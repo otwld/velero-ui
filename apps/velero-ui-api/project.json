@@ -1,0 +1,53 @@
+{
+  "name": "velero-ui-api",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/velero-ui-api/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "target": "node",
+        "compiler": "tsc",
+        "outputPath": "dist/apps/velero-ui-api",
+        "main": "apps/velero-ui-api/src/main.ts",
+        "tsConfig": "apps/velero-ui-api/tsconfig.app.json",
+        "assets": ["apps/velero-ui-api/src/assets"],
+        "webpackConfig": "apps/velero-ui-api/webpack.config.js"
+      },
+      "configurations": {
+        "development": {},
+        "production": {}
+      }
+    },
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "velero-ui-api:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "velero-ui-api:build:development"
+        },
+        "production": {
+          "buildTarget": "velero-ui-api:build:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/velero-ui-api/jest.config.ts"
+      }
+    }
+  },
+  "tags": []
+}
