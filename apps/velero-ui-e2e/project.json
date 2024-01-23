@@ -1,0 +1,30 @@
+{
+  "name": "velero-ui-e2e",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/velero-ui-e2e/src",
+  "targets": {
+    "e2e": {
+      "executor": "@nx/cypress:cypress",
+      "options": {
+        "cypressConfig": "apps/velero-ui-e2e/cypress.config.ts",
+        "testingType": "e2e",
+        "devServerTarget": "velero-ui:serve"
+      },
+      "configurations": {
+        "production": {
+          "devServerTarget": "velero-ui:serve:production"
+        },
+        "ci": {
+          "devServerTarget": "velero-ui:serve-static"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
+    }
+  },
+  "tags": [],
+  "implicitDependencies": ["velero-ui"]
+}
