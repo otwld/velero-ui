@@ -1,6 +1,8 @@
 {
   "compilerOptions": {
     "allowJs": true,
+    "target": "ES2022",
+    "module": "ES2022",
     "esModuleInterop": false,
     "allowSyntheticDefaultImports": true,
     "jsx": "preserve",

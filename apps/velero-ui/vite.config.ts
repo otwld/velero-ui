@@ -1,4 +1,5 @@
 /// <reference types='vitest' />
+import fs from 'fs';
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
@@ -8,7 +9,7 @@ export default defineConfig({
   cacheDir: '../../node_modules/.vite/apps/velero-ui',
 
   server: {
-    port: 4200,
+    port: process.env.VITE_API_PORT,
     host: 'localhost',
   },
 
@@ -17,15 +18,16 @@ export default defineConfig({
     host: 'localhost',
   },
 
+  define: {
+    'import.meta.env.APP_VERSION': `"${
+      JSON.parse(fs.readFileSync('./package.json').toString()).version
+    }"`,
+  },
+
   plugins: [vue(), nxViteTsPaths()],
 
-  // Uncomment this if you are using workers.
-  // worker: {
-  //  plugins: [ nxViteTsPaths() ],
-  // },
-
   build: {
-    outDir: '../../dist/apps/velero-ui',
+    outDir: '../../dist/apps/velero-ui/static',
     reportCompressedSize: true,
     commonjsOptions: {
       transformMixedEsModules: true,
@@ -45,5 +47,5 @@ export default defineConfig({
       reportsDirectory: '../../coverage/apps/velero-ui',
       provider: 'v8',
     },
-  },
+  }
 });

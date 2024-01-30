@@ -11,7 +11,7 @@
       "options": {
         "target": "node",
         "compiler": "tsc",
-        "outputPath": "dist/apps/velero-ui-api",
+        "outputPath": "dist/apps/velero-ui",
         "main": "apps/velero-ui-api/src/main.ts",
         "tsConfig": "apps/velero-ui-api/tsconfig.app.json",
         "assets": ["apps/velero-ui-api/src/assets"],

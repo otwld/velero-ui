@@ -13,7 +13,7 @@
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
       "options": {
-        "outputPath": "dist/apps/velero-ui",
+        "outputPath": "dist/apps/velero-ui/static",
         "skipTypeCheck": true
       },
       "configurations": {
