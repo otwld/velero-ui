@@ -121,9 +121,9 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import type { Schedule } from '@velero-ui/shared-types';
-import { convertTimestampToDate, getRemainingTime } from '../utils/date.utils';
+import { convertTimestampToDate, getRemainingTime } from '../../utils/date.utils';
 import type { PropType } from 'vue';
-import { useScheduleStore } from '../stores/schedule.store';
+import { useScheduleStore } from '../../stores/schedule.store';
 import { ScheduleStatusPhase } from '@velero-ui/shared-types';
 
 export default defineComponent({

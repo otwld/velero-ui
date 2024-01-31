@@ -1,6 +1,5 @@
 <template>
   <div
-    v-if="veleroServer"
     class="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800"
   >
     <div
@@ -23,19 +22,30 @@
       </svg>
 
       <div>
-        <h3 class="flex items-center mb-1 text-lg font-bold text-gray-900 dark:text-white">
+        <h3
+          class="flex items-center mb-1 text-lg font-bold text-gray-900 dark:text-white"
+        >
           Velero Server
           <div
-            v-if="veleroServer.connected"
+            v-if="veleroServer?.connected"
             class="h-2.5 w-2.5 rounded-full bg-green-400 ml-2"
           ></div>
           <div
-            v-if="!veleroServer.connected"
+            v-if="!veleroServer?.connected"
             class="h-2.5 w-2.5 rounded-full bg-red-500 ml-2"
           ></div>
         </h3>
-        <div class="mb-1 text-sm text-gray-500 dark:text-gray-400">{{veleroServer.name}}</div>
-        <div class="mb-1 text-xs text-gray-500 dark:text-gray-400">{{veleroServer.version}}</div>
+        <div class="mb-1 text-sm text-gray-500 dark:text-gray-400">
+          {{ veleroServer?.name }}
+          <div
+            v-if="!veleroServer"
+            class="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-48 mb-4"
+          ></div>
+        </div>
+        <div class="mb-1 text-xs text-gray-500 dark:text-gray-400">
+          {{ veleroServer?.version }}
+          <div v-if="!veleroServer" class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 w-72 mb-4"></div>
+        </div>
         <div class="flex items-center space-x-4"></div>
       </div>
     </div>

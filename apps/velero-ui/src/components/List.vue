@@ -246,16 +246,15 @@ import { defineComponent } from 'vue';
 import BackupLine from './Backup/BackupLine.vue';
 import type { PropType } from 'vue';
 import type {
-  Backup,
   Schedule,
-  StorageLocation,
+  StorageLocation, V1Backup,
 } from '@velero-ui/shared-types';
 
 export default defineComponent({
   components: { BackupLine },
   props: {
     component: Object,
-    data: Array as PropType<Backup[] | Schedule[] | StorageLocation[]>,
+    data: Array as PropType<V1Backup[] | Schedule[] | StorageLocation[]>,
     headers: Array as PropType<string[]>,
     offset: Number,
     limit: Number,

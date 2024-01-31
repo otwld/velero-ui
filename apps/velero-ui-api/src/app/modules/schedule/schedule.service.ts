@@ -4,7 +4,6 @@ import { K8S_CONNECTION } from '../../shared/modules/k8s/k8s.constants';
 import { from, map, Observable } from 'rxjs';
 import { VELERO } from '../../shared/constants/velero.constants';
 import http from 'http';
-import { Backup } from '@velero-ui/shared-types';
 
 @Injectable()
 export class ScheduleService {
@@ -32,7 +31,7 @@ export class ScheduleService {
           ...r,
           total: r.items.length,
           items: (r.items = r.items
-            .filter((i: Backup) => i.metadata.name.includes(search))
+            .filter((i) => i.metadata.name.includes(search))
             .slice(offset, offset + limit)),
         }))
       );

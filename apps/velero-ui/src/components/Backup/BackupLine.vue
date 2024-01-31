@@ -129,7 +129,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import type { Backup } from '@velero-ui/shared-types';
+import type { V1Backup } from '@velero-ui/shared-types';
 import {
   convertTimestampToDate,
   getRemainingTime,
@@ -150,7 +150,7 @@ export default defineComponent({
     return { backupStore };
   },
   props: {
-    data: Object as PropType<Backup>,
+    data: Object as PropType<V1Backup>,
   },
   methods: {
     getRemainingTime,

@@ -10,7 +10,7 @@ export const getRemainingTime = (timeStamp: string): string => {
   }
 
   if (Math.ceil(difference / (1000 * 3600)) > 0) {
-    expireIn += `${Math.ceil(difference / (1000 * 3600))}h`;
+    expireIn += `${Math.ceil(difference / (1000 * 3600) / 24)}h`;
   }
 
   if (difference <= 0) {

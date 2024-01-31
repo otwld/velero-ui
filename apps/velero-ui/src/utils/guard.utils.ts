@@ -5,6 +5,7 @@ import type {
 } from 'vue-router';
 import { User, UserManager } from 'oidc-client-ts';
 import { inject } from 'vue';
+import { Pages } from './constants.utils';
 
 const guard: NavigationGuardWithThis<string> = async (
   to: RouteLocationNormalized
@@ -14,22 +15,22 @@ const guard: NavigationGuardWithThis<string> = async (
   try {
     const user: User = await oidcClient.getUser();
 
-    if (!user && to.name !== 'Login') {
-      return { name: 'Login' };
+    if (!user && to.name !== Pages.LOGIN.name) {
+      return { name: Pages.LOGIN.name };
     }
 
     if (user && user.expired) {
       await oidcClient.removeUser();
-      return { name: 'Login' };
+      return { name: Pages.LOGIN.name };
     }
 
     if (user && to.name === 'Login') {
-      return { name: 'Home' };
+      return { name: Pages.HOME.name };
     }
   } catch (e) {
     console.error(e);
     await oidcClient.removeUser();
-    return { name: 'Login' };
+    return { name: Pages.LOGIN.name };
   }
 };
 export default guard;

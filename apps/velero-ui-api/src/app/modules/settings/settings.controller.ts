@@ -29,6 +29,6 @@ export class SettingsController {
 
   @Get('/velero/ui')
   public getVeleroUi(): Observable<VeleroUiSettings> {
-    return this.settingsService.getVeleroui();
+    return this.settingsService.getVeleroUi();
   }
 }

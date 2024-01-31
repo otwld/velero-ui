@@ -1,13 +1,20 @@
 export type {
-  Backup,
-  BackupMetadata,
-  BackupSpec,
-  BackupSpecMetadata,
-  BackupMetadataOwnerReference,
-  BackupStatus,
-  BackupStatusProgress,
-} from './lib/backup/backup.models';
-export { BackupStatusPhase } from './lib/backup/backup.enums';
+  V1Backup,
+  V1BackupHookSpec,
+  V1BackupHooks,
+  V1BackupSpec,
+  V1BackupExecHook,
+  V1BackupResourceHook,
+  V1BackupSpecMetadata,
+  V1BackupStatusHookStatus,
+  V1BackupStatus,
+  V1BackupStatusProgress,
+} from './lib/backup/v1Backup';
+
+export { V1BackupStatusPhase } from './lib/backup/v1Backup';
+
+export type { V1BackupList } from './lib/backup/v1BackupList';
+
 export type {
   Schedule,
   ScheduleTemplateMetadata,
@@ -31,5 +38,5 @@ export type {
   VeleroServerSettings,
   VeleroUiSettings,
   ClusterSettings,
-  VeleroAgentSettings
+  VeleroAgentSettings,
 } from './lib/settings/settings.models';

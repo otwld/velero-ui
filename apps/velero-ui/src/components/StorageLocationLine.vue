@@ -83,17 +83,14 @@ import { defineComponent } from 'vue';
 import type { StorageLocation } from '@velero-ui/shared-types';
 import type { PropType } from 'vue';
 import { useStorageLocationStore } from '../stores/storage-location.store';
-import {BackupStatusPhase, StorageLocationStatusPhase} from "@velero-ui/shared-types";
+import { StorageLocationStatusPhase } from '@velero-ui/shared-types';
 
 export default defineComponent({
   name: 'StorageLocationLine',
   computed: {
     StorageLocationStatusPhase() {
-      return StorageLocationStatusPhase
+      return StorageLocationStatusPhase;
     },
-    BackupStatusPhase() {
-      return BackupStatusPhase
-    }
   },
   setup() {
     const storageLocationStore = useStorageLocationStore();

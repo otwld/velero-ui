@@ -13,6 +13,7 @@ import { HealthModule } from './modules/health/health.module';
 import { HttpModule } from '@nestjs/axios';
 import { VeleroModule } from './shared/modules/velero/velero.module';
 import { SettingsModule } from './modules/settings/settings.module';
+import { DeleteBackupRequestModule } from './modules/delete-backup-request/delete-backup-request.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { SettingsModule } from './modules/settings/settings.module';
     HealthModule,
     VeleroModule,
     SettingsModule,
+    DeleteBackupRequestModule,
   ],
   controllers: [],
   providers: [

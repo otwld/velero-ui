@@ -1,4 +1,4 @@
-import {Inject, Injectable} from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import {
   catchError,
   concatMap,
@@ -7,7 +7,6 @@ import {
   mergeMap,
   Observable,
   of,
-  toArray,
 } from 'rxjs';
 import {
   ClusterSettings,
@@ -15,7 +14,7 @@ import {
   VeleroServerSettings,
   VeleroUiSettings,
 } from '@velero-ui/shared-types';
-import {K8S_CONNECTION} from '../../shared/modules/k8s/k8s.constants';
+import { K8S_CONNECTION } from '../../shared/modules/k8s/k8s.constants';
 import {
   CoreV1Api,
   KubeConfig,
@@ -23,9 +22,11 @@ import {
   V1Node,
   V1Pod,
 } from '@kubernetes/client-node';
-import {VeleroService} from '../../shared/modules/velero/velero.service';
-import * as process from "process";
-import {version} from "../../../../../../package.json"
+import { VeleroService } from '../../shared/modules/velero/velero.service';
+import { version } from '../../../../../../package.json';
+import { VELERO } from '../../shared/constants/velero.constants';
+import http from 'http';
+import { V1NodeList } from '@kubernetes/client-node/dist/gen/model/v1NodeList';
 
 @Injectable()
 export class SettingsService {
@@ -40,13 +41,20 @@ export class SettingsService {
 
   public getCluster(): Observable<ClusterSettings> {
     return from(this.k8sCoreV1Api.listNode())
-      .pipe(map((r) => r.body.items))
       .pipe(
-        map((nodes: V1Node[]) => ({
-          connected: true,
-          server: this.k8s.getCurrentCluster().server,
-          version: nodes[0].status.nodeInfo.kubeProxyVersion,
-        })),
+        map(
+          (r: { response: http.IncomingMessage; body: V1NodeList }) =>
+            r.body.items
+        )
+      )
+      .pipe(
+        map(
+          (nodes: V1Node[]): ClusterSettings => ({
+            connected: true,
+            server: this.k8s.getCurrentCluster().server,
+            version: nodes[0].status.nodeInfo.kubeProxyVersion,
+          })
+        ),
         catchError(
           (): Observable<ClusterSettings> =>
             of({
@@ -63,16 +71,18 @@ export class SettingsService {
       .checkServer()
       .pipe(concatMap(() => this.veleroService.getServer()))
       .pipe(
-        map((pod) => ({
-          connected: pod.status.phase === 'Running',
-          name: pod.metadata.name,
-          namespace: pod.metadata.namespace,
-          version: pod.spec.containers
-            .find((container: V1Container) =>
-              container.image.startsWith('velero/velero')
-            )
-            .image.split(':')[1],
-        })),
+        map(
+          (pod: V1Pod): VeleroServerSettings => ({
+            connected: pod.status.phase === 'Running',
+            name: pod.metadata.name,
+            namespace: pod.metadata.namespace,
+            version: pod.spec.containers
+              .find((container: V1Container) =>
+                container.image.startsWith(VELERO.IMAGE)
+              )
+              .image.split(':')[1],
+          })
+        ),
         catchError(
           (): Observable<VeleroServerSettings> =>
             of({
@@ -98,7 +108,7 @@ export class SettingsService {
               connected: pod.status.phase === 'Running',
               version: pod.spec.containers
                 .find((container: V1Container) =>
-                  container.image.startsWith('velero/velero')
+                  container.image.startsWith(VELERO.IMAGE)
                 )
                 .image.split(':')[1],
               node: pod.spec.nodeName,
@@ -110,8 +120,7 @@ export class SettingsService {
       );
   }
 
-  public getVeleroui(): Observable<VeleroUiSettings> {
-    console.log(process.env)
+  public getVeleroUi(): Observable<VeleroUiSettings> {
     return of({
       connected: true,
       version: version,

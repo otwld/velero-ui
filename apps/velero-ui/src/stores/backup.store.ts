@@ -1,16 +1,17 @@
 import { defineStore } from 'pinia';
-import type { Backup } from '@velero-ui/shared-types';
 
 import { ApiRoutes } from '../utils/constants.utils';
 import type { AxiosResponse } from 'axios';
+import type { V1Backup } from '@velero-ui/shared-types';
 
 export interface BackupSearchFilters {
   startWith: string;
 }
 
 export interface BackupStore {
-  backups: Backup[];
-  backup: Backup;
+  backups: V1Backup[];
+  backup: V1Backup;
+  backupLogs: string[];
   total: number;
   offset: number;
   limit: number;
@@ -23,6 +24,7 @@ export const useBackupStore = defineStore({
     ({
       backups: [],
       backup: undefined,
+      backupLogs: undefined,
       total: 0,
       offset: 0,
       limit: 20,
@@ -34,7 +36,7 @@ export const useBackupStore = defineStore({
     async get(name: string, namespace: string) {
       try {
         this.backup = this.backups.find(
-          (b: Backup) => b?.metadata?.name === name
+          (b: V1Backup) => b?.metadata?.name === name
         );
 
         if (!this.backup) {
@@ -47,6 +49,19 @@ export const useBackupStore = defineStore({
         }
       } catch (e) {
         this.backup = undefined;
+        console.error(e);
+      }
+    },
+    async logs(name: string, namespace: string) {
+      try {
+        const response = (await this.axios.get(
+          `${ApiRoutes.BACKUPS}/${namespace}/${name}/logs`,
+          {}
+        )) as AxiosResponse;
+
+        this.backupLogs = response.data;
+      } catch (e) {
+        this.backupLogs = [];
         console.error(e);
       }
     },

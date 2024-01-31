@@ -14,7 +14,7 @@ import { defineComponent } from 'vue';
 import List from '../components/List.vue';
 import { storeToRefs } from 'pinia';
 import { useScheduleStore } from '../stores/schedule.store';
-import ScheduleLine from "../components/ScheduleLine.vue";
+import ScheduleLine from "../components/Schedule/ScheduleLine.vue";
 
 export default defineComponent({
   name: 'ScheduleList',
