@@ -12,6 +12,7 @@ import Backup from '../views/Backup.vue';
 import { Pages } from '../utils/constants.utils';
 import SnapshotLocationList from '../views/SnapshotLocationList.vue';
 import Settings from '../views/Settings.vue';
+import Schedule from '../views/Schedule.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -33,7 +34,16 @@ const routes: Array<RouteRecordRaw> = [
       },
       {
         ...Pages.STORAGE_LOCATIONS,
-        component: StorageLocationList,
+        children: [
+          {
+            path: '',
+            component: StorageLocationList,
+          },
+          {
+            ...Pages.STORAGE_LOCATION,
+            component: Schedule,
+          },
+        ],
       },
       {
         ...Pages.RESTORES,
@@ -41,11 +51,29 @@ const routes: Array<RouteRecordRaw> = [
       },
       {
         ...Pages.SCHEDULES,
-        component: ScheduleList,
+        children: [
+          {
+            path: '',
+            component: ScheduleList,
+          },
+          {
+            ...Pages.SCHEDULE,
+            component: Schedule,
+          },
+        ],
       },
       {
         ...Pages.SNAPSHOT_LOCATIONS,
-        component: SnapshotLocationList,
+        children: [
+          {
+            path: '',
+            component: SnapshotLocationList,
+          },
+          {
+            ...Pages.SNAPSHOT_LOCATION,
+            component: Schedule,
+          },
+        ],
       },
       {
         ...Pages.SETTINGS,
@@ -65,6 +93,8 @@ const routes: Array<RouteRecordRaw> = [
 
 const router: Router = createRouter({
   history: createWebHistory('/'),
+  // linkActiveClass: "bg-gray-100 dark:bg-gray-700",
+  // linkExactActiveClass: "bg-gray-100 dark:bg-gray-700",
   routes,
 });
 

@@ -3,7 +3,7 @@
     class="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800"
   >
     <div class="flow-root">
-      <h3 class="text-xl pb-4 font-semibold dark:text-white">Describe</h3>
+      <h3 class="text-xl pb-4 font-semibold dark:text-white">Manifest</h3>
       <div
         class="p-4 text-sm bg-gray-50 border border-gray-300 text-gray-900 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white h-[600px] overflow-auto"
       >

@@ -33,18 +33,22 @@ export interface V1BackupSpec {
   itemOperationTimeout?: string;
   snapshotMoveData?: string;
   datamover?: string;
-  uploaderConfig?: string;
+  uploaderConfig?: V1UploaderConfigForBackup;
+}
+
+export interface V1UploaderConfigForBackup {
+  parallelFilesUpload?: number;
 }
 
 export interface V1BackupSpecMetadata {
-  metadata?: Record<string, string>;
+  labels?: Record<string, string>;
 }
 
 export interface V1BackupHooks {
-  resources?: V1BackupHookSpec[];
+  resources?: V1BackupResourceHookSpec[];
 }
 
-export interface V1BackupHookSpec {
+export interface V1BackupResourceHookSpec {
   name: string;
   includedNamespaces?: string[];
   excludedNamespaces?: string[];
@@ -56,17 +60,22 @@ export interface V1BackupHookSpec {
 }
 
 export interface V1BackupResourceHook {
-  exec: V1BackupExecHook;
+  exec: V1ExecHook;
 }
 
-export interface V1BackupExecHook {
+export const enum V1HookErrorMode {
+  Continue = 'Continue',
+  Fail = 'Fail',
+}
+
+export interface V1ExecHook {
   container?: string;
   command: string;
-  onError?: string;
+  onError?: V1HookErrorMode;
   timeout?: string;
 }
 
-export const enum V1BackupStatusPhase {
+export const enum V1BackupPhase {
   New = 'New',
   FailedValidation = 'FailedValidation',
   InProgress = 'InProgress',
@@ -84,7 +93,7 @@ export interface V1BackupStatus {
   version?: number;
   formatVersion?: string;
   expiration?: Date;
-  phase?: V1BackupStatusPhase;
+  phase?: V1BackupPhase;
   validationErrors?: string[];
   startTimestamp?: string;
   completionTimestamp?: string;
@@ -93,21 +102,21 @@ export interface V1BackupStatus {
   failureReason?: string;
   warnings?: number;
   errors?: number;
-  progress?: V1BackupStatusProgress;
+  progress?: V1BackupProgress;
   csiVolumeSnapshotsAttempted?: number;
   csiVolumeSnapshotsCompleted?: number;
   backupItemOperationsAttempted?: number;
   backupItemOperationsCompleted?: number;
   backupItemOperationsFailed?: number;
-  hookStatus?: V1BackupStatusHookStatus;
+  hookStatus?: V1HookStatus;
 }
 
-export interface V1BackupStatusProgress {
+export interface V1BackupProgress {
   totalItems?: number;
   itemsBackedUp?: number;
 }
 
-export interface V1BackupStatusHookStatus {
+export interface V1HookStatus {
   hooksAttempted?: number;
   hooksFailed?: number;
 }

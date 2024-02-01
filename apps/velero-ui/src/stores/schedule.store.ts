@@ -1,4 +1,4 @@
-import type { Schedule } from '@velero-ui/shared-types';
+import type { V1Schedule } from '@velero-ui/shared-types';
 import { defineStore } from 'pinia';
 import { ApiRoutes } from '../utils/constants.utils';
 import type { AxiosResponse } from 'axios';
@@ -8,7 +8,8 @@ export interface ScheduleSearchFilters {
 }
 
 export interface ScheduleStore {
-  schedules: Schedule[];
+  schedules: V1Schedule[];
+  schedule: V1Schedule;
   total: number;
   offset: number;
   limit: number;
@@ -20,6 +21,7 @@ export const useScheduleStore = defineStore({
   state: () =>
     ({
       schedules: [],
+      schedule: undefined,
       total: 0,
       offset: 0,
       limit: 20,
@@ -29,6 +31,25 @@ export const useScheduleStore = defineStore({
     } as ScheduleStore),
   getters: {},
   actions: {
+    async get(name: string, namespace: string) {
+      try {
+        this.schedule = this.schedules.find(
+          (b: V1Schedule) => b?.metadata?.name === name
+        );
+
+        if (!this.schedule) {
+          const response = (await this.axios.get(
+            `${ApiRoutes.SCHEDULES}/${namespace}/${name}`,
+            {}
+          )) as AxiosResponse;
+
+          this.schedule = response.data;
+        }
+      } catch (e) {
+        this.schedule = undefined;
+        console.error(e);
+      }
+    },
     async fetch() {
       try {
         const response = (await this.axios.get(ApiRoutes.SCHEDULES, {
@@ -48,7 +69,7 @@ export const useScheduleStore = defineStore({
     async delete(names: string[]) {
       try {
         const response = (await this.axios.delete(
-          `${ApiRoutes.SCHEDULES }}`
+          `${ApiRoutes.SCHEDULES}}`
         )) as AxiosResponse;
 
         this.fetch();

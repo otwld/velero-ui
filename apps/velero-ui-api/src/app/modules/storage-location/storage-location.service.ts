@@ -4,6 +4,10 @@ import { K8S_CONNECTION } from '../../shared/modules/k8s/k8s.constants';
 import { from, map, Observable } from 'rxjs';
 import { VELERO } from '../../shared/constants/velero.constants';
 import http from 'http';
+import {
+  V1BackupStorageLocation,
+  V1BackupStorageLocationList,
+} from '@velero-ui/shared-types';
 
 @Injectable()
 export class StorageLocationService {
@@ -17,7 +21,7 @@ export class StorageLocationService {
     offset: number = 0,
     limit: number = 20,
     search?: string
-  ): Observable<any> {
+  ): Observable<V1BackupStorageLocationList> {
     return from(
       this.k8sCustomObjectApi.listClusterCustomObject(
         VELERO.GROUP,
@@ -25,13 +29,22 @@ export class StorageLocationService {
         VELERO.PLURAL_STORAGE_LOCATIONS
       )
     )
-      .pipe(map((r: { response: http.IncomingMessage; body: any }) => r.body))
       .pipe(
-        map((r) => ({
+        map(
+          (r: {
+            response: http.IncomingMessage;
+            body: any;
+          }): V1BackupStorageLocationList => r.body
+        )
+      )
+      .pipe(
+        map((r: V1BackupStorageLocationList) => ({
           ...r,
           total: r.items.length,
           items: (r.items = r.items
-            .filter((i) => i.metadata.name.includes(search))
+            .filter((i: V1BackupStorageLocation) =>
+              i.metadata.name.includes(search)
+            )
             .slice(offset, offset + limit)),
         }))
       );

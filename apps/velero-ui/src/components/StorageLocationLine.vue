@@ -36,18 +36,18 @@
     <td
       class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white"
     >
-      {{ data.status.lastSyncedTime }}
+      {{ convertTimestampToDate(data.status.lastSyncedTime) }}
     </td>
     <td
       class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white"
     >
       <div class="flex items-center">
         <div
-          v-if="data.status.phase === StorageLocationStatusPhase.AVAILABLE"
+          v-if="data.status.phase === V1BackupStorageLocationPhase.Available"
           class="h-2.5 w-2.5 rounded-full bg-green-400 mr-2"
         ></div>
         <div
-          v-if="data.status.phase !== StorageLocationStatusPhase.AVAILABLE"
+          v-if="data.status.phase !== V1BackupStorageLocationPhase.Available"
           class="h-2.5 w-2.5 rounded-full bg-red-500 mr-2"
         ></div>
         {{ data.status.phase }}
@@ -80,16 +80,17 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import type { StorageLocation } from '@velero-ui/shared-types';
+import type { V1BackupStorageLocation } from '@velero-ui/shared-types';
 import type { PropType } from 'vue';
 import { useStorageLocationStore } from '../stores/storage-location.store';
-import { StorageLocationStatusPhase } from '@velero-ui/shared-types';
+import { V1BackupStorageLocationPhase } from '@velero-ui/shared-types';
+import {convertTimestampToDate} from "../utils/date.utils";
 
 export default defineComponent({
   name: 'StorageLocationLine',
   computed: {
-    StorageLocationStatusPhase() {
-      return StorageLocationStatusPhase;
+    V1BackupStorageLocationPhase() {
+      return V1BackupStorageLocationPhase;
     },
   },
   setup() {
@@ -97,9 +98,10 @@ export default defineComponent({
     return { storageLocationStore };
   },
   props: {
-    data: Object as PropType<StorageLocation>,
+    data: Object as PropType<V1BackupStorageLocation>,
   },
   methods: {
+    convertTimestampToDate,
     remove(): void {
       console.log('click delete');
     },

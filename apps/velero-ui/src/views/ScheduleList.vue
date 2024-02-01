@@ -31,7 +31,7 @@ export default defineComponent({
   },
   data() {
     return {
-      headers: ['Name', 'Storage Location', 'Cron', 'TTL', 'Status', 'Actions'],
+      headers: ['Name', 'Storage Location', 'Cron', 'Last Backup', 'Status', 'Actions'],
       searchInput: '',
     };
   },

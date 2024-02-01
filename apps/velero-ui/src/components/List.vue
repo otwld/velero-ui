@@ -83,18 +83,7 @@
             @click="refresh()"
             class="inline-flex items-center justify-center w-1/2 px-3 py-2 text-sm font-medium text-center text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:ring-blue-300 sm:w-auto dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-gray-700"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-              class="w-5 h-5 mr-2 -ml-1"
-            >
-              <path
-                fill-rule="evenodd"
-                d="M15.312 11.424a5.5 5.5 0 0 1-9.201 2.466l-.312-.311h2.433a.75.75 0 0 0 0-1.5H3.989a.75.75 0 0 0-.75.75v4.242a.75.75 0 0 0 1.5 0v-2.43l.31.31a7 7 0 0 0 11.712-3.138.75.75 0 0 0-1.449-.39Zm1.23-3.723a.75.75 0 0 0 .219-.53V2.929a.75.75 0 0 0-1.5 0V5.36l-.31-.31A7 7 0 0 0 3.239 8.188a.75.75 0 1 0 1.448.389A5.5 5.5 0 0 1 13.89 6.11l.311.31h-2.432a.75.75 0 0 0 0 1.5h4.243a.75.75 0 0 0 .53-.219Z"
-                clip-rule="evenodd"
-              />
-            </svg>
+            <FontAwesomeIcon :icon="faArrowsRotate" class="w-4 h-4 mr-2 " />
             Refresh
           </button>
         </div>
@@ -150,42 +139,6 @@
     class="sticky bottom-0 right-0 items-center w-full p-4 bg-white border-t border-gray-200 sm:flex sm:justify-between dark:bg-gray-800 dark:border-gray-700"
   >
     <div class="flex items-center mb-4 sm:mb-0">
-      <button
-        type="button"
-        @click="previous()"
-        class="inline-flex justify-center p-1 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-      >
-        <svg
-          class="w-7 h-7"
-          fill="currentColor"
-          viewBox="0 0 20 20"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            fill-rule="evenodd"
-            d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-            clip-rule="evenodd"
-          ></path>
-        </svg>
-      </button>
-      <button
-        type="button"
-        @click="next()"
-        class="inline-flex justify-center p-1 mr-2 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-      >
-        <svg
-          class="w-7 h-7"
-          fill="currentColor"
-          viewBox="0 0 20 20"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            fill-rule="evenodd"
-            d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-            clip-rule="evenodd"
-          ></path>
-        </svg>
-      </button>
       <span class="text-sm font-normal text-gray-500 dark:text-gray-400"
         >Showing
         <span class="font-semibold text-gray-900 dark:text-white"
@@ -205,18 +158,7 @@
         @click="previous()"
         class="inline-flex items-center justify-center flex-1 px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
       >
-        <svg
-          class="w-5 h-5 mr-1 -ml-1"
-          fill="currentColor"
-          viewBox="0 0 20 20"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            fill-rule="evenodd"
-            d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-            clip-rule="evenodd"
-          ></path>
-        </svg>
+        <FontAwesomeIcon :icon="faChevronLeft" class="w-3 h-3 mr-1" />
         Previous
       </button>
       <button
@@ -225,18 +167,7 @@
         class="inline-flex items-center justify-center flex-1 px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
       >
         Next
-        <svg
-          class="w-5 h-5 ml-1 -mr-1"
-          fill="currentColor"
-          viewBox="0 0 20 20"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            fill-rule="evenodd"
-            d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-            clip-rule="evenodd"
-          ></path>
-        </svg>
+        <FontAwesomeIcon :icon="faChevronRight" class="w-3 h-3 ml-1" />
       </button>
     </div>
   </div>
@@ -247,11 +178,18 @@ import BackupLine from './Backup/BackupLine.vue';
 import type { PropType } from 'vue';
 import type {
   Schedule,
-  StorageLocation, V1Backup,
+  StorageLocation,
+  V1Backup,
 } from '@velero-ui/shared-types';
+import {
+  faChevronRight,
+  faChevronLeft,
+  faArrowsRotate,
+} from '@fortawesome/free-solid-svg-icons';
+import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 
 export default defineComponent({
-  components: { BackupLine },
+  components: { FontAwesomeIcon, BackupLine },
   props: {
     component: Object,
     data: Array as PropType<V1Backup[] | Schedule[] | StorageLocation[]>,
@@ -263,6 +201,9 @@ export default defineComponent({
   name: 'List',
   data() {
     return {
+      faChevronRight,
+      faChevronLeft,
+      faArrowsRotate,
       searchInput: '',
     };
   },

@@ -1,4 +1,4 @@
-export const getRemainingTime = (timeStamp: string): string => {
+export const getRemainingTime = (timeStamp: Date): string => {
   const startDate = new Date();
   const endDate = new Date(timeStamp);
 
@@ -20,6 +20,6 @@ export const getRemainingTime = (timeStamp: string): string => {
   return expireIn;
 };
 
-export const convertTimestampToDate = (timeStamp: string) => {
-  return new Date(timeStamp).toLocaleDateString();
+export const convertTimestampToDate = (timeStamp: Date) => {
+  return new Date(timeStamp).toLocaleString();
 };
