@@ -1,18 +1,21 @@
 import type {
   ClusterSettings,
+  V1ServerStatusRequest,
   VeleroAgentSettings,
   VeleroServerSettings,
   VeleroUiSettings,
-} from '@velero-ui/shared-types';
+} from '@velero-ui/velero';
 import { defineStore } from 'pinia';
 import { ApiRoutes } from '../utils/constants.utils';
 import type { AxiosResponse } from 'axios';
+import type { V1PluginInfo } from '@velero-ui/velero';
 
 export interface SettingsStore {
   cluster: ClusterSettings;
   veleroServer: VeleroServerSettings;
   veleroAgents: VeleroAgentSettings[];
   veleroUi: VeleroUiSettings;
+  plugins: V1PluginInfo;
 }
 
 export const useSettingsStore = defineStore({
@@ -23,6 +26,7 @@ export const useSettingsStore = defineStore({
       veleroUi: null,
       veleroAgents: [],
       veleroServer: null,
+      plugins: [],
     } as SettingsStore),
   getters: {},
   actions: {
@@ -70,6 +74,19 @@ export const useSettingsStore = defineStore({
         )) as AxiosResponse;
 
         this.veleroUi = response.data;
+      } catch (e) {
+        console.error(e);
+      }
+    },
+    async fetchVeleroPlugins() {
+      try {
+        const response: AxiosResponse<V1ServerStatusRequest> =
+          (await this.axios.get(
+            ApiRoutes.SETTINGS_VELERO_PLUGINS,
+            {}
+          )) as AxiosResponse<V1ServerStatusRequest>;
+
+        this.plugins = response.data.status.plugins;
       } catch (e) {
         console.error(e);
       }

@@ -5,21 +5,29 @@
         class="inline-flex items-center space-x-1 text-sm font-medium md:space-x-2"
       >
         <li
+          class="inline-flex items-center"
+        >
+          <router-link
+            to="/"
+            class="inline-flex items-center text-gray-700 hover:text-blue-600 dark:text-gray-300 dark:hover:text-white"
+          >
+            <FontAwesomeIcon
+              :icon="faHouse"
+              class="w-5 h-5 mr-2.5"
+            />
+            Home
+          </router-link>
+        </li>
+        <li
           v-for="(route, index) in matchedRoutes"
           class="inline-flex items-center"
         >
           <router-link
-            v-if="route.name"
+            v-if="index > 0 && route"
             :to="route.path"
             class="inline-flex items-center text-gray-700 hover:text-blue-600 dark:text-gray-300 dark:hover:text-white"
           >
             <FontAwesomeIcon
-              v-if="index === 0"
-              :icon="faHouse"
-              class="w-5 h-5 mr-2.5"
-            />
-            <FontAwesomeIcon
-              v-if="index > 0"
               :icon="faChevronRight"
               class="w-4 h-4 text-gray-400 mr-2.5"
             />

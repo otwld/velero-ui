@@ -9,7 +9,7 @@
       <Describe :data="backup"></Describe>
     </div>
   </div>
-  <Logs :data="backupLogs" class="pb-6"></Logs>
+  <Logs :data="backupLogs" :downloadable="true" class="pb-6"></Logs>
 </template>
 
 <script lang="ts">
@@ -57,7 +57,10 @@ export default defineComponent({
       console.log('click restore');
     },
     download(): void {
-      console.log('click download');
+      this.backupStore.download(this.backup.metadata.name)
+    },
+    downloadLogs(): void {
+      this.backupStore.downloadLogs(this.backup.metadata.name)
     },
   },
 });

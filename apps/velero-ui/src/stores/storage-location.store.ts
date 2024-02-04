@@ -1,4 +1,4 @@
-import type { V1BackupStorageLocation} from '@velero-ui/shared-types';
+import type { V1BackupStorageLocation} from '@velero-ui/velero';
 import { defineStore } from 'pinia';
 import { ApiRoutes } from '../utils/constants.utils';
 import type { AxiosResponse } from 'axios';

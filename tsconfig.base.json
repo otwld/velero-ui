@@ -15,7 +15,8 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@velero-ui/shared-types": ["libs/shared-types/src/index.ts"]
+      "@velero-ui/shared-types": ["libs/shared-types/src/index.ts"],
+      "@velero-ui/velero": ["libs/velero/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

@@ -180,7 +180,7 @@ import type {
   Schedule,
   StorageLocation,
   V1Backup,
-} from '@velero-ui/shared-types';
+} from '@velero-ui/velero';
 import {
   faChevronRight,
   faChevronLeft,

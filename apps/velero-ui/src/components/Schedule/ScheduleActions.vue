@@ -66,7 +66,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
-import type { V1Schedule } from '@velero-ui/shared-types';
+import type { V1Schedule } from '@velero-ui/velero';
 import {
   faPause,
   faPlay,
@@ -74,7 +74,7 @@ import {
   faClock,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { V1SchedulePhase } from '@velero-ui/shared-types';
+import { V1SchedulePhase } from '@velero-ui/velero';
 
 export default defineComponent({
   name: 'ScheduleActions',

@@ -60,7 +60,7 @@ export class K8sModule {
         return await lastValueFrom(
           defer(async () => {
             const k8sConfig = new KubeConfig();
-            k8sConfig.loadFromFile(options.file, options.opts);
+            k8sConfig.loadFromFile(options.kubeConfigPath, options.opts);
             return k8sConfig;
           }).pipe(
             catchError((error) => {

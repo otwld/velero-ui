@@ -17,7 +17,6 @@
         name: Pages.BACKUP.name,
         params: {
           name: data.metadata.name,
-          namespace: data.metadata.namespace,
         },
       }"
     >
@@ -84,7 +83,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import type { V1Backup } from '@velero-ui/shared-types';
+import type { V1Backup } from '@velero-ui/velero';
 import {
   convertTimestampToDate,
   getRemainingTime,
@@ -127,7 +126,7 @@ export default defineComponent({
       console.log('click restore');
     },
     download(): void {
-      console.log('click download');
+      this.backupStore.download(this.data.metadata.name);
     },
   },
 });

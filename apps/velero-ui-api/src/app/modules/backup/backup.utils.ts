@@ -1,6 +1,6 @@
 import { DeleteBackupRequest } from '../../shared/models/velero.models';
 import { getApiVersion } from '../../shared/utils/velero.utils';
-import { VELERO } from '../../shared/constants/velero.constants';
+import { VELERO } from '../../shared/modules/velero/velero.constants';
 
 export const createBackupRequest = (spec: any, namespace: string) => ({
 });

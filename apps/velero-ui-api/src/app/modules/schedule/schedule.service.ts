@@ -2,15 +2,19 @@ import { Inject, Injectable } from '@nestjs/common';
 import { CustomObjectsApi, KubeConfig } from '@kubernetes/client-node';
 import { K8S_CONNECTION } from '../../shared/modules/k8s/k8s.constants';
 import { from, map, Observable } from 'rxjs';
-import { VELERO } from '../../shared/constants/velero.constants';
+import { VELERO } from '../../shared/modules/velero/velero.constants';
 import http from 'http';
-import { V1Schedule, V1ScheduleList } from '@velero-ui/shared-types';
+import { V1Schedule, V1ScheduleList } from '@velero-ui/velero';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class ScheduleService {
   private k8sCustomObjectApi: CustomObjectsApi;
 
-  constructor(@Inject(K8S_CONNECTION) private readonly k8s: KubeConfig) {
+  constructor(
+    @Inject(K8S_CONNECTION) private readonly k8s: KubeConfig,
+    private configService: ConfigService
+  ) {
     this.k8sCustomObjectApi = this.k8s.makeApiClient(CustomObjectsApi);
   }
 
@@ -20,9 +24,10 @@ export class ScheduleService {
     search?: string
   ): Observable<V1ScheduleList> {
     return from(
-      this.k8sCustomObjectApi.listClusterCustomObject(
+      this.k8sCustomObjectApi.listNamespacedCustomObject(
         VELERO.GROUP,
         VELERO.VERSION,
+        this.configService.get('velero.namespace'),
         VELERO.PLURAL_SCHEDULES
       )
     )
@@ -43,12 +48,12 @@ export class ScheduleService {
       );
   }
 
-  public findByName(name: string, namespace: string): Observable<V1Schedule> {
+  public findByName(name: string): Observable<V1Schedule> {
     return from(
       this.k8sCustomObjectApi.getNamespacedCustomObject(
         VELERO.GROUP,
         VELERO.VERSION,
-        namespace,
+        this.configService.get('velero.namespace'),
         VELERO.PLURAL_SCHEDULES,
         name
       )

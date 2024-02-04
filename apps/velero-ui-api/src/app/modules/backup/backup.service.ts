@@ -4,17 +4,24 @@ import {
   CoreV1Api,
   CustomObjectsApi,
   KubeConfig,
-  LogsApi,
 } from '@kubernetes/client-node';
-import { concatMap, map, Observable } from 'rxjs';
+import { concatMap, map, Observable, tap } from 'rxjs';
 import { from } from 'rxjs';
 import http from 'http';
-import { VELERO } from '../../shared/constants/velero.constants';
+import { VELERO } from '../../shared/modules/velero/velero.constants';
+import { VeleroService } from '../../shared/modules/velero/velero.service';
 import {
-  VeleroServer,
-  VeleroService,
-} from '../../shared/modules/velero/velero.service';
-import { V1BackupList, V1Backup } from '@velero-ui/shared-types';
+  V1BackupList,
+  V1Backup,
+  V1DownloadTargetKind,
+  V1DownloadRequest,
+  Ressources,
+} from '@velero-ui/velero';
+import { ConfigService } from '@nestjs/config';
+import { DownloadRequestService } from '../../shared/modules/download-request/download-request.service';
+import { HttpService } from '@nestjs/axios';
+import { AxiosResponse } from 'axios';
+import { unzipSync } from 'zlib';
 
 @Injectable()
 export class BackupService {
@@ -23,7 +30,10 @@ export class BackupService {
 
   constructor(
     @Inject(K8S_CONNECTION) private readonly k8s: KubeConfig,
-    private readonly veleroService: VeleroService
+    private readonly veleroService: VeleroService,
+    private configService: ConfigService,
+    private readonly downloadRequestService: DownloadRequestService,
+    private readonly httpService: HttpService
   ) {
     this.k8sCustomObjectApi = this.k8s.makeApiClient(CustomObjectsApi);
     this.k8sCoreV1Api = this.k8s.makeApiClient(CoreV1Api);
@@ -35,10 +45,11 @@ export class BackupService {
     search?: string
   ): Observable<V1BackupList> {
     return from(
-      this.k8sCustomObjectApi.listClusterCustomObject(
+      this.k8sCustomObjectApi.listNamespacedCustomObject(
         VELERO.GROUP,
         VELERO.VERSION,
-        VELERO.PLURAL_BACKUPS
+        this.configService.get('velero.namespace'),
+        Ressources.BACKUP.plurial
       )
     )
       .pipe(
@@ -58,13 +69,13 @@ export class BackupService {
       );
   }
 
-  public findByName(name: string, namespace: string): Observable<V1Backup> {
+  public findByName(name: string): Observable<V1Backup> {
     return from(
       this.k8sCustomObjectApi.getNamespacedCustomObject(
         VELERO.GROUP,
         VELERO.VERSION,
-        namespace,
-        VELERO.PLURAL_BACKUPS,
+        this.configService.get('velero.namespace'),
+        Ressources.BACKUP.plurial,
         name
       )
     ).pipe(
@@ -72,27 +83,25 @@ export class BackupService {
     );
   }
 
-  public logs(name: string) {
-    return this.veleroService
-      .checkServer()
+  public logs(name: string): Observable<string[]> {
+    return from(
+      this.downloadRequestService.create({
+        name,
+        kind: V1DownloadTargetKind.BackupLog,
+      })
+    )
       .pipe(
-        concatMap((velero: VeleroServer) =>
-          this.k8sCoreV1Api.readNamespacedPodLog(
-            'restic-k2stj',
-            velero.namespace
-          )
+        concatMap(
+          (
+            downloadRequest: V1DownloadRequest
+          ): Observable<AxiosResponse<ArrayBuffer>> =>
+            this.httpService.get(downloadRequest.status.downloadURL, {
+              responseType: 'arraybuffer',
+            })
         )
       )
-      .pipe(
-        map(
-          (r: { response: http.IncomingMessage; body: any }): string => r.body
-        )
-      )
-      .pipe(map((raw) => raw.split('\n')))
-      .pipe(
-        map((lines) =>
-          lines.filter((line: string) => line.includes(`backup=${name}`))
-        )
-      );
+      .pipe(map((response: AxiosResponse<ArrayBuffer>) => response.data))
+      .pipe(map((buffer: ArrayBuffer) => unzipSync(buffer)))
+      .pipe(map((content: Buffer) => content.toString().split('\n')));
   }
 }

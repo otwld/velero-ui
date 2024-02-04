@@ -1,0 +1,17 @@
+export const VELERO = {
+  GROUP: 'velero.io',
+  VERSION: 'v1',
+  SERVER_PREFIX: 'velero-',
+  IMAGE: 'velero/velero',
+  KIND_BACKUP: 'Backup',
+  KIND_DELETE_BACKUP_REQUEST: 'DeleteBackupRequest',
+  KIND_SCHEDULE: 'Schedule',
+  KIND_RESTORE: 'Restore',
+  PLURAL_BACKUPS: 'backups',
+  PLURAL_DELETE_BACKUP_REQUEST: 'deletebackuprequests',
+  PLURAL_DOWNLOAD_REQUEST: 'downloadrequests',
+  PLURAL_SCHEDULES: 'schedules',
+  PLURAL_STORAGE_LOCATIONS: 'backupstoragelocations',
+  PLURAL_RESTORES: 'restores',
+  PLURAL_SNAPSHOT_LOCATIONS: 'volumesnapshotlocations',
+};

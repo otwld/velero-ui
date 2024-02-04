@@ -24,7 +24,7 @@ import {
 } from '@kubernetes/client-node';
 import { VeleroService } from '../../shared/modules/velero/velero.service';
 import { version } from '../../../../../../package.json';
-import { VELERO } from '../../shared/constants/velero.constants';
+import { VELERO } from '../../shared/modules/velero/velero.constants';
 import http from 'http';
 import { V1NodeList } from '@kubernetes/client-node/dist/gen/model/v1NodeList';
 

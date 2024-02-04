@@ -80,10 +80,10 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import type { V1BackupStorageLocation } from '@velero-ui/shared-types';
+import type { V1BackupStorageLocation } from '@velero-ui/velero';
 import type { PropType } from 'vue';
 import { useStorageLocationStore } from '../stores/storage-location.store';
-import { V1BackupStorageLocationPhase } from '@velero-ui/shared-types';
+import { V1BackupStorageLocationPhase } from '@velero-ui/velero';
 import {convertTimestampToDate} from "../utils/date.utils";
 
 export default defineComponent({

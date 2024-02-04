@@ -1,30 +1,33 @@
 <template xmlns="http://www.w3.org/1999/html">
-  <ClusterSettings></ClusterSettings>
+  <SettingsCluster></SettingsCluster>
   <div
     class="grid grid-cols-1 px-4 pt-6 xl:grid-cols-3 xl:gap-4 dark:bg-gray-900"
   >
     <div class="col-span-full xl:col-auto">
-      <VeleroServerSettings></VeleroServerSettings>
-      <VeleroUiSettings></VeleroUiSettings>
+      <SettingsVeleroServer></SettingsVeleroServer>
+      <SetttingsVeleroUi></SetttingsVeleroUi>
     </div>
-    <VeleroServerAgentsSettings></VeleroServerAgentsSettings>
+    <SettingsVeleroAgents></SettingsVeleroAgents>
   </div>
+  <SettingsVeleroPlugins class="pb-6"></SettingsVeleroPlugins>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import ClusterSettings from '../components/Settings/ClusterSettings.vue';
-import VeleroServerSettings from '../components/Settings/VeleroServerSettings.vue';
-import VeleroServerAgentsSettings from '../components/Settings/VeleroAgentsSettings.vue';
-import VeleroUiSettings from '../components/Settings/VeleroUiSetttings.vue';
+import SettingsCluster from '../components/Settings/SettingsCluster.vue';
+import SettingsVeleroServer from '../components/Settings/SettingsVeleroServer.vue';
+import SettingsVeleroAgents from '../components/Settings/SettingsVeleroAgents.vue';
+import SetttingsVeleroUi from '../components/Settings/SetttingsVeleroUi.vue';
+import SettingsVeleroPlugins from '../components/Settings/SettingsVeleroPlugins.vue';
 
 export default defineComponent({
   name: 'Settings',
   components: {
-    VeleroUiSettings,
-    VeleroServerAgentsSettings,
-    VeleroServerSettings,
-    ClusterSettings,
+    SettingsVeleroPlugins,
+    SetttingsVeleroUi,
+    SettingsVeleroAgents,
+    SettingsVeleroServer,
+    SettingsCluster,
   },
 });
 </script>

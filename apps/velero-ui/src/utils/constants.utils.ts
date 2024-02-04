@@ -8,29 +8,30 @@ export const ApiRoutes = {
   SETTINGS_VELERO_SERVER: '/settings/velero/server',
   SETTINGS_VELERO_AGENTS: '/settings/velero/agents',
   SETTINGS_VELERO_UI: '/settings/velero/ui',
+  SETTINGS_VELERO_PLUGINS: '/settings/velero/plugins',
 };
 
 export const Pages = {
   HOME: { name: 'Home', path: '/' },
   LOGIN: { name: 'Login', path: '/login' },
   BACKUPS: { name: 'Backups', path: '/backups' },
-  BACKUP: { name: 'Backup', path: '/backups/:namespace/:name' },
+  BACKUP: { name: 'Backup', path: '/backups/:name' },
   SCHEDULES: { name: 'Schedules', path: '/schedules' },
-  SCHEDULE: { name: 'Schedule', path: '/schedules/:namespace/:name' },
+  SCHEDULE: { name: 'Schedule', path: '/schedules/:name' },
   STORAGE_LOCATIONS: { name: 'Storage locations', path: '/storage-locations' },
   STORAGE_LOCATION: {
     name: 'Storage location',
-    path: '/storage-locations/:namespace/:name',
+    path: '/storage-locations/:name',
   },
   RESTORES: { name: 'Restores', path: '/restores' },
-  RESTORE: { name: 'Restore', path: '/restores/:namespace/:name' },
+  RESTORE: { name: 'Restore', path: '/restores/:name' },
   SNAPSHOT_LOCATIONS: {
     name: 'Snapshot Locations',
     path: '/snapshot-locations',
   },
   SNAPSHOT_LOCATION: {
     name: 'Snapshot Location',
-    path: '/snapshot-locations/:namespace/:name',
+    path: '/snapshot-locations/:name',
   },
   SETTINGS: {
     name: 'Settings',

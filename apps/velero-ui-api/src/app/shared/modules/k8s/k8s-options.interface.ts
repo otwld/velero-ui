@@ -2,7 +2,7 @@ import { ModuleMetadata } from '@nestjs/common';
 import { ConfigOptions } from '@kubernetes/client-node/dist/config_types';
 
 export interface K8sModuleFactoryOptions {
-  file: string;
+  kubeConfigPath: string;
   opts?: Partial<ConfigOptions>;
 }
 

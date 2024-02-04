@@ -7,10 +7,16 @@ import {
   VeleroServerSettings,
   VeleroUiSettings,
 } from '@velero-ui/shared-types';
+import { DownloadRequestService } from '../../shared/modules/download-request/download-request.service';
+import {V1ServerStatusRequest} from "@velero-ui/velero";
+import {ServerStatusRequestService} from "../../shared/modules/server-status-request/server-status-request.service";
 
 @Controller('/settings')
 export class SettingsController {
-  constructor(private readonly settingsService: SettingsService) {}
+  constructor(
+    private readonly settingsService: SettingsService,
+    private readonly serverStatusRequestService: ServerStatusRequestService
+  ) {}
 
   @Get('/cluster')
   public getCluster(): Observable<ClusterSettings> {
@@ -30,5 +36,10 @@ export class SettingsController {
   @Get('/velero/ui')
   public getVeleroUi(): Observable<VeleroUiSettings> {
     return this.settingsService.getVeleroUi();
+  }
+
+  @Get('/velero/plugins')
+  public getVeleroPlugins(): Observable<V1ServerStatusRequest> {
+    return this.serverStatusRequestService.create()
   }
 }

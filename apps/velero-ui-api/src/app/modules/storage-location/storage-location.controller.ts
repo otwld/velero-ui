@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { StorageLocationService } from './storage-location.service';
 import { Observable } from 'rxjs';
-import { V1BackupStorageLocationList } from '@velero-ui/shared-types';
+import { V1BackupStorageLocationList } from '@velero-ui/velero';
 
 @Controller('storage-locations')
 export class StorageLocationController {

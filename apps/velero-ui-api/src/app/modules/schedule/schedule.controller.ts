@@ -8,7 +8,7 @@ import {
 } from '@nestjs/common';
 import { ScheduleService } from './schedule.service';
 import { Observable } from 'rxjs';
-import { V1Schedule, V1ScheduleList } from '@velero-ui/shared-types';
+import { V1Schedule, V1ScheduleList } from '@velero-ui/velero';
 
 @Controller('schedules')
 export class ScheduleController {
@@ -23,11 +23,10 @@ export class ScheduleController {
     return this.scheduleService.find(offset, limit, search);
   }
 
-  @Get('/:namespace/:name')
+  @Get('/:name')
   public getByName(
-    @Param('name') name: string,
-    @Param('namespace') namespace: string
+    @Param('name') name: string
   ): Observable<V1Schedule> {
-    return this.scheduleService.findByName(name, namespace);
+    return this.scheduleService.findByName(name);
   }
 }

@@ -1,0 +1,23 @@
+{
+  "name": "velero",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/velero/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/velero",
+        "main": "libs/velero/src/index.ts",
+        "tsConfig": "libs/velero/tsconfig.lib.json",
+        "assets": ["libs/velero/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
+    }
+  },
+  "tags": []
+}

@@ -15,7 +15,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
-import { V1SchedulePhase } from '@velero-ui/shared-types';
+import { V1SchedulePhase } from '@velero-ui/velero';
 
 export default defineComponent({
   name: 'ScheduleStatusPhaseBadge',

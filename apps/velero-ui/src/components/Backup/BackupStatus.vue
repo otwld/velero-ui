@@ -78,7 +78,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
-import type { V1Backup } from '@velero-ui/shared-types';
+import type { V1Backup } from '@velero-ui/velero';
 import { getRemainingTime } from '../../utils/date.utils';
 import BackupStatusPhaseBadge from './BackupStatusPhaseBadge.vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';

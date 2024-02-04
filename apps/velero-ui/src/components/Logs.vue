@@ -4,19 +4,27 @@
       class="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800 xl:mb-0"
     >
       <div class="flow-root">
-        <h3 class="text-xl pb-4 font-semibold dark:text-white">Logs</h3>
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-xl font-semibold dark:text-white">Logs</h3>
+          <button
+            v-if="downloadable"
+            :disabled="!data"
+            @click="download()"
+            class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+          >
+            <FontAwesomeIcon :icon="faFileArrowDown" class="w-4 h-4 mr-2" />
+            Download
+          </button>
+        </div>
         <div
           class="p-4 text-sm text-white bg-gray-900 border border-gray-200 rounded-lg dark:border-gray-700 dark:text-white max-h-[500px] overflow-auto"
         >
           <div v-if="data">
-            <p v-for="line of data" class="flex-row pb-2">
+            <p v-for="line of data" class="flex-row">
               {{ line }}
             </p>
           </div>
-          <div
-            v-if="data?.length === 0"
-            class="inline-flex items-center"
-          >
+          <div v-if="data?.length === 0" class="inline-flex items-center">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 20 20"
@@ -60,11 +68,23 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
+import { faFileArrowDown } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 export default defineComponent({
   name: 'Logs',
+  components: { FontAwesomeIcon },
   props: {
     data: Array as PropType<string[]>,
+    downloadable: Boolean as PropType<boolean>,
+  },
+  data: () => ({
+    faFileArrowDown,
+  }),
+  methods: {
+    download() {
+      this.$parent.downloadLogs();
+    },
   },
 });
 </script>

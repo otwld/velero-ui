@@ -12,15 +12,23 @@ import {
 
 import { BackupService } from './backup.service';
 import { concatMap, from, Observable } from 'rxjs';
-import { V1Backup, V1BackupList } from '@velero-ui/shared-types';
+import {
+  V1Backup,
+  V1BackupList,
+  V1DeleteBackupRequest,
+  V1DownloadRequest,
+  V1DownloadTargetKind,
+} from '@velero-ui/velero';
 import { CreateDeleteBackRequestDto } from '../../shared/dto/delete-backup-request.dto';
-import { DeleteBackupRequestService } from '../delete-backup-request/delete-backup-request.service';
+import { DeleteBackupRequestService } from '../../shared/modules/delete-backup-request/delete-backup-request.service';
+import { DownloadRequestService } from '../../shared/modules/download-request/download-request.service';
 
 @Controller('backups')
 export class BackupController {
   constructor(
     private readonly backupService: BackupService,
-    private readonly deleteBackupRequestService: DeleteBackupRequestService
+    private readonly deleteBackupRequestService: DeleteBackupRequestService,
+    private readonly downloadRequestService: DownloadRequestService
   ) {}
 
   @Get()
@@ -56,37 +64,45 @@ export class BackupController {
     return {};
   }
 
-  @Get('/:namespace/:name')
-  public getByName(
-    @Param('name') name: string,
-    @Param('namespace') namespace: string
-  ): Observable<V1Backup> {
-    return this.backupService.findByName(name, namespace);
+  @Get('/:name')
+  public getByName(@Param('name') name: string): Observable<V1Backup> {
+    return this.backupService.findByName(name);
   }
 
-  @Get('/:namespace/:name/logs')
-  public logs(@Param('name') name: string) {
+  @Get('/:name/logs')
+  public logs(@Param('name') name: string): Observable<string[]> {
     return this.backupService.logs(name);
   }
 
-  @Post('/:namespace/:name/restore')
+  @Post('/:name/logs/download')
+  public downloadLogs(@Param('name') name: string): Observable<V1DownloadRequest> {
+    return this.downloadRequestService.create({
+      name,
+      kind: V1DownloadTargetKind.BackupLog,
+    });
+  }
+
+  @Post('/:name/restore')
   public restoreByName(@Param('name') name: string) {
     return {};
   }
 
-  @Post('/:namespace/:name/download')
-  public downloadByName(@Param('name') name: string) {
-    return {};
+  @Post('/:name/download')
+  public downloadByName(
+    @Param('name') name: string
+  ): Observable<V1DownloadRequest> {
+    return this.downloadRequestService.create({
+      name,
+      kind: V1DownloadTargetKind.BackupContents,
+    });
   }
 
-  @Delete('/:namespace/:name')
+  @Delete('/:name')
   public deleteByName(
-    @Param('name') name: string,
-    @Param('namespace') namespace: string
-  ) {
+    @Param('name') name: string
+  ): Observable<V1DeleteBackupRequest> {
     return this.deleteBackupRequestService.create({
       name,
-      namespace,
     });
   }
 }

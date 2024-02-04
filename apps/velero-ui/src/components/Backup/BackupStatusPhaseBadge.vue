@@ -11,7 +11,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
-import { V1BackupPhase } from '@velero-ui/shared-types';
+import { V1BackupPhase } from '@velero-ui/velero';
 
 export default defineComponent({
   name: 'BackupStatusPhaseBadge',

@@ -18,7 +18,7 @@ import { storeToRefs } from 'pinia';
 import { useScheduleStore } from '../stores/schedule.store';
 import ScheduleActions from '../components/Schedule/ScheduleActions.vue';
 import Describe from '../components/Describe.vue';
-import ScheduleStatus from '../components/Schedule/BackupStatus.vue';
+import ScheduleStatus from '../components/Schedule/ScheduleStatus.vue';
 import BackupDetails from "../components/Backup/BackupDetails.vue";
 
 export default defineComponent({

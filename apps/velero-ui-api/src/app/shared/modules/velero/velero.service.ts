@@ -8,48 +8,35 @@ import {
 } from '@kubernetes/client-node';
 import { catchError, from, map, Observable, tap } from 'rxjs';
 import http from 'http';
-import { VELERO } from '../../constants/velero.constants';
+import { VELERO } from './velero.constants';
 import { V1PodList } from '@kubernetes/client-node/dist/gen/model/v1PodList';
-
-export interface VeleroServer {
-  namespace: string;
-  podName: string;
-}
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class VeleroService {
   private k8sCoreV1Api: CoreV1Api;
-  private server: VeleroServer;
+  private podServerName: string;
 
-  constructor(@Inject(K8S_CONNECTION) private readonly k8s: KubeConfig) {
+  constructor(
+    @Inject(K8S_CONNECTION) private readonly k8s: KubeConfig,
+    private configService: ConfigService
+  ) {
     this.k8sCoreV1Api = this.k8s.makeApiClient(CoreV1Api);
-
-    this.server = {
-      namespace: '',
-      podName: '',
-    };
 
     this.findServer().subscribe();
   }
 
-  public checkServer(): Observable<VeleroServer> {
+  public checkServer(): Observable<string> {
     return this.getServerStatus()
       .pipe(catchError(() => this.findServer()))
-      .pipe(
-        map(
-          (): VeleroServer => ({
-            podName: this.server.podName,
-            namespace: this.server.namespace,
-          })
-        )
-      );
+      .pipe(map(() => this.podServerName));
   }
 
   public getServerStatus(): Observable<V1PodStatus> {
     return from(
       this.k8sCoreV1Api.readNamespacedPodStatus(
-        this.server.podName,
-        this.server.namespace
+        this.podServerName,
+        this.configService.get('velero.namespace')
       )
     ).pipe(
       map((r: { response: http.IncomingMessage; body: V1Pod }) => r.body.status)
@@ -59,14 +46,18 @@ export class VeleroService {
   public getServer(): Observable<V1Pod> {
     return from(
       this.k8sCoreV1Api.readNamespacedPod(
-        this.server.podName,
-        this.server.namespace
+        this.podServerName,
+        this.configService.get('velero.namespace')
       )
     ).pipe(map((r: { response: http.IncomingMessage; body: V1Pod }) => r.body));
   }
 
   public getAgents(): Observable<V1Pod[]> {
-    return from(this.k8sCoreV1Api.listNamespacedPod(this.server.namespace))
+    return from(
+      this.k8sCoreV1Api.listNamespacedPod(
+        this.configService.get('velero.namespace')
+      )
+    )
       .pipe(
         map(
           (r: { response: http.IncomingMessage; body: V1PodList }) =>
@@ -85,7 +76,11 @@ export class VeleroService {
   }
 
   private findServer(): Observable<V1Pod> {
-    return from(this.k8sCoreV1Api.listPodForAllNamespaces())
+    return from(
+      this.k8sCoreV1Api.listNamespacedPod(
+        this.configService.get('velero.namespace')
+      )
+    )
       .pipe(
         map(
           (r: { response: http.IncomingMessage; body: V1PodList }) =>
@@ -103,8 +98,7 @@ export class VeleroService {
       .pipe(
         tap((pod: V1Pod): void => {
           if (pod) {
-            this.server.namespace = pod.metadata.namespace;
-            this.server.podName = pod.metadata.name;
+            this.podServerName = pod.metadata.name;
           } else {
             throw new Error('Cannot find Velero server!');
           }

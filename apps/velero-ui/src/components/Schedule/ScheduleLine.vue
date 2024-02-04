@@ -17,7 +17,6 @@
         name: Pages.SCHEDULE.name,
         params: {
           name: data.metadata.name,
-          namespace: data.metadata.namespace,
         },
       }"
     >
@@ -41,7 +40,6 @@
           name: Pages.SNAPSHOT_LOCATION.name,
           params: {
             name: data.spec.template.storageLocation,
-            namespace: data.metadata.namespace,
           },
         }"
         class="inline-flex items-center bg-gray-100 hover:bg-gray-200 text-gray-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-300"
@@ -104,7 +102,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import type { V1Schedule } from '@velero-ui/shared-types';
+import type { V1Schedule } from '@velero-ui/velero';
 import {
   convertTimestampToDate,
 } from '../../utils/date.utils';
@@ -119,7 +117,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { Pages } from '../../utils/constants.utils';
 import ScheduleStatusPhaseBadge from './ScheduleStatusPhaseBadge.vue';
-import { V1SchedulePhase } from '@velero-ui/shared-types';
+import { V1SchedulePhase } from '@velero-ui/velero';
 
 export default defineComponent({
   name: 'ScheduleLine',

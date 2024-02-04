@@ -1,4 +1,4 @@
-/// <reference types='vitest' />
+/// <reference models='vitest' />
 import fs from 'fs';
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';

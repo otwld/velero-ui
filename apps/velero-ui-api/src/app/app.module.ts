@@ -13,14 +13,28 @@ import { HealthModule } from './modules/health/health.module';
 import { HttpModule } from '@nestjs/axios';
 import { VeleroModule } from './shared/modules/velero/velero.module';
 import { SettingsModule } from './modules/settings/settings.module';
-import { DeleteBackupRequestModule } from './modules/delete-backup-request/delete-backup-request.module';
+import { DeleteBackupRequestModule } from './shared/modules/delete-backup-request/delete-backup-request.module';
+import { DownloadRequestModule } from './shared/modules/download-request/download-request.module';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ServerStatusRequestModule } from './shared/modules/server-status-request/server-status-request.module';
+import velero from '../config/velero.config';
+import k8s from '../config/k8s.config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      load: [velero, k8s],
+    }),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, 'static'),
     }),
-    K8sModule.forRoot('/Users/jdetroyes/.kube/config'),
+    K8sModule.forRootAsync({
+      useFactory: (configService: ConfigService) => ({
+        kubeConfigPath: configService.get('k8s.kubeConfigPath'),
+      }),
+      inject: [ConfigService],
+    }),
     ThrottlerModule.forRoot([
       {
         ttl: 60000,
@@ -35,7 +49,6 @@ import { DeleteBackupRequestModule } from './modules/delete-backup-request/delet
     HealthModule,
     VeleroModule,
     SettingsModule,
-    DeleteBackupRequestModule,
   ],
   controllers: [],
   providers: [

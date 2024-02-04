@@ -1,4 +1,4 @@
-import type { V1Schedule } from '@velero-ui/shared-types';
+import type { V1Schedule } from '@velero-ui/velero';
 import { defineStore } from 'pinia';
 import { ApiRoutes } from '../utils/constants.utils';
 import type { AxiosResponse } from 'axios';
@@ -31,7 +31,7 @@ export const useScheduleStore = defineStore({
     } as ScheduleStore),
   getters: {},
   actions: {
-    async get(name: string, namespace: string) {
+    async get(name: string) {
       try {
         this.schedule = this.schedules.find(
           (b: V1Schedule) => b?.metadata?.name === name
@@ -39,7 +39,7 @@ export const useScheduleStore = defineStore({
 
         if (!this.schedule) {
           const response = (await this.axios.get(
-            `${ApiRoutes.SCHEDULES}/${namespace}/${name}`,
+            `${ApiRoutes.SCHEDULES}/${name}`,
             {}
           )) as AxiosResponse;
 
