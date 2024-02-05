@@ -1,26 +1,26 @@
 import type {
-  V1BackupStorageLocation,
-  V1BackupStorageLocationList,
+  V1VolumeSnapshotLocation,
+  V1VolumeSnapshotLocationList,
 } from '@velero-ui/velero';
 import { defineStore } from 'pinia';
 import { ApiRoutes } from '../utils/constants.utils';
 import type { AxiosResponse } from 'axios';
 
-export interface StorageLocationSearchFilters {
+export interface SnapshotLocationSearchFilters {
   startWith: string;
 }
 
-export interface StorageLocationStore {
-  locations: V1BackupStorageLocation[];
-  location: V1BackupStorageLocation;
+export interface SnapshotLocationStore {
+  locations: V1VolumeSnapshotLocation[];
+  location: V1VolumeSnapshotLocation;
   total: number;
   offset: number;
   limit: number;
-  filters: StorageLocationSearchFilters;
+  filters: SnapshotLocationSearchFilters;
 }
 
-export const useStorageLocationStore = defineStore({
-  id: 'storage-location',
+export const useSnapshotLocationStore = defineStore({
+  id: 'snapshot-location',
   state: () =>
     ({
       locations: [],
@@ -31,21 +31,21 @@ export const useStorageLocationStore = defineStore({
       filters: {
         search: null,
       },
-    } as StorageLocationStore),
+    } as SnapshotLocationStore),
   getters: {},
   actions: {
     async get(name: string) {
       try {
         this.location = this.locations.find(
-          (b: V1BackupStorageLocation): boolean => b?.metadata?.name === name
+          (b: V1VolumeSnapshotLocation): boolean => b?.metadata?.name === name
         );
 
         if (!this.backup) {
-          const response: AxiosResponse<V1BackupStorageLocation> =
+          const response: AxiosResponse<V1VolumeSnapshotLocation> =
             (await this.axios.get(
-              `${ApiRoutes.STORAGE_LOCATIONS}/${name}`,
+              `${ApiRoutes.SNAPSHOT_LOCATIONS}/${name}`,
               {}
-            )) as AxiosResponse<V1BackupStorageLocation>;
+            )) as AxiosResponse<V1VolumeSnapshotLocation>;
 
           this.location = response.data;
         }
@@ -56,14 +56,14 @@ export const useStorageLocationStore = defineStore({
     },
     async fetch() {
       try {
-        const response: AxiosResponse<V1BackupStorageLocationList> =
-          (await this.axios.get(ApiRoutes.STORAGE_LOCATIONS, {
+        const response: AxiosResponse<V1VolumeSnapshotLocationList> =
+          (await this.axios.get(ApiRoutes.SNAPSHOT_LOCATIONS, {
             params: {
               offset: this.offset,
               limit: this.limit,
               search: this.filters.search,
             },
-          })) as AxiosResponse<V1BackupStorageLocationList>;
+          })) as AxiosResponse<V1VolumeSnapshotLocationList>;
 
         this.locations = response.data.items;
         this.total = response.data.total;
@@ -73,11 +73,6 @@ export const useStorageLocationStore = defineStore({
     },
     async delete(names: string[]) {
       try {
-        const response = (await this.axios.delete(
-          `${ApiRoutes.SCHEDULES}}`
-        )) as AxiosResponse;
-
-        this.fetch();
       } catch (e) {
         console.error(e);
       }

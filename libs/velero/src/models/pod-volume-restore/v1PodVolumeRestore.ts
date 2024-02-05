@@ -1,9 +1,11 @@
 import { KubernetesObject, V1Pod } from '@kubernetes/client-node';
-import { V1DataMoveOperationProgress } from '../shared/shared';
+import { V1DataMoveOperationProgress, V1Metadata } from '../shared/shared';
+import { V1ObjectMeta } from '@kubernetes/client-node/dist/api';
 
 export interface V1PodVolumeRestore extends KubernetesObject {
-  spec: V1PodVolumeRestoreSpec;
-  status: V1PodVolumeRestoreStatus;
+  metadata?: V1ObjectMeta & V1Metadata;
+  spec?: V1PodVolumeRestoreSpec;
+  status?: V1PodVolumeRestoreStatus;
 }
 
 export interface V1PodVolumeRestoreSpec {

@@ -76,7 +76,7 @@ export class ServerStatusRequestService {
       .pipe(
         map((requestStatus: V1ServerStatusRequest): V1ServerStatusRequest => {
           if (
-            requestStatus.status.phase !== V1ServerStatusRequestPhase.Processed
+            requestStatus?.status?.phase !== V1ServerStatusRequestPhase.Processed
           ) {
             throwError(() => 'Server status request not ready!');
           }

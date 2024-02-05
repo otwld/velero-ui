@@ -6,7 +6,7 @@ import { VELERO } from '../velero/velero.constants';
 import { CreateDeleteBackRequestDto } from '../../dto/delete-backup-request.dto';
 import { createDeleteBackupRequest } from './delete-backup-request.utils';
 import { ConfigService } from '@nestjs/config';
-import { V1DeleteBackupRequest } from '@velero-ui/velero';
+import {Ressources, V1DeleteBackupRequest} from '@velero-ui/velero';
 import http from 'http';
 
 @Injectable()
@@ -34,7 +34,7 @@ export class DeleteBackupRequestService {
           this.k8sCustomObjectApi.createClusterCustomObject(
             VELERO.GROUP,
             VELERO.VERSION,
-            VELERO.PLURAL_DELETE_BACKUP_REQUEST,
+            Ressources.DELETE_BACKUP_REQUEST.plurial,
             request
           )
         )

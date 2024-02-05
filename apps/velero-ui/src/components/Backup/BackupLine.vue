@@ -34,7 +34,23 @@
     <td
       class="max-w-sm p-4 overflow-hidden text-base font-normal text-gray-500 truncate xl:max-w-xs dark:text-gray-400"
     >
-      {{ data.metadata.namespace }}
+      <router-link
+        v-if="data?.metadata?.labels['velero.io/schedule-name']"
+        :to="{
+          name: Pages.SCHEDULE.name,
+          params: {
+            name: data?.metadata?.labels['velero.io/schedule-name'],
+          },
+        }"
+        class="inline-flex items-center bg-gray-100 hover:bg-gray-200 text-gray-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-300"
+      >
+        <FontAwesomeIcon :icon="faDatabase" class="w-3 h-3 mr-1.5" />
+        {{ data?.metadata?.labels['velero.io/schedule-name'] }}
+        <FontAwesomeIcon
+          :icon="faArrowUpRightFromSquare"
+          class="w-2 h-2 ml-1.5"
+        />
+      </router-link>
     </td>
     <td
       class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white"
@@ -66,9 +82,18 @@
       <button
         type="button"
         @click="download()"
+        data-tooltip-target="tooltip-button-download"
         class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-teal-800"
       >
         <FontAwesomeIcon :icon="faDownload" class="w-4 h-4" />
+        <div
+          id="tooltip-button-download"
+          role="tooltip"
+          class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
+        >
+          Download
+          <div class="tooltip-arrow" data-popper-arrow></div>
+        </div>
       </button>
       <button
         type="button"
@@ -97,7 +122,10 @@ import {
   faClockRotateLeft,
   faTrashCan,
   faDownload,
+  faDatabase,
+  faArrowUpRightFromSquare,
 } from '@fortawesome/free-solid-svg-icons';
+import { initTooltips } from 'flowbite';
 
 export default defineComponent({
   name: 'BackupLine',
@@ -106,11 +134,16 @@ export default defineComponent({
     const backupStore = useBackupStore();
     return { backupStore };
   },
+  mounted() {
+    initTooltips();
+  },
   data: () => ({
     Pages,
     faClockRotateLeft,
     faTrashCan,
     faDownload,
+    faDatabase,
+    faArrowUpRightFromSquare,
   }),
   props: {
     data: Object as PropType<V1Backup>,
@@ -119,7 +152,6 @@ export default defineComponent({
     getRemainingTime,
     convertTimestampToDate,
     remove(): void {
-      // this.backupStore.delete([this.data.metadata.name]);
       console.log('click delete');
     },
     restore(): void {

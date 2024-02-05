@@ -3,6 +3,10 @@ export interface V1DataMoveOperationProgress {
   bytesDone?: number;
 }
 
+export interface V1Metadata {
+  labels?: Partial<V1LabelsAnnotations>;
+}
+
 export interface V1LabelsAnnotations {
   'velero.io/backup-name'?: string;
   'velero.io/backup-uid'?: string;

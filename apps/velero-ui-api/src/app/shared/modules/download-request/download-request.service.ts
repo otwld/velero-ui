@@ -76,7 +76,7 @@ export class DownloadRequestService {
       )
       .pipe(
         map((requestStatus: V1DownloadRequest): V1DownloadRequest => {
-          if (requestStatus.status.phase !== V1DownloadRequestPhase.Processed) {
+          if (requestStatus?.status?.phase !== V1DownloadRequestPhase.Processed) {
             throwError(() => 'Download request not ready!');
           }
           return requestStatus;

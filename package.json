@@ -24,7 +24,6 @@
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
     "flowbite": "^2.2.1",
-    "flowbite-vue": "^0.1.2",
     "helmet": "^7.1.0",
     "oidc-client-ts": "^2.4.0",
     "pinia": "^2.1.7",

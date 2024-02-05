@@ -61,6 +61,7 @@ export class K8sModule {
           defer(async () => {
             const k8sConfig = new KubeConfig();
             k8sConfig.loadFromFile(options.kubeConfigPath, options.opts);
+            k8sConfig.setCurrentContext('zeus');  // TODO: remove
             return k8sConfig;
           }).pipe(
             catchError((error) => {

@@ -18,7 +18,6 @@ import { useBackupStore } from '../stores/backup.store';
 import type { Router } from 'vue-router';
 import { useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
-import { convertTimestampToDate, getRemainingTime } from '../utils/date.utils';
 import BackupActions from '../components/Backup/BackupActions.vue';
 import Logs from '../components/Logs.vue';
 import Describe from '../components/Describe.vue';
@@ -47,8 +46,6 @@ export default defineComponent({
     );
   },
   methods: {
-    getRemainingTime,
-    convertTimestampToDate,
     remove(): void {
       // this.backupStore.delete([this.data.metadata.name]);
       console.log('click delete');

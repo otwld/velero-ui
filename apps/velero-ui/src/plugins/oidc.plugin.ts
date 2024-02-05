@@ -7,7 +7,7 @@ export const registerOidcClient = (app: App) => {
     client_id: import.meta.env.VITE_OIDC_CLIENT_ID,
     client_secret: import.meta.env.VITE_OIDC_CLIENT_SECRET,
     redirect_uri: import.meta.env.VITE_BASE_URL + '/login',
-    post_logout_redirect_uri: import.meta.env.VITE_BASE_URL + '/login',
+    post_logout_redirect_uri: import.meta.env.VITE_BASE_URL + '/login?state=success&reason=logout',
     response_type: 'code',
     scope: 'openid email profile',
     response_mode: 'fragment',

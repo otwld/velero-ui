@@ -5,7 +5,7 @@ import {
   CustomObjectsApi,
   KubeConfig,
 } from '@kubernetes/client-node';
-import { concatMap, map, Observable, tap } from 'rxjs';
+import {catchError, concatMap, map, Observable, tap} from 'rxjs';
 import { from } from 'rxjs';
 import http from 'http';
 import { VELERO } from '../../shared/modules/velero/velero.constants';
@@ -54,7 +54,7 @@ export class BackupService {
     )
       .pipe(
         map(
-          (r: { response: http.IncomingMessage; body: any }): V1BackupList =>
+          (r: { response: http.IncomingMessage; body: V1BackupList }): V1BackupList =>
             r.body
         )
       )
@@ -95,7 +95,7 @@ export class BackupService {
           (
             downloadRequest: V1DownloadRequest
           ): Observable<AxiosResponse<ArrayBuffer>> =>
-            this.httpService.get(downloadRequest.status.downloadURL, {
+            this.httpService.get(downloadRequest?.status?.downloadURL, {
               responseType: 'arraybuffer',
             })
         )

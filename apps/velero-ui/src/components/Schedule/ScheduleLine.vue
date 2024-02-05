@@ -37,13 +37,14 @@
       <router-link
         v-if="data.spec.template?.storageLocation"
         :to="{
-          name: Pages.SNAPSHOT_LOCATION.name,
+          name: Pages.STORAGE_LOCATION.name,
           params: {
             name: data.spec.template.storageLocation,
           },
         }"
         class="inline-flex items-center bg-gray-100 hover:bg-gray-200 text-gray-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-300"
       >
+        <FontAwesomeIcon :icon="faServer" class="w-3 h-3 mr-1.5" />
         {{ data.spec.template.storageLocation }}
         <FontAwesomeIcon
           :icon="faArrowUpRightFromSquare"
@@ -112,6 +113,7 @@ import {
   faPause,
   faPlay,
   faTrashCan,
+  faServer,
   faArrowUpRightFromSquare,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
@@ -131,6 +133,7 @@ export default defineComponent({
     V1SchedulePhase,
     faPause,
     faPlay,
+    faServer,
     faTrashCan,
     faArrowUpRightFromSquare,
   }),

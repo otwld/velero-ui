@@ -27,9 +27,13 @@ export const Ressources = {
     kind: 'PodVolumeRestore',
     plurial: 'podvolumerestores',
   },
-  BACKUP_REPOSITORY: {
+  BACKUP_REPOSITORY: { // >= v1.10.x
     kind: 'BackupRepository',
     plurial: 'backuprepositories',
+  },
+  RESTIC_REPOSITORY: { // < v1.10.x
+    kind: 'ResticRepository',
+    plurial: 'resticrepositories',
   },
   BACKUP_STORAGE_LOCATION: {
     kind: 'BackupStorageLocation',

@@ -1,8 +1,11 @@
 import { KubernetesObject } from '@kubernetes/client-node';
+import { V1Metadata } from '../shared';
+import { V1ObjectMeta } from '@kubernetes/client-node/dist/api';
 
 export interface V1Backup extends KubernetesObject {
-  spec: V1BackupSpec;
-  status: V1BackupStatus;
+  metadata?: V1ObjectMeta & V1Metadata;
+  spec?: V1BackupSpec;
+  status?: V1BackupStatus;
 }
 
 export interface V1BackupSpec {

@@ -50,7 +50,8 @@
           </button>
           <button
             type="button"
-            @click="this.$parent.remove()"
+            data-modal-target="modal-delete"
+            data-modal-toggle="modal-delete"
             class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-red-600 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"
           >
             <FontAwesomeIcon :icon="faTrashCan" class="w-4 h-4 mr-2" />
@@ -60,6 +61,7 @@
       </div>
     </div>
   </div>
+  <ModalDelete id="modal-delete" :name="backup?.metadata?.name"></ModalDelete>
 </template>
 
 <script lang="ts">
@@ -73,12 +75,17 @@ import {
   faFloppyDisk,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { initModals } from 'flowbite';
+import ModalDelete from '../Modals/ModalDelete.vue';
 
 export default defineComponent({
   name: 'BackupActions',
-  components: { FontAwesomeIcon },
+  components: { ModalDelete, FontAwesomeIcon },
   props: {
     backup: Object as PropType<V1Backup>,
+  },
+  mounted() {
+    initModals();
   },
   data: () => ({
     faClockRotateLeft,
@@ -86,5 +93,10 @@ export default defineComponent({
     faDownload,
     faFloppyDisk,
   }),
+  methods: {
+    remove(): void {
+      this.$parent.remove();
+    },
+  },
 });
 </script>

@@ -1,6 +1,9 @@
 import { KubernetesObject } from '@kubernetes/client-node';
+import { V1ObjectMeta } from '@kubernetes/client-node/dist/api';
+import { V1Metadata } from '../shared';
 
 export interface V1DeleteBackupRequest extends KubernetesObject {
+  metadata?: V1ObjectMeta & V1Metadata;
   spec?: V1DeleteBackupRequestSpec;
   status?: V1DeleteBackupRequestStatus;
 }

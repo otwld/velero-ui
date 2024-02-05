@@ -13,6 +13,8 @@ import { Pages } from '../utils/constants.utils';
 import SnapshotLocationList from '../views/SnapshotLocationList.vue';
 import Settings from '../views/Settings.vue';
 import Schedule from '../views/Schedule.vue';
+import StorageLocation from '../views/StorageLocation.vue';
+import SnapshotLocation from '../views/SnapshotLocation.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -41,7 +43,7 @@ const routes: Array<RouteRecordRaw> = [
           },
           {
             ...Pages.STORAGE_LOCATION,
-            component: Schedule,
+            component: StorageLocation,
           },
         ],
       },
@@ -71,7 +73,7 @@ const routes: Array<RouteRecordRaw> = [
           },
           {
             ...Pages.SNAPSHOT_LOCATION,
-            component: Schedule,
+            component: SnapshotLocation,
           },
         ],
       },

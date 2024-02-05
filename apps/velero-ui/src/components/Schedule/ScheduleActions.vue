@@ -30,6 +30,13 @@
         ></div>
         <div v-if="schedule" class="flex items-center space-x-4">
           <button
+            type="button"
+            class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:ring-teal-300 dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
+          >
+            <FontAwesomeIcon :icon="faPen" class="w-4 h-4 mr-2" />
+            Edit
+          </button>
+          <button
             v-if="
               schedule.status.phase !== V1SchedulePhase.FailedValidation
             "
@@ -72,6 +79,7 @@ import {
   faPlay,
   faTrashCan,
   faClock,
+  faPen,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { V1SchedulePhase } from '@velero-ui/velero';
@@ -88,6 +96,7 @@ export default defineComponent({
     faTrashCan,
     faPlay,
     faClock,
+    faPen,
   }),
 });
 </script>

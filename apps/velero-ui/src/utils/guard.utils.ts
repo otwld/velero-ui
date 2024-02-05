@@ -16,12 +16,24 @@ const guard: NavigationGuardWithThis<string> = async (
     const user: User = await oidcClient.getUser();
 
     if (!user && to.name !== Pages.LOGIN.name) {
-      return { name: Pages.LOGIN.name };
+      return {
+        name: Pages.LOGIN.name,
+        query: {
+          state: 'error',
+          reason: 'unauthorized',
+        },
+      };
     }
 
     if (user && user.expired) {
       await oidcClient.removeUser();
-      return { name: Pages.LOGIN.name };
+      return {
+        name: Pages.LOGIN.name,
+        query: {
+          state: 'error',
+          reason: 'inactivity',
+        },
+      };
     }
 
     if (user && to.name === 'Login') {

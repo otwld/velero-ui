@@ -1,9 +1,11 @@
-import { V1HookErrorMode, V1HookStatus } from '@velero-ui/velero';
+import { V1HookErrorMode, V1HookStatus, V1Metadata } from '@velero-ui/velero';
 import { KubernetesObject } from '@kubernetes/client-node';
+import { V1ObjectMeta } from '@kubernetes/client-node/dist/api';
 
 export interface V1Restore extends KubernetesObject {
-  spec: V1RestoreSpec;
-  status: V1RestoreStatus;
+  metadata?: V1ObjectMeta & V1Metadata;
+  spec?: V1RestoreSpec;
+  status?: V1RestoreStatus;
 }
 
 export interface V1RestoreSpec {

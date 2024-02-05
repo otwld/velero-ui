@@ -4,7 +4,7 @@ import { K8S_CONNECTION } from '../../shared/modules/k8s/k8s.constants';
 import { from, map, Observable } from 'rxjs';
 import { VELERO } from '../../shared/modules/velero/velero.constants';
 import http from 'http';
-import { V1Schedule, V1ScheduleList } from '@velero-ui/velero';
+import { Ressources, V1Schedule, V1ScheduleList } from '@velero-ui/velero';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()
@@ -28,13 +28,15 @@ export class ScheduleService {
         VELERO.GROUP,
         VELERO.VERSION,
         this.configService.get('velero.namespace'),
-        VELERO.PLURAL_SCHEDULES
+        Ressources.SCHEDULE.plurial
       )
     )
       .pipe(
         map(
-          (r: { response: http.IncomingMessage; body: any }): V1ScheduleList =>
-            r.body
+          (r: {
+            response: http.IncomingMessage;
+            body: V1ScheduleList;
+          }): V1ScheduleList => r.body
         )
       )
       .pipe(
@@ -54,7 +56,7 @@ export class ScheduleService {
         VELERO.GROUP,
         VELERO.VERSION,
         this.configService.get('velero.namespace'),
-        VELERO.PLURAL_SCHEDULES,
+        Ressources.SCHEDULE.plurial,
         name
       )
     ).pipe(

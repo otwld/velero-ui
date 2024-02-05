@@ -22,6 +22,8 @@
           >
             Sign in
           </h1>
+          <Alert :message="error" color="red" :icon="faCircleExclamation"></Alert>
+          <Alert :message="success" color="green" :icon="faCircleExclamation"></Alert>
           <form
             class="space-y-4 md:space-y-6"
             @submit.prevent="basicLogin($event)"
@@ -65,11 +67,15 @@
               <FontAwesomeIcon
                 v-if="basicLoading"
                 :icon="faCircleNotch"
-                class=" w-4 h-4 animate-spin mr-2"
+                class="w-4 h-4 animate-spin mr-2"
               />
               Sign in
             </button>
-
+            <div class="flex items-center mb-1.5 mt-1.5">
+              <div class="w-full bg-gray-300 h-0.5"></div>
+              <div class="px-3 text-gray-600 text-center">or</div>
+              <div class="w-full bg-gray-300 h-0.5"></div>
+            </div>
             <button
               @click="ssoLogin()"
               type="button"
@@ -79,7 +85,7 @@
               <FontAwesomeIcon
                 v-if="ssoLoading"
                 :icon="faCircleNotch"
-                class=" w-4 h-4 animate-spin mr-2"
+                class="w-4 h-4 animate-spin mr-2"
               />
               Single Sign On Login
             </button>
@@ -93,27 +99,43 @@
 <script lang="ts">
 import { defineComponent, inject } from 'vue';
 import type { UserManager } from 'oidc-client-ts';
-import type { Router } from 'vue-router';
-import { useRouter } from 'vue-router';
+import type { Router,  } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import {
-  faCircleNotch,
-} from '@fortawesome/free-solid-svg-icons';
+import { faCircleNotch, faCircleExclamation } from '@fortawesome/free-solid-svg-icons';
+import Alert from "../../components/Alert.vue";
 
 export default defineComponent({
   name: 'Header',
-  components: { FontAwesomeIcon },
+  components: {Alert, FontAwesomeIcon },
   setup() {
     const oidcClient: UserManager = inject('oidcClient') as UserManager;
     const router: Router = useRouter();
-    return { oidcClient, router };
+    const route = useRoute();
+    return { oidcClient, router, route };
   },
   data: () => ({
     faCircleNotch,
+    faCircleExclamation,
     ssoLoading: false,
     basicLoading: false,
+    error: '',
+    success: '',
   }),
   async beforeMount() {
+    if (this.route.query?.state === 'error') {
+      if (this.route.query?.reason === 'unauthorized') {
+        this.error = 'You must login to access this page.';
+      }
+      if (this.route.query?.reason === 'inactivity') {
+        this.error = 'Your session timed out.';
+      }
+    } else if (this.route.query?.state === 'success') {
+      if (this.route.query?.reason === 'logout') {
+       this.success = 'You successfully logged out!';
+      }
+    }
+
     if (window.location.href.indexOf('#') >= 0) {
       this.ssoLoading = true;
       try {
@@ -127,11 +149,12 @@ export default defineComponent({
     }
   },
   methods: {
-    ssoLogin() {
+    async ssoLogin() {
       try {
         this.ssoLoading = true;
-        this.oidcClient.signinRedirect({});
+        await this.oidcClient.signinRedirect({});
       } catch (e) {
+        this.error = 'Unable to proceed request, please retry.'
         this.ssoLoading = false;
         console.error(e);
       }

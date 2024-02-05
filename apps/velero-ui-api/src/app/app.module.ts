@@ -17,6 +17,7 @@ import { DeleteBackupRequestModule } from './shared/modules/delete-backup-reques
 import { DownloadRequestModule } from './shared/modules/download-request/download-request.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ServerStatusRequestModule } from './shared/modules/server-status-request/server-status-request.module';
+import { SnapshotLocationModule } from './modules/snapshot-location/snapshot-location.module';
 import velero from '../config/velero.config';
 import k8s from '../config/k8s.config';
 
@@ -49,6 +50,7 @@ import k8s from '../config/k8s.config';
     HealthModule,
     VeleroModule,
     SettingsModule,
+    SnapshotLocationModule,
   ],
   controllers: [],
   providers: [

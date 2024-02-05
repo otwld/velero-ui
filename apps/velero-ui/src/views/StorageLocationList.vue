@@ -14,7 +14,7 @@ import { defineComponent } from 'vue';
 import List from '../components/List.vue';
 import { storeToRefs } from 'pinia';
 import { useStorageLocationStore } from '../stores/storage-location.store';
-import StorageLocationLine from '../components/StorageLocationLine.vue';
+import StorageLocationLine from '../components/StorageLocation/StorageLocationLine.vue';
 
 export default defineComponent({
   name: 'StorageLocationList',
@@ -34,7 +34,6 @@ export default defineComponent({
     return {
       headers: [
         'Name',
-        'Namespace',
         'Provider',
         'Last Sync',
         'Status',

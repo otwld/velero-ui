@@ -1,8 +1,11 @@
 import { KubernetesObject } from '@kubernetes/client-node';
+import { V1ObjectMeta } from '@kubernetes/client-node/dist/api';
+import { V1Metadata } from '../shared';
 
 export interface V1BackupStorageLocation extends KubernetesObject {
-  spec: V1BackupStorageLocationSpec;
-  status: V1BackupStorageLocationStatus;
+  metadata?: V1ObjectMeta & V1Metadata;
+  spec?: V1BackupStorageLocationSpec;
+  status?: V1BackupStorageLocationStatus;
 }
 
 export const enum V1BackupStorageLocationAccessMode {

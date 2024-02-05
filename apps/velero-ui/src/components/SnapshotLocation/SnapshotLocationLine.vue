@@ -11,7 +11,15 @@
         <label for="checkbox-" class="sr-only">checkbox</label>
       </div>
     </td>
-    <router-link router-link :to="'/backups/' + data.metadata.uid">
+    <router-link
+      router-link
+      :to="{
+        name: Pages.SNAPSHOT_LOCATION.name,
+        params: {
+          name: data.metadata.name,
+        },
+      }"
+    >
       <td class="flex items-center p-4 mr-12 space-x-6 whitespace-nowrap">
         <div class="text-sm font-normal text-gray-500 dark:text-gray-400">
           <div class="text-base font-semibold text-gray-900 dark:text-white">
@@ -24,55 +32,38 @@
       </td>
     </router-link>
     <td
-      class="max-w-sm p-4 overflow-hidden text-base font-normal text-gray-500 truncate xl:max-w-xs dark:text-gray-400"
-    >
-      {{ data.metadata.namespace }}
-    </td>
-    <td
       class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white"
     >
       {{ data.spec.provider }}
-    </td>
-    <td
-      class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white"
-    >
-      {{ convertTimestampToDate(data.status.lastSyncedTime) }}
     </td>
     <td
       class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white"
     >
       <div class="flex items-center">
         <div
-          v-if="data.status.phase === V1BackupStorageLocationPhase.Available"
+          v-if="data?.status?.phase === V1VolumeSnapshotLocationPhase.Available"
           class="h-2.5 w-2.5 rounded-full bg-green-400 mr-2"
         ></div>
         <div
-          v-if="data.status.phase !== V1BackupStorageLocationPhase.Available"
+          v-if="
+            data?.status?.phase === V1VolumeSnapshotLocationPhase.Unavailable
+          "
           class="h-2.5 w-2.5 rounded-full bg-red-500 mr-2"
         ></div>
-        {{ data.status.phase }}
+        <div
+          v-if="!data?.status?.phase"
+          class="h-2.5 w-2.5 rounded-full bg-gray-500 mr-2"
+        ></div>
+        {{ data?.status?.phase ? data.status.phase : 'Unknown' }}
       </div>
     </td>
     <td class="p-4 space-x-2 whitespace-nowrap">
       <button
         type="button"
         @click="remove()"
-        data-modal-target="delete-user-modal"
-        data-modal-toggle="delete-user-modal"
         class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"
       >
-        <svg
-          class="w-4 h-4"
-          fill="currentColor"
-          viewBox="0 0 20 20"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            fill-rule="evenodd"
-            d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
-            clip-rule="evenodd"
-          ></path>
-        </svg>
+        <FontAwesomeIcon :icon="faTrashCan" class="w-4 h-4" />
       </button>
     </td>
   </tr>
@@ -80,25 +71,33 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import type { V1BackupStorageLocation } from '@velero-ui/velero';
+import type { V1VolumeSnapshotLocation } from '@velero-ui/velero';
 import type { PropType } from 'vue';
-import { useStorageLocationStore } from '../stores/storage-location.store';
-import { V1BackupStorageLocationPhase } from '@velero-ui/velero';
-import {convertTimestampToDate} from "../utils/date.utils";
+import { V1VolumeSnapshotLocationPhase } from '@velero-ui/velero';
+import { convertTimestampToDate } from '../../utils/date.utils';
+import { useSnapshotLocationStore } from '../../stores/snapshot-location';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
+import { Pages } from '../../utils/constants.utils';
 
 export default defineComponent({
-  name: 'StorageLocationLine',
+  name: 'SnapshotLocationLine',
+  components: { FontAwesomeIcon },
   computed: {
-    V1BackupStorageLocationPhase() {
-      return V1BackupStorageLocationPhase;
+    V1VolumeSnapshotLocationPhase() {
+      return V1VolumeSnapshotLocationPhase;
     },
   },
   setup() {
-    const storageLocationStore = useStorageLocationStore();
-    return { storageLocationStore };
+    const snapshotLocationStore = useSnapshotLocationStore();
+    return { snapshotLocationStore };
   },
+  data: () => ({
+    Pages,
+    faTrashCan,
+  }),
   props: {
-    data: Object as PropType<V1BackupStorageLocation>,
+    data: Object as PropType<V1VolumeSnapshotLocation>,
   },
   methods: {
     convertTimestampToDate,

@@ -38,14 +38,14 @@
             </li>
             <li>
               <router-link
-                :to="Pages.STORAGE_LOCATIONS.path"
+                :to="Pages.SCHEDULES.path"
                 class="flex items-center p-2 text-base text-gray-900 rounded-lg hover:bg-gray-100 group dark:text-gray-200 dark:hover:bg-gray-700"
               >
                 <FontAwesomeIcon
-                  :icon="faDatabase"
+                  :icon="faClock"
                   class="w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
                 />
-                <span class="ml-3">Storage Locations</span>
+                <span class="ml-3">Schedules</span>
               </router-link>
             </li>
             <li>
@@ -63,14 +63,26 @@
             </li>
             <li>
               <router-link
-                :to="Pages.SCHEDULES.path"
+                to=""
                 class="flex items-center p-2 text-base text-gray-900 rounded-lg hover:bg-gray-100 group dark:text-gray-200 dark:hover:bg-gray-700"
               >
                 <FontAwesomeIcon
-                  :icon="faClock"
+                  :icon="faFolderTree"
                   class="w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
                 />
-                <span class="ml-3">Schedules</span>
+                <span class="ml-3">Backup Repositories</span>
+              </router-link>
+            </li>
+            <li>
+              <router-link
+                :to="Pages.STORAGE_LOCATIONS.path"
+                class="flex items-center p-2 text-base text-gray-900 rounded-lg hover:bg-gray-100 group dark:text-gray-200 dark:hover:bg-gray-700"
+              >
+                <FontAwesomeIcon
+                  :icon="faServer"
+                  class="w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
+                />
+                <span class="ml-3">Storage Locations</span>
               </router-link>
             </li>
             <li>
@@ -79,11 +91,67 @@
                 class="flex items-center p-2 text-base text-gray-900 rounded-lg hover:bg-gray-100 group dark:text-gray-200 dark:hover:bg-gray-700"
               >
                 <FontAwesomeIcon
-                  :icon="faServer"
+                  :icon="faDatabase"
                   class="w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
                 />
                 <span class="ml-3">Snapshot Locations</span>
               </router-link>
+            </li>
+            <li>
+              <button
+                type="button"
+                class="flex w-full items-center p-2 text-base text-gray-900 rounded-lg transition duration-75 hover:bg-gray-100 group dark:text-gray-200 dark:hover:bg-gray-700"
+                aria-controls="dropdown-requests"
+                data-collapse-toggle="dropdown-requests"
+              >
+                <FontAwesomeIcon
+                  :icon="faFileLines"
+                  class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
+                />
+                <span class="flex-1 text-left ml-3">Requests</span>
+                <FontAwesomeIcon
+                  :icon="faAngleDown"
+                  class="w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
+                />
+              </button>
+              <ul id="dropdown-requests" class="hidden py-2 space-y-2">
+                <li>
+                  <router-link
+                    to="/"
+                    class="flex items-center p-2 text-base text-gray-900 transition duration-75 rounded-lg pl-6 group hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700"
+                  >
+                    <FontAwesomeIcon
+                      :icon="faFileExcel"
+                      class="w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
+                    />
+                    <span class="ml-3">Delete Backup Requests</span>
+                  </router-link>
+                </li>
+                <li>
+                  <router-link
+                    to="/"
+                    class="flex items-center p-2 text-base text-gray-900 transition duration-75 rounded-lg pl-6 group hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700"
+                  >
+                    <FontAwesomeIcon
+                      :icon="faFileArrowDown"
+                      class="w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
+                    />
+                    <span class="ml-3">Download Requests</span>
+                  </router-link>
+                </li>
+                <li>
+                  <router-link
+                    to="/"
+                    class="flex items-center p-2 text-base text-gray-900 transition duration-75 rounded-lg pl-6 group hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700"
+                  >
+                    <FontAwesomeIcon
+                      :icon="faFileWaveform"
+                      class="w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
+                    />
+                    <span class="ml-3">Server Status Requests</span>
+                  </router-link>
+                </li>
+              </ul>
             </li>
           </ul>
           <div class="pt-2 space-y-2">
@@ -138,10 +206,17 @@ import {
   faClock,
   faClockRotateLeft,
   faFloppyDisk,
+  faFolderTree,
+  faAngleDown,
+  faFileArrowDown,
+  faFileExcel,
+  faFileWaveform,
+  faFileLines,
 } from '@fortawesome/free-solid-svg-icons';
 import { faGithub } from '@fortawesome/free-brands-svg-icons';
 import { defineComponent } from 'vue';
 import { Pages } from '../../../utils/constants.utils';
+import { initDropdowns } from 'flowbite';
 
 export default defineComponent({
   name: 'Sidebar',
@@ -150,6 +225,9 @@ export default defineComponent({
     Pages() {
       return Pages;
     },
+  },
+  mounted() {
+    initDropdowns();
   },
   data: () => ({
     faChartPie,
@@ -160,6 +238,12 @@ export default defineComponent({
     faClockRotateLeft,
     faFloppyDisk,
     faGithub,
+    faFolderTree,
+    faAngleDown,
+    faFileArrowDown,
+    faFileExcel,
+    faFileWaveform,
+    faFileLines,
     version: import.meta.env.APP_VERSION,
   }),
 });
