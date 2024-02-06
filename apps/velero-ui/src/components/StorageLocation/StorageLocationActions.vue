@@ -15,7 +15,7 @@
           v-if="location"
           class="mb-1 text-lg font-bold text-gray-900 dark:text-white"
         >
-          {{ location.metadata.name }}
+          {{ location?.metadata?.name }}
         </h3>
         <div
           v-if="!location"
@@ -25,7 +25,7 @@
           v-if="location"
           class="mb-4 text-xs text-gray-500 dark:text-gray-400"
         >
-          {{ location.metadata.uid }}
+          {{ location?.metadata?.uid }}
         </div>
         <div
           v-if="!location"
@@ -34,7 +34,6 @@
         <div v-if="location" class="flex items-center space-x-4">
           <button
             type="button"
-            @click="this.$parent.remove()"
             class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-red-600 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"
           >
             <FontAwesomeIcon :icon="faTrashCan" class="w-4 h-4 mr-2" />
@@ -45,22 +44,13 @@
     </div>
   </div>
 </template>
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script setup lang="ts">
 import type { PropType } from 'vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import type { V1BackupStorageLocation } from '@velero-ui/velero';
 import { faServer, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 
-export default defineComponent({
-  name: 'StorageLocationActions',
-  components: { FontAwesomeIcon },
-  props: {
-    location: Object as PropType<V1BackupStorageLocation>,
-  },
-  data: () => ({
-    faTrashCan,
-    faServer,
-  }),
+defineProps({
+  location: Object as PropType<V1BackupStorageLocation>,
 });
 </script>

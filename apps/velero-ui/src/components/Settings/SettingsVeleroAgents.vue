@@ -44,7 +44,10 @@
           <li v-for="agent of veleroAgents" class="py-4">
             <div class="flex items-center space-x-4">
               <div class="flex items-center">
-                <FontAwesomeIcon :icon="faMicrochip" class="w-6 h-6 dark:text-white" />
+                <FontAwesomeIcon
+                  :icon="faMicrochip"
+                  class="w-6 h-6 dark:text-white"
+                />
               </div>
               <div class="flex-1 min-w-0">
                 <div
@@ -82,27 +85,15 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script setup lang="ts">
+import { defineComponent, onBeforeMount } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useSettingsStore } from '../../stores/settings.store';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { faMicrochip } from '@fortawesome/free-solid-svg-icons';
 
-export default defineComponent({
-  name: 'SettingsVeleroAgents',
-  components: { FontAwesomeIcon },
-  setup() {
-    const settingsStore = useSettingsStore();
-    const { veleroAgents } = storeToRefs(settingsStore);
+const settingsStore = useSettingsStore();
+const { veleroAgents } = storeToRefs(settingsStore);
 
-    return { settingsStore, veleroAgents };
-  },
-  data: () => ({
-    faMicrochip,
-  }),
-  beforeMount() {
-    this.settingsStore.fetchVeleroAgents();
-  },
-});
+onBeforeMount(() => settingsStore.fetchVeleroAgents());
 </script>

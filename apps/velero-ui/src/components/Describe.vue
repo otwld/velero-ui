@@ -36,27 +36,23 @@
     </div>
   </div>
 </template>
-<script lang="ts">
-import { defineComponent } from 'vue';
+
+<script setup lang="ts">
 import type { PropType } from 'vue';
 import { stringify } from 'yaml';
 
-export default defineComponent({
-  name: 'Describe',
-  props: {
-    data: Object as PropType<any>,
-  },
-  methods: {
-    parseYaml(data: object) {
-      const yaml = stringify(data);
-
-      return yaml.split('\n');
-    },
-    indent(line: string) {
-      return {
-        'padding-left': `${line.search(/\S/) * 0.5}rem`,
-      };
-    },
-  },
+defineProps({
+  data: Object as PropType<any>,
 });
+
+const parseYaml = (data: object) => {
+  const yaml = stringify(data);
+
+  return yaml.split('\n');
+};
+const indent = (line: string) => {
+  return {
+    'padding-left': `${line.search(/\S/) * 0.5}rem`,
+  };
+};
 </script>

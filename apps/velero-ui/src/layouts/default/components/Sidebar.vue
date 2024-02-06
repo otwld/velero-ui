@@ -221,15 +221,11 @@ import { initDropdowns } from 'flowbite';
 export default defineComponent({
   name: 'Sidebar',
   components: { FontAwesomeIcon },
-  computed: {
-    Pages() {
-      return Pages;
-    },
-  },
   mounted() {
     initDropdowns();
   },
   data: () => ({
+    Pages,
     faChartPie,
     faServer,
     faDatabase,

@@ -15,7 +15,7 @@
           v-if="backup"
           class="mb-1 text-lg font-bold text-gray-900 dark:text-white"
         >
-          {{ backup.metadata.name }}
+          {{ backup?.metadata?.name }}
         </h3>
         <div
           v-if="!backup"
@@ -25,7 +25,7 @@
           v-if="backup"
           class="mb-4 text-xs text-gray-500 dark:text-gray-400"
         >
-          {{ backup.metadata.uid }}
+          {{ backup?.metadata?.uid }}
         </div>
         <div
           v-if="!backup"
@@ -34,7 +34,8 @@
         <div class="flex items-center space-x-4">
           <button
             type="button"
-            @click="this.$parent.restore()"
+            data-modal-target="modal-restore"
+            data-modal-toggle="modal-restore"
             class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:ring-teal-300 dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
           >
             <FontAwesomeIcon :icon="faClockRotateLeft" class="w-4 h-4 mr-2" />
@@ -42,10 +43,20 @@
           </button>
           <button
             type="button"
-            @click="this.$parent.download()"
+            :disabled="downloadLoading"
+            @click="download()"
             class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
           >
-            <FontAwesomeIcon :icon="faDownload" class="w-4 h-4 mr-2" />
+            <FontAwesomeIcon
+              v-if="!downloadLoading"
+              :icon="faDownload"
+              class="w-4 h-4 mr-2"
+            />
+            <FontAwesomeIcon
+              v-if="downloadLoading"
+              :icon="faCircleNotch"
+              class="w-4 h-4 animate-spin mr-2"
+            />
             Download
           </button>
           <button
@@ -64,8 +75,8 @@
   <ModalDelete id="modal-delete" :name="backup?.metadata?.name"></ModalDelete>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script setup lang="ts">
+import { onMounted, toRef } from 'vue';
 import type { PropType } from 'vue';
 import type { V1Backup } from '@velero-ui/velero';
 import {
@@ -73,30 +84,20 @@ import {
   faDownload,
   faTrashCan,
   faFloppyDisk,
+  faCircleNotch,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { initModals } from 'flowbite';
 import ModalDelete from '../Modals/ModalDelete.vue';
+import { useBackupDownloadContent } from '../../composables/backup/useBackupDownloadContent';
 
-export default defineComponent({
-  name: 'BackupActions',
-  components: { ModalDelete, FontAwesomeIcon },
-  props: {
-    backup: Object as PropType<V1Backup>,
-  },
-  mounted() {
-    initModals();
-  },
-  data: () => ({
-    faClockRotateLeft,
-    faTrashCan,
-    faDownload,
-    faFloppyDisk,
-  }),
-  methods: {
-    remove(): void {
-      this.$parent.remove();
-    },
-  },
+const props = defineProps({
+  backup: Object as PropType<V1Backup>,
 });
+
+onMounted(() => initModals());
+
+const { download, downloadLoading } = useBackupDownloadContent(
+  toRef(() => props.data?.metadata?.name)
+);
 </script>

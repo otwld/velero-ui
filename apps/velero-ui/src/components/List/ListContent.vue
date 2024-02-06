@@ -45,14 +45,9 @@
     </div>
   </div>
 </template>
-<script lang="ts">
-import { defineComponent } from 'vue';
+
+<script setup lang="ts">
 import type { PropType } from 'vue';
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import {
-  faChevronLeft,
-  faChevronRight,
-} from '@fortawesome/free-solid-svg-icons';
 import type {
   V1Backup,
   V1BackupStorageLocation,
@@ -61,25 +56,15 @@ import type {
   V1VolumeSnapshotLocation,
 } from '@velero-ui/velero';
 
-export default defineComponent({
-  name: 'ListContent',
-  components: { FontAwesomeIcon },
-  props: {
-    headers: Array as PropType<string[]>,
-    component: Object,
-    data: Array as PropType<
-      | V1Backup[]
-      | V1Schedule[]
-      | V1Restore
-      | V1BackupStorageLocation[]
-      | V1VolumeSnapshotLocation
-    >,
-  },
-  data() {
-    return {
-      faChevronRight,
-      faChevronLeft,
-    };
-  },
+defineProps({
+  headers: Array as PropType<string[]>,
+  component: Object,
+  data: Array as PropType<
+    | V1Backup[]
+    | V1Schedule[]
+    | V1Restore
+    | V1BackupStorageLocation[]
+    | V1VolumeSnapshotLocation
+  >,
 });
 </script>

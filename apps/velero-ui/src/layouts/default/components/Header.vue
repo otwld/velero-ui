@@ -49,39 +49,30 @@
     </div>
   </nav>
 </template>
-<script lang="ts">
-import { defineComponent, inject } from 'vue';
-import { faArrowRightFromBracket, faCircleNotch } from '@fortawesome/free-solid-svg-icons';
+<script setup lang="ts">
+import { inject, onBeforeMount, ref } from 'vue';
+import {
+  faArrowRightFromBracket,
+  faCircleNotch,
+} from '@fortawesome/free-solid-svg-icons';
 import { UserManager } from 'oidc-client-ts';
 import { useAppStore } from '../../../stores/app.store';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
-export default defineComponent({
-  name: 'Header',
-  components: { FontAwesomeIcon },
-  setup() {
-    const appStore = useAppStore();
-    const oidcClient: UserManager = inject('oidcClient') as UserManager;
-    return { appStore, oidcClient };
-  },
-  data: () => ({
-    faArrowRightFromBracket,
-    faCircleNotch,
-    user: null,
-    isLoading: false,
-  }),
-  async beforeMount() {
-    this.user = await this.oidcClient.getUser();
-  },
-  methods: {
-    async logout() {
-      try {
-        this.isLoading = true;
-        await this.oidcClient.signoutRedirect();
-      } catch (e) {
-        console.error(e);
-      }
-    },
-  },
-});
+const appStore = useAppStore();
+const oidcClient: UserManager = inject('oidcClient') as UserManager;
+
+onBeforeMount(async () => (user.value = await oidcClient.getUser()));
+
+const user = ref(null);
+const isLoading = ref(false);
+
+const logout = async () => {
+  try {
+    isLoading.value = true;
+    await oidcClient.signoutRedirect();
+  } catch (e) {
+    console.error(e);
+  }
+};
 </script>

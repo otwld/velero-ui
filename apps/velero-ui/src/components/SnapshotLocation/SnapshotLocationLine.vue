@@ -16,17 +16,17 @@
       :to="{
         name: Pages.SNAPSHOT_LOCATION.name,
         params: {
-          name: data.metadata.name,
+          name: data?.metadata?.name,
         },
       }"
     >
       <td class="flex items-center p-4 mr-12 space-x-6 whitespace-nowrap">
         <div class="text-sm font-normal text-gray-500 dark:text-gray-400">
           <div class="text-base font-semibold text-gray-900 dark:text-white">
-            {{ data.metadata.name }}
+            {{ data?.metadata?.name }}
           </div>
           <div class="text-xs font-normal text-gray-500 dark:text-gray-400">
-            {{ data.metadata.uid }}
+            {{ data?.metadata?.uid }}
           </div>
         </div>
       </td>
@@ -34,7 +34,7 @@
     <td
       class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white"
     >
-      {{ data.spec.provider }}
+      {{ data?.spec?.provider }}
     </td>
     <td
       class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white"
@@ -69,41 +69,17 @@
   </tr>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script setup lang="ts">
 import type { V1VolumeSnapshotLocation } from '@velero-ui/velero';
 import type { PropType } from 'vue';
 import { V1VolumeSnapshotLocationPhase } from '@velero-ui/velero';
-import { convertTimestampToDate } from '../../utils/date.utils';
-import { useSnapshotLocationStore } from '../../stores/snapshot-location';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { Pages } from '../../utils/constants.utils';
 
-export default defineComponent({
-  name: 'SnapshotLocationLine',
-  components: { FontAwesomeIcon },
-  computed: {
-    V1VolumeSnapshotLocationPhase() {
-      return V1VolumeSnapshotLocationPhase;
-    },
-  },
-  setup() {
-    const snapshotLocationStore = useSnapshotLocationStore();
-    return { snapshotLocationStore };
-  },
-  data: () => ({
-    Pages,
-    faTrashCan,
-  }),
-  props: {
-    data: Object as PropType<V1VolumeSnapshotLocation>,
-  },
-  methods: {
-    convertTimestampToDate,
-    remove(): void {
-      console.log('click delete');
-    },
-  },
+defineProps({
+  data: Object as PropType<V1VolumeSnapshotLocation>,
 });
+
+const remove = () => {};
 </script>

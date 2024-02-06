@@ -12,7 +12,7 @@
           v-if="schedule"
           class="mb-1 text-lg font-bold text-gray-900 dark:text-white"
         >
-          {{ schedule.metadata.name }}
+          {{ schedule?.metadata?.name }}
         </h3>
         <div
           v-if="!schedule"
@@ -22,7 +22,7 @@
           v-if="schedule"
           class="mb-4 text-xs text-gray-500 dark:text-gray-400"
         >
-          {{ schedule.metadata.uid }}
+          {{ schedule?.metadata?.uid }}
         </div>
         <div
           v-if="!schedule"
@@ -38,23 +38,47 @@
           </button>
           <button
             v-if="
-              schedule.status.phase !== V1SchedulePhase.FailedValidation
+              schedule?.status?.phase !== V1SchedulePhase.FailedValidation &&
+              schedule?.spec?.paused
             "
             type="button"
-            @click="this.$parent.switchStatus()"
+            :disabled="togglePauseLoading"
+            @click="togglePause(false)"
+            class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+          >
+            <FontAwesomeIcon
+              v-if="!togglePauseLoading"
+              :icon="faPlay"
+              class="w-4 h-4 mr-2"
+            />
+            <FontAwesomeIcon
+              v-if="togglePauseLoading"
+              :icon="faCircleNotch"
+              class="w-4 h-4 animate-spin mr-2"
+            />
+            Enable
+          </button>
+          <button
+            v-if="
+              schedule?.status?.phase !== V1SchedulePhase.FailedValidation &&
+              !schedule?.spec?.paused
+            "
+            type="button"
+            :disabled="togglePauseLoading"
+            @click="togglePause(true)"
             class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
           >
             <FontAwesomeIcon
-              v-if="!schedule.spec.paused"
+              v-if="!togglePauseLoading"
               :icon="faPause"
               class="w-4 h-4 mr-2"
             />
             <FontAwesomeIcon
-              v-if="schedule.spec.paused"
-              :icon="faPlay"
-              class="w-4 h-4 mr-2"
+              v-if="togglePauseLoading"
+              :icon="faCircleNotch"
+              class="w-4 h-4 animate-spin mr-2"
             />
-            {{ schedule.spec.paused ? 'Enable' : 'Pause'}}
+            Pause
           </button>
           <button
             type="button"
@@ -70,8 +94,7 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script setup lang="ts">
 import type { PropType } from 'vue';
 import type { V1Schedule } from '@velero-ui/velero';
 import {
@@ -80,23 +103,20 @@ import {
   faTrashCan,
   faClock,
   faPen,
+  faCircleNotch,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { V1SchedulePhase } from '@velero-ui/velero';
+import { ref, toRef } from 'vue';
+import { useSchedulePause } from '../../composables/schedule/useSchedulePause';
 
-export default defineComponent({
-  name: 'ScheduleActions',
-  components: { FontAwesomeIcon },
-  props: {
-    schedule: Object as PropType<V1Schedule>,
-  },
-  data: () => ({
-    V1SchedulePhase,
-    faPause,
-    faTrashCan,
-    faPlay,
-    faClock,
-    faPen,
-  }),
+const props = defineProps({
+  schedule: Object as PropType<V1Schedule>,
 });
+
+const { togglePause, togglePauseLoading } = useSchedulePause(
+  toRef(() => props.schedule?.metadata?.name)
+);
+
+const deleteLoading = ref(false);
 </script>

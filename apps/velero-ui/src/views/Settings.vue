@@ -12,22 +12,11 @@
   <SettingsVeleroPlugins class="pb-6"></SettingsVeleroPlugins>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script setup lang="ts">
 import SettingsCluster from '../components/Settings/SettingsCluster.vue';
 import SettingsVeleroServer from '../components/Settings/SettingsVeleroServer.vue';
 import SettingsVeleroAgents from '../components/Settings/SettingsVeleroAgents.vue';
 import SetttingsVeleroUi from '../components/Settings/SetttingsVeleroUi.vue';
 import SettingsVeleroPlugins from '../components/Settings/SettingsVeleroPlugins.vue';
 
-export default defineComponent({
-  name: 'Settings',
-  components: {
-    SettingsVeleroPlugins,
-    SetttingsVeleroUi,
-    SettingsVeleroAgents,
-    SettingsVeleroServer,
-    SettingsCluster,
-  },
-});
 </script>

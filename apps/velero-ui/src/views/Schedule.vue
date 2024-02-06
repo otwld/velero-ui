@@ -10,40 +10,26 @@
     </div>
   </div>
 </template>
-<script lang="ts">
-import { defineComponent } from 'vue';
-import type { Router } from 'vue-router';
-import { useRouter } from 'vue-router';
-import { storeToRefs } from 'pinia';
-import { useScheduleStore } from '../stores/schedule.store';
+
+<script setup lang="ts">
 import ScheduleActions from '../components/Schedule/ScheduleActions.vue';
 import Describe from '../components/Describe.vue';
 import ScheduleStatus from '../components/Schedule/ScheduleStatus.vue';
-import BackupDetails from "../components/Backup/BackupDetails.vue";
+import BackupDetails from '../components/Backup/BackupDetails.vue';
+import { onBeforeMount } from 'vue';
+import { useScheduleStore } from '../stores/schedule.store';
+import { useRouter } from 'vue-router';
+import type { Router } from 'vue-router';
+import { storeToRefs } from 'pinia';
 
-export default defineComponent({
-  name: 'Schedule',
-  components: {BackupDetails, ScheduleStatus, Describe, ScheduleActions },
-  setup() {
-    const scheduleStore = useScheduleStore();
-    const { schedule } = storeToRefs(scheduleStore);
+const scheduleStore = useScheduleStore();
+const { schedule } = storeToRefs(scheduleStore);
 
-    const router: Router = useRouter();
-    return { scheduleStore, router, schedule };
-  },
-  beforeMount() {
-    this.scheduleStore.get(
-      this.router.currentRoute.value.params.name,
-      this.router.currentRoute.value.params.namespace
-    );
-  },
-  methods: {
-    remove(): void {
-      console.log('click delete');
-    },
-    switchStatus(): void {
-      console.log('click switchStatus');
-    },
-  },
-});
+const router: Router = useRouter();
+
+onBeforeMount(() =>
+  scheduleStore.get(
+    router.currentRoute.value.params.name
+  )
+);
 </script>

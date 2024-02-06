@@ -7,55 +7,35 @@
     :offset="offset"
     :limit="limit"
     :total="total"
+    @onSearchInput="onSearchInput"
+    @onNext="onNext"
+    @onPrevious="onPrevious"
+    @onRefresh="onRefresh"
   ></List>
 </template>
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script setup lang="ts">
 import List from '../components/List.vue';
 import { storeToRefs } from 'pinia';
 import { useScheduleStore } from '../stores/schedule.store';
-import ScheduleLine from "../components/Schedule/ScheduleLine.vue";
+import ScheduleLine from '../components/Schedule/ScheduleLine.vue';
+import { onBeforeMount } from 'vue';
 
-export default defineComponent({
-  name: 'ScheduleList',
-  computed: {
-    ScheduleLine() {
-      return ScheduleLine
-    }
-  },
-  components: { List },
-  setup() {
-    const scheduleStore = useScheduleStore();
-    const { schedules, total, offset, limit } = storeToRefs(scheduleStore);
-    return { scheduleStore, schedules, offset, limit, total };
-  },
-  data() {
-    return {
-      headers: ['Name', 'Storage Location', 'Cron', 'Last Backup', 'Status', 'Actions'],
-      searchInput: '',
-    };
-  },
-  beforeMount() {
-    this.scheduleStore.fetch();
-  },
-  watch: {
-    searchInput(value: string) {
-      this.applyNameFilter(value);
-    },
-  },
-  methods: {
-    refresh() {
-      this.scheduleStore.fetch();
-    },
-    next() {
-      this.scheduleStore.next();
-    },
-    previous() {
-      this.scheduleStore.previous();
-    },
-    applyNameFilter(name: string) {
-      this.scheduleStore.applyNameFilter(name);
-    },
-  },
-});
+const scheduleStore = useScheduleStore();
+const { schedules, total, offset, limit } = storeToRefs(scheduleStore);
+
+const headers = [
+  'Name',
+  'Storage Location',
+  'Cron',
+  'Last Backup',
+  'Status',
+  'Actions',
+];
+
+onBeforeMount(() => scheduleStore.fetch());
+
+const onSearchInput = (value) => scheduleStore.applyNameFilter(value);
+const onNext = () => scheduleStore.next();
+const onPrevious = () => scheduleStore.previous();
+const onRefresh = () => scheduleStore.fetch();
 </script>

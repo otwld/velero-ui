@@ -39,11 +39,17 @@
           </h3>
           <div class="mb-1 text-sm text-gray-500 dark:text-gray-400">
             {{ cluster?.server }}
-            <div v-if="!cluster" class="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-48 mb-5"></div>
+            <div
+              v-if="!cluster"
+              class="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-48 mb-5"
+            ></div>
           </div>
           <div class="mb-4 text-xs text-gray-500 dark:text-gray-400">
             {{ cluster?.version }}
-            <div v-if="!cluster" class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 w-72 mb-4"></div>
+            <div
+              v-if="!cluster"
+              class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 w-72 mb-4"
+            ></div>
           </div>
           <div class="flex items-center space-x-4"></div>
         </div>
@@ -52,21 +58,13 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script setup lang="ts">
+import { onBeforeMount } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useSettingsStore } from '../../stores/settings.store';
 
-export default defineComponent({
-  name: 'SettingsCluster',
-  setup() {
-    const settingsStore = useSettingsStore();
-    const { cluster } = storeToRefs(settingsStore);
+const settingsStore = useSettingsStore();
+const { cluster } = storeToRefs(settingsStore);
 
-    return { settingsStore, cluster };
-  },
-  beforeMount() {
-    this.settingsStore.fetchCluster();
-  },
-});
+onBeforeMount(() => settingsStore.fetchCluster());
 </script>

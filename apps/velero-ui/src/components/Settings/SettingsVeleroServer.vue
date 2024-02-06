@@ -41,27 +41,15 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script setup lang="ts">
 import { storeToRefs } from 'pinia';
 import { useSettingsStore } from '../../stores/settings.store';
 import { faHardDrive } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { onBeforeMount } from 'vue';
 
-export default defineComponent({
-  name: 'SettingsVeleroServer',
-  components: { FontAwesomeIcon },
-  data: () => ({
-    faHardDrive,
-  }),
-  setup() {
-    const settingsStore = useSettingsStore();
-    const { veleroServer } = storeToRefs(settingsStore);
+const settingsStore = useSettingsStore();
+const { veleroServer } = storeToRefs(settingsStore);
 
-    return { settingsStore, veleroServer };
-  },
-  beforeMount() {
-    this.settingsStore.fetchVeleroServer();
-  },
-});
+onBeforeMount(() => settingsStore.fetchVeleroServer());
 </script>

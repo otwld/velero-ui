@@ -25,7 +25,7 @@
           <h3 class="mt-5 text-lg text-gray-500 dark:text-gray-400">
             Are you sure you want to delete:
           </h3>
-          <div class="flex justify-center ">
+          <div class="flex justify-center">
             <p
               class="mt-2 px-1 mb-6 text-sm rounded bg-gray-200 text-gray-600 dark:bg-gray-600 dark:text-gray-200"
             >
@@ -52,28 +52,17 @@
     </div>
   </div>
 </template>
-<script lang="ts">
-import { defineComponent } from 'vue';
+
+<script setup lang="ts">
 import {
   faExclamationCircle,
   faXmark,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
-export default defineComponent({
-  name: 'ModalDelete',
-  components: { FontAwesomeIcon },
-  props: {
-    name: String,
-  },
-  data: () => ({
-    faExclamationCircle,
-    faXmark,
-  }),
-  methods: {
-    remove(): void {
-      this.$parent.remove();
-    },
-  },
+defineProps({
+  name: String,
 });
+
+const remove = () => {};
 </script>

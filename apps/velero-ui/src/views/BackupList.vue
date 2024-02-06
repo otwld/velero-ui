@@ -7,55 +7,28 @@
     :offset="offset"
     :limit="limit"
     :total="total"
+    @onSearchInput="onSearchInput"
+    @onNext="onNext"
+    @onPrevious="onPrevious"
+    @onRefresh="onRefresh"
   ></List>
 </template>
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script setup lang="ts">
+import { onBeforeMount } from 'vue';
 import { useBackupStore } from '../stores/backup.store';
 import { storeToRefs } from 'pinia';
 import List from '../components/List.vue';
 import BackupLine from '../components/Backup/BackupLine.vue';
 
-export default defineComponent({
-  name: 'BackupList',
-  computed: {
-    BackupLine() {
-      return BackupLine;
-    },
-  },
-  components: { List },
-  setup() {
-    const backupStore = useBackupStore();
-    const { backups, total, offset, limit } = storeToRefs(backupStore);
-    return { backupStore, backups, offset, limit, total };
-  },
-  data() {
-    return {
-      headers: ['Name', 'Schedule', 'Date', 'Expire in', 'Status', 'Actions'],
-      searchInput: '',
-    };
-  },
-  beforeMount() {
-    this.backupStore.fetch();
-  },
-  watch: {
-    searchInput(value: string) {
-      this.applyNameFilter(value);
-    },
-  },
-  methods: {
-    refresh() {
-      this.backupStore.fetch();
-    },
-    next() {
-      this.backupStore.next();
-    },
-    previous() {
-      this.backupStore.previous();
-    },
-    applyNameFilter(name: string) {
-      this.backupStore.applyNameFilter(name);
-    },
-  },
-});
+const backupStore = useBackupStore();
+const { backups, total, offset, limit } = storeToRefs(backupStore);
+
+const headers = ['Name', 'Schedule', 'Date', 'Expire in', 'Status', 'Actions'];
+
+onBeforeMount(() => backupStore.fetch());
+
+const onSearchInput = (value) => backupStore.applyNameFilter(value);
+const onNext = () => backupStore.next();
+const onPrevious = () => backupStore.previous();
+const onRefresh = () => backupStore.fetch();
 </script>

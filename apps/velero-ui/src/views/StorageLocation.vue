@@ -9,35 +9,21 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script setup lang="ts">
 import Describe from '../components/Describe.vue';
 import { storeToRefs } from 'pinia';
 import { useRouter } from 'vue-router';
 import type { Router } from 'vue-router';
 import { useStorageLocationStore } from '../stores/storage-location.store';
 import StorageLocationActions from '../components/StorageLocation/StorageLocationActions.vue';
+import { onBeforeMount } from 'vue';
 
-`
-import type { Router } from 'vue-router';`;
+const storageLocationStore = useStorageLocationStore();
+const { location } = storeToRefs(storageLocationStore);
 
-export default defineComponent({
-  name: 'StorageLocation',
-  components: { StorageLocationActions, Describe },
-  setup() {
-    const storageLocationStore = useStorageLocationStore();
-    const { location } = storeToRefs(storageLocationStore);
+const router: Router = useRouter();
 
-    const router: Router = useRouter();
-    return { storageLocationStore, router, location };
-  },
-  beforeMount() {
-    this.storageLocationStore.get(this.router.currentRoute.value.params.name);
-  },
-  methods: {
-    remove(): void {
-      console.log('click delete');
-    },
-  },
-});
+onBeforeMount(() =>
+  storageLocationStore.get(router.currentRoute.value.params.name)
+);
 </script>

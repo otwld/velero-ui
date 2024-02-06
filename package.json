@@ -20,6 +20,7 @@
     "@nestjs/terminus": "^10.2.1",
     "@nestjs/throttler": "^5.1.1",
     "@vueuse/core": "^10.7.2",
+    "@vueuse/integrations": "^10.7.2",
     "axios": "^1.6.7",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",

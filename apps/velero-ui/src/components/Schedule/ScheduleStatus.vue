@@ -17,55 +17,50 @@
         :status="schedule?.status.phase"
       ></ScheduleStatusPhaseBadge>
       <span
+        v-if="schedule?.spec?.paused"
+        class="ml-4 bg-yellow-100 text-yellow-800 text-xs font-medium inline-flex items-center me-2 px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300"
+      >
+        <FontAwesomeIcon :icon="faPause" class="w-3 h-3 mr-1.5" />
+        Paused
+      </span>
+      <span
         v-if="schedule?.spec.schedule"
         class="ml-4 bg-blue-100 text-blue-800 text-xs font-medium inline-flex items-center me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300"
       >
         <FontAwesomeIcon :icon="faCalendar" class="w-3 h-3 mr-1.5" />
-        {{schedule.spec.schedule}}
-        </span
-      >
+        {{ schedule.spec.schedule }}
+      </span>
     </div>
     <div v-if="schedule?.status.lastBackup" class="mt-4 flex flex-col">
       <span class="text-base font-medium text-gray-900 dark:text-white"
         >Last Backup</span
       >
       <i class="mt-1 text-xs text-gray-500 dark:text-gray-400">{{
-          convertTimestampToDate(schedule.status.lastBackup)
-          }}</i>
+        convertTimestampToDate(schedule.status.lastBackup)
+      }}</i>
     </div>
     <div v-if="schedule?.status.lastSkipped" class="mt-4 flex flex-col">
       <span class="text-base font-medium text-gray-900 dark:text-white"
         >Last Skipped</span
       >
       <i class="mt-1 text-xs text-gray-500 dark:text-gray-400">{{
-          convertTimestampToDate(schedule.status.lastSkipped)
-          }}</i>
+        convertTimestampToDate(schedule.status.lastSkipped)
+      }}</i>
     </div>
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script setup lang="ts">
 import type { PropType } from 'vue';
-import type { V1Schedule} from '@velero-ui/velero';
+import type { V1Schedule } from '@velero-ui/velero';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import {
-  faCalendar,
-} from '@fortawesome/free-solid-svg-icons';
-import ScheduleStatusPhaseBadge from "./ScheduleStatusPhaseBadge.vue";
-import {convertTimestampToDate} from "../../utils/date.utils";
+import { faCalendar, faPause } from '@fortawesome/free-solid-svg-icons';
+import ScheduleStatusPhaseBadge from './ScheduleStatusPhaseBadge.vue';
+import { convertTimestampToDate } from '../../utils/date.utils';
 
-export default defineComponent({
-  name: 'ScheduleStatus',
-  components: {ScheduleStatusPhaseBadge, FontAwesomeIcon },
-  props: {
-    schedule: Object as PropType<V1Schedule>,
-  },
-  data: () => ({
-    faCalendar,
-  }),
-  methods: {
-    convertTimestampToDate
-  },
+defineProps({
+  schedule: Object as PropType<V1Schedule>,
 });
+
+
 </script>

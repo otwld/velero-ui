@@ -9,34 +9,21 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script setup lang="ts">
 import Describe from '../components/Describe.vue';
 import SnapshotLocationActions from '../components/SnapshotLocation/SnapshotLocationActions.vue';
 import { storeToRefs } from 'pinia';
 import { useRouter } from 'vue-router';
 import type { Router } from 'vue-router';
 import { useSnapshotLocationStore } from '../stores/snapshot-location';
+import { onBeforeMount } from 'vue';
 
-export default defineComponent({
-  name: 'SnapshotLocation',
-  components: { SnapshotLocationActions, Describe },
-  setup() {
-    const snapshotLocationStore = useSnapshotLocationStore();
-    const { location } = storeToRefs(snapshotLocationStore);
+const snapshotLocationStore = useSnapshotLocationStore();
+const { location } = storeToRefs(snapshotLocationStore);
 
-    const router: Router = useRouter();
-    return { snapshotLocationStore, router, location };
-  },
-  beforeMount() {
-    this.snapshotLocationStore.get(
-      this.router.currentRoute.value.params.name,
-    );
-  },
-  methods: {
-    remove(): void {
-      console.log('click delete');
-    },
-  },
-});
+const router: Router = useRouter();
+
+onBeforeMount(() =>
+  snapshotLocationStore.get(router.currentRoute.value.params.name)
+);
 </script>

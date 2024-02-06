@@ -1,11 +1,16 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { CustomObjectsApi, KubeConfig } from '@kubernetes/client-node';
+import {
+  CustomObjectsApi,
+  KubeConfig,
+  PatchUtils,
+} from '@kubernetes/client-node';
 import { K8S_CONNECTION } from '../../shared/modules/k8s/k8s.constants';
-import { from, map, Observable } from 'rxjs';
+import {catchError, concatMap, from, map, Observable, of, tap} from 'rxjs';
 import { VELERO } from '../../shared/modules/velero/velero.constants';
 import http from 'http';
 import { Ressources, V1Schedule, V1ScheduleList } from '@velero-ui/velero';
 import { ConfigService } from '@nestjs/config';
+import { patchPauseSchedule } from './schedule.utils';
 
 @Injectable()
 export class ScheduleService {
@@ -62,5 +67,32 @@ export class ScheduleService {
     ).pipe(
       map((r: { response: http.IncomingMessage; body: V1Schedule }) => r.body)
     );
+  }
+
+  public togglePause(name: string, paused: boolean): Observable<V1Schedule> {
+    const options = {
+      headers: { 'Content-type': PatchUtils.PATCH_FORMAT_JSON_PATCH },
+    };
+
+    return of(patchPauseSchedule(paused))
+      .pipe(
+        concatMap((body) =>
+          this.k8sCustomObjectApi.patchNamespacedCustomObject(
+            VELERO.GROUP,
+            VELERO.VERSION,
+            this.configService.get('velero.namespace'),
+            Ressources.SCHEDULE.plurial,
+            name,
+            body,
+            undefined,
+            undefined,
+            undefined,
+            options
+          )
+        )
+      )
+      .pipe(
+        map((r: { response: http.IncomingMessage; body: V1Schedule }) => r.body)
+      );
   }
 }

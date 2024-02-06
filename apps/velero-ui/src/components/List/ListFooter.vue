@@ -19,7 +19,7 @@
     <div class="flex items-center space-x-3">
       <button
         type="button"
-        @click="previous()"
+        @click="emit('onPrevious')"
         class="inline-flex items-center justify-center flex-1 px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
       >
         <FontAwesomeIcon :icon="faChevronLeft" class="w-3 h-3 mr-1" />
@@ -27,7 +27,7 @@
       </button>
       <button
         type="button"
-        @click="next()"
+        @click="emit('onNext')"
         class="inline-flex items-center justify-center flex-1 px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
       >
         Next
@@ -37,7 +37,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { defineComponent } from 'vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import {
@@ -45,27 +45,14 @@ import {
   faChevronLeft,
 } from '@fortawesome/free-solid-svg-icons';
 
-export default defineComponent({
-  name: 'ListFooter',
-  components: { FontAwesomeIcon },
-  props: {
-    offset: Number,
-    limit: Number,
-    total: Number,
-  },
-  data() {
-    return {
-      faChevronRight,
-      faChevronLeft,
-    };
-  },
-  methods: {
-    next() {
-      this.$parent.next();
-    },
-    previous() {
-      this.$parent.previous();
-    },
-  },
+defineProps({
+  offset: Number,
+  limit: Number,
+  total: Number,
 });
+
+const emit = defineEmits(['onNext', 'onPrevious'])
+
+
 </script>
+

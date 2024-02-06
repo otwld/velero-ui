@@ -1,14 +1,23 @@
 <template>
-  <ListHeader></ListHeader>
+  <ListHeader
+    @onRefresh="emit('onRefresh')"
+    @onSearchInput="(value) => emit('onSearchInput', value)"
+  ></ListHeader>
   <ListContent
     :headers="headers"
     :data="data"
     :component="component"
   ></ListContent>
-  <ListFooter :total="total" :limit="limit" :offset="offset"></ListFooter>
+  <ListFooter
+    :total="total"
+    :limit="limit"
+    :offset="offset"
+    @onNext="emit('onNext')"
+    @onPrevious="emit('onPrevious')"
+  ></ListFooter>
 </template>
-<script lang="ts">
-import { defineComponent } from 'vue';
+
+<script setup lang="ts">
 import type { PropType } from 'vue';
 import type {
   V1Backup,
@@ -21,44 +30,25 @@ import ListHeader from './List/ListHeader.vue';
 import ListFooter from './List/ListFooter.vue';
 import ListContent from './List/ListContent.vue';
 
-export default defineComponent({
-  components: {
-    ListContent,
-    ListFooter,
-    ListHeader,
-  },
-  props: {
-    component: Object,
-    data: Array as PropType<
-      | V1Backup[]
-      | V1Schedule[]
-      | V1Restore
-      | V1BackupStorageLocation[]
-      | V1VolumeSnapshotLocation
-    >,
-    headers: Array as PropType<string[]>,
-    offset: Number,
-    limit: Number,
-    total: Number,
-  },
-  name: 'List',
-  data() {
-    return {
-    };
-  },
-  methods: {
-    refresh() {
-      this.$parent.refresh();
-    },
-    next() {
-      this.$parent.next();
-    },
-    previous() {
-      this.$parent.previous();
-    },
-    applyNameFilter(name: string) {
-      this.$parent.applyNameFilter(name);
-    },
-  },
+const emit = defineEmits([
+  'onNext',
+  'onPrevious',
+  'onSearchInput',
+  'onRefresh',
+]);
+
+defineProps({
+  component: Object,
+  data: Array as PropType<
+    | V1Backup[]
+    | V1Schedule[]
+    | V1Restore
+    | V1BackupStorageLocation[]
+    | V1VolumeSnapshotLocation
+  >,
+  headers: Array as PropType<string[]>,
+  offset: Number,
+  limit: Number,
+  total: Number,
 });
 </script>

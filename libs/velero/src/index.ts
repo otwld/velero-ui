@@ -12,3 +12,5 @@ export * from './models/schedule/index';
 export * from './models/server-status-request/index';
 export * from './models/shared/index';
 export * from './models/volume-snapshot-location/index';
+// export * from './models/data-download/index';
+// export * from './models/data-upload/index';

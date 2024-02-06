@@ -65,48 +65,80 @@
     <td
       class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white"
     >
-      <div class="flex items-center">
+      <div class="flex items-center flex-col">
         <ScheduleStatusPhaseBadge
           :status="data.status.phase"
           :paused="data.status.paused"
         ></ScheduleStatusPhaseBadge>
+        <span
+          v-if="data?.spec?.paused"
+          class="mt-2 bg-yellow-100 text-yellow-800 text-xs font-medium inline-flex items-center me-2 px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300"
+        >
+          Paused
+        </span>
       </div>
     </td>
     <td class="p-4 space-x-2 whitespace-nowrap">
-      <button
-        v-if="data.status.phase !== V1SchedulePhase.FailedValidation"
-        type="button"
-        @click="switchStatus()"
-        class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-600 rounded-lg hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900"
-      >
-        <FontAwesomeIcon
-          v-if="!data.spec.paused"
-          :icon="faPause"
-          class="w-4 h-4"
-        />
-        <FontAwesomeIcon
-          v-if="data.spec.paused"
-          :icon="faPlay"
-          class="w-4 h-4"
-        />
-      </button>
-      <button
-        type="button"
-        @click="remove()"
-        class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"
-      >
-        <FontAwesomeIcon :icon="faTrashCan" class="w-4 h-4" />
-      </button>
+      <div class="inline-flex rounded-md shadow-sm" role="group">
+        <button
+          v-if="
+            data?.status?.phase !== V1SchedulePhase.FailedValidation &&
+            data?.spec?.paused
+          "
+          type="button"
+          :disabled="togglePauseLoading"
+          @click="togglePause(false)"
+          class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-green-600 rounded-l-lg hover:bg-green-800 focus:ring-4 focus:ring-green-300 dark:focus:ring-green-900"
+        >
+          <FontAwesomeIcon
+            v-if="!togglePauseLoading"
+            :icon="faPlay"
+            class="w-4 h-4"
+          />
+          <FontAwesomeIcon
+            v-if="togglePauseLoading"
+            :icon="faCircleNotch"
+            class="w-4 h-4 animate-spin"
+          />
+        </button>
+        <button
+          v-if="
+            data?.status?.phase !== V1SchedulePhase.FailedValidation &&
+            !data?.spec?.paused
+          "
+          type="button"
+          :disabled="togglePauseLoading"
+          @click="togglePause(true)"
+          class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-600 rounded-l-lg hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900"
+        >
+          <FontAwesomeIcon
+            v-if="!togglePauseLoading"
+            :icon="faPause"
+            class="w-4 h-4"
+          />
+          <FontAwesomeIcon
+            v-if="togglePauseLoading"
+            :icon="faCircleNotch"
+            class="w-4 h-4 animate-spin"
+          />
+        </button>
+
+        <button
+          type="button"
+          @click="remove()"
+          class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-red-600 rounded-r-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"
+        >
+          <FontAwesomeIcon :icon="faTrashCan" class="w-4 h-4" />
+        </button>
+      </div>
     </td>
   </tr>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { defineComponent } from 'vue';
 import type { V1Schedule } from '@velero-ui/velero';
-import {
-  convertTimestampToDate,
-} from '../../utils/date.utils';
+import { convertTimestampToDate } from '../../utils/date.utils';
 import type { PropType } from 'vue';
 import { useScheduleStore } from '../../stores/schedule.store';
 import {
@@ -115,39 +147,26 @@ import {
   faTrashCan,
   faServer,
   faArrowUpRightFromSquare,
+  faCircleNotch,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { Pages } from '../../utils/constants.utils';
 import ScheduleStatusPhaseBadge from './ScheduleStatusPhaseBadge.vue';
 import { V1SchedulePhase } from '@velero-ui/velero';
+import { useSchedulePause } from '../../composables/schedule/useSchedulePause';
+import { toRef } from 'vue';
+import {useScheduleRemove} from "../../composables/schedule/useScheduleRemove";
 
-export default defineComponent({
-  name: 'ScheduleLine',
-  components: { ScheduleStatusPhaseBadge, FontAwesomeIcon },
-  setup() {
-    const scheduleStore = useScheduleStore();
-    return { scheduleStore };
-  },
-  data: () => ({
-    Pages,
-    V1SchedulePhase,
-    faPause,
-    faPlay,
-    faServer,
-    faTrashCan,
-    faArrowUpRightFromSquare,
-  }),
-  props: {
-    data: Object as PropType<V1Schedule>,
-  },
-  methods: {
-    convertTimestampToDate,
-    switchStatus(): void {
-      console.log('click switch');
-    },
-    remove(): void {
-      console.log('click remove');
-    },
-  },
+const props = defineProps({
+  data: Object as PropType<V1Schedule>,
 });
+
+const { togglePause, togglePauseLoading } = useSchedulePause(
+  toRef(() => props.data?.metadata?.name)
+);
+
+const { remove, removeLoading } = useScheduleRemove(
+  toRef(() => props.data?.metadata?.name)
+);
+
 </script>

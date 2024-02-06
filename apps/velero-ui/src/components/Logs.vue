@@ -7,11 +7,21 @@
         <div class="flex items-center justify-between mb-4">
           <h3 class="text-xl font-semibold dark:text-white">Logs</h3>
           <button
-            v-if="downloadable && data?.length > 0"
+            v-if="data?.length > 0"
             @click="download()"
+            :disabled="downloadLoading"
             class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
           >
-            <FontAwesomeIcon :icon="faFileArrowDown" class="w-4 h-4 mr-2" />
+            <FontAwesomeIcon
+              v-if="!downloadLoading"
+              :icon="faFileArrowDown"
+              class="w-4 h-4 mr-2"
+            />
+            <FontAwesomeIcon
+              v-if="downloadLoading"
+              :icon="faCircleNotch"
+              class="w-4 h-4 animate-spin mr-2"
+            />
             Download
           </button>
         </div>
@@ -64,26 +74,25 @@
     </div>
   </div>
 </template>
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script setup lang="ts">
 import type { PropType } from 'vue';
-import { faFileArrowDown } from '@fortawesome/free-solid-svg-icons';
+import {
+  faCircleNotch,
+  faFileArrowDown,
+} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { useDownloadLogs } from '../composables/useDownloadLogs';
+import type { V1DownloadTargetKind } from '@velero-ui/velero';
+import { toRef } from 'vue';
 
-export default defineComponent({
-  name: 'Logs',
-  components: { FontAwesomeIcon },
-  props: {
-    data: Array as PropType<string[]>,
-    downloadable: Boolean as PropType<boolean>,
-  },
-  data: () => ({
-    faFileArrowDown,
-  }),
-  methods: {
-    download() {
-      this.$parent.downloadLogs();
-    },
-  },
+const props = defineProps({
+  data: Array as PropType<string[]>,
+  name: String,
+  type: String as PropType<V1DownloadTargetKind>,
 });
+
+const { download, downloadLoading } = useDownloadLogs(
+  toRef(() => props.name),
+  toRef(() => props.type)
+);
 </script>

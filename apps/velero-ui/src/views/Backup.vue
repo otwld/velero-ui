@@ -9,11 +9,15 @@
       <Describe :data="backup"></Describe>
     </div>
   </div>
-  <Logs :data="backupLogs" :downloadable="true" class="pb-6"></Logs>
+  <Logs
+    :data="backupLogs"
+    :name="backup?.metadata?.name"
+    :type="V1DownloadTargetKind.BackupLog"
+    class="pb-6"
+  ></Logs>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script setup lang="ts">
 import { useBackupStore } from '../stores/backup.store';
 import type { Router } from 'vue-router';
 import { useRouter } from 'vue-router';
@@ -23,42 +27,17 @@ import Logs from '../components/Logs.vue';
 import Describe from '../components/Describe.vue';
 import BackupDetails from '../components/Backup/BackupDetails.vue';
 import BackupStatus from '../components/Backup/BackupStatus.vue';
+import { V1DownloadTargetKind } from '@velero-ui/velero';
+import { onBeforeMount } from 'vue';
 
-export default defineComponent({
-  name: 'Backup',
-  components: { BackupStatus, BackupDetails, Describe, Logs, BackupActions },
-  setup() {
-    const backupStore = useBackupStore();
-    const { backup, backupLogs } = storeToRefs(backupStore);
+const backupStore = useBackupStore();
+const { backup, backupLogs } = storeToRefs(backupStore);
 
-    const router: Router = useRouter();
-    return { backupStore, router, backup, backupLogs };
-  },
-  beforeMount() {
-    this.backupStore.get(
-      this.router.currentRoute.value.params.name,
-      this.router.currentRoute.value.params.namespace
-    );
-    this.backupLogs = undefined;
-    this.backupStore.logs(
-      this.router.currentRoute.value.params.name,
-      this.router.currentRoute.value.params.namespace
-    );
-  },
-  methods: {
-    remove(): void {
-      // this.backupStore.delete([this.data.metadata.name]);
-      console.log('click delete');
-    },
-    restore(): void {
-      console.log('click restore');
-    },
-    download(): void {
-      this.backupStore.download(this.backup.metadata.name)
-    },
-    downloadLogs(): void {
-      this.backupStore.downloadLogs(this.backup.metadata.name)
-    },
-  },
-});
+const router: Router = useRouter();
+
+backupLogs.value = undefined;
+
+onBeforeMount(() => backupStore.get(router.currentRoute.value.params.name));
+
+onBeforeMount(() => backupStore.logs(router.currentRoute.value.params.name));
 </script>

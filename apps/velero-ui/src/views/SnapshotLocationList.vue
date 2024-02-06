@@ -7,62 +7,28 @@
     :offset="offset"
     :limit="limit"
     :total="total"
+    @onSearchInput="onSearchInput"
+    @onNext="onNext"
+    @onPrevious="onPrevious"
+    @onRefresh="onRefresh"
   ></List>
 </template>
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script setup lang="ts">
 import List from '../components/List.vue';
 import { storeToRefs } from 'pinia';
 import { useSnapshotLocationStore } from '../stores/snapshot-location';
 import SnapshotLocationLine from '../components/SnapshotLocation/SnapshotLocationLine.vue';
+import { onBeforeMount } from 'vue';
 
-export default defineComponent({
-  name: 'SnapshotLocationList',
-  computed: {
-    SnapshotLocationLine() {
-      return SnapshotLocationLine;
-    },
-  },
-  components: { List },
-  setup() {
-    const snapshotLocationStore = useSnapshotLocationStore();
-    const { locations, total, offset, limit } = storeToRefs(
-      snapshotLocationStore
-    );
-    return { snapshotLocationStore, locations, offset, limit, total };
-  },
-  data() {
-    return {
-      headers: [
-        'Name',
-        'Provider',
-        'Status',
-        'Actions',
-      ],
-      searchInput: '',
-    };
-  },
-  beforeMount() {
-    this.snapshotLocationStore.fetch();
-  },
-  watch: {
-    searchInput(value: string) {
-      this.applyNameFilter(value);
-    },
-  },
-  methods: {
-    refresh() {
-      this.snapshotLocationStore.fetch();
-    },
-    next() {
-      this.snapshotLocationStore.next();
-    },
-    previous() {
-      this.snapshotLocationStore.previous();
-    },
-    applyNameFilter(name: string) {
-      this.snapshotLocationStore.applyNameFilter(name);
-    },
-  },
-});
+const snapshotLocationStore = useSnapshotLocationStore();
+const { locations, total, offset, limit } = storeToRefs(snapshotLocationStore);
+
+const headers = ['Name', 'Provider', 'Status', 'Actions'];
+
+onBeforeMount(() => snapshotLocationStore.fetch());
+
+const onSearchInput = (value) => snapshotLocationStore.applyNameFilter(value);
+const onNext = () => snapshotLocationStore.next();
+const onPrevious = () => snapshotLocationStore.previous();
+const onRefresh = () => snapshotLocationStore.fetch();
 </script>

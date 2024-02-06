@@ -3,7 +3,7 @@ import {
   DefaultValuePipe,
   Get,
   Param,
-  ParseIntPipe,
+  ParseIntPipe, Post,
   Query,
 } from '@nestjs/common';
 import { ScheduleService } from './schedule.service';
@@ -28,5 +28,19 @@ export class ScheduleController {
     @Param('name') name: string
   ): Observable<V1Schedule> {
     return this.scheduleService.findByName(name);
+  }
+
+  @Post('/:name/pause')
+  public pause(
+    @Param('name') name: string
+  ): Observable<V1Schedule> {
+    return this.scheduleService.togglePause(name, true);
+  }
+
+  @Post('/:name/unpause')
+  public unpause(
+    @Param('name') name: string
+  ): Observable<V1Schedule> {
+    return this.scheduleService.togglePause(name, false);
   }
 }

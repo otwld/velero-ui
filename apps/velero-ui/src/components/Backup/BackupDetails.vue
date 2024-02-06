@@ -141,34 +141,19 @@
     </div>
   </div>
 </template>
-
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script setup lang="ts">
 import type { PropType } from 'vue';
 import type { V1BackupSpec } from '@velero-ui/velero';
 import {
   faServer,
   faDatabase,
   faClock,
-  faTriangleExclamation,
   faArrowUpRightFromSquare,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { Pages } from '../../utils/constants.utils';
 
-export default defineComponent({
-  name: 'BackupDetails',
-  components: { FontAwesomeIcon },
-  props: {
-    spec: Object as PropType<V1BackupSpec>,
-  },
-  data: () => ({
-    Pages,
-    faTriangleExclamation,
-    faServer,
-    faDatabase,
-    faClock,
-    faArrowUpRightFromSquare,
-  }),
+defineProps({
+  spec: Object as PropType<V1BackupSpec>,
 });
 </script>

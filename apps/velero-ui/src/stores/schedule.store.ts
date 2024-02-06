@@ -1,4 +1,4 @@
-import type { V1Schedule } from '@velero-ui/velero';
+import type { V1Schedule, V1ScheduleList } from '@velero-ui/velero';
 import { defineStore } from 'pinia';
 import { ApiRoutes } from '../utils/constants.utils';
 import type { AxiosResponse } from 'axios';
@@ -31,17 +31,17 @@ export const useScheduleStore = defineStore({
     } as ScheduleStore),
   getters: {},
   actions: {
-    async get(name: string) {
+    async get(name: string): Promise<V1Schedule> {
       try {
         this.schedule = this.schedules.find(
           (b: V1Schedule) => b?.metadata?.name === name
         );
 
         if (!this.schedule) {
-          const response = (await this.axios.get(
+          const response: AxiosResponse<V1Schedule> = await this.axios.get(
             `${ApiRoutes.SCHEDULES}/${name}`,
             {}
-          )) as AxiosResponse;
+          );
 
           this.schedule = response.data;
         }
@@ -49,23 +49,48 @@ export const useScheduleStore = defineStore({
         this.schedule = undefined;
         console.error(e);
       }
+      return this.schedule;
     },
-    async fetch() {
+
+    async fetch(): Promise<V1Schedule[]> {
       try {
-        const response = (await this.axios.get(ApiRoutes.SCHEDULES, {
-          params: {
-            offset: this.offset,
-            limit: this.limit,
-            search: this.filters.search,
-          },
-        })) as AxiosResponse;
+        const response: AxiosResponse<V1ScheduleList> = await this.axios.get(
+          ApiRoutes.SCHEDULES,
+          {
+            params: {
+              offset: this.offset,
+              limit: this.limit,
+              search: this.filters.search,
+            },
+          }
+        );
 
         this.schedules = response.data.items;
         this.total = response.data.total;
       } catch (e) {
+        this.schedules = [];
+        this.total = 0;
         console.error(e);
       }
+      return this.schedules;
     },
+
+    togglePause(name: string, paused: boolean) {
+      if (this.schedule?.spec) {
+        this.schedule.spec.paused = paused;
+      }
+
+      if (this.schedules.length > 0) {
+        const schedule = this.schedules.find(
+          (s: V1Schedule): boolean => s?.metadata?.name === name
+        );
+
+        if (schedule?.spec) {
+          schedule.spec.paused = paused;
+        }
+      }
+    },
+
     async delete(names: string[]) {
       try {
         const response = (await this.axios.delete(

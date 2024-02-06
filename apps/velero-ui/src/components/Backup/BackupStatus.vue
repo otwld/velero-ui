@@ -75,7 +75,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
 import type { V1Backup } from '@velero-ui/velero';
@@ -88,28 +88,18 @@ import {
   faHourglass,
 } from '@fortawesome/free-solid-svg-icons';
 
-export default defineComponent({
-  name: 'BackupStatus',
-  components: { BackupStatusPhaseBadge, FontAwesomeIcon },
-  props: {
-    backup: Object as PropType<V1Backup>,
-  },
-  data: () => ({
-    faTriangleExclamation,
-    faCircleExclamation,
-    faHourglass,
-  }),
-  methods: {
-    getRemainingTime,
-    getPercent() {
-      const percent = Math.round(
-        (this.backup?.status.progress.itemsBackedUp * 100) /
-          this.backup?.status.progress.totalItems
-      );
-      return {
-        width: `${percent}%`,
-      };
-    },
-  },
+const props = defineProps({
+  backup: Object as PropType<V1Backup>,
 });
+
+const getPercent = () => {
+  const percent = Math.round(
+    (props.backup?.status.progress.itemsBackedUp * 100) /
+      props.backup?.status.progress.totalItems
+  );
+  return {
+    width: `${percent}%`,
+  };
+};
+
 </script>

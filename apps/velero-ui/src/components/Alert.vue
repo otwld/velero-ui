@@ -33,19 +33,14 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script setup lang="ts">
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import type { PropType } from 'vue';
 import type { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 
-export default defineComponent({
-  name: 'Alert',
-  components: { FontAwesomeIcon },
-  props: {
-    message: String,
-    icon: Object as PropType<IconDefinition>,
-    color: String,
-  }
+defineProps({
+  message: String,
+  icon: Object as PropType<IconDefinition>,
+  color: String,
 });
 </script>

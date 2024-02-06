@@ -22,8 +22,16 @@
           >
             Sign in
           </h1>
-          <Alert :message="error" color="red" :icon="faCircleExclamation"></Alert>
-          <Alert :message="success" color="green" :icon="faCircleExclamation"></Alert>
+          <Alert
+            :message="error"
+            color="red"
+            :icon="faCircleExclamation"
+          ></Alert>
+          <Alert
+            :message="success"
+            color="green"
+            :icon="faCircleExclamation"
+          ></Alert>
           <form
             class="space-y-4 md:space-y-6"
             @submit.prevent="basicLogin($event)"
@@ -96,73 +104,66 @@
   </section>
 </template>
 
-<script lang="ts">
-import { defineComponent, inject } from 'vue';
+<script setup lang="ts">
+import { inject, onBeforeMount, ref } from 'vue';
 import type { UserManager } from 'oidc-client-ts';
-import type { Router,  } from 'vue-router';
+import type { Router } from 'vue-router';
 import { useRouter, useRoute } from 'vue-router';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { faCircleNotch, faCircleExclamation } from '@fortawesome/free-solid-svg-icons';
-import Alert from "../../components/Alert.vue";
+import {
+  faCircleNotch,
+  faCircleExclamation,
+} from '@fortawesome/free-solid-svg-icons';
+import Alert from '../../components/Alert.vue';
 
-export default defineComponent({
-  name: 'Header',
-  components: {Alert, FontAwesomeIcon },
-  setup() {
-    const oidcClient: UserManager = inject('oidcClient') as UserManager;
-    const router: Router = useRouter();
-    const route = useRoute();
-    return { oidcClient, router, route };
-  },
-  data: () => ({
-    faCircleNotch,
-    faCircleExclamation,
-    ssoLoading: false,
-    basicLoading: false,
-    error: '',
-    success: '',
-  }),
-  async beforeMount() {
-    if (this.route.query?.state === 'error') {
-      if (this.route.query?.reason === 'unauthorized') {
-        this.error = 'You must login to access this page.';
-      }
-      if (this.route.query?.reason === 'inactivity') {
-        this.error = 'Your session timed out.';
-      }
-    } else if (this.route.query?.state === 'success') {
-      if (this.route.query?.reason === 'logout') {
-       this.success = 'You successfully logged out!';
-      }
+const oidcClient: UserManager = inject('oidcClient') as UserManager;
+const router: Router = useRouter();
+const route = useRoute();
+
+const ssoLoading = ref(false);
+const basicLoading = ref(false);
+const error = ref('');
+const success = ref('');
+
+onBeforeMount(async () => {
+  if (route.query?.state === 'error') {
+    if (route.query?.reason === 'unauthorized') {
+      error.value = 'You must login to access this page.';
     }
-
-    if (window.location.href.indexOf('#') >= 0) {
-      this.ssoLoading = true;
-      try {
-        await this.oidcClient.signinRedirectCallback();
-
-        await this.router.push('/');
-      } catch (e) {
-        this.ssoLoading = false;
-        console.error(e);
-      }
+    if (route.query?.reason === 'inactivity') {
+      error.value = 'Your session timed out.';
     }
-  },
-  methods: {
-    async ssoLogin() {
-      try {
-        this.ssoLoading = true;
-        await this.oidcClient.signinRedirect({});
-      } catch (e) {
-        this.error = 'Unable to proceed request, please retry.'
-        this.ssoLoading = false;
-        console.error(e);
-      }
-    },
-    async basicLogin(event: Event) {
-      event.preventDefault();
-      this.basicLoading = true;
-    },
-  },
+  } else if (route.query?.state === 'success') {
+    if (route.query?.reason === 'logout') {
+      success.value = 'You successfully logged out!';
+    }
+  }
+
+  if (window.location.href.indexOf('#') >= 0) {
+    ssoLoading.value = true;
+    try {
+      await oidcClient.signinRedirectCallback();
+
+      await router.push('/');
+    } catch (e) {
+      ssoLoading.value = false;
+      console.error(e);
+    }
+  }
 });
+
+const ssoLogin = async () => {
+  try {
+    ssoLoading.value = true;
+    await oidcClient.signinRedirect({});
+  } catch (e) {
+    error.value = 'Unable to proceed request, please retry.';
+    ssoLoading.value = false;
+    console.error(e);
+  }
+};
+const basicLogin = (event: Event) => {
+  event.preventDefault();
+  basicLoading.value = true;
+};
 </script>

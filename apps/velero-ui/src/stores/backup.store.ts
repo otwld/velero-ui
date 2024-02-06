@@ -88,34 +88,6 @@ export const useBackupStore = defineStore({
         console.error(e);
       }
     },
-    async download(name: string) {
-      try {
-        const response: AxiosResponse<V1DownloadRequest> =
-          (await this.axios.post(
-            `${ApiRoutes.BACKUPS}/${name}/download`
-          )) as AxiosResponse<V1DownloadRequest>;
-
-        if (response) {
-          window.open(response.data.status.downloadURL);
-        }
-      } catch (e) {
-        console.error(e);
-      }
-    },
-    async downloadLogs(name: string) {
-      try {
-        const response: AxiosResponse<V1DownloadRequest> =
-          (await this.axios.post(
-            `${ApiRoutes.BACKUPS}/${name}/logs/download`
-          )) as AxiosResponse<V1DownloadRequest>;
-
-        if (response) {
-          window.open(response.data.status.downloadURL);
-        }
-      } catch (e) {
-        console.error(e);
-      }
-    },
     async delete(names: string[]) {
       try {
         const response = (await this.axios.delete(
