@@ -46,6 +46,7 @@ defineProps({
     | V1BackupStorageLocation[]
     | V1VolumeSnapshotLocation
   >,
+  loading: Boolean,
   headers: Array as PropType<string[]>,
   offset: Number,
   limit: Number,

@@ -2,11 +2,8 @@ import { defineStore } from 'pinia';
 
 import { ApiRoutes } from '../utils/constants.utils';
 import type { AxiosResponse } from 'axios';
-import type {
-  V1Backup,
-  V1BackupList,
-  V1DownloadRequest,
-} from '@velero-ui/velero';
+import type { V1Backup } from '@velero-ui/velero';
+import { V1BackupPhase } from '@velero-ui/velero';
 
 export interface BackupSearchFilters {
   startWith: string;
@@ -37,23 +34,13 @@ export const useBackupStore = defineStore({
       },
     } as BackupStore),
   actions: {
-    async get(name: string) {
-      try {
-        this.backup = this.backups.find(
-          (b: V1Backup): boolean => b?.metadata?.name === name
-        );
-
-        if (!this.backup) {
-          const response: AxiosResponse<V1Backup> = (await this.axios.get(
-            `${ApiRoutes.BACKUPS}/${name}`,
-            {}
-          )) as AxiosResponse<V1Backup>;
-
-          this.backup = response.data;
-        }
-      } catch (e) {
-        this.backup = undefined;
-        console.error(e);
+    set(backup: V1Backup): void {
+      this.backup = backup;
+    },
+    setMany(backups: V1Backup[], total?: number): void {
+      this.backups = backups;
+      if (total) {
+        this.total = total;
       }
     },
     async logs(name: string) {
@@ -69,55 +56,36 @@ export const useBackupStore = defineStore({
         console.error(e);
       }
     },
-    async fetch() {
-      try {
-        const response: AxiosResponse<V1BackupList> = (await this.axios.get(
-          ApiRoutes.BACKUPS,
-          {
-            params: {
-              offset: this.offset,
-              limit: this.limit,
-              search: this.filters.search,
-            },
-          }
-        )) as AxiosResponse<V1BackupList>;
+    delete(name: string): void {
+      if (this.backup?.status) {
+        this.backup.status.phase = V1BackupPhase.Deleting;
+      }
 
-        this.backups = response.data.items;
-        this.total = response.data.total;
-      } catch (e) {
-        console.error(e);
+      if (this.backups.length > 0) {
+        const backup = this.schedules.find(
+          (b: V1Backup): boolean => b?.metadata?.name === name
+        );
+
+        if (backup?.status) {
+          backup.status.phase = V1BackupPhase.Deleting;
+        }
       }
     },
-    async delete(names: string[]) {
-      try {
-        const response = (await this.axios.delete(
-          `${ApiRoutes.BACKUPS}}`
-        )) as AxiosResponse;
-
-        this.fetch();
-      } catch (e) {
-        console.error(e);
-      }
-    },
-    next() {
+    next(): void {
       if (this.offset + this.limit < this.total) {
         this.offset += 20;
-        this.fetch();
       }
     },
-    previous() {
+    previous(): void {
       this.offset -= 20;
 
       if (this.offset < 0) {
         this.offset = 0;
       }
-
-      this.fetch();
     },
-    applyNameFilter(name: string) {
+    applyNameFilter(name: string): void {
       this.offset = 0;
       this.filters.search = name;
-      this.fetch();
     },
   },
 });

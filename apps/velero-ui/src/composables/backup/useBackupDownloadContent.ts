@@ -3,7 +3,6 @@ import { useAxios } from '@vueuse/integrations/useAxios';
 import { inject } from 'vue';
 import type { Ref } from 'vue';
 import type { AxiosInstance } from 'axios';
-import { V1DownloadTargetKind } from '@velero-ui/velero';
 import { ApiRoutes } from '../../utils/constants.utils';
 
 export const useBackupDownloadContent = (name: Ref<string>) => {
@@ -20,7 +19,7 @@ export const useBackupDownloadContent = (name: Ref<string>) => {
         method: 'POST',
       });
 
-      if (data.value) {
+      if (data?.value?.status?.downloadURL) {
         window.open(data.value.status.downloadURL);
       }
     } catch (e) {}

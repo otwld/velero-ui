@@ -28,16 +28,21 @@ import Describe from '../components/Describe.vue';
 import BackupDetails from '../components/Backup/BackupDetails.vue';
 import BackupStatus from '../components/Backup/BackupStatus.vue';
 import { V1DownloadTargetKind } from '@velero-ui/velero';
-import { onBeforeMount } from 'vue';
+import { onBeforeMount, toRef } from 'vue';
+import { useBackupGet } from '../composables/backup/useBackupGet';
 
 const backupStore = useBackupStore();
 const { backup, backupLogs } = storeToRefs(backupStore);
 
 const router: Router = useRouter();
 
+const { get } = useBackupGet(
+  toRef(router.currentRoute.value.params.name)
+);
+
 backupLogs.value = undefined;
 
-onBeforeMount(() => backupStore.get(router.currentRoute.value.params.name));
+onBeforeMount(() => get());
 
 onBeforeMount(() => backupStore.logs(router.currentRoute.value.params.name));
 </script>

@@ -34,7 +34,6 @@
               <component
                 :is="component"
                 v-for="item in data"
-                class="hover:bg-gray-100 dark:hover:bg-gray-700"
                 :data="item"
               >
               </component>

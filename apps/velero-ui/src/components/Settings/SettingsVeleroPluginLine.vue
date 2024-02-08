@@ -1,4 +1,4 @@
-<template>
+<template class="hover:bg-gray-100 dark:hover:bg-gray-700">
   <tr>
     <td class="flex items-center p-4 mr-12 space-x-6 whitespace-nowrap">
       <div class="text-sm font-normal text-gray-500 dark:text-gray-400">

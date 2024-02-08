@@ -61,35 +61,51 @@
           </button>
           <button
             type="button"
-            data-modal-target="modal-delete"
-            data-modal-toggle="modal-delete"
+            :disabled="isDeleting"
+            :data-modal-target="`modal-delete-${backup?.metadata?.name}`"
+            :data-modal-toggle="`modal-delete-${backup?.metadata?.name}`"
             class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-red-600 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"
           >
-            <FontAwesomeIcon :icon="faTrashCan" class="w-4 h-4 mr-2" />
-            Delete
+            <FontAwesomeIcon
+              v-if="isDeleting"
+              :icon="faCircleNotch"
+              class="w-4 h-4 animate-spin mr-2"
+            />
+            <FontAwesomeIcon
+              v-if="!isDeleting"
+              :icon="faTrashCan"
+              class="w-4 h-4 mr-2"
+            />
+            {{ isDeleting ? 'Deleting' : 'Delete' }}
           </button>
         </div>
       </div>
     </div>
   </div>
-  <ModalDelete id="modal-delete" :name="backup?.metadata?.name"></ModalDelete>
+  <ModalDelete
+    :id="`modal-delete-${backup?.metadata?.name}`"
+    @onConfirm="remove"
+    :name="backup?.metadata?.name"
+  ></ModalDelete>
 </template>
 
 <script setup lang="ts">
-import { onMounted, toRef } from 'vue';
 import type { PropType } from 'vue';
+import { computed, onMounted, toRef } from 'vue';
 import type { V1Backup } from '@velero-ui/velero';
+import { V1BackupPhase } from '@velero-ui/velero';
 import {
+  faCircleNotch,
   faClockRotateLeft,
   faDownload,
-  faTrashCan,
   faFloppyDisk,
-  faCircleNotch,
+  faTrashCan,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { initModals } from 'flowbite';
 import ModalDelete from '../Modals/ModalDelete.vue';
 import { useBackupDownloadContent } from '../../composables/backup/useBackupDownloadContent';
+import { useBackupDelete } from '../../composables/backup/useBackupDelete';
 
 const props = defineProps({
   backup: Object as PropType<V1Backup>,
@@ -98,6 +114,17 @@ const props = defineProps({
 onMounted(() => initModals());
 
 const { download, downloadLoading } = useBackupDownloadContent(
-  toRef(() => props.data?.metadata?.name)
+  toRef(() => props.backup?.metadata?.name)
 );
+
+const { remove, deleteLoading } = useBackupDelete(
+  toRef(() => props.backup?.metadata?.name)
+);
+
+const isDeleting = computed(() => {
+  return (
+    deleteLoading.value ||
+    props.backup?.status?.phase === V1BackupPhase.Deleting
+  );
+});
 </script>

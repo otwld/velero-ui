@@ -1,4 +1,4 @@
-<template>
+<template class="hover:bg-gray-100 dark:hover:bg-gray-700">
   <tr>
     <td class="w-4 p-4">
       <div class="flex items-center">
@@ -108,18 +108,34 @@
         </button>
         <button
           type="button"
-          @click="remove()"
+          :disabled="isDeleting"
+          :data-modal-target="`modal-delete-${data?.metadata?.name}`"
+          :data-modal-toggle="`modal-delete-${data?.metadata?.name}`"
           class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-red-600 rounded-r-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"
         >
-          <FontAwesomeIcon :icon="faTrashCan" class="w-4 h-4" />
+          <FontAwesomeIcon
+            v-if="isDeleting"
+            :icon="faCircleNotch"
+            class="w-4 h-4 animate-spin"
+          />
+          <FontAwesomeIcon
+            v-if="!isDeleting"
+            :icon="faTrashCan"
+            class="w-4 h-4"
+          />
         </button>
       </div>
     </td>
   </tr>
+  <ModalDelete
+    :id="`modal-delete-${data?.metadata?.name}`"
+    @onConfirm="remove"
+    :name="data?.metadata?.name"
+  ></ModalDelete>
 </template>
 
 <script setup lang="ts">
-import { onMounted, toRef } from 'vue';
+import { computed, onMounted, toRef } from 'vue';
 import type { V1Backup } from '@velero-ui/velero';
 import {
   convertTimestampToDate,
@@ -137,18 +153,33 @@ import {
   faArrowUpRightFromSquare,
   faCircleNotch,
 } from '@fortawesome/free-solid-svg-icons';
-import { initTooltips } from 'flowbite';
+import { initModals, initTooltips } from 'flowbite';
 import { useBackupDownloadContent } from '../../composables/backup/useBackupDownloadContent';
+import { useBackupDelete } from '../../composables/backup/useBackupDelete';
+import { V1BackupPhase } from '@velero-ui/velero';
+import ModalDelete from '../Modals/ModalDelete.vue';
 
 const props = defineProps({
   data: Object as PropType<V1Backup>,
 });
 
+onMounted(() => initTooltips());
+onMounted(() => initModals());
+
 const { download, downloadLoading } = useBackupDownloadContent(
   toRef(() => props.data?.metadata?.name)
 );
-onMounted(() => initTooltips());
 
-const remove = () => {};
+const { remove, deleteLoading } = useBackupDelete(
+  toRef(() => props.data?.metadata?.name)
+);
+
+const isDeleting = computed(() => {
+  return (
+    deleteLoading.value ||
+    props.data?.status?.phase === V1BackupPhase.Deleting
+  );
+});
+
 const restore = () => {};
 </script>

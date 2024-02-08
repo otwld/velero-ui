@@ -29,7 +29,7 @@ export const useDownloadLogs = (
         });
       }
 
-      if (data.value) {
+      if (data?.value?.status?.downloadURL) {
         window.open(data.value.status.downloadURL);
       }
     } catch (e) {}

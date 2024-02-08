@@ -31,9 +31,10 @@ export class DeleteBackupRequestService {
     )
       .pipe(
         concatMap((request: V1DeleteBackupRequest) =>
-          this.k8sCustomObjectApi.createClusterCustomObject(
+          this.k8sCustomObjectApi.createNamespacedCustomObject(
             VELERO.GROUP,
             VELERO.VERSION,
+            this.configService.get('velero.namespace'),
             Ressources.DELETE_BACKUP_REQUEST.plurial,
             request
           )
