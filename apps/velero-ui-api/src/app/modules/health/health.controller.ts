@@ -3,9 +3,9 @@ import {
   HealthCheck,
   HealthCheckService,
 } from '@nestjs/terminus';
-import { K8sHealthIndicator } from '../../shared/health-indicators/k8s.health-indicator';
+import { K8sHealthIndicator } from '@velero-ui-api/modules/health/health-indicators/k8s.health-indicator';
 import { lastValueFrom } from 'rxjs';
-import { VeleroHealthIndicator } from '../../shared/health-indicators/velero.health-indicator';
+import { VeleroHealthIndicator } from '@velero-ui-api/modules/health/health-indicators/velero.health-indicator';
 
 @Controller('health')
 export class HealthController {

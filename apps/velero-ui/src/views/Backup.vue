@@ -18,27 +18,26 @@
 </template>
 
 <script setup lang="ts">
-import { useBackupStore } from '../stores/backup.store';
 import type { Router } from 'vue-router';
 import { useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
-import BackupActions from '../components/Backup/BackupActions.vue';
-import Logs from '../components/Logs.vue';
-import Describe from '../components/Describe.vue';
-import BackupDetails from '../components/Backup/BackupDetails.vue';
-import BackupStatus from '../components/Backup/BackupStatus.vue';
+
 import { V1DownloadTargetKind } from '@velero-ui/velero';
 import { onBeforeMount, toRef } from 'vue';
-import { useBackupGet } from '../composables/backup/useBackupGet';
+import { useBackupStore } from '@velero-ui-app/stores/backup.store';
+import { useBackupGet } from '@velero-ui-app/use/backup/useBackupGet';
+import BackupActions from '@velero-ui-app/components/Backup/BackupActions.vue';
+import BackupStatus from '@velero-ui-app/components/Backup/BackupStatus.vue';
+import BackupDetails from '@velero-ui-app/components/Backup/BackupDetails.vue';
+import Describe from '@velero-ui-app/components/Describe.vue';
+import Logs from '@velero-ui-app/components/Logs.vue';
 
 const backupStore = useBackupStore();
 const { backup, backupLogs } = storeToRefs(backupStore);
 
 const router: Router = useRouter();
 
-const { get } = useBackupGet(
-  toRef(router.currentRoute.value.params.name)
-);
+const { get } = useBackupGet(toRef(router.currentRoute.value.params.name));
 
 backupLogs.value = undefined;
 

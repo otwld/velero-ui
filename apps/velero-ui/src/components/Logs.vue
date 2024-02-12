@@ -81,9 +81,9 @@ import {
   faFileArrowDown,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { useDownloadLogs } from '../composables/useDownloadLogs';
 import type { V1DownloadTargetKind } from '@velero-ui/velero';
 import { toRef } from 'vue';
+import { useDownloadLogs } from '@velero-ui-app/use/useDownloadLogs';
 
 const props = defineProps({
   data: Array as PropType<string[]>,

@@ -1,7 +1,6 @@
 <template>
   <div
     class="fixed left-0 right-0 z-50 items-center justify-center hidden overflow-x-hidden overflow-y-auto top-4 md:inset-0 h-modal sm:h-full"
-    id="delete-user-modal"
   >
     <div class="relative w-full h-full max-w-md px-4 md:h-auto">
       <div class="relative bg-white rounded-lg shadow dark:bg-gray-800">

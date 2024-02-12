@@ -56,8 +56,8 @@ import {
   faCircleNotch,
 } from '@fortawesome/free-solid-svg-icons';
 import { UserManager } from 'oidc-client-ts';
-import { useAppStore } from '../../../stores/app.store';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { useAppStore } from '@velero-ui-app/stores/app.store';
 
 const appStore = useAppStore();
 const oidcClient: UserManager = inject('oidcClient') as UserManager;

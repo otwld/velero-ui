@@ -104,8 +104,8 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { initModals } from 'flowbite';
 import ModalDelete from '../Modals/ModalDelete.vue';
-import { useBackupDownloadContent } from '../../composables/backup/useBackupDownloadContent';
-import { useBackupDelete } from '../../composables/backup/useBackupDelete';
+import { useBackupDownloadContent } from '@velero-ui-app/use/backup/useBackupDownloadContent';
+import { useBackupDelete } from '@velero-ui-app/use/backup/useBackupDelete';
 
 const props = defineProps({
   backup: Object as PropType<V1Backup>,

@@ -108,7 +108,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { V1SchedulePhase } from '@velero-ui/velero';
 import { ref, toRef } from 'vue';
-import { useSchedulePause } from '../../composables/schedule/useSchedulePause';
+import { useSchedulePause } from '@velero-ui-app/use/schedule/useSchedulePause';
 
 const props = defineProps({
   schedule: Object as PropType<V1Schedule>,

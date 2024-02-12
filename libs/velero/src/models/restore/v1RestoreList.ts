@@ -1,10 +1,6 @@
-import { V1ListMeta } from '@kubernetes/client-node';
 import { V1Restore } from './v1Restore';
+import { KubernetesListObject } from '@kubernetes/client-node/dist/types';
 
-export interface V1RestoreList {
-  apiVersion: string;
+export interface V1RestoreList extends KubernetesListObject<V1Restore> {
   total?: number;
-  items: V1Restore[];
-  kind: string;
-  metadata: V1ListMeta;
 }

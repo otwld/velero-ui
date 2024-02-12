@@ -1,3 +1,5 @@
+import {V1Backup} from "./models/backup";
+
 export const Ressources = {
   BACKUP: {
     kind: 'Backup',
@@ -12,7 +14,7 @@ export const Ressources = {
     plurial: 'schedules',
   },
   DOWNLOAD_REQUEST: {
-    kind: 'DownloadRequest',
+    kind: 'Request',
     plurial: 'downloadrequests',
   },
   DELETE_BACKUP_REQUEST: {

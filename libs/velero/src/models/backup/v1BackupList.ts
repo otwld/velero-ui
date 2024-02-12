@@ -1,10 +1,6 @@
 import { V1Backup } from './v1Backup';
-import { V1ListMeta } from '@kubernetes/client-node';
+import { KubernetesListObject } from '@kubernetes/client-node/dist/types';
 
-export interface V1BackupList {
-  apiVersion: string;
+export interface V1BackupList extends KubernetesListObject<V1Backup> {
   total?: number;
-  items: V1Backup[];
-  kind: string;
-  metadata: V1ListMeta;
 }

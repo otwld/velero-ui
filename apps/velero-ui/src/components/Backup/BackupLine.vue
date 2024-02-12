@@ -75,6 +75,7 @@
       <div class="inline-flex rounded-md shadow-sm" role="group">
         <button
           type="button"
+          :disabled="isDeleting"
           @click="restore()"
           class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-l-lg bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:ring-teal-300 dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
         >
@@ -82,10 +83,10 @@
         </button>
         <button
           type="button"
-          :disabled="downloadLoading"
+          :disabled="isDeleting || downloadLoading"
           @click="download()"
           data-tooltip-target="tooltip-button-download"
-          class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-teal-800"
+          class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
         >
           <FontAwesomeIcon
             v-if="!downloadLoading"
@@ -142,7 +143,7 @@ import {
   getRemainingTime,
 } from '../../utils/date.utils';
 import type { PropType } from 'vue';
-import { Pages } from '../../utils/constants.utils';
+import { Pages } from '@velero-ui-app/utils/constants.utils';
 import BackupStatusPhaseBadge from './BackupStatusPhaseBadge.vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import {
@@ -154,10 +155,10 @@ import {
   faCircleNotch,
 } from '@fortawesome/free-solid-svg-icons';
 import { initModals, initTooltips } from 'flowbite';
-import { useBackupDownloadContent } from '../../composables/backup/useBackupDownloadContent';
-import { useBackupDelete } from '../../composables/backup/useBackupDelete';
 import { V1BackupPhase } from '@velero-ui/velero';
 import ModalDelete from '../Modals/ModalDelete.vue';
+import { useBackupDownloadContent } from '@velero-ui-app/use/backup/useBackupDownloadContent';
+import { useBackupDelete } from '@velero-ui-app/use/backup/useBackupDelete';
 
 const props = defineProps({
   data: Object as PropType<V1Backup>,
@@ -176,8 +177,7 @@ const { remove, deleteLoading } = useBackupDelete(
 
 const isDeleting = computed(() => {
   return (
-    deleteLoading.value ||
-    props.data?.status?.phase === V1BackupPhase.Deleting
+    deleteLoading.value || props.data.status?.phase === V1BackupPhase.Deleting
   );
 });
 

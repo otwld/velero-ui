@@ -10,8 +10,8 @@
     </div>
   </div>
 </template>
-<script setup lang="ts">
-import Header from './components/Header.vue';
-import Sidebar from './components/Sidebar.vue';
-import BreadCrumb from './components/BreadCrumb.vue';
+<script lang="ts" setup>
+import Header from '@velero-ui-app/layouts/default/components/Header.vue';
+import Sidebar from '@velero-ui-app/layouts/default/components/Sidebar.vue';
+import BreadCrumb from '@velero-ui-app/layouts/default/components/BreadCrumb.vue';
 </script>

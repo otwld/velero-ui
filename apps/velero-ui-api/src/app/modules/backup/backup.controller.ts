@@ -13,6 +13,7 @@ import {
 import { BackupService } from './backup.service';
 import { concatMap, from, Observable } from 'rxjs';
 import {
+  Ressources,
   V1Backup,
   V1BackupList,
   V1DeleteBackupRequest,
@@ -20,15 +21,17 @@ import {
   V1DownloadTargetKind,
 } from '@velero-ui/velero';
 import { CreateDeleteBackRequestDto } from '../../shared/dto/delete-backup-request.dto';
-import { DeleteBackupRequestService } from '../../shared/modules/delete-backup-request/delete-backup-request.service';
-import { DownloadRequestService } from '../../shared/modules/download-request/download-request.service';
+import { DeleteBackupRequestService } from '@velero-ui-api/modules/delete-backup-request/delete-backup-request.service';
+import { DownloadRequestService } from '@velero-ui-api/modules/download-request/download-request.service';
+import { K8sCustomObjectService } from '@velero-ui-api/shared/modules/k8s-custom-object/k8s-custom-object.service';
 
 @Controller('backups')
 export class BackupController {
   constructor(
     private readonly backupService: BackupService,
     private readonly deleteBackupRequestService: DeleteBackupRequestService,
-    private readonly downloadRequestService: DownloadRequestService
+    private readonly downloadRequestService: DownloadRequestService,
+    private readonly k8sCustomObjectService: K8sCustomObjectService
   ) {}
 
   @Get()
@@ -37,7 +40,12 @@ export class BackupController {
     @Query('limit', new DefaultValuePipe(20), ParseIntPipe) limit: number,
     @Query('search', new DefaultValuePipe('')) search: string
   ): Observable<V1BackupList> {
-    return this.backupService.find(offset, limit, search);
+    return this.k8sCustomObjectService.get<V1Backup, V1BackupList>(
+      Ressources.BACKUP.plurial,
+      offset,
+      limit,
+      search
+    );
   }
 
   @Post('/restore')
@@ -66,7 +74,10 @@ export class BackupController {
 
   @Get('/:name')
   public getByName(@Param('name') name: string): Observable<V1Backup> {
-    return this.backupService.findByName(name);
+    return this.k8sCustomObjectService.getByName<V1Backup>(
+      Ressources.BACKUP.plurial,
+      name
+    );
   }
 
   @Get('/:name/logs')
@@ -75,7 +86,9 @@ export class BackupController {
   }
 
   @Post('/:name/logs/download')
-  public downloadLogs(@Param('name') name: string): Observable<V1DownloadRequest> {
+  public downloadLogs(
+    @Param('name') name: string
+  ): Observable<V1DownloadRequest> {
     return this.downloadRequestService.create({
       name,
       kind: V1DownloadTargetKind.BackupLog,

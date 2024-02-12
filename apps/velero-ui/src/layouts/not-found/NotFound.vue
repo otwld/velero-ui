@@ -25,6 +25,7 @@
     </div>
   </section>
 </template>
+
 <script setup lang="ts">
-import { Pages } from '../../utils/constants.utils';
+import { Pages } from '@velero-ui-app/utils/constants.utils';
 </script>

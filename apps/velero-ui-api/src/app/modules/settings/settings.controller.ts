@@ -7,9 +7,9 @@ import {
   VeleroServerSettings,
   VeleroUiSettings,
 } from '@velero-ui/shared-types';
-import { DownloadRequestService } from '../../shared/modules/download-request/download-request.service';
+import { DownloadRequestService } from '@velero-ui-api/modules/download-request/download-request.service';
 import {V1ServerStatusRequest} from "@velero-ui/velero";
-import {ServerStatusRequestService} from "../../shared/modules/server-status-request/server-status-request.service";
+import {ServerStatusRequestService} from "@velero-ui-api/modules/server-status-request/server-status-request.service";
 
 @Controller('/settings')
 export class SettingsController {

@@ -15,6 +15,7 @@
             <li>
               <router-link
                 :to="Pages.HOME.path"
+                active-class="bg-gray-100 dark:bg-gray-700"
                 class="flex items-center p-2 text-base text-gray-900 rounded-lg hover:bg-gray-100 group dark:text-gray-200 dark:hover:bg-gray-700"
               >
                 <FontAwesomeIcon
@@ -27,6 +28,7 @@
             <li>
               <router-link
                 :to="Pages.BACKUPS.path"
+                active-class="bg-gray-100 dark:bg-gray-700"
                 class="flex items-center p-2 text-base text-gray-900 rounded-lg hover:bg-gray-100 group dark:text-gray-200 dark:hover:bg-gray-700"
               >
                 <FontAwesomeIcon
@@ -39,6 +41,7 @@
             <li>
               <router-link
                 :to="Pages.SCHEDULES.path"
+                active-class="bg-gray-100 dark:bg-gray-700"
                 class="flex items-center p-2 text-base text-gray-900 rounded-lg hover:bg-gray-100 group dark:text-gray-200 dark:hover:bg-gray-700"
               >
                 <FontAwesomeIcon
@@ -51,10 +54,12 @@
             <li>
               <router-link
                 :to="Pages.RESTORES.path"
+                active-class="bg-gray-100 dark:bg-gray-700"
                 class="flex items-center p-2 text-base text-gray-900 rounded-lg hover:bg-gray-100 group dark:text-gray-200 dark:hover:bg-gray-700"
               >
                 <FontAwesomeIcon
                   :icon="faClockRotateLeft"
+                  active-class="bg-gray-100 dark:bg-gray-700"
                   class="w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
                 />
 
@@ -63,7 +68,8 @@
             </li>
             <li>
               <router-link
-                to=""
+                :to="Pages.BACKUP_REPOSITORIES.path"
+                active-class="bg-gray-100 dark:bg-gray-700"
                 class="flex items-center p-2 text-base text-gray-900 rounded-lg hover:bg-gray-100 group dark:text-gray-200 dark:hover:bg-gray-700"
               >
                 <FontAwesomeIcon
@@ -76,6 +82,7 @@
             <li>
               <router-link
                 :to="Pages.STORAGE_LOCATIONS.path"
+                active-class="bg-gray-100 dark:bg-gray-700"
                 class="flex items-center p-2 text-base text-gray-900 rounded-lg hover:bg-gray-100 group dark:text-gray-200 dark:hover:bg-gray-700"
               >
                 <FontAwesomeIcon
@@ -88,6 +95,7 @@
             <li>
               <router-link
                 :to="Pages.SNAPSHOT_LOCATIONS.path"
+                active-class="bg-gray-100 dark:bg-gray-700"
                 class="flex items-center p-2 text-base text-gray-900 rounded-lg hover:bg-gray-100 group dark:text-gray-200 dark:hover:bg-gray-700"
               >
                 <FontAwesomeIcon
@@ -117,7 +125,8 @@
               <ul id="dropdown-requests" class="hidden py-2 space-y-2">
                 <li>
                   <router-link
-                    to="/"
+                    :to="Pages.DELETE_BACKUP_REQUESTS.path"
+                    active-class="bg-gray-100 dark:bg-gray-700"
                     class="flex items-center p-2 text-base text-gray-900 transition duration-75 rounded-lg pl-6 group hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700"
                   >
                     <FontAwesomeIcon
@@ -129,7 +138,8 @@
                 </li>
                 <li>
                   <router-link
-                    to="/"
+                    :to="Pages.DOWNLOAD_REQUESTS.path"
+                    active-class="bg-gray-100 dark:bg-gray-700"
                     class="flex items-center p-2 text-base text-gray-900 transition duration-75 rounded-lg pl-6 group hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700"
                   >
                     <FontAwesomeIcon
@@ -141,7 +151,8 @@
                 </li>
                 <li>
                   <router-link
-                    to="/"
+                    :to="Pages.SERVER_STATUS_REQUESTS.path"
+                    active-class="bg-gray-100 dark:bg-gray-700"
                     class="flex items-center p-2 text-base text-gray-900 transition duration-75 rounded-lg pl-6 group hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700"
                   >
                     <FontAwesomeIcon
@@ -157,6 +168,7 @@
           <div class="pt-2 space-y-2">
             <router-link
               :to="Pages.SETTINGS.path"
+              active-class="bg-gray-100 dark:bg-gray-700"
               class="flex items-center p-2 text-base text-gray-900 transition duration-75 rounded-lg hover:bg-gray-100 group dark:text-gray-200 dark:hover:bg-gray-700"
             >
               <FontAwesomeIcon
@@ -196,7 +208,7 @@
     </div>
   </aside>
 </template>
-<script lang="ts">
+<script setup lang="ts">
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import {
   faChartPie,
@@ -214,33 +226,11 @@ import {
   faFileLines,
 } from '@fortawesome/free-solid-svg-icons';
 import { faGithub } from '@fortawesome/free-brands-svg-icons';
-import { defineComponent } from 'vue';
-import { Pages } from '../../../utils/constants.utils';
 import { initDropdowns } from 'flowbite';
+import { onMounted } from 'vue';
+import { Pages } from '@velero-ui-app/utils/constants.utils';
 
-export default defineComponent({
-  name: 'Sidebar',
-  components: { FontAwesomeIcon },
-  mounted() {
-    initDropdowns();
-  },
-  data: () => ({
-    Pages,
-    faChartPie,
-    faServer,
-    faDatabase,
-    faGear,
-    faClock,
-    faClockRotateLeft,
-    faFloppyDisk,
-    faGithub,
-    faFolderTree,
-    faAngleDown,
-    faFileArrowDown,
-    faFileExcel,
-    faFileWaveform,
-    faFileLines,
-    version: import.meta.env.APP_VERSION,
-  }),
-});
+onMounted(() => initDropdowns());
+
+const version = import.meta.env.APP_VERSION;
 </script>

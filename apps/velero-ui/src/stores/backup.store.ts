@@ -13,10 +13,6 @@ export interface BackupStore {
   backups: V1Backup[];
   backup: V1Backup;
   backupLogs: string[];
-  total: number;
-  offset: number;
-  limit: number;
-  filters: BackupSearchFilters;
 }
 
 export const useBackupStore = defineStore({
@@ -26,22 +22,13 @@ export const useBackupStore = defineStore({
       backups: [],
       backup: undefined,
       backupLogs: undefined,
-      total: 0,
-      offset: 0,
-      limit: 20,
-      filters: {
-        search: null,
-      },
     } as BackupStore),
   actions: {
     set(backup: V1Backup): void {
       this.backup = backup;
     },
-    setMany(backups: V1Backup[], total?: number): void {
+    setMany(backups: V1Backup[]): void {
       this.backups = backups;
-      if (total) {
-        this.total = total;
-      }
     },
     async logs(name: string) {
       try {
@@ -62,7 +49,7 @@ export const useBackupStore = defineStore({
       }
 
       if (this.backups.length > 0) {
-        const backup = this.schedules.find(
+        const backup = this.backups.find(
           (b: V1Backup): boolean => b?.metadata?.name === name
         );
 
@@ -70,22 +57,6 @@ export const useBackupStore = defineStore({
           backup.status.phase = V1BackupPhase.Deleting;
         }
       }
-    },
-    next(): void {
-      if (this.offset + this.limit < this.total) {
-        this.offset += 20;
-      }
-    },
-    previous(): void {
-      this.offset -= 20;
-
-      if (this.offset < 0) {
-        this.offset = 0;
-      }
-    },
-    applyNameFilter(name: string): void {
-      this.offset = 0;
-      this.filters.search = name;
     },
   },
 });

@@ -14,7 +14,7 @@
   ></List>
 </template>
 <script setup lang="ts">
-import List from '../components/List.vue';
+import List from '../components/List/List.vue';
 import { storeToRefs } from 'pinia';
 import { useSnapshotLocationStore } from '../stores/snapshot-location';
 import SnapshotLocationLine from '../components/SnapshotLocation/SnapshotLocationLine.vue';

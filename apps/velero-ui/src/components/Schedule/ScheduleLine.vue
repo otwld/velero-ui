@@ -153,9 +153,9 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { Pages } from '../../utils/constants.utils';
 import ScheduleStatusPhaseBadge from './ScheduleStatusPhaseBadge.vue';
 import { V1SchedulePhase } from '@velero-ui/velero';
-import { useSchedulePause } from '../../composables/schedule/useSchedulePause';
 import { toRef } from 'vue';
-import {useScheduleRemove} from "../../composables/schedule/useScheduleRemove";
+import { useSchedulePause } from '@velero-ui-app/use/schedule/useSchedulePause';
+import { useScheduleRemove } from '@velero-ui-app/use/schedule/useScheduleRemove';
 
 const props = defineProps({
   data: Object as PropType<V1Schedule>,
@@ -168,5 +168,4 @@ const { togglePause, togglePauseLoading } = useSchedulePause(
 const { remove, removeLoading } = useScheduleRemove(
   toRef(() => props.data?.metadata?.name)
 );
-
 </script>

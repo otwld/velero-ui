@@ -17,33 +17,4 @@ export class RestoreService {
   ) {
     this.k8sCustomObjectApi = this.k8s.makeApiClient(CustomObjectsApi);
   }
-
-  public find(
-    offset: number = 0,
-    limit: number = 20,
-    search?: string
-  ): Observable<V1RestoreList> {
-    return from(
-      this.k8sCustomObjectApi.listClusterCustomObject(
-        VELERO.GROUP,
-        VELERO.VERSION,
-        this.configService.get('velero.namespace'),
-        Ressources.RESTORE.plurial
-      )
-    )
-      .pipe(
-        map(
-          (r: { response: http.IncomingMessage; body: V1RestoreList }) => r.body
-        )
-      )
-      .pipe(
-        map((r: V1RestoreList) => ({
-          ...r,
-          total: r.items.length,
-          items: (r.items = r.items
-            .filter((i: V1Restore) => i.metadata.name.includes(search))
-            .slice(offset, offset + limit)),
-        }))
-      );
-  }
 }

@@ -95,7 +95,7 @@ export interface V1BackupStatus {
   expiration?: Date;
   phase?: V1BackupPhase;
   validationErrors?: string[];
-  startTimestamp?: string;
+  startTimestamp?: Date;
   completionTimestamp?: string;
   volumeSnapshotsAttempted?: Date;
   volumeSnapshotsCompleted?: Date;

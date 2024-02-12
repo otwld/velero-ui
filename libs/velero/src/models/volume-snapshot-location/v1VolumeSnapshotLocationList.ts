@@ -1,10 +1,7 @@
-import { V1ListMeta } from '@kubernetes/client-node';
 import { V1VolumeSnapshotLocation } from './v1VolumeSnapshotLocation';
+import { KubernetesListObject } from '@kubernetes/client-node/dist/types';
 
-export interface V1VolumeSnapshotLocationList {
-  apiVersion: string;
+export interface V1VolumeSnapshotLocationList
+  extends KubernetesListObject<V1VolumeSnapshotLocation> {
   total?: number;
-  items: V1VolumeSnapshotLocation[];
-  kind: string;
-  metadata: V1ListMeta;
 }

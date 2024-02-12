@@ -1,10 +1,7 @@
-import { V1ListMeta } from '@kubernetes/client-node';
 import { V1BackupStorageLocation } from './v1BackupStorageLocation';
+import { KubernetesListObject } from '@kubernetes/client-node/dist/types';
 
-export interface V1BackupStorageLocationList {
-  apiVersion: string;
+export interface V1BackupStorageLocationList
+  extends KubernetesListObject<V1BackupStorageLocation> {
   total?: number;
-  items: V1BackupStorageLocation[];
-  kind: string;
-  metadata: V1ListMeta;
 }

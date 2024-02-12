@@ -4,8 +4,8 @@ import { V1Metadata } from '../shared';
 
 export interface V1VolumeSnapshotLocation extends KubernetesObject {
   metadata?: V1ObjectMeta & V1Metadata;
-  spec: V1VolumeSnapshotLocationSpec;
-  status: V1VolumeSnapshotLocationStatus;
+  spec?: V1VolumeSnapshotLocationSpec;
+  status?: V1VolumeSnapshotLocationStatus;
 }
 
 export const enum V1VolumeSnapshotLocationPhase {

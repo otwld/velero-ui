@@ -5,35 +5,32 @@
     :data="backups"
     :loading="isGettingMany"
     :headers="headers"
-    :offset="offset"
-    :limit="limit"
-    :total="total"
-    @onSearchInput="onSearchInput"
-    @onNext="onNext"
-    @onPrevious="onPrevious"
     @onRefresh="getMany"
   ></List>
 </template>
 <script setup lang="ts">
-import { onBeforeMount } from 'vue';
+import { onBeforeMount, watch } from 'vue';
 import { useBackupStore } from '../stores/backup.store';
 import { storeToRefs } from 'pinia';
-import List from '../components/List.vue';
+import List from '../components/List/List.vue';
 import BackupLine from '../components/Backup/BackupLine.vue';
-import { useBackupGetMany } from '../composables/backup/useBackupGetMany';
+import { useListStore } from '../stores/list.store';
+import { useBackupGetMany } from '@velero-ui-app/use/backup/useBackupGetMany';
+
+const listStore = useListStore();
+const { offset, filters } = storeToRefs(listStore);
 
 const backupStore = useBackupStore();
-const { backups, total, offset, limit } = storeToRefs(backupStore);
+const { backups } = storeToRefs(backupStore);
 
 const { getMany, isGettingMany } = useBackupGetMany();
 
-onBeforeMount( () => getMany());
+onBeforeMount(() => getMany());
 
 const headers = ['Name', 'Schedule', 'Date', 'Expire in', 'Status', 'Actions'];
 
-
-const onSearchInput = (value) => backupStore.applyNameFilter(value);
-const onNext = () => (backupStore.next(), getMany());
-const onPrevious = () => (backupStore.previous(), getMany());
-
+watch(offset, () => getMany());
+watch(filters, () => getMany(), {
+  deep: true,
+});
 </script>

@@ -114,7 +114,7 @@ import {
   faCircleNotch,
   faCircleExclamation,
 } from '@fortawesome/free-solid-svg-icons';
-import Alert from '../../components/Alert.vue';
+import Alert from '@velero-ui-app/components/Alert.vue';
 
 const oidcClient: UserManager = inject('oidcClient') as UserManager;
 const router: Router = useRouter();

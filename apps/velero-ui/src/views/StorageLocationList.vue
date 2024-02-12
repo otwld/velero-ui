@@ -14,7 +14,7 @@
   ></List>
 </template>
 <script setup lang="ts">
-import List from '../components/List.vue';
+import List from '../components/List/List.vue';
 import { storeToRefs } from 'pinia';
 import { useStorageLocationStore } from '../stores/storage-location.store';
 import StorageLocationLine from '../components/StorageLocation/StorageLocationLine.vue';

@@ -1,19 +1,31 @@
 export const getRemainingTime = (timeStamp: Date): string => {
-  const startDate = new Date();
-  const endDate = new Date(timeStamp);
 
-  const difference = endDate.getTime() - startDate.getTime();
+  const total = Date.parse(timeStamp) - Date.parse(new Date());
+  const seconds = Math.floor( (total/1000) % 60 );
+  const minutes = Math.floor( (total/1000/60) % 60 );
+  const hours = Math.floor( (total/(1000*60*60)) % 24 );
+  const days = Math.floor( total/(1000*60*60*24) );
+
   let expireIn = '';
 
-  if (Math.floor(difference / (1000 * 3600 * 24)) > 0) {
-    expireIn += `${Math.floor(difference / (1000 * 3600 * 24))}d`;
+  if (days > 0) {
+    expireIn += `${days}d`;
   }
 
-  if (Math.ceil(difference / (1000 * 3600)) > 0) {
-    expireIn += `${Math.ceil(difference / (1000 * 3600) / 24)}h`;
+  if (hours > 0) {
+    expireIn += `${hours}h`;
   }
 
-  if (difference <= 0) {
+  if (minutes > 0) {
+    expireIn += `${minutes}m`;
+  }
+
+  if (seconds > 0) {
+    expireIn += `${seconds}s`;
+  }
+
+
+  if (total <= 0 || !total) {
     expireIn = 'Expired';
   }
 

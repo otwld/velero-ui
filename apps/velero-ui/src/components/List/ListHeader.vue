@@ -80,6 +80,15 @@
         <div class="flex items-center ml-auto space-x-2 sm:space-x-3">
           <button
             type="button"
+            data-modal-target="modal-add"
+            data-modal-toggle="modal-add"
+            class="inline-flex items-center justify-center w-1/2 px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 sm:w-auto dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+          >
+            <FontAwesomeIcon :icon="faPlus" class="w-4 h-4 mr-2" />
+            New
+          </button>
+          <button
+            type="button"
             @click="emit('onRefresh')"
             class="inline-flex items-center justify-center w-1/2 px-3 py-2 text-sm font-medium text-center text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:ring-blue-300 sm:w-auto dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-gray-700"
           >
@@ -90,18 +99,25 @@
       </div>
     </div>
   </div>
+  <VModal id="modal-add" title="Test"></VModal>
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { onBeforeUnmount, ref } from 'vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { faArrowsRotate } from '@fortawesome/free-solid-svg-icons';
+import { faArrowsRotate, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { useListStore } from '../../stores/list.store';
+import VModal from '../Modals/VModal.vue';
+
+const listStore = useListStore();
 
 const searchInput = ref('');
 
-const emit = defineEmits(['onSearchInput', 'onRefresh']);
+const emit = defineEmits(['onRefresh', 'onNew']);
 
-watch(searchInput, (value: string) => {
-  emit('onSearchInput', value);
-});
+const interval = setInterval(() => {
+  listStore.applyNameFilter(searchInput.value);
+}, 1000);
+
+onBeforeUnmount(() => clearInterval(interval));
 </script>

@@ -4,6 +4,9 @@ export const ApiRoutes = {
   STORAGE_LOCATIONS: '/storage-locations',
   RESTORES: '/restores',
   SNAPSHOT_LOCATIONS: '/snapshot-locations',
+  DOWNLOAD_REQUESTS: '/download-requests',
+  SERVER_STATUS_REQUESTS: '/server-status-requests',
+  DELETE_BACKUP_REQUESTS: '/delete-backup-requests',
   SETTINGS_CLUSTER: '/settings/cluster',
   SETTINGS_VELERO_SERVER: '/settings/velero/server',
   SETTINGS_VELERO_AGENTS: '/settings/velero/agents',
@@ -12,16 +15,20 @@ export const ApiRoutes = {
 };
 
 export const Pages = {
-  HOME: { name: 'Home', path: '/' },
+  HOME: { name: 'Dashboard', path: '/dashboard' },
   LOGIN: { name: 'Login', path: '/login' },
   BACKUPS: { name: 'Backups', path: '/backups' },
   BACKUP: { name: 'Backup', path: '/backups/:name' },
   SCHEDULES: { name: 'Schedules', path: '/schedules' },
   SCHEDULE: { name: 'Schedule', path: '/schedules/:name' },
-  STORAGE_LOCATIONS: { name: 'Storage locations', path: '/storage-locations' },
+  STORAGE_LOCATIONS: { name: 'Storage Locations', path: '/storage-locations' },
   STORAGE_LOCATION: {
-    name: 'Storage location',
+    name: 'Storage Location',
     path: '/storage-locations/:name',
+  },
+  BACKUP_REPOSITORIES: {
+    name: 'Backup Repositories',
+    path: '/backup-repositories',
   },
   RESTORES: { name: 'Restores', path: '/restores' },
   RESTORE: { name: 'Restore', path: '/restores/:name' },
@@ -32,6 +39,18 @@ export const Pages = {
   SNAPSHOT_LOCATION: {
     name: 'Snapshot Location',
     path: '/snapshot-locations/:name',
+  },
+  DELETE_BACKUP_REQUESTS: {
+    name: 'Delete Backup Requests',
+    path: '/requests/delete-backup-requests',
+  },
+  DOWNLOAD_REQUESTS: {
+    name: 'Download Requests',
+    path: '/requests/download-request',
+  },
+  SERVER_STATUS_REQUESTS: {
+    name: 'Server Status Requests',
+    path: '/requests/server-status-requests',
   },
   SETTINGS: {
     name: 'Settings',

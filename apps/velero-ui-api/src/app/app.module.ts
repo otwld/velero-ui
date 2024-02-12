@@ -13,11 +13,12 @@ import { HealthModule } from './modules/health/health.module';
 import { HttpModule } from '@nestjs/axios';
 import { VeleroModule } from './shared/modules/velero/velero.module';
 import { SettingsModule } from './modules/settings/settings.module';
-import { DeleteBackupRequestModule } from './shared/modules/delete-backup-request/delete-backup-request.module';
-import { DownloadRequestModule } from './shared/modules/download-request/download-request.module';
+import { DeleteBackupRequestModule } from '@velero-ui-api/modules/delete-backup-request/delete-backup-request.module';
+import { DownloadRequestModule } from '@velero-ui-api/modules/download-request/download-request.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { ServerStatusRequestModule } from './shared/modules/server-status-request/server-status-request.module';
+import { ServerStatusRequestModule } from '@velero-ui-api/modules/server-status-request/server-status-request.module';
 import { SnapshotLocationModule } from './modules/snapshot-location/snapshot-location.module';
+import { K8sCustomObjectModule } from '@velero-ui-api/shared/modules/k8s-custom-object/k8s-custom-object.module';
 import velero from '../config/velero.config';
 import k8s from '../config/k8s.config';
 
@@ -51,6 +52,7 @@ import k8s from '../config/k8s.config';
     VeleroModule,
     SettingsModule,
     SnapshotLocationModule,
+    K8sCustomObjectModule,
   ],
   controllers: [],
   providers: [

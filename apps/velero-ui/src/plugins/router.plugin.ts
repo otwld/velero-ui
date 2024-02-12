@@ -15,18 +15,25 @@ import Settings from '../views/Settings.vue';
 import Schedule from '../views/Schedule.vue';
 import StorageLocation from '../views/StorageLocation.vue';
 import SnapshotLocation from '../views/SnapshotLocation.vue';
+import {useListStore} from "../stores/list.store";
+import Dashboard from "../views/Dashboard.vue";
+import DownloadRequestList from "@velero-ui-app/views/DownloadRequestList.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
     component: Default,
-    ...Pages.HOME,
     children: [
+      {
+        ...Pages.HOME,
+        component: Dashboard,
+      },
       {
         ...Pages.BACKUPS,
         children: [
           {
             path: '',
             component: BackupList,
+            beforeEnter: () => useListStore().reset()
           },
           {
             ...Pages.BACKUP,
@@ -78,6 +85,22 @@ const routes: Array<RouteRecordRaw> = [
         ],
       },
       {
+        ...Pages.BACKUP_REPOSITORIES,
+        component: Dashboard,
+      },
+      {
+        ...Pages.DOWNLOAD_REQUESTS,
+        component: DownloadRequestList,
+      },
+      {
+        ...Pages.SERVER_STATUS_REQUESTS,
+        component: Dashboard,
+      },
+      {
+        ...Pages.DELETE_BACKUP_REQUESTS,
+        component: Dashboard,
+      },
+      {
         ...Pages.SETTINGS,
         component: Settings,
       },
@@ -95,8 +118,8 @@ const routes: Array<RouteRecordRaw> = [
 
 const router: Router = createRouter({
   history: createWebHistory('/'),
-  // linkActiveClass: "bg-gray-100 dark:bg-gray-700",
-  // linkExactActiveClass: "bg-gray-100 dark:bg-gray-700",
+   // linkActiveClass: "bg-gray-100 dark:bg-gray-700",
+   // linkExactActiveClass: "bg-gray-100 dark:bg-gray-700",
   routes,
 });
 
