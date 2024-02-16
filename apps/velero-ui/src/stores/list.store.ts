@@ -1,4 +1,4 @@
-import { defineStore } from 'pinia';
+import {defineStore} from 'pinia';
 
 export interface ListSearchFilters {
   startWith: string;
@@ -27,6 +27,11 @@ export const useListStore = defineStore({
       this.total = 0;
       this.offset = 0;
       this.limit = 20;
+
+      this.resetSearch();
+    },
+    resetSearch() {
+      this.filters.startWith = null;
     },
     setTotal(total: number): void {
       this.total = total;
@@ -44,6 +49,7 @@ export const useListStore = defineStore({
       }
     },
     applyNameFilter(name: string): void {
+      this.offset = 0;
       this.filters.startWith = name;
     },
   },

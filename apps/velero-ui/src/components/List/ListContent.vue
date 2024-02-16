@@ -54,6 +54,7 @@ import type {
   V1Schedule,
   V1VolumeSnapshotLocation,
 } from '@velero-ui/velero';
+import { computed, ref } from 'vue';
 
 defineProps({
   headers: Array as PropType<string[]>,
@@ -66,4 +67,8 @@ defineProps({
     | V1VolumeSnapshotLocation
   >,
 });
+
+const checkBoxes = ref([]);
+
+const checked = computed((checked) => checkBoxes.value.find((e) => e === v));
 </script>

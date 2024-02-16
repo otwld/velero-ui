@@ -8,7 +8,7 @@
         class="p-4 text-sm bg-gray-50 border border-gray-300 text-gray-900 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white h-[600px] overflow-auto"
       >
         <div v-if="data">
-          <p v-for="line of parseYaml(data)" :style="indent(line)">
+          <p v-for="line of parseYaml(data)" :style="indentYaml(line)">
             {{ line }}
           </p>
         </div>
@@ -40,19 +40,9 @@
 <script setup lang="ts">
 import type { PropType } from 'vue';
 import { stringify } from 'yaml';
+import { indentYaml, parseYaml } from '@velero-ui-app/utils/yaml.utils';
 
 defineProps({
   data: Object as PropType<any>,
 });
-
-const parseYaml = (data: object) => {
-  const yaml = stringify(data);
-
-  return yaml.split('\n');
-};
-const indent = (line: string) => {
-  return {
-    'padding-left': `${line.search(/\S/) * 0.5}rem`,
-  };
-};
 </script>

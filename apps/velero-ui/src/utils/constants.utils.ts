@@ -46,7 +46,7 @@ export const Pages = {
   },
   DOWNLOAD_REQUESTS: {
     name: 'Download Requests',
-    path: '/requests/download-request',
+    path: '/requests/download-requests',
   },
   SERVER_STATUS_REQUESTS: {
     name: 'Server Status Requests',

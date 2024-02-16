@@ -1,13 +1,14 @@
 import { Inject, Injectable } from '@nestjs/common';
 import {
   CustomObjectsApi,
-  KubeConfig, KubernetesListObject,
+  KubeConfig,
+  KubernetesListObject,
   KubernetesObject,
 } from '@kubernetes/client-node';
 import { K8S_CONNECTION } from '@velero-ui-api/shared/modules/k8s/k8s.constants';
 import { VeleroService } from '@velero-ui-api/shared/modules/velero/velero.service';
 import { ConfigService } from '@nestjs/config';
-import { from, map, Observable } from 'rxjs';
+import { catchError, from, map, Observable, of } from 'rxjs';
 import { VELERO } from '@velero-ui-api/shared/modules/velero/velero.constants';
 import http from 'http';
 
@@ -44,8 +45,8 @@ export class K8sCustomObjectService {
             ...r,
             total: r.items.length,
             items: (r.items = r.items.filter((i: R) =>
-            i.metadata.name.includes(search)
-          )),
+              i.metadata.name.includes(search)
+            )),
           })
         )
       )
@@ -73,5 +74,24 @@ export class K8sCustomObjectService {
         name
       )
     ).pipe(map((r: { response: http.IncomingMessage; body: T }): T => r.body));
+  }
+
+  public count(plurial: string): Observable<number> {
+    return from(
+      this.k8sCustomObjectApi.listNamespacedCustomObject(
+        VELERO.GROUP,
+        VELERO.VERSION,
+        this.configService.get('velero.namespace'),
+        plurial
+      )
+    ).pipe(
+      map(
+        (r: {
+          response: http.IncomingMessage;
+          body: { items: number };
+        }): number => r.body.items
+      ),
+      catchError(() => of(0))
+    );
   }
 }

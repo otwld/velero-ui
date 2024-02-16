@@ -16,20 +16,19 @@
 import type { PropType } from 'vue';
 import type {
   V1Backup,
-  V1BackupStorageLocation, V1DeleteBackupRequest, V1DownloadRequest,
+  V1BackupStorageLocation,
+  V1DeleteBackupRequest,
+  V1DownloadRequest,
   V1Restore,
-  V1Schedule, V1ServerStatusRequest,
+  V1Schedule,
+  V1ServerStatusRequest,
   V1VolumeSnapshotLocation,
 } from '@velero-ui/velero';
 import ListHeader from './ListHeader.vue';
 import ListFooter from './ListFooter.vue';
 import ListContent from './ListContent.vue';
 
-const emit = defineEmits([
-  'onSearchInput',
-  'onRefresh',
-]);
-
+const emit = defineEmits(['onSearchInput', 'onRefresh']);
 
 defineProps({
   component: Object,

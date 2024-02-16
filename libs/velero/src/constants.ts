@@ -14,7 +14,7 @@ export const Ressources = {
     plurial: 'schedules',
   },
   DOWNLOAD_REQUEST: {
-    kind: 'Request',
+    kind: 'DownloadRequest',
     plurial: 'downloadrequests',
   },
   DELETE_BACKUP_REQUEST: {

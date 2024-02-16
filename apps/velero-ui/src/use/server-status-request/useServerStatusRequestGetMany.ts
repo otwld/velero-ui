@@ -1,25 +1,25 @@
-import type { V1BackupList } from '@velero-ui/velero';
+import type { V1ServerStatusRequestList } from '@velero-ui/velero';
 import { useAxios } from '@vueuse/integrations/useAxios';
-import { inject } from 'vue';
+import { inject, ref } from 'vue';
 import type { AxiosInstance } from 'axios';
 import { ApiRoutes } from '../../utils/constants.utils';
-import { useBackupStore } from '../../stores/backup.store';
 import { storeToRefs } from 'pinia';
 import { useListStore } from '../../stores/list.store';
 
-export const useBackupGetMany = () => {
-  const backupStore = useBackupStore();
+export const useServerStatusRequestGetMany = () => {
   const listStore = useListStore();
   const { offset, limit, filters } = storeToRefs(listStore);
 
   const axiosInstance: AxiosInstance = inject('axios') as AxiosInstance;
-  const { execute, isLoading, data } = useAxios<V1BackupList>(axiosInstance);
+  const { execute, isLoading, data } =
+    useAxios<V1ServerStatusRequestList>(axiosInstance);
 
   const isGettingMany = isLoading;
+  const serverStatusRequests = ref([]);
 
   const getMany = async () => {
     try {
-      await execute(`${ApiRoutes.BACKUPS}`, {
+      await execute(`${ApiRoutes.SERVER_STATUS_REQUESTS}`, {
         method: 'GET',
         params: {
           offset: offset.value,
@@ -29,11 +29,11 @@ export const useBackupGetMany = () => {
       });
 
       if (data?.value?.items) {
-        backupStore.setMany(data.value.items);
+        serverStatusRequests.value = data?.value?.items;
         listStore.setTotal(data.value.total);
       }
     } catch (e) {}
   };
 
-  return { getMany, isGettingMany };
+  return { getMany, isGettingMany, serverStatusRequests };
 };

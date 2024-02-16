@@ -86,6 +86,7 @@
             data?.spec?.paused
           "
           type="button"
+          title="Unpause"
           :disabled="togglePauseLoading"
           @click="togglePause(false)"
           class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-green-600 rounded-l-lg hover:bg-green-800 focus:ring-4 focus:ring-green-300 dark:focus:ring-green-900"
@@ -107,6 +108,7 @@
             !data?.spec?.paused
           "
           type="button"
+          title="Pause"
           :disabled="togglePauseLoading"
           @click="togglePause(true)"
           class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-600 rounded-l-lg hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900"
@@ -125,6 +127,7 @@
 
         <button
           type="button"
+          title="Delete"
           @click="remove()"
           class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-red-600 rounded-r-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"
         >

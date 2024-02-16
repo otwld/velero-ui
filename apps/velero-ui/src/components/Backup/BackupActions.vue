@@ -34,6 +34,7 @@
         <div class="flex items-center space-x-4">
           <button
             type="button"
+            :class="{'cursor-not-allowed' : isDeleting}"
             data-modal-target="modal-restore"
             data-modal-toggle="modal-restore"
             class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:ring-teal-300 dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
@@ -43,7 +44,8 @@
           </button>
           <button
             type="button"
-            :disabled="downloadLoading"
+            :disabled="downloadLoading || isDeleting"
+            :class="{'cursor-not-allowed' : downloadLoading || isDeleting}"
             @click="download()"
             class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
           >
@@ -64,6 +66,7 @@
             :disabled="isDeleting"
             :data-modal-target="`modal-delete-${backup?.metadata?.name}`"
             :data-modal-toggle="`modal-delete-${backup?.metadata?.name}`"
+            :class="{'cursor-not-allowed' : isDeleting}"
             class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-red-600 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"
           >
             <FontAwesomeIcon

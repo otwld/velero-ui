@@ -15,9 +15,11 @@ import Settings from '../views/Settings.vue';
 import Schedule from '../views/Schedule.vue';
 import StorageLocation from '../views/StorageLocation.vue';
 import SnapshotLocation from '../views/SnapshotLocation.vue';
-import {useListStore} from "../stores/list.store";
-import Dashboard from "../views/Dashboard.vue";
-import DownloadRequestList from "@velero-ui-app/views/DownloadRequestList.vue";
+import { useListStore } from '../stores/list.store';
+import Dashboard from '../views/Dashboard.vue';
+import DownloadRequestList from '@velero-ui-app/views/DownloadRequestList.vue';
+import ServerStatusRequestList from '@velero-ui-app/views/ServerStatusRequestList.vue';
+import DeleteBackupRequestList from '@velero-ui-app/views/DeleteBackupRequestList.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -33,7 +35,7 @@ const routes: Array<RouteRecordRaw> = [
           {
             path: '',
             component: BackupList,
-            beforeEnter: () => useListStore().reset()
+            beforeEnter: () => useListStore().reset(),
           },
           {
             ...Pages.BACKUP,
@@ -64,6 +66,7 @@ const routes: Array<RouteRecordRaw> = [
           {
             path: '',
             component: ScheduleList,
+            beforeEnter: () => useListStore().reset(),
           },
           {
             ...Pages.SCHEDULE,
@@ -77,6 +80,7 @@ const routes: Array<RouteRecordRaw> = [
           {
             path: '',
             component: SnapshotLocationList,
+            beforeEnter: () => useListStore().reset(),
           },
           {
             ...Pages.SNAPSHOT_LOCATION,
@@ -91,14 +95,17 @@ const routes: Array<RouteRecordRaw> = [
       {
         ...Pages.DOWNLOAD_REQUESTS,
         component: DownloadRequestList,
+        beforeEnter: () => useListStore().reset(),
       },
       {
         ...Pages.SERVER_STATUS_REQUESTS,
-        component: Dashboard,
+        component: ServerStatusRequestList,
+        beforeEnter: () => useListStore().reset(),
       },
       {
         ...Pages.DELETE_BACKUP_REQUESTS,
-        component: Dashboard,
+        component: DeleteBackupRequestList,
+        beforeEnter: () => useListStore().reset(),
       },
       {
         ...Pages.SETTINGS,
@@ -118,8 +125,8 @@ const routes: Array<RouteRecordRaw> = [
 
 const router: Router = createRouter({
   history: createWebHistory('/'),
-   // linkActiveClass: "bg-gray-100 dark:bg-gray-700",
-   // linkExactActiveClass: "bg-gray-100 dark:bg-gray-700",
+  // linkActiveClass: "bg-gray-100 dark:bg-gray-700",
+  // linkExactActiveClass: "bg-gray-100 dark:bg-gray-700",
   routes,
 });
 

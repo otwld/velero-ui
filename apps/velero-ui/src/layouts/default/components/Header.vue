@@ -28,6 +28,7 @@
               <button
                 @click="logout()"
                 type="button"
+                title="Logout"
                 :disabled="isLoading"
                 class="inline-flex self-center p-2 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
               >

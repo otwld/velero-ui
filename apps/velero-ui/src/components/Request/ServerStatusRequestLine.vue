@@ -25,27 +25,21 @@
         </div>
       </div>
     </td>
-    <td class="p-4 text-base text-gray-900 whitespace-nowrap dark:text-white">
-      {{ data?.spec?.target?.name }}
-    </td>
-    <td class="p-4 text-base text-gray-900 whitespace-nowrap dark:text-white">
-      {{ data?.spec?.target?.kind }}
-    </td>
     <td
       class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white"
     >
-      {{ data.status?.expiration ? remainingTime : '' }}
+      {{ convertTimestampToDate(data.status?.processedTimestamp) }}
     </td>
     <td
       class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white"
     >
       <div class="flex items-center">
         <div
-          v-if="data?.status?.phase === V1DownloadRequestPhase.Processed"
+          v-if="data?.status?.phase === V1ServerStatusRequestPhase.Processed"
           class="h-2.5 w-2.5 rounded-full bg-green-400 mr-2"
         ></div>
         <div
-          v-if="data?.status?.phase === V1DownloadRequestPhase.New"
+          v-if="data?.status?.phase === V1ServerStatusRequestPhase.New"
           class="h-2.5 w-2.5 rounded-full bg-blue-500 mr-2"
         ></div>
         <div
@@ -59,19 +53,13 @@
       <div class="inline-flex rounded-md shadow-sm" role="group">
         <button
           type="button"
-          title="Download"
-          @click="download()"
-          class="inline-flex items-center px-3 py-2 text-sm font-medium text-center rounded-l-lg text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+          title="Describe"
+          :disabled="isDeleting"
+          :data-modal-target="`modal-describe-${data?.metadata?.name}`"
+          :data-modal-toggle="`modal-describe-${data?.metadata?.name}`"
+          class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"
         >
-          <FontAwesomeIcon :icon="faDownload" class="w-4 h-4" />
-          <div
-            id="tooltip-button-download"
-            role="tooltip"
-            class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
-          >
-            Download
-            <div class="tooltip-arrow" data-popper-arrow></div>
-          </div>
+          <FontAwesomeIcon :icon="faFileCode" class="w-4 h-4" />
         </button>
         <button
           type="button"
@@ -79,7 +67,7 @@
           :disabled="isDeleting"
           :data-modal-target="`modal-delete-${data?.metadata?.name}`"
           :data-modal-toggle="`modal-delete-${data?.metadata?.name}`"
-          class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-red-600 rounded-r-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"
+          class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"
         >
           <FontAwesomeIcon
             v-if="isDeleting"
@@ -100,40 +88,37 @@
     @onConfirm="remove"
     :name="data?.metadata?.name"
   ></ModalDelete>
+  <ModalDescribe
+    :id="`modal-describe-${data?.metadata?.name}`"
+    :name="data?.metadata?.name"
+    :data="data"
+  ></ModalDescribe>
 </template>
 
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref, toRef } from 'vue';
-import type { V1DownloadRequest } from '@velero-ui/velero';
-import { getRemainingTime } from '../../utils/date.utils';
+import { onMounted } from 'vue';
+import type { V1ServerStatusRequest } from '@velero-ui/velero';
+import { convertTimestampToDate } from '../../utils/date.utils';
 import type { PropType } from 'vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import {
   faTrashCan,
-  faDownload,
   faCircleNotch,
+  faFileCode,
 } from '@fortawesome/free-solid-svg-icons';
 import { initModals, initTooltips } from 'flowbite';
 import ModalDelete from '../Modals/ModalDelete.vue';
-import { V1DownloadRequestPhase } from '@velero-ui/velero';
+import { V1ServerStatusRequestPhase } from '@velero-ui/velero';
+import ModalDescribe from '@velero-ui-app/components/Modals/ModalDescribe.vue';
 
-const props = defineProps({
-  data: Object as PropType<V1DownloadRequest>,
+defineProps({
+  data: Object as PropType<V1ServerStatusRequest>,
 });
-
-const remainingTime = ref(0);
 
 onMounted(() => initTooltips());
 onMounted(() => initModals());
 
-const interval = setInterval(
-  () => (remainingTime.value = getRemainingTime(props.data.status.expiration))
-);
-
-onUnmounted(() => clearInterval(interval));
-
 const isDeleting = false;
 
 const remove = () => {};
-const download = () => window.open(props.data.status.downloadURL);
 </script>
