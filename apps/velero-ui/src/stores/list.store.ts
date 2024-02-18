@@ -19,7 +19,7 @@ export const useListStore = defineStore({
       offset: 0,
       limit: 20,
       filters: {
-        search: null,
+        search: '',
       },
     } as ListStore),
   actions: {
@@ -30,7 +30,7 @@ export const useListStore = defineStore({
       this.resetSearch();
     },
     resetSearch(): void {
-      this.filters.startWith = null;
+      this.filters.startWith = '';
     },
     setTotal(total: number): void {
       this.total = total;

@@ -74,8 +74,10 @@ import {
 import { useListStore } from '../../stores/list.store';
 import VModal from '@velero-ui-app/components/Modals/VModal.vue';
 import { initModals } from 'flowbite';
+import { storeToRefs } from 'pinia';
 
 const listStore = useListStore();
+const { filters } = storeToRefs(listStore);
 
 const searchInput = ref('');
 
@@ -86,7 +88,10 @@ defineProps({
 });
 
 const interval = setInterval(() => {
-  listStore.applyNameFilter(searchInput.value);
+  if (filters.value.startWith != searchInput.value) {
+    listStore.applyNameFilter(searchInput.value);
+    emit('onRefresh');
+  }
 }, 1000);
 
 onMounted(() => initModals());
