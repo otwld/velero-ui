@@ -57,7 +57,7 @@
           :disabled="isDeleting"
           :data-modal-target="`modal-describe-${data?.metadata?.name}`"
           :data-modal-toggle="`modal-describe-${data?.metadata?.name}`"
-          class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"
+          class="inline-flex items-center px-3 py-2 text-sm font-medium rounded-l-lg text-center text-gray-900 focus:outline-none bg-white border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
         >
           <FontAwesomeIcon :icon="faFileCode" class="w-4 h-4" />
         </button>
@@ -67,7 +67,7 @@
           :disabled="isDeleting"
           :data-modal-target="`modal-delete-${data?.metadata?.name}`"
           :data-modal-toggle="`modal-delete-${data?.metadata?.name}`"
-          class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"
+          class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-red-600 rounded-r-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"
         >
           <FontAwesomeIcon
             v-if="isDeleting"

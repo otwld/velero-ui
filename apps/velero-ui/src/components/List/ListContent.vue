@@ -29,16 +29,31 @@
               </tr>
             </thead>
             <tbody
+              :class="{
+                'animate-pulse-loading': loading && data.length > 0,
+              }"
               class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700"
             >
-              <component
-                :is="component"
-                v-for="item in data"
-                :data="item"
-              >
-              </component>
+              <component :is="component" v-for="item in data" :data="item" />
             </tbody>
           </table>
+          <div
+            v-if="data.length === 0 && !loading"
+            class="w-full flex flex-col items-center py-10 text-gray-400 dark:text-gray-300 dark:bg-gray-800"
+          >
+            <FontAwesomeIcon :icon="faInfoCircle" class="w-16 h-16 mb-5" />
+            There are no entries.
+          </div>
+          <div
+            v-if="loading && data.length === 0"
+            class="w-full flex flex-col items-center py-10 text-gray-600 dark:text-gray-300 dark:bg-gray-800"
+          >
+            <FontAwesomeIcon
+              :icon="faCircleNotch"
+              class="w-16 h-16 mb-5 animate-spin"
+            />
+            Fetching entries
+          </div>
         </div>
       </div>
     </div>
@@ -49,22 +64,33 @@
 import type { PropType } from 'vue';
 import type {
   V1Backup,
+  V1BackupRepository,
   V1BackupStorageLocation,
+  V1DeleteBackupRequest,
+  V1DownloadRequest,
   V1Restore,
   V1Schedule,
+  V1ServerStatusRequest,
   V1VolumeSnapshotLocation,
 } from '@velero-ui/velero';
 import { computed, ref } from 'vue';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { faCircleNotch, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 
 defineProps({
   headers: Array as PropType<string[]>,
   component: Object,
+  loading: Boolean,
   data: Array as PropType<
     | V1Backup[]
     | V1Schedule[]
-    | V1Restore
+    | V1Restore[]
     | V1BackupStorageLocation[]
-    | V1VolumeSnapshotLocation
+    | V1VolumeSnapshotLocation[]
+    | V1BackupRepository[]
+    | V1DeleteBackupRequest[]
+    | V1ServerStatusRequest[]
+    | V1DownloadRequest[]
   >,
 });
 

@@ -1,27 +1,27 @@
-import type { V1DownloadRequestList } from '@velero-ui/velero';
+import type { V1ScheduleList } from '@velero-ui/velero';
 import { useAxios } from '@vueuse/integrations/useAxios';
-import { inject, ref } from 'vue';
+import { inject } from 'vue';
 import type { AxiosInstance } from 'axios';
 import { ApiRoutes } from '../../utils/constants.utils';
 import { storeToRefs } from 'pinia';
 import { useListStore } from '../../stores/list.store';
 import { ToastType, useToastsStore } from '@velero-ui-app/stores/toasts.store';
+import { useScheduleStore } from '@velero-ui-app/stores/schedule.store';
 
-export const useDownloadRequestGetMany = () => {
+export const useScheduleGetMany = () => {
+  const scheduleStore = useScheduleStore();
   const listStore = useListStore();
   const toastsStore = useToastsStore();
   const { offset, limit, filters } = storeToRefs(listStore);
 
   const axiosInstance: AxiosInstance = inject('axios') as AxiosInstance;
-  const { execute, isLoading, data } =
-    useAxios<V1DownloadRequestList>(axiosInstance);
+  const { execute, isLoading, data } = useAxios<V1ScheduleList>(axiosInstance);
 
   const isGettingMany = isLoading;
-  const downloadRequests = ref([]);
 
   const getMany = async () => {
     try {
-      await execute(`${ApiRoutes.DOWNLOAD_REQUESTS}`, {
+      await execute(`${ApiRoutes.SCHEDULES}`, {
         method: 'GET',
         params: {
           offset: offset.value,
@@ -31,17 +31,17 @@ export const useDownloadRequestGetMany = () => {
       });
 
       if (data?.value?.items) {
-        downloadRequests.value = data?.value?.items;
+        scheduleStore.setMany(data.value.items);
         listStore.setTotal(data.value.total);
       }
     } catch (e) {
       toastsStore.push(
-        'Unable to fetch download requests, please try again.',
+        'Unable to fetch schedules, please try again.',
         ToastType.ERROR
       );
       console.error(e);
     }
   };
 
-  return { getMany, isGettingMany, downloadRequests };
+  return { getMany, isGettingMany };
 };

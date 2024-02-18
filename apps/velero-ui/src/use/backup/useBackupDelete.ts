@@ -5,8 +5,10 @@ import type { Ref } from 'vue';
 import type { AxiosInstance } from 'axios';
 import { ApiRoutes } from '../../utils/constants.utils';
 import { useBackupStore } from '../../stores/backup.store';
+import {ToastType, useToastsStore} from "@velero-ui-app/stores/toasts.store";
 
 export const useBackupDelete = (name: Ref<string>) => {
+  const toastsStore = useToastsStore();
   const backupStore = useBackupStore();
   const axiosInstance: AxiosInstance = inject('axios') as AxiosInstance;
 
@@ -23,8 +25,18 @@ export const useBackupDelete = (name: Ref<string>) => {
 
       if (data?.value) {
         backupStore.delete(name.value);
+        toastsStore.push(
+        'Delete request created, request will now be processed by velero server.',
+        ToastType.SUCCESS
+      );
       }
-    } catch (e) {}
+    } catch (e) {
+      toastsStore.push(
+        'Unable to delete the backup, please try again.',
+        ToastType.ERROR
+      );
+      console.error(e);
+    }
   };
 
   return { remove, deleteLoading };

@@ -1,15 +1,18 @@
 <template>
-  <ListHeader
-    :loading="loading"
-    @onRefresh="emit('onRefresh')"
-    @onNew=""
-  ></ListHeader>
-  <ListContent
-    :headers="headers"
-    :data="data"
-    :component="component"
-  ></ListContent>
-  <ListFooter :loading="loading"></ListFooter>
+  <div class="">
+    <ListHeader
+      :loading="loading"
+      @onRefresh="emit('onRefresh')"
+      @onNew=""
+    ></ListHeader>
+    <ListContent
+      :headers="headers"
+      :data="data"
+      :loading="loading"
+      :component="component"
+    ></ListContent>
+    <ListFooter :loading="loading" @onRefresh="emit('onRefresh')"></ListFooter>
+  </div>
 </template>
 
 <script setup lang="ts">

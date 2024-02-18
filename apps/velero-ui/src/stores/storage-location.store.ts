@@ -1,22 +1,9 @@
-import type {
-  V1BackupStorageLocation,
-  V1BackupStorageLocationList,
-} from '@velero-ui/velero';
+import type { V1BackupStorageLocation } from '@velero-ui/velero';
 import { defineStore } from 'pinia';
-import { ApiRoutes } from '../utils/constants.utils';
-import type { AxiosResponse } from 'axios';
-
-export interface StorageLocationSearchFilters {
-  startWith: string;
-}
 
 export interface StorageLocationStore {
   locations: V1BackupStorageLocation[];
   location: V1BackupStorageLocation;
-  total: number;
-  offset: number;
-  limit: number;
-  filters: StorageLocationSearchFilters;
 }
 
 export const useStorageLocationStore = defineStore({
@@ -25,82 +12,26 @@ export const useStorageLocationStore = defineStore({
     ({
       locations: [],
       location: undefined,
-      total: 0,
-      offset: 0,
-      limit: 20,
-      filters: {
-        search: null,
-      },
     } as StorageLocationStore),
   getters: {},
   actions: {
-    async get(name: string) {
-      try {
-        this.location = this.locations.find(
-          (b: V1BackupStorageLocation): boolean => b?.metadata?.name === name
-        );
-
-        if (!this.backup) {
-          const response: AxiosResponse<V1BackupStorageLocation> =
-            (await this.axios.get(
-              `${ApiRoutes.STORAGE_LOCATIONS}/${name}`,
-              {}
-            )) as AxiosResponse<V1BackupStorageLocation>;
-
-          this.location = response.data;
-        }
-      } catch (e) {
+    set(location: V1BackupStorageLocation): void {
+      this.location = location;
+    },
+    setMany(locations: V1BackupStorageLocation[]): void {
+      this.locations = locations;
+    },
+    delete(name: string): void {
+      if (this.location) {
         this.location = undefined;
-        console.error(e);
-      }
-    },
-    async fetch() {
-      try {
-        const response: AxiosResponse<V1BackupStorageLocationList> =
-          (await this.axios.get(ApiRoutes.STORAGE_LOCATIONS, {
-            params: {
-              offset: this.offset,
-              limit: this.limit,
-              search: this.filters.search,
-            },
-          })) as AxiosResponse<V1BackupStorageLocationList>;
-
-        this.locations = response.data.items;
-        this.total = response.data.total;
-      } catch (e) {
-        console.error(e);
-      }
-    },
-    async delete(names: string[]) {
-      try {
-        const response = (await this.axios.delete(
-          `${ApiRoutes.SCHEDULES}}`
-        )) as AxiosResponse;
-
-        this.fetch();
-      } catch (e) {
-        console.error(e);
-      }
-    },
-    next() {
-      if (this.offset + this.limit < this.total) {
-        this.offset += 20;
-        this.fetch();
-      }
-    },
-    previous() {
-      this.offset -= 20;
-
-      if (this.offset < 0) {
-        this.offset = 0;
       }
 
-      this.fetch();
-    },
-    applyNameFilter(name: string) {
-      this.offset = 0;
-      this.filters.search = name;
-      this.fetch();
+      if (this.locations.length > 0) {
+        this.locations = this.locations.filters(
+          (location: V1BackupStorageLocation): boolean =>
+            location?.metadata?.name === name
+        );
+      }
     },
   },
 });

@@ -1,20 +1,23 @@
 <template>
-  <div class="grid grid-cols-1 px-4 xl:grid-cols-3 xl:gap-4 dark:bg-gray-900">
-    <div class="col-span-full xl:col-auto">
-      <BackupActions :backup="backup"></BackupActions>
-      <BackupStatus :backup="backup"></BackupStatus>
-      <BackupDetails :spec="backup?.spec"></BackupDetails>
+  <div class="h-full bg-gray-50 dark:bg-gray-900">
+    <div class="grid grid-cols-1 px-4 xl:grid-cols-3 xl:gap-4">
+      <div class="col-span-full xl:col-auto">
+        <BackupActions :backup="backup"></BackupActions>
+        <BackupStatus :backup="backup"></BackupStatus>
+        <BackupDetails :spec="backup?.spec"></BackupDetails>
+      </div>
+      <div class="col-span-2">
+        <Describe :data="backup"></Describe>
+      </div>
     </div>
-    <div class="col-span-2">
-      <Describe :data="backup"></Describe>
-    </div>
+    <Logs
+      :data="logs"
+      :name="backup?.metadata?.name"
+      :loading="isGettingLogs"
+      :type="V1DownloadTargetKind.BackupLog"
+      class="pb-6"
+    ></Logs>
   </div>
-  <Logs
-    :data="backupLogs"
-    :name="backup?.metadata?.name"
-    :type="V1DownloadTargetKind.BackupLog"
-    class="pb-6"
-  ></Logs>
 </template>
 
 <script setup lang="ts">
@@ -31,17 +34,25 @@ import BackupStatus from '@velero-ui-app/components/Backup/BackupStatus.vue';
 import BackupDetails from '@velero-ui-app/components/Backup/BackupDetails.vue';
 import Describe from '@velero-ui-app/components/Describe.vue';
 import Logs from '@velero-ui-app/components/Logs.vue';
+import { useLogsGet } from '@velero-ui-app/use/useLogsGet';
 
 const backupStore = useBackupStore();
-const { backup, backupLogs } = storeToRefs(backupStore);
+const { backup } = storeToRefs(backupStore);
 
 const router: Router = useRouter();
 
 const { get } = useBackupGet(toRef(router.currentRoute.value.params.name));
 
-backupLogs.value = undefined;
+const {
+  get: getLogs,
+  logs,
+  isGetting: isGettingLogs,
+} = useLogsGet(
+  toRef(router.currentRoute.value.params.name),
+  toRef(() => V1DownloadTargetKind.BackupLog)
+);
 
 onBeforeMount(() => get());
 
-onBeforeMount(() => backupStore.logs(router.currentRoute.value.params.name));
+onBeforeMount(() => getLogs());
 </script>

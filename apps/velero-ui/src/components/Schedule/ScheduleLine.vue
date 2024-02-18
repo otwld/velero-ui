@@ -139,11 +139,9 @@
 </template>
 
 <script setup lang="ts">
-import { defineComponent } from 'vue';
 import type { V1Schedule } from '@velero-ui/velero';
 import { convertTimestampToDate } from '../../utils/date.utils';
 import type { PropType } from 'vue';
-import { useScheduleStore } from '../../stores/schedule.store';
 import {
   faPause,
   faPlay,

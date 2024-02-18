@@ -1,6 +1,6 @@
 <template>
-  <div class="px-4 pt-6 mb-4 col-span-full xl:mb-2">
-    <nav class="flex mb-5" aria-label="Breadcrumb">
+  <div class="px-4 py-6 col-span-full bg-gray-50 dark:bg-gray-900">
+    <nav class="flex" aria-label="Breadcrumb">
       <ol
         class="inline-flex items-center space-x-1 text-sm font-medium md:space-x-2"
       >

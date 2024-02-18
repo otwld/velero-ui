@@ -1,4 +1,4 @@
-import {defineStore} from 'pinia';
+import { defineStore } from 'pinia';
 
 export interface ListSearchFilters {
   startWith: string;
@@ -26,30 +26,31 @@ export const useListStore = defineStore({
     reset(): void {
       this.total = 0;
       this.offset = 0;
-      this.limit = 20;
 
       this.resetSearch();
     },
-    resetSearch() {
+    resetSearch(): void {
       this.filters.startWith = null;
     },
     setTotal(total: number): void {
       this.total = total;
     },
+    setLimit(limit: number): void {
+      this.limit = limit;
+    },
     next(): void {
       if (this.offset + this.limit < this.total) {
-        this.offset += 20;
+        this.offset += this.limit;
       }
     },
     previous(): void {
-      this.offset -= 20;
+      this.offset -= this.limit;
 
       if (this.offset < 0) {
         this.offset = 0;
       }
     },
     applyNameFilter(name: string): void {
-      this.offset = 0;
       this.filters.startWith = name;
     },
   },

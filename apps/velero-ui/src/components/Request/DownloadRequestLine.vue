@@ -59,9 +59,19 @@
       <div class="inline-flex rounded-md shadow-sm" role="group">
         <button
           type="button"
+          title="Describe"
+          :disabled="isDeleting"
+          :data-modal-target="`modal-describe-${data?.metadata?.name}`"
+          :data-modal-toggle="`modal-describe-${data?.metadata?.name}`"
+          class="inline-flex items-center px-3 py-2 text-sm font-medium rounded-l-lg text-center text-gray-900 focus:outline-none bg-white border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+        >
+          <FontAwesomeIcon :icon="faFileCode" class="w-4 h-4" />
+        </button>
+        <button
+          type="button"
           title="Download"
           @click="download()"
-          class="inline-flex items-center px-3 py-2 text-sm font-medium text-center rounded-l-lg text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+          class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
         >
           <FontAwesomeIcon :icon="faDownload" class="w-4 h-4" />
           <div
@@ -100,6 +110,11 @@
     @onConfirm="remove"
     :name="data?.metadata?.name"
   ></ModalDelete>
+  <ModalDescribe
+    :id="`modal-describe-${data?.metadata?.name}`"
+    :name="data?.metadata?.name"
+    :data="data"
+  ></ModalDescribe>
 </template>
 
 <script setup lang="ts">
@@ -111,11 +126,12 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import {
   faTrashCan,
   faDownload,
-  faCircleNotch,
+  faCircleNotch, faFileCode,
 } from '@fortawesome/free-solid-svg-icons';
 import { initModals, initTooltips } from 'flowbite';
 import ModalDelete from '../Modals/ModalDelete.vue';
 import { V1DownloadRequestPhase } from '@velero-ui/velero';
+import ModalDescribe from "@velero-ui-app/components/Modals/ModalDescribe.vue";
 
 const props = defineProps({
   data: Object as PropType<V1DownloadRequest>,

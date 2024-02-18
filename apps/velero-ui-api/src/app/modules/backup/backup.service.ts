@@ -6,12 +6,10 @@ import {
 } from '@kubernetes/client-node';
 import { concatMap, map, Observable } from 'rxjs';
 import { from } from 'rxjs';
-import { VeleroService } from '../../shared/modules/velero/velero.service';
 import {
   V1DownloadTargetKind,
   V1DownloadRequest,
 } from '@velero-ui/velero';
-import { ConfigService } from '@nestjs/config';
 import { DownloadRequestService } from '@velero-ui-api/modules/download-request/download-request.service';
 import { HttpService } from '@nestjs/axios';
 import { AxiosResponse } from 'axios';
@@ -23,8 +21,6 @@ export class BackupService {
 
   constructor(
     @Inject(K8S_CONNECTION) private readonly k8s: KubeConfig,
-    private readonly veleroService: VeleroService,
-    private configService: ConfigService,
     private readonly downloadRequestService: DownloadRequestService,
     private readonly httpService: HttpService
   ) {

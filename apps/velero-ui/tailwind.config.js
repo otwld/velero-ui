@@ -11,7 +11,19 @@ module.exports = {
   ],
   darkMode: 'media',
   theme: {
-    extend: {},
+    extend: {
+      keyframes: {
+        'pulse-loading': {
+          '0%': { opacity: 1 },
+          '100%': { opacity: 1 },
+          '50%': { opacity: 0.95 },
+        },
+      },
+      animation: {
+        'pulse-loading':
+          'pulse-loading 1s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+      },
+    },
   },
   plugins: [require('flowbite/plugin')],
 };

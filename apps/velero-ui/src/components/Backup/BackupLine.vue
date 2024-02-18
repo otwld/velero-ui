@@ -55,7 +55,7 @@
       </router-link>
     </td>
     <td
-      class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white"
+      class="p-4 text-base  text-gray-900 whitespace-nowrap dark:text-white"
     >
       {{
         data.status?.startTimestamp
@@ -64,7 +64,7 @@
       }}
     </td>
     <td
-      class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white"
+      class="p-4 text-base text-gray-900 whitespace-nowrap dark:text-white"
     >
       {{ getRemainingTime(data.status.expiration) }}
     </td>

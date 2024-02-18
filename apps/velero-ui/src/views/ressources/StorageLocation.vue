@@ -10,20 +10,23 @@
 </template>
 
 <script setup lang="ts">
-import Describe from '../components/Describe.vue';
+import Describe from '@velero-ui-app/components/Describe.vue';
 import { storeToRefs } from 'pinia';
 import { useRouter } from 'vue-router';
 import type { Router } from 'vue-router';
-import { useStorageLocationStore } from '../stores/storage-location.store';
-import StorageLocationActions from '../components/StorageLocation/StorageLocationActions.vue';
-import { onBeforeMount } from 'vue';
+import { useStorageLocationStore } from '@velero-ui-app/stores/storage-location.store';
+import StorageLocationActions from '@velero-ui-app/components/StorageLocation/StorageLocationActions.vue';
+import { onBeforeMount, toRef } from 'vue';
+import { useStorageLocationGet } from '@velero-ui-app/use/storage-location/useStorageLocationGet';
 
 const storageLocationStore = useStorageLocationStore();
 const { location } = storeToRefs(storageLocationStore);
 
 const router: Router = useRouter();
 
-onBeforeMount(() =>
-  storageLocationStore.get(router.currentRoute.value.params.name)
+const { get } = useStorageLocationGet(
+  toRef(router.currentRoute.value.params.name)
 );
+
+onBeforeMount(() => get());
 </script>

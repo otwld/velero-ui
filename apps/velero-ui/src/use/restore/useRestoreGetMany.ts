@@ -1,27 +1,27 @@
-import type { V1DownloadRequestList } from '@velero-ui/velero';
+import type { V1RestoreList } from '@velero-ui/velero';
 import { useAxios } from '@vueuse/integrations/useAxios';
-import { inject, ref } from 'vue';
+import { inject } from 'vue';
 import type { AxiosInstance } from 'axios';
 import { ApiRoutes } from '../../utils/constants.utils';
 import { storeToRefs } from 'pinia';
 import { useListStore } from '../../stores/list.store';
 import { ToastType, useToastsStore } from '@velero-ui-app/stores/toasts.store';
+import { useRestoreStore } from '@velero-ui-app/stores/restore.store';
 
-export const useDownloadRequestGetMany = () => {
+export const useRestoreGetMany = () => {
+  const restoreStore = useRestoreStore();
   const listStore = useListStore();
   const toastsStore = useToastsStore();
   const { offset, limit, filters } = storeToRefs(listStore);
 
   const axiosInstance: AxiosInstance = inject('axios') as AxiosInstance;
-  const { execute, isLoading, data } =
-    useAxios<V1DownloadRequestList>(axiosInstance);
+  const { execute, isLoading, data } = useAxios<V1RestoreList>(axiosInstance);
 
   const isGettingMany = isLoading;
-  const downloadRequests = ref([]);
 
   const getMany = async () => {
     try {
-      await execute(`${ApiRoutes.DOWNLOAD_REQUESTS}`, {
+      await execute(`${ApiRoutes.RESTORES}`, {
         method: 'GET',
         params: {
           offset: offset.value,
@@ -31,17 +31,17 @@ export const useDownloadRequestGetMany = () => {
       });
 
       if (data?.value?.items) {
-        downloadRequests.value = data?.value?.items;
+        restoreStore.setMany(data.value.items);
         listStore.setTotal(data.value.total);
       }
     } catch (e) {
       toastsStore.push(
-        'Unable to fetch download requests, please try again.',
+        'Unable to fetch restores, please try again.',
         ToastType.ERROR
       );
       console.error(e);
     }
   };
 
-  return { getMany, isGettingMany, downloadRequests };
+  return { getMany, isGettingMany };
 };

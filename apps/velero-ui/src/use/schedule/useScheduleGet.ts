@@ -1,33 +1,33 @@
-import type { V1Backup } from '@velero-ui/velero';
+import type { V1Schedule } from '@velero-ui/velero';
 import { useAxios } from '@vueuse/integrations/useAxios';
 import { inject } from 'vue';
 import type { Ref } from 'vue';
 import type { AxiosInstance } from 'axios';
 import { ApiRoutes } from '../../utils/constants.utils';
-import { useBackupStore } from '../../stores/backup.store';
-import {ToastType, useToastsStore} from "@velero-ui-app/stores/toasts.store";
+import { ToastType, useToastsStore } from '@velero-ui-app/stores/toasts.store';
+import { useScheduleStore } from '@velero-ui-app/stores/schedule.store';
 
-export const useBackupGet = (name: Ref<string>) => {
+export const useScheduleGet = (name: Ref<string>) => {
   const toastsStore = useToastsStore();
-  const backupStore = useBackupStore();
+  const scheduleStore = useScheduleStore();
 
   const axiosInstance: AxiosInstance = inject('axios') as AxiosInstance;
-  const { execute, isLoading, data } = useAxios<V1Backup>(axiosInstance);
+  const { execute, isLoading, data } = useAxios<V1Schedule>(axiosInstance);
 
   const isGetting = isLoading;
 
   const get = async () => {
     try {
-      await execute(`${ApiRoutes.BACKUPS}/${name.value}`, {
+      await execute(`${ApiRoutes.SCHEDULES}/${name.value}`, {
         method: 'GET',
       });
 
       if (data?.value) {
-        backupStore.set(data.value);
+        scheduleStore.set(data.value);
       }
     } catch (e) {
       toastsStore.push(
-        'Unable to fetch backup\'s information, please try again.',
+        "Unable to fetch schedule's information, please try again.",
         ToastType.ERROR
       );
       console.error(e);

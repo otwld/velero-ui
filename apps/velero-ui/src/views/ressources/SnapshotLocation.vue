@@ -10,20 +10,23 @@
 </template>
 
 <script setup lang="ts">
-import Describe from '../components/Describe.vue';
-import SnapshotLocationActions from '../components/SnapshotLocation/SnapshotLocationActions.vue';
+import Describe from '@velero-ui-app/components/Describe.vue';
+import SnapshotLocationActions from '@velero-ui-app/components/SnapshotLocation/SnapshotLocationActions.vue';
 import { storeToRefs } from 'pinia';
 import { useRouter } from 'vue-router';
 import type { Router } from 'vue-router';
-import { useSnapshotLocationStore } from '../stores/snapshot-location';
-import { onBeforeMount } from 'vue';
+import { useSnapshotLocationStore } from '@velero-ui-app/stores/snapshot-location';
+import { onBeforeMount, toRef } from 'vue';
+import { useSnapshotLocationGet } from '@velero-ui-app/use/snapshot-location/useSnapshotLocationGet';
 
 const snapshotLocationStore = useSnapshotLocationStore();
 const { location } = storeToRefs(snapshotLocationStore);
 
 const router: Router = useRouter();
 
-onBeforeMount(() =>
-  snapshotLocationStore.get(router.currentRoute.value.params.name)
+const { get } = useSnapshotLocationGet(
+  toRef(router.currentRoute.value.params.name)
 );
+
+onBeforeMount(() => get());
 </script>

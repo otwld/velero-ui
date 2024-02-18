@@ -9,16 +9,12 @@
   ></List>
 </template>
 <script setup lang="ts">
-import { onBeforeMount, watch } from 'vue';
-import { useBackupStore } from '../stores/backup.store';
+import { onBeforeMount } from 'vue';
+import { useBackupStore } from '@velero-ui-app/stores/backup.store';
 import { storeToRefs } from 'pinia';
-import List from '../components/List/List.vue';
-import BackupLine from '../components/Backup/BackupLine.vue';
-import { useListStore } from '../stores/list.store';
+import List from '@velero-ui-app/components/List/List.vue';
+import BackupLine from '@velero-ui-app/components/Backup/BackupLine.vue';
 import { useBackupGetMany } from '@velero-ui-app/use/backup/useBackupGetMany';
-
-const listStore = useListStore();
-const { offset, filters } = storeToRefs(listStore);
 
 const backupStore = useBackupStore();
 const { backups } = storeToRefs(backupStore);
@@ -28,9 +24,4 @@ const { getMany, isGettingMany } = useBackupGetMany();
 onBeforeMount(() => getMany());
 
 const headers = ['Name', 'Schedule', 'Date', 'Expire in', 'Status', 'Actions'];
-
-watch(offset, () => getMany());
-watch(filters, () => getMany(), {
-  deep: true,
-});
 </script>

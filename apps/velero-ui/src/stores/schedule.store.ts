@@ -1,19 +1,9 @@
-import type { V1Schedule, V1ScheduleList } from '@velero-ui/velero';
+import type { V1Schedule } from '@velero-ui/velero';
 import { defineStore } from 'pinia';
-import { ApiRoutes } from '../utils/constants.utils';
-import type { AxiosResponse } from 'axios';
-
-export interface ScheduleSearchFilters {
-  startWith: string;
-}
 
 export interface ScheduleStore {
   schedules: V1Schedule[];
   schedule: V1Schedule;
-  total: number;
-  offset: number;
-  limit: number;
-  filters: ScheduleSearchFilters;
 }
 
 export const useScheduleStore = defineStore({
@@ -22,60 +12,17 @@ export const useScheduleStore = defineStore({
     ({
       schedules: [],
       schedule: undefined,
-      total: 0,
-      offset: 0,
-      limit: 20,
-      filters: {
-        search: null,
-      },
     } as ScheduleStore),
   getters: {},
   actions: {
-    async get(name: string): Promise<V1Schedule> {
-      try {
-        this.schedule = this.schedules.find(
-          (b: V1Schedule) => b?.metadata?.name === name
-        );
-
-        if (!this.schedule) {
-          const response: AxiosResponse<V1Schedule> = await this.axios.get(
-            `${ApiRoutes.SCHEDULES}/${name}`,
-            {}
-          );
-
-          this.schedule = response.data;
-        }
-      } catch (e) {
-        this.schedule = undefined;
-        console.error(e);
-      }
-      return this.schedule;
+    set(schedule: V1Schedule): void {
+      this.schedule = schedule;
+    },
+    setMany(schedules: V1Schedule[]): void {
+      this.schedules = schedules;
     },
 
-    async fetch(): Promise<V1Schedule[]> {
-      try {
-        const response: AxiosResponse<V1ScheduleList> = await this.axios.get(
-          ApiRoutes.SCHEDULES,
-          {
-            params: {
-              offset: this.offset,
-              limit: this.limit,
-              search: this.filters.search,
-            },
-          }
-        );
-
-        this.schedules = response.data.items;
-        this.total = response.data.total;
-      } catch (e) {
-        this.schedules = [];
-        this.total = 0;
-        console.error(e);
-      }
-      return this.schedules;
-    },
-
-    togglePause(name: string, paused: boolean) {
+    togglePause(name: string, paused: boolean): void {
       if (this.schedule?.spec) {
         this.schedule.spec.paused = paused;
       }
@@ -91,36 +38,16 @@ export const useScheduleStore = defineStore({
       }
     },
 
-    async delete(names: string[]) {
-      try {
-        const response = (await this.axios.delete(
-          `${ApiRoutes.SCHEDULES}}`
-        )) as AxiosResponse;
-
-        this.fetch();
-      } catch (e) {
-        console.error(e);
-      }
-    },
-    next() {
-      if (this.offset + this.limit < this.total) {
-        this.offset += 20;
-        this.fetch();
-      }
-    },
-    previous() {
-      this.offset -= 20;
-
-      if (this.offset < 0) {
-        this.offset = 0;
+    delete(name: string): void {
+      if (this.schedule) {
+        this.schedule = undefined;
       }
 
-      this.fetch();
-    },
-    applyNameFilter(name: string) {
-      this.offset = 0;
-      this.filters.search = name;
-      this.fetch();
+      if (this.schedules.length > 0) {
+        this.schedules = this.schedules.filters(
+          (schedule: V1Schedule): boolean => schedule?.metadata?.name === name
+        );
+      }
     },
   },
 });

@@ -3,23 +3,23 @@ import type { RouteRecordRaw, Router } from 'vue-router';
 import Default from '../layouts/default/Default.vue';
 import Auth from '../layouts/auth/Auth.vue';
 import guard from '../utils/guard.utils';
-import BackupList from '../views/BackupList.vue';
+import BackupList from '@velero-ui-app/views/list/BackupList.vue';
 import NotFound from '../layouts/not-found/NotFound.vue';
-import ScheduleList from '../views/ScheduleList.vue';
-import RestoreList from '../views/RestoreList.vue';
-import StorageLocationList from '../views/StorageLocationList.vue';
-import Backup from '../views/Backup.vue';
+import ScheduleList from '@velero-ui-app/views/list/ScheduleList.vue';
+import RestoreList from '@velero-ui-app/views/list/RestoreList.vue';
+import StorageLocationList from '@velero-ui-app/views/list/StorageLocationList.vue';
+import Backup from '@velero-ui-app/views/ressources/Backup.vue';
 import { Pages } from '../utils/constants.utils';
-import SnapshotLocationList from '../views/SnapshotLocationList.vue';
+import SnapshotLocationList from '@velero-ui-app/views/list/SnapshotLocationList.vue';
 import Settings from '../views/Settings.vue';
-import Schedule from '../views/Schedule.vue';
-import StorageLocation from '../views/StorageLocation.vue';
-import SnapshotLocation from '../views/SnapshotLocation.vue';
+import Schedule from '@velero-ui-app/views/ressources/Schedule.vue';
+import StorageLocation from '@velero-ui-app/views/ressources/StorageLocation.vue';
+import SnapshotLocation from '@velero-ui-app/views/ressources/SnapshotLocation.vue';
 import { useListStore } from '../stores/list.store';
 import Dashboard from '../views/Dashboard.vue';
-import DownloadRequestList from '@velero-ui-app/views/DownloadRequestList.vue';
-import ServerStatusRequestList from '@velero-ui-app/views/ServerStatusRequestList.vue';
-import DeleteBackupRequestList from '@velero-ui-app/views/DeleteBackupRequestList.vue';
+import DownloadRequestList from '@velero-ui-app/views/list/DownloadRequestList.vue';
+import ServerStatusRequestList from '@velero-ui-app/views/list/ServerStatusRequestList.vue';
+import DeleteBackupRequestList from '@velero-ui-app/views/list/DeleteBackupRequestList.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -49,6 +49,7 @@ const routes: Array<RouteRecordRaw> = [
           {
             path: '',
             component: StorageLocationList,
+            beforeEnter: () => useListStore().reset(),
           },
           {
             ...Pages.STORAGE_LOCATION,
@@ -58,7 +59,17 @@ const routes: Array<RouteRecordRaw> = [
       },
       {
         ...Pages.RESTORES,
-        component: RestoreList,
+        children: [
+          {
+            path: '',
+            component: RestoreList,
+            beforeEnter: () => useListStore().reset(),
+          },
+          {
+            ...Pages.RESTORE,
+            component: Dashboard,
+          },
+        ],
       },
       {
         ...Pages.SCHEDULES,
@@ -91,6 +102,7 @@ const routes: Array<RouteRecordRaw> = [
       {
         ...Pages.BACKUP_REPOSITORIES,
         component: Dashboard,
+        beforeEnter: () => useListStore().reset(),
       },
       {
         ...Pages.DOWNLOAD_REQUESTS,
@@ -125,8 +137,6 @@ const routes: Array<RouteRecordRaw> = [
 
 const router: Router = createRouter({
   history: createWebHistory('/'),
-  // linkActiveClass: "bg-gray-100 dark:bg-gray-700",
-  // linkExactActiveClass: "bg-gray-100 dark:bg-gray-700",
   routes,
 });
 

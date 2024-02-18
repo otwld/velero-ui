@@ -5,11 +5,13 @@ import type { Ref } from 'vue';
 import type { AxiosInstance } from 'axios';
 import { V1DownloadTargetKind } from '@velero-ui/velero';
 import { ApiRoutes } from '../utils/constants.utils';
+import { ToastType, useToastsStore } from '@velero-ui-app/stores/toasts.store';
 
-export const useDownloadLogs = (
+export const useLogsDownload = (
   name: Ref<string>,
   type: Ref<V1DownloadTargetKind>
 ) => {
+  const toastsStore = useToastsStore();
   const axiosInstance: AxiosInstance = inject('axios') as AxiosInstance;
 
   const { execute, isLoading, data } =
@@ -30,9 +32,16 @@ export const useDownloadLogs = (
       }
 
       if (data?.value?.status?.downloadURL) {
+        toastsStore.push('Download started..', ToastType.SUCCESS);
         window.open(data.value.status.downloadURL);
       }
-    } catch (e) {}
+    } catch (e) {
+      toastsStore.push(
+        'Unable to download logs, please try again.',
+        ToastType.ERROR
+      );
+      console.error(e);
+    }
   };
 
   return { download, downloadLoading };
