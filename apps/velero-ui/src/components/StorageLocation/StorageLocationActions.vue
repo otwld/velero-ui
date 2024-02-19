@@ -34,6 +34,13 @@
         <div v-if="location" class="flex items-center space-x-4">
           <button
             type="button"
+            class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:ring-teal-300 dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
+          >
+            <FontAwesomeIcon :icon="faPen" class="w-4 h-4 mr-2" />
+            Edit
+          </button>
+          <button
+            type="button"
             class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-red-600 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"
           >
             <FontAwesomeIcon :icon="faTrashCan" class="w-4 h-4 mr-2" />
@@ -48,7 +55,7 @@
 import type { PropType } from 'vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import type { V1BackupStorageLocation } from '@velero-ui/velero';
-import { faServer, faTrashCan } from '@fortawesome/free-solid-svg-icons';
+import {faPen, faServer, faTrashCan} from '@fortawesome/free-solid-svg-icons';
 
 defineProps({
   location: Object as PropType<V1BackupStorageLocation>,

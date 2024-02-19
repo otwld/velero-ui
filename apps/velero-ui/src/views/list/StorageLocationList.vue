@@ -23,5 +23,5 @@ const { getMany, isGettingMany } = useStorageLocationGetMany();
 
 onBeforeMount(() => getMany());
 
-const headers = ['Name', 'Provider', 'Last Sync', 'Status', 'Actions'];
+const headers = ['Name', 'Provider', 'Access Mode', 'Last Sync', 'Status', 'Actions'];
 </script>

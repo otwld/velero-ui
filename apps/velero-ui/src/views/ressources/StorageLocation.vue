@@ -2,6 +2,8 @@
   <div class="grid grid-cols-1 px-4 xl:grid-cols-3 xl:gap-4 dark:bg-gray-900">
     <div class="col-span-full xl:col-auto">
       <StorageLocationActions :location="location"></StorageLocationActions>
+      <StorageLocationStatus :location="location"></StorageLocationStatus>
+      <StorageLocationDetails :location="location"></StorageLocationDetails>
     </div>
     <div class="col-span-2">
       <Describe :data="location"></Describe>
@@ -18,6 +20,8 @@ import { useStorageLocationStore } from '@velero-ui-app/stores/storage-location.
 import StorageLocationActions from '@velero-ui-app/components/StorageLocation/StorageLocationActions.vue';
 import { onBeforeMount, toRef } from 'vue';
 import { useStorageLocationGet } from '@velero-ui-app/use/storage-location/useStorageLocationGet';
+import StorageLocationStatus from '@velero-ui-app/components/StorageLocation/StorageLocationStatus.vue';
+import StorageLocationDetails from '@velero-ui-app/components/StorageLocation/StorageLocationDetails.vue';
 
 const storageLocationStore = useStorageLocationStore();
 const { location } = storeToRefs(storageLocationStore);

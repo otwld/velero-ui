@@ -32,12 +32,17 @@
       </td>
     </router-link>
     <td
-      class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white"
+      class="p-4 text-base text-gray-900 whitespace-nowrap dark:text-white"
     >
       {{ data?.spec?.provider }}
     </td>
     <td
-      class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white"
+      class="p-4 text-base text-gray-900 whitespace-nowrap dark:text-white"
+    >
+      {{ data?.spec?.accessMode }}
+    </td>
+    <td
+      class="p-4 text-base  text-gray-900 whitespace-nowrap dark:text-white"
     >
       {{ convertTimestampToDate(data?.status?.lastSyncedTime) }}
     </td>
