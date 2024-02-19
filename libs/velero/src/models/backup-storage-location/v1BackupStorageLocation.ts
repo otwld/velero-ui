@@ -17,7 +17,8 @@ export interface V1BackupStorageLocationSpec {
   provider: string;
   config?: Record<string, string>;
   credential?: string;
-  storageType?: V1BackupStorageLocationStorageType;
+  // storageType?: V1BackupStorageLocationStorageType;
+  objectStorage?: V1BackupStorageLocationObjectStorageLocation;
   default?: boolean;
   accessMode?: V1BackupStorageLocationAccessMode;
   backupSyncPeriod?: Date;

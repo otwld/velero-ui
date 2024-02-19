@@ -11,7 +11,7 @@ export interface V1BackupRepository extends KubernetesObject {
 export interface V1BackupRepositorySpec {
   volumeNamespace: string;
   backupStorageLocation: string;
-  repositoryType?: string;
+  repositoryType?: V1BackupRepositoryType;
   resticIdentifier: string;
   maintenanceFrequency: Date;
 }
@@ -20,8 +20,11 @@ export const enum V1BackupRepositoryPhase {
   New = 'New',
   Ready = 'Ready',
   NotReady = 'NotReady',
-  restic = 'restic',
-  kopia = 'kopia',
+}
+
+export const enum V1BackupRepositoryType {
+  Restic = 'restic',
+  Kopia = 'kopia',
 }
 
 export interface V1BackupRepositoryStatus {
