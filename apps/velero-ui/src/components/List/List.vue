@@ -19,6 +19,7 @@
 import type { PropType } from 'vue';
 import type {
   V1Backup,
+  V1BackupRepository,
   V1BackupStorageLocation,
   V1DeleteBackupRequest,
   V1DownloadRequest,
@@ -44,6 +45,7 @@ defineProps({
     | V1DownloadRequest[]
     | V1ServerStatusRequest[]
     | V1DeleteBackupRequest[]
+    | V1BackupRepository[]
   >,
   loading: Boolean,
   headers: Array as PropType<string[]>,
