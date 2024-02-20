@@ -11,7 +11,7 @@
 <script setup lang="ts">
 import List from '@velero-ui-app/components/List/List.vue';
 import { storeToRefs } from 'pinia';
-import { useSnapshotLocationStore } from '@velero-ui-app/stores/snapshot-location';
+import { useSnapshotLocationStore } from '@velero-ui-app/stores/snapshot-location.store';
 import SnapshotLocationLine from '@velero-ui-app/components/SnapshotLocation/SnapshotLocationLine.vue';
 import { onBeforeMount } from 'vue';
 import { useSnapshotLocationGetMany } from '@velero-ui-app/use/snapshot-location/useSnapshotLocationGetMany';

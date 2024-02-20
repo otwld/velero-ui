@@ -6,7 +6,7 @@ import { ApiRoutes } from '../../utils/constants.utils';
 import { storeToRefs } from 'pinia';
 import { useListStore } from '../../stores/list.store';
 import { ToastType, useToastsStore } from '@velero-ui-app/stores/toasts.store';
-import { useSnapshotLocationStore } from '@velero-ui-app/stores/snapshot-location';
+import { useSnapshotLocationStore } from '@velero-ui-app/stores/snapshot-location.store';
 
 export const useSnapshotLocationGetMany = () => {
   const snapshotLocationStore = useSnapshotLocationStore();

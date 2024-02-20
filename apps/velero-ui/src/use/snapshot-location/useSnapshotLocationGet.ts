@@ -5,7 +5,7 @@ import type { Ref } from 'vue';
 import type { AxiosInstance } from 'axios';
 import { ApiRoutes } from '../../utils/constants.utils';
 import { ToastType, useToastsStore } from '@velero-ui-app/stores/toasts.store';
-import { useSnapshotLocationStore } from '@velero-ui-app/stores/snapshot-location';
+import { useSnapshotLocationStore } from '@velero-ui-app/stores/snapshot-location.store';
 
 export const useSnapshotLocationGet = (name: Ref<string>) => {
   const toastsStore = useToastsStore();

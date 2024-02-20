@@ -15,7 +15,7 @@ import SnapshotLocationActions from '@velero-ui-app/components/SnapshotLocation/
 import { storeToRefs } from 'pinia';
 import { useRouter } from 'vue-router';
 import type { Router } from 'vue-router';
-import { useSnapshotLocationStore } from '@velero-ui-app/stores/snapshot-location';
+import { useSnapshotLocationStore } from '@velero-ui-app/stores/snapshot-location.store';
 import { onBeforeMount, toRef } from 'vue';
 import { useSnapshotLocationGet } from '@velero-ui-app/use/snapshot-location/useSnapshotLocationGet';
 
