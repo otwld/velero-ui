@@ -5,8 +5,10 @@ import { useAxios } from '@vueuse/integrations/useAxios';
 import { inject } from 'vue';
 import type { Ref } from 'vue';
 import type { AxiosInstance } from 'axios';
+import { ToastType, useToastsStore } from '@velero-ui-app/stores/toasts.store';
 
 export const useScheduleRemove = (name: Ref<string>) => {
+  const toastsStore = useToastsStore();
   const scheduleStore = useScheduleStore();
   const axiosInstance: AxiosInstance = inject('axios') as AxiosInstance;
 
@@ -16,17 +18,21 @@ export const useScheduleRemove = (name: Ref<string>) => {
 
   const remove = async () => {
     try {
-      await execute(
-        `${ApiRoutes.SCHEDULES}/${name.value}`,
-        {
-          method: 'DELETE',
-        }
-      );
+      await execute(`${ApiRoutes.SCHEDULES}/${name.value}`, {
+        method: 'DELETE',
+      });
 
       if (data.value) {
-        // DELETED
+        scheduleStore.delete(name.value);
+        toastsStore.push('Schedule deleted.', ToastType.SUCCESS);
       }
-    } catch (e) {}
+    } catch (e) {
+      toastsStore.push(
+        'Unable to delete the schedule, please try again.',
+        ToastType.ERROR
+      );
+      console.error(e);
+    }
   };
 
   return { remove, removeLoading };
