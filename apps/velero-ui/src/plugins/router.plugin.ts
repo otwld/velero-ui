@@ -20,6 +20,7 @@ import Dashboard from '../views/Dashboard.vue';
 import DownloadRequestList from '@velero-ui-app/views/list/DownloadRequestList.vue';
 import ServerStatusRequestList from '@velero-ui-app/views/list/ServerStatusRequestList.vue';
 import DeleteBackupRequestList from '@velero-ui-app/views/list/DeleteBackupRequestList.vue';
+import BackupRepositoryList from '@velero-ui-app/views/list/BackupRepositoryList.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -101,8 +102,17 @@ const routes: Array<RouteRecordRaw> = [
       },
       {
         ...Pages.BACKUP_REPOSITORIES,
-        component: Dashboard,
-        beforeEnter: () => useListStore().reset(),
+        children: [
+          {
+            path: '',
+            component: BackupRepositoryList,
+            beforeEnter: () => useListStore().reset(),
+          },
+          {
+            ...Pages.BACKUP_REPOSITORY,
+            component: Dashboard,
+          },
+        ],
       },
       {
         ...Pages.DOWNLOAD_REQUESTS,

@@ -3,6 +3,7 @@ export const ApiRoutes = {
   SCHEDULES: '/schedules',
   STORAGE_LOCATIONS: '/storage-locations',
   RESTORES: '/restores',
+  BACKUP_REPOSITORIES: '/backup-repositories',
   SNAPSHOT_LOCATIONS: '/snapshot-locations',
   DOWNLOAD_REQUESTS: '/download-requests',
   SERVER_STATUS_REQUESTS: '/server-status-requests',
@@ -29,6 +30,10 @@ export const Pages = {
   BACKUP_REPOSITORIES: {
     name: 'Backup Repositories',
     path: '/backup-repositories',
+  },
+  BACKUP_REPOSITORY: {
+    name: 'Backup Repository',
+    path: '/backup-repositories/:name',
   },
   RESTORES: { name: 'Restores', path: '/restores' },
   RESTORE: { name: 'Restore', path: '/restores/:name' },
