@@ -1,30 +1,30 @@
 <template>
   <div class="grid grid-cols-1 px-4 xl:grid-cols-3 xl:gap-4 dark:bg-gray-900">
     <div class="col-span-full xl:col-auto">
-      <SnapshotLocationActions :location="location"></SnapshotLocationActions>
+      <BackupRepositoryActions :location="repository"></BackupRepositoryActions>
     </div>
     <div class="col-span-2">
-      <Describe :data="location"></Describe>
+      <Describe :data="repository"></Describe>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import Describe from '@velero-ui-app/components/Describe.vue';
-import SnapshotLocationActions from '@velero-ui-app/components/SnapshotLocation/SnapshotLocationActions.vue';
 import { storeToRefs } from 'pinia';
 import { useRouter } from 'vue-router';
 import type { Router } from 'vue-router';
-import { useSnapshotLocationStore } from '@velero-ui-app/stores/snapshot-location.store';
 import { onBeforeMount, toRef } from 'vue';
-import { useSnapshotLocationGet } from '@velero-ui-app/use/snapshot-location/useSnapshotLocationGet';
+import { useBackupRepositoryStore } from '@velero-ui-app/stores/backup-repository.store';
+import { useBackupRepositoryGet } from '@velero-ui-app/use/backup-repository/useBackupRepositoryGet';
+import BackupRepositoryActions from '@velero-ui-app/components/BackupRepository/BackupRepositoryActions.vue';
 
-const snapshotLocationStore = useSnapshotLocationStore();
-const { location } = storeToRefs(snapshotLocationStore);
+const backupRepositoryStore = useBackupRepositoryStore();
+const { repository } = storeToRefs(backupRepositoryStore);
 
 const router: Router = useRouter();
 
-const { get } = useSnapshotLocationGet(
+const { get } = useBackupRepositoryGet(
   toRef(router.currentRoute.value.params.name)
 );
 

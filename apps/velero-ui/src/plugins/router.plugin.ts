@@ -21,6 +21,7 @@ import DownloadRequestList from '@velero-ui-app/views/list/DownloadRequestList.v
 import ServerStatusRequestList from '@velero-ui-app/views/list/ServerStatusRequestList.vue';
 import DeleteBackupRequestList from '@velero-ui-app/views/list/DeleteBackupRequestList.vue';
 import BackupRepositoryList from '@velero-ui-app/views/list/BackupRepositoryList.vue';
+import BackupRepository from '@velero-ui-app/views/ressources/BackupRepository.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -110,7 +111,7 @@ const routes: Array<RouteRecordRaw> = [
           },
           {
             ...Pages.BACKUP_REPOSITORY,
-            component: Dashboard,
+            component: BackupRepository,
           },
         ],
       },
