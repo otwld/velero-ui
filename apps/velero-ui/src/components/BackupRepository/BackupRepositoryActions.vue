@@ -12,26 +12,26 @@
 
       <div>
         <h3
-          v-if="location"
+          v-if="repository"
           class="mb-1 text-lg font-bold text-gray-900 dark:text-white"
         >
-          {{ location?.metadata?.name }}
+          {{ repository?.metadata?.name }}
         </h3>
         <div
-          v-if="!location"
+          v-if="!repository"
           class="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-48 mb-4"
         ></div>
         <div
-          v-if="location"
+          v-if="repository"
           class="mb-4 text-xs text-gray-500 dark:text-gray-400"
         >
-          {{ location?.metadata?.uid }}
+          {{ repository?.metadata?.uid }}
         </div>
         <div
-          v-if="!location"
+          v-if="!repository"
           class="h-1.5 bg-gray-200 rounded-full dark:bg-gray-700 w-48 mb-4"
         ></div>
-        <div v-if="location" class="flex items-center space-x-4">
+        <div v-if="repository" class="flex items-center space-x-4">
           <button
             type="button"
             class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-red-600 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"
@@ -52,6 +52,6 @@ import type { V1BackupRepository } from '@velero-ui/velero';
 import { faTrashCan, faFolderTree } from '@fortawesome/free-solid-svg-icons';
 
 defineProps({
-  location: Object as PropType<V1BackupRepository>,
+  repository: Object as PropType<V1BackupRepository>,
 });
 </script>

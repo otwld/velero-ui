@@ -53,14 +53,28 @@
       </router-link>
     </td>
     <td
-      class="p-4 text-base text-gray-900 whitespace-nowrap dark:text-white"
+      class="p-4 inline-flex items-center text-base text-gray-900 whitespace-nowrap dark:text-white"
     >
+      <img
+        v-if="data?.spec?.repositoryType === V1BackupRepositoryType.Kopia"
+        class="h-5 w-5 mr-2"
+        src="/src/assets/images/kopia.svg"
+      />
+      <img
+        v-if="data?.spec?.repositoryType === V1BackupRepositoryType.Restic"
+        class="h-5 w-5 mr-2"
+        src="/src/assets/images/restic.png"
+      />
       {{ data?.spec?.repositoryType }}
     </td>
     <td
       class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white"
     >
-      {{ data?.status?.lastMaintenanceTime ? convertTimestampToDate(data?.status?.lastMaintenanceTime) : '-' }}
+      {{
+        data?.status?.lastMaintenanceTime
+          ? convertTimestampToDate(data?.status?.lastMaintenanceTime)
+          : '-'
+      }}
     </td>
     <td
       class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white"
@@ -100,12 +114,19 @@
 
 <script setup lang="ts">
 import type { V1BackupRepository } from '@velero-ui/velero';
+import {
+  V1BackupRepositoryPhase,
+  V1BackupRepositoryType,
+} from '@velero-ui/velero';
 import type { PropType } from 'vue';
-import { V1BackupRepositoryPhase } from '@velero-ui/velero';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import {faArrowUpRightFromSquare, faServer, faTrashCan} from '@fortawesome/free-solid-svg-icons';
+import {
+  faArrowUpRightFromSquare,
+  faServer,
+  faTrashCan,
+} from '@fortawesome/free-solid-svg-icons';
 import { Pages } from '../../utils/constants.utils';
-import {convertTimestampToDate} from "../../utils/date.utils";
+import { convertTimestampToDate } from '../../utils/date.utils';
 
 defineProps({
   data: Object as PropType<V1BackupRepository>,
