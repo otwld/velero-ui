@@ -17,8 +17,6 @@ export const useLogsDownload = (
   const { execute, isLoading, data } =
     useAxios<V1DownloadRequest>(axiosInstance);
 
-  const downloadLoading = isLoading;
-
   const download = async () => {
     try {
       if (type.value === V1DownloadTargetKind.BackupLog) {
@@ -44,5 +42,5 @@ export const useLogsDownload = (
     }
   };
 
-  return { download, downloadLoading };
+  return { download, isLoading };
 };

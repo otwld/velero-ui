@@ -26,6 +26,7 @@ import BackupRepository from '@velero-ui-app/views/ressources/BackupRepository.v
 const routes: Array<RouteRecordRaw> = [
   {
     component: Default,
+    redirect: Pages.HOME.path,
     children: [
       {
         ...Pages.HOME,
