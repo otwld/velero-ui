@@ -8,6 +8,7 @@ export const ApiRoutes = {
   DOWNLOAD_REQUESTS: '/download-requests',
   SERVER_STATUS_REQUESTS: '/server-status-requests',
   DELETE_BACKUP_REQUESTS: '/delete-backup-requests',
+  STATS: '/stats',
   SETTINGS_CLUSTER: '/settings/cluster',
   SETTINGS_VELERO_SERVER: '/settings/velero/server',
   SETTINGS_VELERO_AGENTS: '/settings/velero/agents',
