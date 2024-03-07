@@ -88,8 +88,8 @@ export class K8sCustomObjectService {
       map(
         (r: {
           response: http.IncomingMessage;
-          body: { items: number };
-        }): number => r.body.items
+          body: { items: [] };
+        }): number => r.body.items.length
       ),
       catchError(() => of(0))
     );

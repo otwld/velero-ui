@@ -20,6 +20,7 @@ import { ServerStatusRequestModule } from '@velero-ui-api/modules/server-status-
 import { SnapshotLocationModule } from './modules/snapshot-location/snapshot-location.module';
 import { K8sCustomObjectModule } from '@velero-ui-api/shared/modules/k8s-custom-object/k8s-custom-object.module';
 import { BackupRepositoryModule } from '@velero-ui-api/modules/backup-repository/backup-repository.module';
+import { StatsModule } from '@velero-ui-api/modules/stats/stats.module';
 import velero from '../config/velero.config';
 import k8s from '../config/k8s.config';
 
@@ -55,6 +56,7 @@ import k8s from '../config/k8s.config';
     SnapshotLocationModule,
     K8sCustomObjectModule,
     BackupRepositoryModule,
+    StatsModule,
   ],
   controllers: [],
   providers: [
