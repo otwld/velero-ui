@@ -140,6 +140,7 @@ onBeforeMount(async () => {
   }
 
   if (window.location.href.indexOf('#') >= 0) {
+    success.value = 'Processing login, please wait...';
     ssoLoading.value = true;
     try {
       await oidcClient.signinRedirectCallback();

@@ -15,7 +15,7 @@ const guard: NavigationGuardWithThis<string> = async (
   try {
     const user: User = await oidcClient.getUser();
 
-    if (!user && to.name !== Pages.LOGIN.name) {
+    if (!user && !to.path.startsWith(Pages.LOGIN.path)) {
       return {
         name: Pages.LOGIN.name,
         query: {
@@ -36,7 +36,7 @@ const guard: NavigationGuardWithThis<string> = async (
       };
     }
 
-    if (user && to.name === 'Login') {
+    if (user && to.name === Pages.LOGIN.name) {
       return { name: Pages.HOME.name };
     }
   } catch (e) {
