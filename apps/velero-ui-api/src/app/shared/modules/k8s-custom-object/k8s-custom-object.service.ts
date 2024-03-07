@@ -27,7 +27,7 @@ export class K8sCustomObjectService {
   public get<R extends KubernetesObject, T extends KubernetesListObject<R>>(
     plurial: string,
     offset: number = 0,
-    limit: number = 20,
+    limit?: number,
     search?: string
   ): Observable<T> {
     return from(
@@ -45,7 +45,7 @@ export class K8sCustomObjectService {
             ...r,
             total: r.items.length,
             items: (r.items = r.items.filter((i: R) =>
-              i.metadata.name.includes(search)
+              search ? i.metadata.name.includes(search) : i
             )),
           })
         )
@@ -55,7 +55,9 @@ export class K8sCustomObjectService {
           (r: T): T => ({
             ...r,
             total: r.items.length,
-            items: (r.items = r.items.slice(offset, offset + limit)),
+            items: limit
+              ? (r.items = r.items.slice(offset, offset + limit))
+              : r.items,
           })
         )
       );
@@ -86,10 +88,8 @@ export class K8sCustomObjectService {
       )
     ).pipe(
       map(
-        (r: {
-          response: http.IncomingMessage;
-          body: { items: [] };
-        }): number => r.body.items.length
+        (r: { response: http.IncomingMessage; body: { items: [] } }): number =>
+          r.body.items.length
       ),
       catchError(() => of(0))
     );

@@ -1,7 +1,11 @@
 import { Controller, Get } from '@nestjs/common';
 import { StatsService } from '@velero-ui-api/modules/stats/stats.service';
 import { Observable } from 'rxjs';
-import { BasicStats } from '@velero-ui/shared-types';
+import {
+  BackupsStatusStats,
+  BackupsSuccessRateStats,
+  BasicStats,
+} from '@velero-ui/shared-types';
 
 @Controller('stats')
 export class StatsController {
@@ -10,5 +14,15 @@ export class StatsController {
   @Get()
   public getBasicStats(): Observable<BasicStats> {
     return this.statsService.getBasicStats();
+  }
+
+  @Get('/backups/status')
+  public getBackupsStatus(): Observable<BackupsStatusStats> {
+    return this.statsService.getBackupsStatus();
+  }
+
+  @Get('/backups/success-rate')
+  public getBackupsSuccessRate(): Observable<BackupsSuccessRateStats> {
+    return this.statsService.getBackupsSuccessRate();
   }
 }
