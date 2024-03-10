@@ -1,9 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import {concatMap, forkJoin, map, Observable, of} from 'rxjs';
+import { forkJoin, map, Observable } from 'rxjs';
 import {
   BackupsStatusStats,
   BackupsSuccessRateStats,
   BasicStats,
+  RestoresStatusStats,
+  RestoresSuccessRateStats,
 } from '@velero-ui/shared-types';
 import { K8sCustomObjectService } from '@velero-ui-api/shared/modules/k8s-custom-object/k8s-custom-object.service';
 import {
@@ -11,6 +13,9 @@ import {
   V1Backup,
   V1BackupList,
   V1BackupPhase,
+  V1Restore,
+  V1RestoreList,
+  V1RestorePhase,
 } from '@velero-ui/velero';
 
 @Injectable()
@@ -40,26 +45,24 @@ export class StatsService {
     return this.k8sCustomObjectService
       .get<V1Backup, V1BackupList>(Ressources.BACKUP.plurial)
       .pipe(
-        concatMap(
-          (backupList: V1BackupList): Observable<BackupsStatusStats> => {
-            const stats: BackupsStatusStats = {
-              labels: [],
-              series: [],
-            };
-            for (const backup of backupList.items) {
-              if (stats.labels.includes(backup?.status?.phase)) {
-                const index: number = stats.labels.findIndex(
-                  (e: string): boolean => e === backup?.status?.phase
-                );
-                stats.series[index] += 1;
-              } else {
-                stats.labels.push(backup.status.phase);
-                stats.series.push(1);
-              }
+        map((backupList: V1BackupList): BackupsStatusStats => {
+          const stats: BackupsStatusStats = {
+            labels: [],
+            series: [],
+          };
+          for (const backup of backupList.items) {
+            if (stats.labels.includes(backup?.status?.phase)) {
+              const index: number = stats.labels.findIndex(
+                (e: string): boolean => e === backup?.status?.phase
+              );
+              stats.series[index] += 1;
+            } else {
+              stats.labels.push(backup.status.phase);
+              stats.series.push(1);
             }
-            return of(stats);
           }
-        )
+          return stats;
+        })
       );
   }
 
@@ -67,21 +70,68 @@ export class StatsService {
     return this.k8sCustomObjectService
       .get<V1Backup, V1BackupList>(Ressources.BACKUP.plurial)
       .pipe(
-        concatMap(
-          (backupList: V1BackupList): Observable<BackupsSuccessRateStats> => {
-            const stats: BackupsSuccessRateStats = {
-              series: [],
-            };
-            let success: number = 0;
-            for (const backup of backupList.items) {
-              if (backup.status.phase === V1BackupPhase.Completed) {
-                success += 1;
-              }
+        map((backupList: V1BackupList): BackupsSuccessRateStats => {
+          const stats: BackupsSuccessRateStats = {
+            series: [],
+          };
+          let success: number = 0;
+          for (const backup of backupList.items) {
+            if (backup.status.phase === V1BackupPhase.Completed) {
+              success += 1;
             }
-            stats.series.push(Math.round((success * 100) / backupList.total));
-            return of(stats);
           }
-        )
+          if (success > 0) {
+            stats.series.push(Math.round((success * 100) / backupList.total));
+          }
+          return stats;
+        })
+      );
+  }
+
+  public getRestoresStatus(): Observable<RestoresStatusStats> {
+    return this.k8sCustomObjectService
+      .get<V1Restore, V1RestoreList>(Ressources.RESTORE.plurial)
+      .pipe(
+        map((restoreList: V1RestoreList): RestoresStatusStats => {
+          const stats: RestoresStatusStats = {
+            labels: [],
+            series: [],
+          };
+          for (const restore of restoreList.items) {
+            if (stats.labels.includes(restore?.status?.phase)) {
+              const index: number = stats.labels.findIndex(
+                (e: string): boolean => e === restore?.status?.phase
+              );
+              stats.series[index] += 1;
+            } else {
+              stats.labels.push(restore.status.phase);
+              stats.series.push(1);
+            }
+          }
+          return stats;
+        })
+      );
+  }
+
+  public getRestoresSuccessRate(): Observable<RestoresSuccessRateStats> {
+    return this.k8sCustomObjectService
+      .get<V1Restore, V1RestoreList>(Ressources.RESTORE.plurial)
+      .pipe(
+        map((restoreList: V1RestoreList): RestoresSuccessRateStats => {
+          const stats: RestoresSuccessRateStats = {
+            series: [],
+          };
+          let success: number = 0;
+          for (const restore of restoreList.items) {
+            if (restore.status.phase === V1RestorePhase.Completed) {
+              success += 1;
+            }
+          }
+          if (success > 0) {
+            stats.series.push(Math.round((success * 100) / restoreList.total));
+          }
+          return stats;
+        })
       );
   }
 }

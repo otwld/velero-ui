@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import {
   BackupsStatusStats,
   BackupsSuccessRateStats,
-  BasicStats,
+  BasicStats, RestoresStatusStats, RestoresSuccessRateStats,
 } from '@velero-ui/shared-types';
 
 @Controller('stats')
@@ -24,5 +24,15 @@ export class StatsController {
   @Get('/backups/success-rate')
   public getBackupsSuccessRate(): Observable<BackupsSuccessRateStats> {
     return this.statsService.getBackupsSuccessRate();
+  }
+
+  @Get('/restores/status')
+  public getRestoresStatus(): Observable<RestoresStatusStats> {
+    return this.statsService.getRestoresStatus();
+  }
+
+  @Get('/restores/success-rate')
+  public getRestoresSuccessRate(): Observable<RestoresSuccessRateStats> {
+    return this.statsService.getRestoresSuccessRate();
   }
 }
