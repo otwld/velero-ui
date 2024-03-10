@@ -2,7 +2,7 @@
   <div class="grid grid-cols-1 px-4 xl:grid-cols-4 xl:gap-4">
     <div class="col-span-full xl:col-auto">
       <div
-        class="p-4 mb-4 flex justify-between bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800"
+        class=" flex justify-between bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800 h-full"
       >
         <div
           class="items-center sm:flex xl:block 2xl:flex sm:space-x-4 xl:space-x-0 2xl:space-x-4"
@@ -32,14 +32,14 @@
             title="See"
             class="inline-flex text-gray-500 p-2 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
           >
-            <FontAwesomeIcon :icon="faArrowUpRightFromSquare" class="w-5 h-5" />
+            <FontAwesomeIcon :icon="faChevronRight" class="w-5 h-5" />
           </router-link>
         </div>
       </div>
     </div>
     <div class="col-span-full xl:col-auto">
       <div
-        class="p-4 mb-4 flex justify-between bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800"
+        class="p-4 mb-4 flex justify-between bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800 h-full"
       >
         <div
           class="items-center sm:flex xl:block 2xl:flex sm:space-x-4 xl:space-x-0 2xl:space-x-4"
@@ -69,14 +69,14 @@
             title="See"
             class="inline-flex text-gray-500 p-2 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
           >
-            <FontAwesomeIcon :icon="faArrowUpRightFromSquare" class="w-5 h-5" />
+            <FontAwesomeIcon :icon="faChevronRight" class="w-5 h-5" />
           </router-link>
         </div>
       </div>
     </div>
     <div class="col-span-full xl:col-auto">
       <div
-        class="p-4 mb-4 flex justify-between bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800"
+        class="p-4 mb-4 flex justify-between bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800 h-full"
       >
         <div
           class="items-center sm:flex xl:block 2xl:flex sm:space-x-4 xl:space-x-0 2xl:space-x-4"
@@ -106,14 +106,14 @@
             title="See"
             class="inline-flex text-gray-500 p-2 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
           >
-            <FontAwesomeIcon :icon="faArrowUpRightFromSquare" class="w-5 h-5" />
+            <FontAwesomeIcon :icon="faChevronRight" class="w-5 h-5" />
           </router-link>
         </div>
       </div>
     </div>
     <div class="col-span-full xl:col-auto">
       <div
-        class="p-4 mb-4 flex justify-between bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800"
+        class="p-4 mb-4 flex justify-between bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800 h-full"
       >
         <div
           class="items-center sm:flex xl:block 2xl:flex sm:space-x-4 xl:space-x-0 2xl:space-x-4"
@@ -145,7 +145,7 @@
             title="See"
             class="inline-flex text-gray-500 p-2 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
           >
-            <FontAwesomeIcon :icon="faArrowUpRightFromSquare" class="w-5 h-5" />
+            <FontAwesomeIcon :icon="faChevronRight" class="w-5 h-5" />
           </router-link>
         </div>
       </div>
@@ -154,7 +154,7 @@
 </template>
 <script setup lang="ts">
 import {
-  faArrowUpRightFromSquare,
+  faChevronRight,
   faClock,
   faClockRotateLeft,
   faFloppyDisk,
