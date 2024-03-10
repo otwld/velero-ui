@@ -13,3 +13,13 @@ export interface BackupsStatusStats {
 export interface BackupsSuccessRateStats {
   series: number[];
 }
+
+export interface RestoresStatusStats {
+  labels: string[];
+  series: number[];
+}
+
+export interface RestoresSuccessRateStats {
+  series: number[];
+}
+
