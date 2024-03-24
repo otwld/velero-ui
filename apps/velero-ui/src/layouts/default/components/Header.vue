@@ -83,7 +83,7 @@ const logout = async () => {
     isLoading.value = true;
     if (basicAuth.enabled && basicUser) {
       localStorage.removeItem('access_token');
-      await router.push('/login');
+      await router.push('/login?state=success&reason=logout');
     }
     if (oidc.enabled && oidcUser.value) {
       await oidcClient.signoutRedirect();

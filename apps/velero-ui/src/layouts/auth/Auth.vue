@@ -82,7 +82,10 @@
               />
               Sign in
             </button>
-            <div v-if="oidc?.enabled && basicAuth?.enabled" class="flex items-center mb-1.5 mt-1.5">
+            <div
+              v-if="oidc?.enabled && basicAuth?.enabled"
+              class="flex items-center mb-1.5 mt-1.5"
+            >
               <div class="w-full bg-gray-300 h-0.5"></div>
               <div class="px-3 text-gray-600 text-center">or</div>
               <div class="w-full bg-gray-300 h-0.5"></div>
@@ -113,7 +116,6 @@ import { inject, onBeforeMount, ref, watch } from 'vue';
 import type { Ref } from 'vue';
 import type { UserManager } from 'oidc-client-ts';
 import type { Router } from 'vue-router';
-import {} from 'oidc-client-ts';
 
 import { useRouter, useRoute } from 'vue-router';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
@@ -184,6 +186,7 @@ const ssoLogin = async () => {
       },
     });
   } catch (e) {
+    success.value = '';
     error.value = 'Unable to proceed request, please retry.';
     ssoLoading.value = false;
     console.error(e);

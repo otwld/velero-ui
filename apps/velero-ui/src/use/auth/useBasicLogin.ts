@@ -3,14 +3,12 @@ import { inject } from 'vue';
 import type { Ref } from 'vue';
 import type { AxiosInstance } from 'axios';
 import { ApiRoutes } from '../../utils/constants.utils';
-import { useUserStore } from '@velero-ui-app/stores/user.store';
 import { useRouter } from 'vue-router';
 import type { Router } from 'vue-router';
 
 export const useBasicLogin = (username: Ref<string>, password: Ref<string>) => {
   const axiosInstance: AxiosInstance = inject('axios') as AxiosInstance;
   const router: Router = useRouter();
-  const userStore = useUserStore();
 
   const { execute, isLoading, data, error } = useAxios<any>(axiosInstance);
 
@@ -28,7 +26,7 @@ export const useBasicLogin = (username: Ref<string>, password: Ref<string>) => {
       });
 
       if (data?.value) {
-        userStore.login(data?.value.access_token);
+        localStorage.setItem('access_token', data?.value.access_token);
         await router.push('/');
       }
     } catch (e) {
