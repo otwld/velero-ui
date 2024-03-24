@@ -69,9 +69,10 @@ import { Pages } from '@velero-ui-app/utils/constants.utils';
 import DashboardBasicStats from '@velero-ui-app/components/Dashboard/DashboardBasicStats.vue';
 import DashboardBackupsStatusStats from '@velero-ui-app/components/Dashboard/DashboardBackupsStatusStats.vue';
 import DashboardBackupsSuccessRateStats from '@velero-ui-app/components/Dashboard/DashboardBackupsSuccessRateStats.vue';
-import DashboardRestoresStatusStats from "@velero-ui-app/components/Dashboard/DashboardRestoresStatusStats.vue";
-import DashboardRestoresSuccessRateStats
-  from "@velero-ui-app/components/Dashboard/DashboardRestoresSuccessRateStats.vue";
+import DashboardRestoresStatusStats from '@velero-ui-app/components/Dashboard/DashboardRestoresStatusStats.vue';
+import DashboardRestoresSuccessRateStats from '@velero-ui-app/components/Dashboard/DashboardRestoresSuccessRateStats.vue';
+import { inject } from 'vue';
+import type { AppConfig } from '@velero-ui/shared-types';
 
-const grafanaUrl = import.meta.env.VITE_GRAFANA_URL;
+const { grafanaUrl } = inject('config') as AppConfig;
 </script>

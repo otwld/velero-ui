@@ -3,6 +3,7 @@ import type { AxiosInstance, InternalAxiosRequestConfig } from 'axios';
 import type { App } from 'vue';
 import type { UserManager, User } from 'oidc-client-ts';
 import type { Pinia } from 'pinia';
+import { hasExpired } from '@velero-ui-app/utils/jwt.utils';
 
 export const registerAxios = (app: App, store: Pinia) => {
   const axiosInstance: AxiosInstance = axios.create({
@@ -11,12 +12,24 @@ export const registerAxios = (app: App, store: Pinia) => {
 
   axiosInstance.interceptors.request.use(
     async (onFulfilled: InternalAxiosRequestConfig) => {
-      const oidcClient: UserManager = app.config.globalProperties
-        .oidcClient as UserManager;
-      const user: User = await oidcClient.getUser();
+      const { oidc, basicAuth } = app.config.globalProperties;
 
-      if (user && user.access_token) {
-        onFulfilled.headers['Authorization'] = `Bearer ${user.access_token}`;
+      if (oidc.enabled) {
+        const oidcClient: UserManager = app.config.globalProperties
+          .oidcClient as UserManager;
+        const user: User = await oidcClient.getUser();
+
+        if (user && user.access_token) {
+          onFulfilled.headers['Authorization'] = `Bearer ${user.access_token}`;
+        }
+      }
+
+      if (basicAuth.enabled) {
+        const accessToken: string = localStorage.getItem('access_token');
+
+        if (accessToken && !hasExpired(accessToken)) {
+          onFulfilled.headers['Authorization'] = `Bearer ${accessToken}`;
+        }
       }
 
       return onFulfilled;
@@ -25,5 +38,5 @@ export const registerAxios = (app: App, store: Pinia) => {
 
   app.config.globalProperties.axios = axiosInstance;
   app.provide('axios', axiosInstance);
-  store.use(() => ({axios: axiosInstance}))
+  store.use(() => ({ axios: axiosInstance }));
 };

@@ -1,4 +1,5 @@
 export const ApiRoutes = {
+  AUTH: '/auth',
   BACKUPS: '/backups',
   SCHEDULES: '/schedules',
   STORAGE_LOCATIONS: '/storage-locations',

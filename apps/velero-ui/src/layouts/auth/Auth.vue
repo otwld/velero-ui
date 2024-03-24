@@ -32,26 +32,25 @@
             color="green"
             :icon="faCircleExclamation"
           ></Alert>
-          <form
-            class="space-y-4 md:space-y-6"
-            @submit.prevent="basicLogin($event)"
-          >
-            <div class="">
+          <div class="space-y-4 md:space-y-6">
+            <div class="" v-if="basicAuth?.enabled">
               <label
-                for="email"
+                for="username"
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >Your email</label
+                >Your username</label
               >
               <input
-                type="email"
-                name="email"
-                id="email"
+                type="text"
+                name="username"
+                id="username"
+                v-model="username"
+                :disabled="basicLoading"
                 class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="name@company.com"
-                required=""
+                placeholder="username"
+                required
               />
             </div>
-            <div>
+            <div v-if="basicAuth?.enabled">
               <label
                 for="password"
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -61,15 +60,19 @@
                 type="password"
                 name="password"
                 id="password"
+                v-model="password"
                 placeholder="••••••••"
+                :disabled="basicLoading"
                 class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                required=""
+                required
               />
             </div>
 
             <button
-              type="submit"
+              v-if="basicAuth?.enabled"
+              type="button"
               :disabled="basicLoading"
+              @click="basicLogin()"
               class="flex justify-center items-center w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
             >
               <FontAwesomeIcon
@@ -79,12 +82,13 @@
               />
               Sign in
             </button>
-            <div class="flex items-center mb-1.5 mt-1.5">
+            <div v-if="oidc?.enabled && basicAuth?.enabled" class="flex items-center mb-1.5 mt-1.5">
               <div class="w-full bg-gray-300 h-0.5"></div>
               <div class="px-3 text-gray-600 text-center">or</div>
               <div class="w-full bg-gray-300 h-0.5"></div>
             </div>
             <button
+              v-if="oidc?.enabled"
               @click="ssoLogin()"
               type="button"
               :disabled="ssoLoading"
@@ -97,7 +101,7 @@
               />
               Single Sign On Login
             </button>
-          </form>
+          </div>
         </div>
       </div>
     </div>
@@ -105,9 +109,12 @@
 </template>
 
 <script setup lang="ts">
-import { inject, onBeforeMount, ref } from 'vue';
+import { inject, onBeforeMount, ref, watch } from 'vue';
+import type { Ref } from 'vue';
 import type { UserManager } from 'oidc-client-ts';
 import type { Router } from 'vue-router';
+import {} from 'oidc-client-ts';
+
 import { useRouter, useRoute } from 'vue-router';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import {
@@ -115,15 +122,30 @@ import {
   faCircleExclamation,
 } from '@fortawesome/free-solid-svg-icons';
 import Alert from '@velero-ui-app/components/Alert.vue';
+import type { AppPublicConfig } from '@velero-ui/shared-types';
+import { useBasicLogin } from '@velero-ui-app/use/auth/useBasicLogin';
 
+const { oidc, basicAuth } = inject('config') as AppPublicConfig;
 const oidcClient: UserManager = inject('oidcClient') as UserManager;
 const router: Router = useRouter();
 const route = useRoute();
 
-const ssoLoading = ref(false);
-const basicLoading = ref(false);
-const error = ref('');
-const success = ref('');
+const username: Ref<string> = ref('');
+const password: Ref<string> = ref('');
+
+const {
+  isLoading: basicLoading,
+  error: basicError,
+  login: basicLogin,
+} = useBasicLogin(username, password);
+
+const ssoLoading: Ref<boolean> = ref(false);
+const error: Ref<string> = ref('');
+const success: Ref<string> = ref('');
+
+watch(basicError, () => {
+  error.value = 'Username or password incorrect!';
+});
 
 onBeforeMount(async () => {
   if (route.query?.state === 'error') {
@@ -139,11 +161,11 @@ onBeforeMount(async () => {
     }
   }
 
-  if (window.location.href.indexOf('#') >= 0) {
+  if (route.query?.code) {
     success.value = 'Processing login, please wait...';
     ssoLoading.value = true;
     try {
-      await oidcClient.signinRedirectCallback();
+      await oidcClient.signinCallback();
 
       await router.push('/');
     } catch (e) {
@@ -156,15 +178,15 @@ onBeforeMount(async () => {
 const ssoLogin = async () => {
   try {
     ssoLoading.value = true;
-    await oidcClient.signinRedirect({});
+    await oidcClient.signinRedirect({
+      state: {
+        code_challenge: '',
+      },
+    });
   } catch (e) {
     error.value = 'Unable to proceed request, please retry.';
     ssoLoading.value = false;
     console.error(e);
   }
-};
-const basicLogin = (event: Event) => {
-  event.preventDefault();
-  basicLoading.value = true;
 };
 </script>

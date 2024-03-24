@@ -19,10 +19,12 @@
               <div class="flex flex-col text-right">
                 <span
                   class="mr-4 font-semibold whitespace-nowrap dark:text-white"
-                  >{{ user?.profile.name }}</span
+                  >{{
+                    basicUser ? basicUser?.name : oidcUser?.profile.name
+                  }}</span
                 >
                 <span class="text-xs mr-4 whitespace-nowrap dark:text-white">{{
-                  user?.profile.email
+                  basicUser ? 'Local account' : oidcUser?.profile.email
                 }}</span>
               </div>
               <button
@@ -52,26 +54,40 @@
 </template>
 <script setup lang="ts">
 import { inject, onBeforeMount, ref } from 'vue';
+import type { Ref } from 'vue';
 import {
   faArrowRightFromBracket,
   faCircleNotch,
 } from '@fortawesome/free-solid-svg-icons';
 import { UserManager } from 'oidc-client-ts';
+import type { User } from 'oidc-client-ts';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { useAppStore } from '@velero-ui-app/stores/app.store';
+import { useRouter } from 'vue-router';
+import type { Router } from 'vue-router';
+import { getUser } from '@velero-ui-app/utils/jwt.utils';
+import type { AppPublicConfig } from '@velero-ui/shared-types';
 
-const appStore = useAppStore();
+const router: Router = useRouter();
+
+const { oidc, basicAuth } = inject('config') as AppPublicConfig;
 const oidcClient: UserManager = inject('oidcClient') as UserManager;
 
-onBeforeMount(async () => (user.value = await oidcClient.getUser()));
+const isLoading: Ref<boolean> = ref(false);
 
-const user = ref(null);
-const isLoading = ref(false);
+const oidcUser: Ref<User> = ref(null);
+const basicUser = getUser(localStorage.getItem('access_token'));
 
+onBeforeMount(async () => (oidcUser.value = await oidcClient.getUser()));
 const logout = async () => {
   try {
     isLoading.value = true;
-    await oidcClient.signoutRedirect();
+    if (basicAuth.enabled && basicUser) {
+      localStorage.removeItem('access_token');
+      await router.push('/login');
+    }
+    if (oidc.enabled && oidcUser.value) {
+      await oidcClient.signoutRedirect();
+    }
   } catch (e) {
     console.error(e);
   }
