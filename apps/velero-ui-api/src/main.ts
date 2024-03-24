@@ -3,6 +3,7 @@ import { NestFactory } from '@nestjs/core';
 import helmet from 'helmet';
 
 import { AppModule } from './app/app.module';
+import passport from "passport";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -12,6 +13,7 @@ async function bootstrap() {
   });
   app.use(helmet());
   app.enableCors();
+  app.use(passport.initialize());
   app.useGlobalPipes(new ValidationPipe());
 
   const port = process.env.PORT || 3000;

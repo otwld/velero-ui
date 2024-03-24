@@ -1,7 +1,8 @@
 import { registerAs } from '@nestjs/config';
 import * as process from 'process';
+import {K8sConfig} from "@velero-ui/shared-types";
 
-export default registerAs('k8s', () => {
+export default registerAs('k8s', (): K8sConfig => {
   return {
     kubeConfigPath: process.env.KUBE_CONFIG_PATH,
   };

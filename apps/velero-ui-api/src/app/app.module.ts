@@ -13,22 +13,26 @@ import { HealthModule } from './modules/health/health.module';
 import { HttpModule } from '@nestjs/axios';
 import { VeleroModule } from './shared/modules/velero/velero.module';
 import { SettingsModule } from './modules/settings/settings.module';
-import { DeleteBackupRequestModule } from '@velero-ui-api/modules/delete-backup-request/delete-backup-request.module';
-import { DownloadRequestModule } from '@velero-ui-api/modules/download-request/download-request.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { ServerStatusRequestModule } from '@velero-ui-api/modules/server-status-request/server-status-request.module';
 import { SnapshotLocationModule } from './modules/snapshot-location/snapshot-location.module';
 import { K8sCustomObjectModule } from '@velero-ui-api/shared/modules/k8s-custom-object/k8s-custom-object.module';
 import { BackupRepositoryModule } from '@velero-ui-api/modules/backup-repository/backup-repository.module';
 import { StatsModule } from '@velero-ui-api/modules/stats/stats.module';
+import { AppConfigModule } from '@velero-ui-api/modules/app-config/app-config.module';
+import { AuthModule } from '@velero-ui-api/modules/auth/auth.module';
+import { JwtAuthGuard } from '@velero-ui-api/shared/guards/jwt-auth.guard';
 import velero from '../config/velero.config';
 import k8s from '../config/k8s.config';
+import app from '../config/app.config';
+import oidc from '@velero-ui-api/config/oidc.config';
+import basicAuth from '../config/basic-auth.config';
+import ldap from '../config/ldap.config';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [velero, k8s],
+      load: [velero, k8s, oidc, basicAuth, app, ldap],
     }),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, 'static'),
@@ -57,9 +61,15 @@ import k8s from '../config/k8s.config';
     K8sCustomObjectModule,
     BackupRepositoryModule,
     StatsModule,
+    AppConfigModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
     {
       provide: APP_GUARD,
       useClass: ThrottlerGuard,
