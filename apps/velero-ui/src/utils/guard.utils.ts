@@ -6,26 +6,20 @@ import type {
 import { User, UserManager } from 'oidc-client-ts';
 import { inject } from 'vue';
 import { Pages } from './constants.utils';
+import { hasExpired } from '@velero-ui-app/utils/jwt.utils';
+import type { AppPublicConfig } from '@velero-ui/shared-types';
 
 const guard: NavigationGuardWithThis<string> = async (
   to: RouteLocationNormalized
 ): Promise<RouteLocationRaw> => {
   const oidcClient: UserManager = inject('oidcClient') as UserManager;
+  const { oidc, basicAuth } = inject('config') as AppPublicConfig;
 
-  try {
-    const user: User = await oidcClient.getUser();
+  const accessToken: string = localStorage.getItem('access_token');
+  const oidcUser: User = await oidcClient.getUser();
 
-    if (!user && !to.path.startsWith(Pages.LOGIN.path)) {
-      return {
-        name: Pages.LOGIN.name,
-        query: {
-          state: 'error',
-          reason: 'unauthorized',
-        },
-      };
-    }
-
-    if (user && user.expired) {
+  if (oidc.enabled && oidcUser) {
+    if (oidcUser && oidcUser.expired) {
       await oidcClient.removeUser();
       return {
         name: Pages.LOGIN.name,
@@ -36,13 +30,35 @@ const guard: NavigationGuardWithThis<string> = async (
       };
     }
 
-    if (user && to.name === Pages.LOGIN.name) {
+    if (to.name === Pages.LOGIN.name) {
       return { name: Pages.HOME.name };
     }
-  } catch (e) {
-    console.error(e);
-    await oidcClient.removeUser();
-    return { name: Pages.LOGIN.name };
+  } else if (basicAuth.enabled && accessToken) {
+    if (hasExpired(accessToken)) {
+      localStorage.removeItem('access_token');
+
+      return {
+        name: Pages.LOGIN.name,
+        query: {
+          state: 'error',
+          reason: 'inactivity',
+        },
+      };
+    }
+
+    if (to.name === Pages.LOGIN.name) {
+      return { name: Pages.HOME.name };
+    }
+  } else {
+    if (!to.path.startsWith(Pages.LOGIN.path)) {
+      return {
+        name: Pages.LOGIN.name,
+        query: {
+          state: 'error',
+          reason: 'unauthorized',
+        },
+      };
+    }
   }
 };
 export default guard;
