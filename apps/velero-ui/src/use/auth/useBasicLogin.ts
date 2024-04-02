@@ -10,7 +10,7 @@ export const useBasicLogin = (username: Ref<string>, password: Ref<string>) => {
   const axiosInstance: AxiosInstance = inject('axios') as AxiosInstance;
   const router: Router = useRouter();
 
-  const { execute, isLoading, data, error } = useAxios<any>(axiosInstance);
+  const { execute, isLoading, data, error } = useAxios(axiosInstance);
 
   const login = async () => {
     try {

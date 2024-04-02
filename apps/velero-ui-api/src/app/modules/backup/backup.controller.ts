@@ -48,11 +48,13 @@ export class BackupController {
   }
 
   @Post('/restore')
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public restore(@Body() names: string[]) {
     return {};
   }
 
   @Post('/download')
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public download(@Body() names: string[]) {
     return {};
   }
@@ -95,6 +97,7 @@ export class BackupController {
   }
 
   @Post('/:name/restore')
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public restoreByName(@Param('name') name: string) {
     return {};
   }

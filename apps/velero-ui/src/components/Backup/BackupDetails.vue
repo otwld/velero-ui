@@ -51,7 +51,7 @@
       >
       <div class="mt-1 text-xs">
         <router-link
-          v-for="location of spec?.volumeSnapshotLocations"
+          v-for="(location, index) of spec?.volumeSnapshotLocations"  :key="`volume-location-${index}`"
           :to="{
             name: Pages.SNAPSHOT_LOCATION.name,
             params: {

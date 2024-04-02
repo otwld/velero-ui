@@ -7,7 +7,7 @@
         <div class="flex items-center justify-start">
           <router-link to="/" class="flex ml-2 md:mr-24">
             <img
-              src="/src/assets/images/Velero.svg"
+              src="/src/assets/images/velero.svg"
               class="h-8 mr-3"
               alt="Velero Logo"
             />

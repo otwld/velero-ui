@@ -7,7 +7,7 @@ import {
   V1DownloadRequestPhase,
 } from '@velero-ui/velero';
 import { ConfigService } from '@nestjs/config';
-import {catchError, concatMap, from, map, Observable, of, retry, tap, throwError} from 'rxjs';
+import { concatMap, from, map, Observable, of, retry, throwError} from 'rxjs';
 import { CreateDownloadRequestDto } from '@velero-ui-api/shared/dto/download-request.dto';
 import http from 'http';
 import { VELERO } from '@velero-ui-api/shared/modules/velero/velero.constants';

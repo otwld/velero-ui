@@ -26,9 +26,9 @@ export class K8sModule {
     };
     const connectionProvider = {
       provide: K8S_CONNECTION,
-      useFactory: async (): Promise<any> =>
+      useFactory: async (): Promise<KubeConfig> =>
         await lastValueFrom(
-          defer(async () => {
+          defer(async (): Promise<KubeConfig> => {
             const k8sConfig: KubeConfig = new KubeConfig();
             k8sConfig.loadFromFile(file, opts);
             return k8sConfig;
@@ -54,11 +54,11 @@ export class K8sModule {
 
     const connectionProvider = {
       provide: K8S_CONNECTION,
-      useFactory: async (options: K8sModuleFactoryOptions): Promise<any> => {
+      useFactory: async (options: K8sModuleFactoryOptions): Promise<KubeConfig> => {
         const k8sConnectionError = (error) => error;
 
         return await lastValueFrom(
-          defer(async () => {
+          defer(async (): Promise<KubeConfig> => {
             const k8sConfig = new KubeConfig();
             k8sConfig.loadFromFile(options.kubeConfigPath, options.opts);
             k8sConfig.setCurrentContext('zeus');  // TODO: remove

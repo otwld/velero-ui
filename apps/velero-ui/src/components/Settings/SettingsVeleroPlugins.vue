@@ -23,7 +23,8 @@
                   <thead class="bg-gray-100 dark:bg-gray-700">
                     <tr>
                       <th
-                        v-for="title in headers"
+                        v-for="(title, index) in headers"
+                        :key="`th-${index}`"
                         scope="col"
                         class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400"
                       >
@@ -35,7 +36,7 @@
                     class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700"
                   >
                     <SettingsVeleroPluginLine
-                      v-for="plugin in plugins"
+                      v-for="(plugin, index) in plugins" :key="`plugin-${index}`"
                       :data="plugin"
                     ></SettingsVeleroPluginLine>
                   </tbody>

@@ -76,7 +76,6 @@
 </template>
 
 <script setup lang="ts">
-import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
 import type { V1Backup } from '@velero-ui/velero';
 import { getRemainingTime } from '../../utils/date.utils';

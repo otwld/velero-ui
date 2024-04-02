@@ -9,7 +9,7 @@
       >
         <img
           class="w-64 h-§4 mr-2"
-          src="/src/assets/images/Velero.svg"
+          src="/src/assets/images/velero.svg"
           alt="logo"
         />
       </a>

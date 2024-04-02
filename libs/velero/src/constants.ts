@@ -1,5 +1,3 @@
-import {V1Backup} from "./models/backup";
-
 export const Ressources = {
   BACKUP: {
     kind: 'Backup',

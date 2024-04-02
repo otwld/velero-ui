@@ -1,13 +1,12 @@
 import { Controller, Get } from '@nestjs/common';
 import { SettingsService } from './settings.service';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import {
   ClusterSettings,
   VeleroAgentSettings,
   VeleroServerSettings,
   VeleroUiSettings,
 } from '@velero-ui/shared-types';
-import { DownloadRequestService } from '@velero-ui-api/modules/download-request/download-request.service';
 import {V1ServerStatusRequest} from "@velero-ui/velero";
 import {ServerStatusRequestService} from "@velero-ui-api/modules/server-status-request/server-status-request.service";
 

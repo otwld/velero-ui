@@ -118,7 +118,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref, toRef } from 'vue';
+import { onMounted, onUnmounted, ref } from 'vue';
 import type { V1DownloadRequest } from '@velero-ui/velero';
 import { getRemainingTime } from '../../utils/date.utils';
 import type { PropType } from 'vue';

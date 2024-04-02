@@ -6,6 +6,7 @@ import { HttpService } from '@nestjs/axios';
 import { concatMap, from, map, Observable } from 'rxjs';
 import { AxiosResponse } from 'axios';
 import https from 'https';
+import { OptionsWithUri } from 'request';
 
 @Injectable()
 export class K8sHealthIndicator extends HealthIndicator {
@@ -17,7 +18,7 @@ export class K8sHealthIndicator extends HealthIndicator {
   }
 
   public isHealthy(): Observable<HealthIndicatorResult> {
-    const opts: any = {};
+    const opts: OptionsWithUri = { uri: undefined };
 
     return from(this.k8s.applyToRequest(opts))
       .pipe(

@@ -97,7 +97,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { Pages } from '../../utils/constants.utils';
 
-const props = defineProps({
+defineProps({
   data: Object as PropType<V1Restore>,
 });
 

@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-local';
-import { AuthService } from '@velero-ui-api/modules/auth/auth.service';
 import {ConfigService} from "@nestjs/config";
 
 @Injectable()
@@ -24,7 +23,7 @@ export class LdapStrategy extends PassportStrategy(Strategy, 'ldap') {
     });
   }
 
-  public validate(req: Request, username: any, password: string): boolean {
+  public validate(req: Request, username: string, password: string): boolean {
     /*const success: boolean = this.authService.validateBasicUser(
       username,
       password

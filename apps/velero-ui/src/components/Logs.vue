@@ -28,7 +28,7 @@
         class="p-4 text-sm text-white bg-gray-900 border border-gray-200 rounded-lg dark:border-gray-700 dark:text-white max-h-[500px] overflow-auto"
       >
         <div v-if="data" class="flex-col">
-          <p v-for="line of data">
+          <p v-for="(line, index) of data" :key="`line-${index}`">
             {{ line }}
           </p>
         </div>

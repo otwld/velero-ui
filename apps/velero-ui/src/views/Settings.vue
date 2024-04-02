@@ -1,4 +1,4 @@
-<template xmlns="http://www.w3.org/1999/html">
+<template>
   <div class="h-full bg-gray-50 dark:bg-gray-900">
     <SettingsCluster></SettingsCluster>
     <div class="grid grid-cols-1 px-4 pt-4 xl:grid-cols-3 xl:gap-4">

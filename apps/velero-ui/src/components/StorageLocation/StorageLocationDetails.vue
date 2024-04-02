@@ -76,7 +76,6 @@ import type { PropType } from 'vue';
 import type { V1BackupStorageLocation } from '@velero-ui/velero';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { Pages } from '../../utils/constants.utils';
 
 defineProps({
   location: Object as PropType<V1BackupStorageLocation>,

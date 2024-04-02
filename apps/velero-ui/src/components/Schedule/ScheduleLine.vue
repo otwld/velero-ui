@@ -166,7 +166,7 @@ const { togglePause, togglePauseLoading } = useSchedulePause(
   toRef(() => props.data?.metadata?.name)
 );
 
-const { remove, removeLoading } = useScheduleRemove(
+const { remove } = useScheduleRemove(
   toRef(() => props.data?.metadata?.name)
 );
 </script>

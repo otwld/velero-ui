@@ -13,7 +13,7 @@
           </router-link>
         </li>
         <li
-          v-for="(route, index) in matchedRoutes"
+          v-for="(route, index) in matchedRoutes" :key="`crumb-${index}`"
           class="inline-flex items-center"
         >
           <FontAwesomeIcon

@@ -3,7 +3,6 @@
     <ListHeader
       :loading="loading"
       @onRefresh="emit('onRefresh')"
-      @onNew=""
     ></ListHeader>
     <ListContent
       :headers="headers"

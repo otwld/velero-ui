@@ -41,7 +41,11 @@
               </div>
             </div>
           </li>
-          <li v-for="agent of veleroAgents" class="py-4">
+          <li
+            v-for="(agent, index) of veleroAgents"
+            :key="`agent-${index}`"
+            class="py-4"
+          >
             <div class="flex items-center space-x-4">
               <div class="flex items-center">
                 <FontAwesomeIcon
@@ -86,11 +90,11 @@
 </template>
 
 <script setup lang="ts">
-import { defineComponent, onBeforeMount } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useSettingsStore } from '../../stores/settings.store';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { faMicrochip } from '@fortawesome/free-solid-svg-icons';
+import { onBeforeMount } from 'vue';
 
 const settingsStore = useSettingsStore();
 const { veleroAgents } = storeToRefs(settingsStore);

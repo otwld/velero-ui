@@ -1,4 +1,3 @@
-import { V1ListMeta } from '@kubernetes/client-node';
 import { V1BackupRepository } from './v1BackupRepository';
 import {KubernetesListObject} from "@kubernetes/client-node/dist/types";
 

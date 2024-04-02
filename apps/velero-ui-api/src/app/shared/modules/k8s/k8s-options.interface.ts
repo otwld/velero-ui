@@ -1,5 +1,7 @@
 import { ModuleMetadata } from '@nestjs/common';
 import { ConfigOptions } from '@kubernetes/client-node/dist/config_types';
+import { InjectionToken } from '@nestjs/common/interfaces/modules/injection-token.interface';
+import { OptionalFactoryDependency } from '@nestjs/common/interfaces/modules/optional-factory-dependency.interface';
 
 export interface K8sModuleFactoryOptions {
   kubeConfigPath: string;
@@ -8,7 +10,7 @@ export interface K8sModuleFactoryOptions {
 
 export interface K8sModuleAsyncOptions extends Pick<ModuleMetadata, 'imports'> {
   useFactory?: (
-    ...args: any[]
+    ...args: unknown[]
   ) => Promise<K8sModuleFactoryOptions> | K8sModuleFactoryOptions;
-  inject?: any[];
+  inject?: Array<InjectionToken | OptionalFactoryDependency>;
 }

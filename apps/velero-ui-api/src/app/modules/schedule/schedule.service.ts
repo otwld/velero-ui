@@ -5,10 +5,10 @@ import {
   PatchUtils,
 } from '@kubernetes/client-node';
 import { K8S_CONNECTION } from '../../shared/modules/k8s/k8s.constants';
-import {catchError, concatMap, from, map, Observable, of, tap} from 'rxjs';
+import { concatMap, map, Observable, of } from 'rxjs';
 import { VELERO } from '../../shared/modules/velero/velero.constants';
 import http from 'http';
-import { Ressources, V1Schedule, V1ScheduleList } from '@velero-ui/velero';
+import { Ressources, V1Schedule } from '@velero-ui/velero';
 import { ConfigService } from '@nestjs/config';
 import { patchPauseSchedule } from './schedule.utils';
 

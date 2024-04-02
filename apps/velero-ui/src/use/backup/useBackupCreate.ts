@@ -22,7 +22,9 @@ export const useBackupCreate = () => {
       if (data?.value) {
         // Todo
       }
-    } catch (e) {}
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   return { create, isCreating };

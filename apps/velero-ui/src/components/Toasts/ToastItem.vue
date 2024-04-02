@@ -58,7 +58,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { ToastType } from '@velero-ui-app/stores/toasts.store';
 
-const props = defineProps({
+defineProps({
   icon: Object as PropType<IconDefinition>,
   message: String,
   type: String as PropType<ToastType>,

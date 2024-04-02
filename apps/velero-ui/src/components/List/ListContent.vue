@@ -20,7 +20,7 @@
                   </div>
                 </th>
                 <th
-                  v-for="title in headers"
+                  v-for="(title, index) in headers" :key="`th-${index}`"
                   scope="col"
                   class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400"
                 >
@@ -34,7 +34,7 @@
               }"
               class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700"
             >
-              <component :is="component" v-for="item in data" :data="item" />
+              <component :is="component" v-for="(item, index) in data" :data="item" :key="`list-item-${index}`" />
             </tbody>
           </table>
           <div
@@ -73,7 +73,7 @@ import type {
   V1ServerStatusRequest,
   V1VolumeSnapshotLocation,
 } from '@velero-ui/velero';
-import { computed, ref } from 'vue';
+import { ref } from 'vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { faCircleNotch, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 
@@ -94,7 +94,7 @@ defineProps({
   >,
 });
 
-const checkBoxes = ref([]);
+// const checkBoxes = ref([]);
 
-const checked = computed((checked) => checkBoxes.value.find((e) => e === v));
+// const checked = computed((checked) => checkBoxes.value.find((e) => e === checked));
 </script>

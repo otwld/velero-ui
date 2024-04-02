@@ -1,6 +1,7 @@
 import {
   Controller,
-  DefaultValuePipe, Delete,
+  DefaultValuePipe,
+  Delete,
   Get,
   Param,
   ParseIntPipe,
@@ -14,8 +15,8 @@ import { Observable } from 'rxjs';
 import {
   Ressources,
   V1BackupRepository,
-  V1BackupRepositoryList, V1DeleteBackupRequest,
-  V1Restore,
+  V1BackupRepositoryList,
+  V1DeleteBackupRequest,
 } from '@velero-ui/velero';
 
 @Controller('backup-repositories')
@@ -33,12 +34,10 @@ export class BackupRepositoryController {
     @Query('limit', new DefaultValuePipe(20), ParseIntPipe) limit: number,
     @Query('search', new DefaultValuePipe('')) search: string
   ): Observable<V1BackupRepositoryList> {
-    return this.k8sCustomObjectService.get<V1BackupRepository, V1BackupRepositoryList>(
-      Ressources.BACKUP_REPOSITORY.plurial,
-      offset,
-      limit,
-      search
-    );
+    return this.k8sCustomObjectService.get<
+      V1BackupRepository,
+      V1BackupRepositoryList
+    >(Ressources.BACKUP_REPOSITORY.plurial, offset, limit, search);
   }
 
   @Get('/:name')

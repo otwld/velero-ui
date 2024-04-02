@@ -122,7 +122,6 @@ import type { PropType } from 'vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import {
   faTrashCan,
-  faDownload,
   faCircleNotch,
   faFloppyDisk,
   faArrowUpRightFromSquare, faFileCode,
@@ -133,7 +132,7 @@ import { V1DeleteBackupRequestPhase } from '@velero-ui/velero';
 import { Pages } from '@velero-ui-app/utils/constants.utils';
 import ModalDescribe from "@velero-ui-app/components/Modals/ModalDescribe.vue";
 
-const props = defineProps({
+defineProps({
   data: Object as PropType<V1DeleteBackupRequest>,
 });
 
@@ -143,5 +142,4 @@ onMounted(() => initModals());
 const isDeleting = false;
 
 const remove = () => {};
-const download = () => window.open(props.data.status.downloadURL);
 </script>
