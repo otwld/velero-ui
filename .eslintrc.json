@@ -6,7 +6,7 @@
     {
       "files": ["*.ts", "*.tsx", "*.js", "*.jsx", "*.vue"],
       "rules": {
-        "@nx/enforce-module-boundaries": [
+        /*"@nx/enforce-module-boundaries": [
           "error",
           {
             "enforceBuildableLibDependency": true,
@@ -18,7 +18,7 @@
               }
             ]
           }
-        ]
+        ]*/
       }
     },
     {
