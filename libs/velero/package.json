@@ -2,7 +2,8 @@
   "name": "@velero-ui/velero",
   "version": "0.0.1",
   "dependencies": {
-    "tslib": "^2.3.0"
+    "tslib": "^2.3.0",
+    "@kubernetes/client-node": "^0.20.0"
   },
   "type": "commonjs",
   "main": "./src/index.js",
