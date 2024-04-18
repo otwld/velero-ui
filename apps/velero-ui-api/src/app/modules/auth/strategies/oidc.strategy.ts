@@ -14,7 +14,7 @@ export class OidcStrategy extends PassportStrategy(Strategy, 'oidc') {
         cache: true,
         rateLimit: true,
         jwksRequestsPerMinute: 5,
-        jwksUri: configService.get('oidc.jwksUri'),
+        jwksUri: configService.get('oidc.jwksUri') || ' ',
       }),
       issuer: configService.get('oidc.authority'),
       algorithms: ['RS256']
