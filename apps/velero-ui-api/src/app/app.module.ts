@@ -21,6 +21,7 @@ import { StatsModule } from '@velero-ui-api/modules/stats/stats.module';
 import { AppConfigModule } from '@velero-ui-api/modules/app-config/app-config.module';
 import { AuthModule } from '@velero-ui-api/modules/auth/auth.module';
 import { JwtAuthGuard } from '@velero-ui-api/shared/guards/jwt-auth.guard';
+import { LoggerModule } from '@velero-ui-api/shared/modules/logger/logger.module';
 import velero from '../config/velero.config';
 import k8s from '../config/k8s.config';
 import app from '../config/app.config';
@@ -39,7 +40,8 @@ import ldap from '../config/ldap.config';
     }),
     K8sModule.forRootAsync({
       useFactory: (configService: ConfigService) => ({
-        kubeConfigPath: configService.get('k8s.kubeConfigPath'),
+        configPath: configService.get('k8s.configPath'),
+        context: configService.get('k8s.context'),
       }),
       inject: [ConfigService],
     }),
@@ -63,6 +65,7 @@ import ldap from '../config/ldap.config';
     StatsModule,
     AppConfigModule,
     AuthModule,
+    LoggerModule,
   ],
   controllers: [],
   providers: [

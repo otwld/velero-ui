@@ -4,7 +4,8 @@ import { InjectionToken } from '@nestjs/common/interfaces/modules/injection-toke
 import { OptionalFactoryDependency } from '@nestjs/common/interfaces/modules/optional-factory-dependency.interface';
 
 export interface K8sModuleFactoryOptions {
-  kubeConfigPath: string;
+  configPath: string;
+  context?: string;
   opts?: Partial<ConfigOptions>;
 }
 
