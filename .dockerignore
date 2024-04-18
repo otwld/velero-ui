@@ -1,0 +1,11 @@
+Dockerfile
+.dockerignore
+node_modules
+.git
+.nx
+.vscode
+tmp
+dist
+.idea
+.whitesource
+*.md
