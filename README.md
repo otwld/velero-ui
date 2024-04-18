@@ -9,7 +9,7 @@
 
 A fully dashboard interface to interact with [Velero (vmware-tanzu)](https://github.com/vmware-tanzu/velero/issues).
 
-This dashboard aims to implement the same functionnalities as the velero CLI.
+This dashboard aims to implement the same functionalities as the velero CLI.
 
 ### Quick look
 
@@ -45,7 +45,7 @@ unmanaged API ⚠️
 Starting Velero ui is simple:
 
 1. Locate your Kube Config, default location is in `~/.kube/config`
-2. Run this docker command with your Kube config path, you can also specify context using environment variable `KUBE_CONTEXT`
+2. Run this docker command with your Kube config path, you can also specify context using [environment variable](#environment-variables) `KUBE_CONTEXT`
 ```bash
 docker run --name velero-ui -v ~/.kube/config:/app/.kube/config -e KUBE_CONFIG_PATH=/app/.kube/config -d -p 3333:3000 otwld/velero-ui:latest
 ```
@@ -56,7 +56,7 @@ docker run --name velero-ui -v ~/.kube/config:/app/.kube/config -e KUBE_CONFIG_P
 All kubernetes manifests are located in [kubernetes/manifests](kubernetes/manifests), default namespace used
 is `velero-ui`
 
-1. Edit manifests, environments variables can be defined in [kubernetes/manifests/deployment.yml](kubernetes/manifests/deployment.yml)
+1. Edit manifests, [environment variables](#environment-variables) can be defined in [kubernetes/manifests/deployment.yml](kubernetes/manifests/deployment.yml)
 2. Apply manifest with kubectl
 ```bash
 kubectl apply -f kubernetes/manifests
@@ -71,7 +71,7 @@ kubectl port-forward service/velero-ui 3334:80 -n velero-ui
 
 *Helm chart is not released yet*
 
-## Environments variables
+## Environment variables
 
 | Name                   | Default Value                 | Allowed values         | Description                          |
 |------------------------|-------------------------------|------------------------|--------------------------------------|
@@ -149,18 +149,7 @@ yarn global add nx@latest
 yarn install
 ```
 
-4. Edit the .env.development
-
-```bash
-...
-
-NODE_ENV=development
-VELERO_NAMESPACE=velero
-KUBE_CONFIG_PATH=
-SECRET_PASSPHRASE="this is a secret passphrase"
-
-...
-```
+4. Edit the .env.development, you can find references [HERE](#environment-variables)
 
 ### Serve
 
