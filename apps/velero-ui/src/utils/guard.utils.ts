@@ -15,8 +15,12 @@ const guard: NavigationGuardWithThis<string> = async (
   const oidcClient: UserManager = inject('oidcClient') as UserManager;
   const { oidc, basicAuth } = inject('config') as AppPublicConfig;
 
+  let oidcUser: User;
   const accessToken: string = localStorage.getItem('access_token');
-  const oidcUser: User = await oidcClient.getUser();
+
+  if (oidc.enabled) {
+    oidcUser = await oidcClient.getUser();
+  }
 
   if (oidc.enabled && oidcUser) {
     if (oidcUser && oidcUser.expired) {
