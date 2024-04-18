@@ -25,18 +25,18 @@
               </div>
               <div class="flex-1 min-w-0">
                 <div
-                  class="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-48 mb-4"
+                  class="h-2.5 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-48 mb-4"
                 ></div>
                 <div
-                  class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 w-72 mb-2"
+                  class="h-2 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-72 mb-2"
                 ></div>
                 <div
-                  class="h-1.5 bg-gray-200 rounded-full dark:bg-gray-700 w-24 mb-2"
+                  class="h-1.5 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-24 mb-2"
                 ></div>
               </div>
               <div class="inline-flex items-center">
                 <p
-                  class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 w-32 mb-4"
+                  class="h-2 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-32 mb-4"
                 ></p>
               </div>
             </div>

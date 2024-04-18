@@ -19,7 +19,7 @@
         </h3>
         <div
           v-if="!location"
-          class="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-48 mb-4"
+          class="h-2.5 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-48 mb-4"
         ></div>
         <div
           v-if="location"
@@ -29,7 +29,7 @@
         </div>
         <div
           v-if="!location"
-          class="h-1.5 bg-gray-200 rounded-full dark:bg-gray-700 w-48 mb-4"
+          class="h-1.5 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-48 mb-4"
         ></div>
         <div v-if="location" class="flex items-center space-x-4">
           <button

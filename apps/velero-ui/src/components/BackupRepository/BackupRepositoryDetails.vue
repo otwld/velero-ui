@@ -6,11 +6,11 @@
       <h3 class="text-xl font-semibold dark:text-white">Details</h3>
       <div
         v-if="!spec"
-        class="ml-4 h-2 bg-gray-200 rounded-full dark:bg-gray-700 w-24"
+        class="ml-4 h-2 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-24"
       ></div>
       <div
         v-if="!spec"
-        class="ml-4 h-2 bg-gray-200 rounded-full dark:bg-gray-700 w-24"
+        class="ml-4 h-2 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-24"
       ></div>
       <div class="ml-4">
         <img
@@ -55,10 +55,10 @@
     </div>
     <div v-if="!spec">
       <div
-        class="mt-4 h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-24"
+        class="mt-4 h-2.5 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-24"
       ></div>
       <div
-        class="mt-2 h-2 bg-gray-200 rounded-full dark:bg-gray-700 w-48"
+        class="mt-2 h-2 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-48"
       ></div>
     </div>
     <div v-if="spec?.volumeNamespace" class="mt-4 flex flex-col">

@@ -6,11 +6,11 @@
       <h3 class="text-xl font-semibold dark:text-white">Status</h3>
       <div
         v-if="!schedule"
-        class="ml-4 h-2 bg-gray-200 rounded-full dark:bg-gray-700 w-24"
+        class="ml-4 h-2 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-24"
       ></div>
       <div
         v-if="!schedule"
-        class="ml-4 h-2 bg-gray-200 rounded-full dark:bg-gray-700 w-24"
+        class="ml-4 h-2 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-24"
       ></div>
       <ScheduleStatusPhaseBadge
         class="ml-4"

@@ -6,11 +6,11 @@
       <h3 class="text-xl font-semibold dark:text-white">Status</h3>
       <div
         v-if="!backup"
-        class="ml-4 h-2 bg-gray-200 rounded-full dark:bg-gray-700 w-24"
+        class="ml-4 h-2 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-24"
       ></div>
       <div
         v-if="!backup"
-        class="ml-4 h-2 bg-gray-200 rounded-full dark:bg-gray-700 w-24"
+        class="ml-4 h-2 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-24"
       ></div>
       <BackupStatusPhaseBadge
         class="ml-4"
@@ -46,7 +46,7 @@
         >
         <div
           v-if="!backup"
-          class="ml-4 h-2 bg-gray-200 rounded-full dark:bg-gray-700 w-24"
+          class="ml-4 h-2 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-24"
         ></div>
         <span class="text-xs font-medium text-gray-900 dark:text-white"
           >{{ backup.status.progress.itemsBackedUp }} /
@@ -59,10 +59,10 @@
     </div>
     <div v-if="!backup" class="mt-4">
       <div class="flex items-center justify-between mb-1">
-        <div class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 w-24"></div>
-        <div class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 w-24"></div>
+        <div class="h-2 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-24"></div>
+        <div class="h-2 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-24"></div>
       </div>
-      <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700"></div>
+      <div class="w-full bg-gray-200 rounded-full animate-pulse h-2.5 dark:bg-gray-700"></div>
     </div>
     <div v-if="backup?.status.failureReason" class="mt-4 flex flex-col">
       <span class="text-base font-medium text-gray-900 dark:text-white"
