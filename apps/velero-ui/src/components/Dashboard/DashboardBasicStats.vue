@@ -14,7 +14,7 @@
           <div class="flex-col">
             <div
               v-if="isLoading"
-              class="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-16 animate-pulse mb-4"
+              class="h-2.5 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-16 animate-pulse mb-4"
             ></div>
             <h3
               v-if="!isLoading"
@@ -51,7 +51,7 @@
           <div class="flex-col">
             <div
               v-if="isLoading"
-              class="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-16 animate-pulse mb-4"
+              class="h-2.5 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-16 animate-pulse mb-4"
             ></div>
             <h3
               v-if="!isLoading"
@@ -88,7 +88,7 @@
           <div class="flex-col">
             <div
               v-if="isLoading"
-              class="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-16 animate-pulse mb-4"
+              class="h-2.5 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-16 animate-pulse mb-4"
             ></div>
             <h3
               v-if="!isLoading"
@@ -125,7 +125,7 @@
           <div class="flex-col">
             <div
               v-if="isLoading"
-              class="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-16 animate-pulse mb-4"
+              class="h-2.5 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-16 animate-pulse mb-4"
             ></div>
             <h3
               v-if="!isLoading"
