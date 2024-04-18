@@ -1,14 +1,14 @@
 import { Module } from '@nestjs/common';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
-import { LocalStrategy } from '@velero-ui-api/modules/auth/local.strategy';
+import { LocalStrategy } from '@velero-ui-api/modules/auth/strategies/local.strategy';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { JwtModuleOptions } from '@nestjs/jwt/dist/interfaces/jwt-module-options.interface';
-import { JwtStrategy } from '@velero-ui-api/modules/auth/jwt.strategy';
-import { LdapStrategy } from '@velero-ui-api/modules/auth/ldap.strategy';
-import { OidcStrategy } from '@velero-ui-api/modules/auth/oidc.strategy';
+import { JwtStrategy } from '@velero-ui-api/modules/auth/strategies/jwt.strategy';
+import { LdapStrategy } from '@velero-ui-api/modules/auth/strategies/ldap.strategy';
+import { OidcStrategy } from '@velero-ui-api/modules/auth/strategies/oidc.strategy';
 
 @Module({
   imports: [
