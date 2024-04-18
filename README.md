@@ -49,7 +49,7 @@ Starting Velero ui is simple:
 ```bash
 docker run --name velero-ui -v ~/.kube/config:/app/.kube/config -e KUBE_CONFIG_PATH=/app/.kube/config -d -p 3333:3000 otwld/velero-ui:latest
 ```
-3. Velero-ui is now reachable at port `http://localhost:3333`
+3. Velero-ui is now reachable at `http://localhost:3333`
 
 ### Using Kubernetes
 
@@ -57,7 +57,7 @@ All kubernetes manifests are located in [kubernetes/manifests](kubernetes/manife
 is `velero-ui`
 
 1. Edit manifests, [environment variables](#environment-variables) can be defined in [kubernetes/manifests/deployment.yml](kubernetes/manifests/deployment.yml)
-2. Apply manifest with kubectl
+2. Apply manifests with kubectl
 ```bash
 kubectl apply -f kubernetes/manifests
 ```
@@ -65,7 +65,7 @@ kubectl apply -f kubernetes/manifests
 ```bash
 kubectl port-forward service/velero-ui 3334:80 -n velero-ui
 ```
-4. Velero-ui is now reachable at port `http://localhost:3333`
+4. Velero-ui is now reachable at `http://localhost:3333`
 
 ### Using Helm Chart
 
