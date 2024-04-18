@@ -3,7 +3,8 @@ import { NestFactory } from '@nestjs/core';
 import helmet from 'helmet';
 
 import { AppModule } from './app/app.module';
-import passport from "passport";
+import passport from 'passport';
+import { AppLogger } from '@velero-ui-api/shared/modules/logger/logger.service';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -15,6 +16,7 @@ async function bootstrap() {
   app.enableCors();
   app.use(passport.initialize());
   app.useGlobalPipes(new ValidationPipe());
+  app.useLogger(app.get(AppLogger));
 
   const port = process.env.PORT || 3000;
   await app.listen(port);
