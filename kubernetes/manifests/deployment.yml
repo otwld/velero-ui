@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: velero-ui
+  namespace: velero-ui
+spec:
+  selector:
+    matchLabels:
+      name: velero-ui
+  template:
+    metadata:
+      labels:
+        name: velero-ui
+    spec:
+      serviceAccountName: velero-ui
+      containers:
+      - name: velero-ui
+        image: otwld/velero-ui:latest
+        ports:
+        - name: http
+          containerPort: 3000
+          protocol: TCP
+        env:
+          - name: BASIC_AUTH_PASSWORD
+            value: adminpass
