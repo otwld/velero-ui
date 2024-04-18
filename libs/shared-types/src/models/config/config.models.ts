@@ -39,5 +39,6 @@ export interface VeleroConfig {
 }
 
 export interface K8sConfig {
-  kubeConfigPath: string;
+  configPath: string;
+  context: string;
 }
