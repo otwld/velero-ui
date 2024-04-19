@@ -1,0 +1,163 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "velero-ui.fullname" . }}
+  labels:
+    {{- include "velero-ui.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "velero-ui.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "velero-ui.labels" . | nindent 8 }}
+ {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "velero-ui.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      {{- if .Values.runtimeClassName }}
+      runtimeClassName: {{ .Values.runtimeClassName | quote }}
+      {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
+          {{- if .Values.livenessProbe.enabled }}
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.livenessProbe.path }}
+              port: http
+            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+          {{- end }}
+          {{- if .Values.readinessProbe.enabled }}
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.readinessProbe.path }}
+              port: http
+            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+          {{- end }}
+          args:
+            {{- with .Values.extraArgs }}
+               {{- toYaml . | nindent 12 }}
+            {{- end }}
+          env:
+            {{- with .Values.env }}
+              {{- toYaml . | nindent 12 }}
+            {{- end }}
+            - name: LOG_LEVEL
+              value: {{ .Values.configuration.logLevel | default "info"  | quote }}
+            - name: VELERO_NAMESPACE
+              value: {{ .Values.configuration.general.veleroNamespace | default "velero"  | quote }}
+            {{- if .Values.configuration.general.secretPassPhrase.useSecret }}
+            - name: SECRET_PASSPHRASE
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "velero-ui.passPhraseSecretName" . }}
+                  key: {{ .Values.configuration.general.secretPassPhrase.key }}
+            {{- else }}
+            - name: SECRET_PASSPHRASE
+              value: {{ .Values.configuration.general.secretPassPhrase.value | quote}}
+            {{- end }}
+            {{- if .Values.configuration.general.grafanaUrl }}
+            - name: GRAFANA_URL
+              value: {{ .Values.configuration.general.grafanaUrl  | quote }}
+            {{- end }}
+            {{- if .Values.configuration.auth.enabled }}
+            - name: BASIC_AUTH_ENABLED
+              value: {{ .Values.configuration.auth.enabled | default "true"  | quote }}
+            - name: BASIC_AUTH_USERNAME
+              value: {{ .Values.configuration.auth.username | default "admin"  | quote }}
+            {{- if .Values.configuration.auth.password.useSecret }}
+            - name: BASIC_AUTH_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "velero-ui.authPasswordSecretName" . }}
+                  key: {{ .Values.configuration.auth.password.key }}
+            {{- else }}
+            - name: BASIC_AUTH_PASSWORD
+              value: {{ .Values.configuration.auth.password.value  | quote }}
+            {{- end }}
+            {{- end }}
+            {{- if .Values.configuration.oidc.enabled }}
+            - name: OIDC_ENABLED
+              value: {{ .Values.configuration.oidc.enabled  | quote }}
+            - name: OIDC_AUTHORITY
+              value: {{ .Values.configuration.oidc.authority  | quote }}
+            - name: OIDC_CLIENT_ID
+              value: {{ .Values.configuration.oidc.clientId  | quote }}
+            - name: OIDC_JWKS_URI
+              value: {{ .Values.configuration.oidc.jwksUri  | quote }}
+            - name: OIDC_SCOPES
+              value: {{ .Values.configuration.oidc.scopes  | quote }}
+            {{- end }}
+            {{- if .Values.configuration.ldap.enabled }}
+            - name: LDAP_ENABLED
+              value: {{ .Values.configuration.ldap.enabled  | quote }}
+            - name: LDAP_URL
+              value: {{ .Values.configuration.ldap.url  | quote }}
+            - name: LDAP_BIND_DN
+              value: {{ .Values.configuration.ldap.bindDn  | quote }}
+            - name: LDAP_BIND_CREDENTIALS
+              value: {{ .Values.configuration.ldap.bindCredentials | quote }}
+            - name: LDAP_SEARCH_BASE
+              value: {{ .Values.configuration.ldap.searchBase | quote }}
+            - name: LDAP_SEARCH_FILTER
+              value: {{ .Values.configuration.ldap.searchFilter | quote }}
+            - name: LDAP_SEARCH_ATTRIBUTES
+              value: {{ .Values.configuration.ldap.searchAttributes  | quote }}
+            {{- end }}
+          envFrom:
+            {{- with .Values.envFrom }}
+              {{- toYaml . | nindent 12 }}
+            {{- end }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          {{- with .Values.volumeMounts }}
+          volumeMounts:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+      {{- with .Values.volumes }}
+      volumes:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

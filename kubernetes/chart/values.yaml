@@ -1,0 +1,343 @@
+# Default values for velero-ui.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# -- Number of replicas
+replicaCount: 1
+
+# Docker image
+image:
+  # -- Docker image registry
+  repository: otwld/velero-ui
+
+  # -- Docker pull policy
+  pullPolicy: IfNotPresent
+
+  # -- Docker image tag, overrides the image tag whose default is the chart appVersion.
+  tag: ""
+
+# -- Docker registry secret names as an array
+imagePullSecrets: [ ]
+
+# -- String to partially override template  (will maintain the release name)
+nameOverride: ""
+
+# -- String to fully override template
+fullnameOverride: ""
+
+# Velero UI configuration
+configuration:
+
+  # -- Define the logger level
+  # Allowed values: debug, info, error
+  logLevel: "info"
+
+  # General configuration
+  general:
+    # Secret passphrase use to generate JWT
+    secretPassPhrase:
+
+      # -- Value of the secret pass phrase, must be changed.
+      # if `useSecret` is true and `existingSecret` is empty, this value will be stored in secret at first deployment
+      value: "this is not a secret passphrase"
+
+      # -- Whether a secret should be used.
+      useSecret: false
+
+      # -- Name of the secret to create if `useSecret` is true and `existingSecret` is empty
+      name: ""
+
+      # -- key in the secret containing the passphrase
+      key: "pass_phrase"
+
+      # -- Name of a pre-existing secret (if any)
+      existingSecret: ""
+
+      # -- Annotations to add to the secret
+      annotations: { }
+
+    # -- Define the velero namespace
+    # By default velero is deployed in "velero" namespace
+    veleroNamespace: "velero"
+
+    # -- Add an URL to a grafana Dashboard
+    grafanaUrl: ""
+
+
+  # Builtin authentication configuration
+  auth:
+
+    # -- Enable authentication
+    enabled: true
+
+    # -- Username
+    username: admin
+
+    # Password
+    password:
+      # -- Value of the admin password, must be changed.
+      # if `useSecret` is true and `existingSecret` is empty, this value will be stored in secret at first deployment
+      value: "admin"
+
+      # -- Whether a secret should be used.
+      useSecret: false
+
+      # -- Name of the secret to create if `useSecret` is true and `existingSecret` is empty
+      name: ""
+
+      # -- key in the secret containing the password
+      key: "password"
+
+      # -- Name of a pre-existing secret (if any)
+      # Key used: password
+      existingSecret: ""
+
+      # -- Annotations to add to the secret
+      annotations: { }
+
+  ## OIDC via PKCE configuration
+  oidc:
+    # -- Enable OIDC
+    enabled: false
+
+    # -- Authority URL
+    authority: ""
+
+    # -- Client ID
+    clientId: ""
+
+    # -- JWKS URIs URL
+    jwksUri: ""
+
+    # -- Oauth Scopes
+    scopes: ""
+
+  # LDAP configuration
+  ldap:
+    # -- Enable LDAP
+    enabled: false
+
+    # -- LDAP connection url
+    url: "ldap://"
+
+    # -- BindDN
+    bindDn: ""
+
+    # -- Bind credentials
+    bindCredentials: ""
+
+    # -- Search base
+    searchBase: ""
+
+    # -- Search filter
+    searchFilter: ""
+
+    # -- Search attributes
+    searchAttributes: ""
+
+
+# Service account
+# ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+serviceAccount:
+  # -- Specifies whether a service account should be created
+  create: true
+
+  # -- Automatically mount a ServiceAccount's API credentials?
+  automount: true
+
+  # -- Annotations to add to the service account
+  annotations: { }
+
+  # -- The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+# RBAC
+rbac:
+  # -- Whether to create the Velero-ui role and role binding to give all permissions to the namespace to Velero-ui.
+  create: true
+  # -- Whether to create the cluster role binding to give administrator permissions to Velero-ui
+  clusterAdministrator: true
+  # -- Name of the ClusterRole.
+  clusterAdministratorName: cluster-admin
+
+# -- Map of annotations to add to the pods
+podAnnotations: { }
+
+# -- Map of labels to add to the pods
+podLabels: { }
+
+# -- Pod Security Context
+podSecurityContext: { }
+# fsGroup: 2000
+
+# -- Container Security Context
+securityContext: { }
+  # capabilities:
+  #  drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+# runAsUser: 1000
+
+# -- Specify runtime class
+runtimeClassName: ""
+# Configure Service
+service:
+
+  # -- Service type
+  type: ClusterIP
+
+  # -- Service port
+  port: 3000
+
+# Configure the ingress resource that allows you to access the
+ingress:
+  # -- Enable ingress controller resource
+  enabled: false
+
+  # -- IngressClass that will be used to implement the Ingress (Kubernetes 1.18+)
+  className: ""
+
+  # -- Additional annotations for the Ingress resource.
+  annotations: { }
+    # kubernetes.io/ingress.class: traefik
+    # kubernetes.io/ingress.class: nginx
+  # kubernetes.io/tls-acme: "true"
+
+  # The list of hostnames to be covered with this ingress record.
+  hosts:
+    - host: velero-ui.local
+      paths:
+        - path: /
+          pathType: Prefix
+
+  # --  The tls configuration for hostnames to be covered with this ingress record.
+  tls: [ ]
+  #  - secretName: velero-ui-tls
+  #    hosts:
+  #      - velero-ui.local
+
+
+# Configure resource requests and limits
+# ref: http://kubernetes.io/docs/user-guide/compute-resources/
+resources:
+  # -- Pod requests
+  requests: { }
+
+  # -- Pod limit
+  limits: { }
+
+# Configure extra options for liveness probe
+# ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+livenessProbe:
+  # -- Enable livenessProbe
+  enabled: true
+
+  # -- Request path for livenessProbe
+  path: /health
+
+  # -- Initial delay seconds for livenessProbe
+  initialDelaySeconds: 60
+
+  # -- Period seconds for livenessProbe
+  periodSeconds: 10
+
+  # -- Timeout seconds for livenessProbe
+  timeoutSeconds: 5
+
+  # -- Failure threshold for livenessProbe
+  failureThreshold: 6
+
+  # -- Success threshold for livenessProbe
+  successThreshold: 1
+
+# Configure extra options for readiness probe
+# ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+readinessProbe:
+  # -- Enable readinessProbe
+  enabled: true
+
+  # -- Request path for readinessProbe
+  path: /health
+
+  # -- Initial delay seconds for readinessProbe
+  initialDelaySeconds: 30
+
+  # -- Period seconds for readinessProbe
+  periodSeconds: 5
+
+  # -- Timeout seconds for readinessProbe
+  timeoutSeconds: 3
+
+  # -- Failure threshold for readinessProbe
+  failureThreshold: 6
+
+  # -- Success threshold for readinessProbe
+  successThreshold: 1
+
+
+# Configure autoscaling
+autoscaling:
+  # -- Enable autoscaling
+  enabled: false
+
+  # -- Number of minimum replicas
+  minReplicas: 1
+
+  # -- Number of maximum replicas
+  maxReplicas: 100
+
+  # -- CPU usage to target replica
+  targetCPUUtilizationPercentage: 80
+
+  # -- targetMemoryUtilizationPercentage: 80
+
+# -- Additional volumes on the output Deployment definition.
+volumes: [ ]
+# -- - name: foo
+#   secret:
+#     secretName: mysecret
+#     optional: false
+
+# -- Additional volumeMounts on the output Deployment definition.
+volumeMounts: [ ]
+# -- - name: foo
+#   mountPath: "/etc/foo"
+#   readOnly: true
+
+# -- Additional arguments on the output Deployment definition.
+extraArgs: [ ]
+
+# -- Additional environments variables on the output Deployment definition.
+env: [ ]
+# - name: BASIC_AUTH_ENABLED
+#   value: VALUE
+# - name: BASIC_AUTH_PASSWORD
+#   valueFrom:
+#     secretKeyRef:
+#       name: secret-name
+#       key: secret-key
+# - name: OIDC_CLIENT_ID
+#   valueFrom:
+#     configMapKeyRef:
+#       name: config-map-name
+#       key: config-map-key
+
+# -- envFrom to pass to all deployed Deployments.
+# @default -- `[]` (See [values.yaml])
+envFrom: []
+  # - configMapRef:
+  #     name: config-map-name
+  # - secretRef:
+  #     name: secret-name
+
+
+# -- Node labels for pod assignment.
+nodeSelector: { }
+
+# -- Tolerations for pod assignment
+tolerations: [ ]
+
+# -- Affinity for pod assignment
+affinity: { }
