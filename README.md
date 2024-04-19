@@ -19,7 +19,7 @@ This dashboard aims to implement the same functionalities as the velero CLI.
 
 - **Velero server >= 1.13.0**
 
-⚠️ This dashboard has only be tested on version **1.13.x**, using an older version may cause bugs with an outdated and
+> ⚠️ This dashboard has only be tested on version **1.13.x**, using an older version may cause bugs with an outdated and
 unmanaged API ⚠️
 
 ### Features and comparisons with velero CLI
@@ -69,7 +69,39 @@ kubectl port-forward service/velero-ui 3334:80 -n velero-ui
 
 ### Using Helm Chart
 
-*Helm chart is not released yet*
+> Helm chart is not deployed yet on artifacthub
+
+
+#### Deploying Velero UI chart
+
+To install the `velero-ui` chart in the `velero-ui` namespace:
+
+```console
+helm repo add otwld https://otwld.github.io/helm-charts/
+helm repo update
+helm install velero-ui otwld/velero-ui --namespace velero-ui
+```
+
+#### Upgrading Velero UI chart
+
+Make adjustments to your values as needed, then run `helm upgrade`:
+
+```console
+# -- This pulls the latest version of the velero-ui chart from the repo.
+helm repo update
+helm upgrade velero-ui olwld/velero-ui --namespace velero-ui --values values.yaml
+```
+
+#### Uninstalling Velero UI chart
+
+To uninstall/delete the `velero-ui` deployment in the `velero-ui` namespace:
+
+```console
+helm delete velero-ui --namespace velero-ui
+```
+
+Substitute your values if they differ from the examples. See `helm delete --help` for a full reference on `delete` parameters and flags.
+
 
 ## Environment variables
 
@@ -87,7 +119,7 @@ kubectl port-forward service/velero-ui 3334:80 -n velero-ui
 | BASIC_AUTH_ENABLED     | `true`                        |                        | Enable builtin auth                  |
 | BASIC_AUTH_USERNAME    | `admin`                       |                        | Username                             |
 | BASIC_AUTH_PASSWORD    | `admin`                       |                        | Password                             |
-| **OIDC**               |                               |                        |                                      |
+| **OIDC via PKCE**      |                               |                        |                                      |
 | OIDC_ENABLED           | `false`                       |                        | Enable OIDC                          |
 | OIDC_AUTHORITY         | ` `                           |                        | Authority URL server                 |
 | OIDC_CLIENT_ID         | ` `                           |                        | Client ID                            |
