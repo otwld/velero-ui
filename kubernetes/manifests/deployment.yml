@@ -20,6 +20,15 @@ spec:
         - name: http
           containerPort: 3000
           protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: http
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: http
         env:
           - name: BASIC_AUTH_PASSWORD
-            value: adminpass
+            value: admin
+
