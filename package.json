@@ -9,7 +9,7 @@
   "homepage": "https://github.com/otwld/velero-ui",
   "scripts": {
     "prepare": "husky",
-    "docker:build": "nx build --run-many -t velero-ui velero-ui-api && docker build . --no-cache -t otwld/velero-ui"
+    "docker:build": "nx build --run-many -t velero-ui velero-ui-api && docker build -t otwld/velero-ui"
   },
   "author": "Outworld",
   "description": "A Web-based UI dashboard for managing velero (vmware-tanzu)",
