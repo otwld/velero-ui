@@ -4,11 +4,11 @@ on:
   push:
     branches:
       - main
-    # paths:
-    #  - apps/**
-    #  - libs/**
+    paths:
+     - apps/**
+     - libs/**
 
-# Needed for nx-set-shas when run on the main branch
+
 permissions:
   actions: read
   contents: read

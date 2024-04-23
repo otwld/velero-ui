@@ -3,18 +3,16 @@ name: Lint, test and build
 on:
   pull_request:
     types:
-    - opened
-    - synchronize
-    - reopened
+      - opened
+      - synchronize
+      - reopened
     paths:
       - apps/**
       - libs/**
 
-# Needed for nx-set-shas when run on the main branch
 permissions:
   actions: read
   contents: read
-
 
 env:
   NX_BASE: main
@@ -38,5 +36,4 @@ jobs:
       - uses: nrwl/nx-set-shas@v3
 
       - run: git branch --track main origin/main
-      # - run: npx nx-cloud record -- nx format:check
       - run: yarn nx affected -t lint build
