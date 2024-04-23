@@ -39,12 +39,14 @@ jobs:
       # - run: npx nx-cloud record -- nx format:check
       - run: yarn nx run-many -t build --prod
 
-      - run: ls && ls dist
+      - run: ls -lr dist
 
 
       - name: get-npm-version
         id: package-version
         uses: martinbeentjes/npm-get-version-action@v1.3.1
+
+      - run: echo ${{ steps.package-version.outputs.current-version }}
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3

@@ -1,27 +1,13 @@
-FROM node:20-slim AS base
-
-FROM base AS builder
+FROM node:20-slim
 
 WORKDIR /app
-
-RUN yarn global add nx@latest
-
-COPY package.json .
-COPY yarn.lock .
-
-RUN yarn --pure-lockfile
-
-FROM base AS runtime
-
-WORKDIR /app
-
-COPY --from=builder /app/node_modules ./node_modules
 
 COPY dist/apps/velero-ui .
 
+RUN yarn --pure-lockfile
+
 RUN chown -R node:node .
 USER node
-
 
 ENV NODE_ENV production
 ENV HOSTNAME "0.0.0.0"
