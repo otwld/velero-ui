@@ -1,7 +1,7 @@
 # Velero Ui
 
 ![GitHub License](https://img.shields.io/github/license/otwld/velero-ui)
-[![Build Status](https://drone.outworld.fr/api/badges/otwld/velero-ui/status.svg)](https://drone.outworld.fr/otwld/velero-ui)
+![Build Status](https://github.com/otwld/velero-ui/actions/workflows/cd.yml/badge.svg)
 ![Docker Image Version (latest semver)](https://img.shields.io/docker/v/otwld/velero-ui?label=docker%20image)
 ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/otwld/velero-ui/latest)
 
