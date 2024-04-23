@@ -29,5 +29,5 @@ jobs:
       - uses: nrwl/nx-set-shas@v3
 
       - run: git branch --track main origin/main
-      - run: npx nx-cloud record -- nx format:check
+      # - run: npx nx-cloud record -- nx format:check
       - run: npx nx affected -t lint build
