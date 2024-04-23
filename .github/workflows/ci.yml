@@ -10,6 +10,15 @@ on:
       - apps/**
       - libs/**
 
+# Needed for nx-set-shas when run on the main branch
+permissions:
+  actions: read
+  contents: read
+
+
+env:
+  NX_BASE: main
+
 jobs:
   main:
     timeout-minutes: 15

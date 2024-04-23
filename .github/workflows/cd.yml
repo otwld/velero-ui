@@ -8,8 +8,15 @@ on:
     #  - apps/**
     #  - libs/**
 
+# Needed for nx-set-shas when run on the main branch
+permissions:
+  actions: read
+  contents: read
+
+
 env:
   DOCKER_IMAGE: otwld/velero-ui
+  NX_BASE: main
 
 jobs:
   main:
