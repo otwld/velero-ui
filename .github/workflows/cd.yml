@@ -37,7 +37,7 @@ jobs:
       - uses: nrwl/nx-set-shas@v3
 
       # - run: npx nx-cloud record -- nx format:check
-      - run: npx nx affected -t lint build
+      - run: yarn nx run-many -t lint build --prod
 
       - name: get-npm-version
         id: package-version
