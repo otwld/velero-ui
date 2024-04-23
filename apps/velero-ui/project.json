@@ -12,6 +12,13 @@
       "executor": "@nx/vite:build",
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
+      "dependsOn": [
+        {
+          "projects": ["velero-ui-api"],
+          "target": "build",
+          "params": "forward"
+        }
+      ],
       "options": {
         "outputPath": "dist/apps/velero-ui/static",
         "skipTypeCheck": true

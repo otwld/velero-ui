@@ -1,4 +1,4 @@
-FROM --platform=linux/amd64 node:20-slim AS base
+FROM node:20-slim AS base
 
 FROM base AS builder
 
@@ -6,20 +6,18 @@ WORKDIR /app
 
 RUN yarn global add nx@latest
 
-COPY package.json ./
+COPY package.json .
+COPY yarn.lock .
 
 RUN yarn --pure-lockfile
-
-COPY . .
-
-RUN nx build velero-ui-api && nx build velero-ui
 
 FROM base AS runtime
 
 WORKDIR /app
 
-COPY --from=builder /app/dist/apps/velero-ui ./
 COPY --from=builder /app/node_modules ./node_modules
+
+COPY dist/apps/velero-ui .
 
 RUN chown -R node:node .
 USER node

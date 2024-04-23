@@ -14,7 +14,6 @@
         "outputPath": "dist/apps/velero-ui",
         "main": "apps/velero-ui-api/src/main.ts",
         "tsConfig": "apps/velero-ui-api/tsconfig.app.json",
-        "assets": ["apps/velero-ui-api/src/assets"],
         "webpackConfig": "apps/velero-ui-api/webpack.config.js"
       },
       "configurations": {
