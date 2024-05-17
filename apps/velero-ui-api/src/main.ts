@@ -1,6 +1,5 @@
 import { Logger, RequestMethod, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
-import helmet from 'helmet';
 
 import { AppModule } from './app/app.module';
 import passport from 'passport';
@@ -12,7 +11,6 @@ async function bootstrap() {
   app.setGlobalPrefix('api', {
     exclude: [{ path: 'health', method: RequestMethod.GET }],
   });
-  app.use(helmet());
   app.enableCors();
   app.use(passport.initialize());
   app.useGlobalPipes(new ValidationPipe());
