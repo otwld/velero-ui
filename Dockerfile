@@ -1,4 +1,4 @@
-FROM node:20-slim
+FROM node:22-slim
 
 WORKDIR /app
 
@@ -13,7 +13,6 @@ ENV NODE_ENV production
 ENV HOSTNAME "0.0.0.0"
 ENV PORT 3000
 ENV VELERO_NAMESPACE velero
-ENV KUBE_CONFIG_PATH ""
 ENV SECRET_PASSPHRASE "this is a secret passphrase"
 
 ENV BASIC_AUTH_ENABLED=true
