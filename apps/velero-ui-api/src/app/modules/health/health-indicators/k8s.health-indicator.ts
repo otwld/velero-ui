@@ -20,8 +20,6 @@ export class K8sHealthIndicator extends HealthIndicator {
   public isHealthy(): Observable<HealthIndicatorResult> {
     const opts: OptionsWithUri = { uri: undefined };
 
-    console.debug('API endpoint: ' + this.k8s.getCurrentCluster()?.server);
-
     return from(this.k8s.applyToRequest(opts))
       .pipe(
         map(
@@ -35,7 +33,7 @@ export class K8sHealthIndicator extends HealthIndicator {
       .pipe(
         concatMap((agent) =>
           this.httpService.get(
-            `${this.k8s.getCurrentCluster()?.server}/readyz`,
+            `${this.k8s.getCurrentCluster().server}/readyz`,
             {
               httpsAgent: agent,
             }
