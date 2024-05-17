@@ -20,7 +20,7 @@
               v-if="!isLoading"
               class="mb-1 text-2xl font-bold text-gray-900 dark:text-white"
             >
-              {{ data.totalBackups.toString() || 'N/A' }}
+              {{ data?.totalBackups.toString() || 'N/A' }}
             </h3>
             <div class="text-gray-500 dark:text-gray-400">Backups</div>
           </div>
@@ -57,7 +57,7 @@
               v-if="!isLoading"
               class="mb-1 text-2xl font-bold text-gray-900 dark:text-white"
             >
-              {{ data.totalSchedules.toString() || 'N/A' }}
+              {{ data?.totalSchedules.toString() || 'N/A' }}
             </h3>
             <div class="text-gray-500 dark:text-gray-400">Schedules</div>
           </div>
@@ -94,7 +94,7 @@
               v-if="!isLoading"
               class="mb-1 text-2xl font-bold text-gray-900 dark:text-white"
             >
-              {{ data.totalRestores.toString() || 'N/A' }}
+              {{ data?.totalRestores.toString() || 'N/A' }}
             </h3>
             <div class="text-gray-500 dark:text-gray-400">Restores</div>
           </div>
