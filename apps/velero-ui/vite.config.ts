@@ -9,7 +9,7 @@ export default defineConfig({
   cacheDir: '../../node_modules/.vite/apps/velero-ui',
 
   server: {
-    port: process.env.VITE_API_PORT,
+    port: process.env.VITE_PORT,
     host: 'localhost',
   },
 
