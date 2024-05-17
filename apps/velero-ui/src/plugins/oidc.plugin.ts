@@ -8,8 +8,8 @@ export const registerOidcClient = (app: App): void => {
     const oidcClient: UserManager = new UserManager({
       authority: oidc.authority,
       client_id: oidc.clientId,
-      redirect_uri: baseUrl + '/login',
-      post_logout_redirect_uri: baseUrl + '/login?state=success&reason=logout',
+      redirect_uri: `${baseUrl || window.location.origin}/login`,
+      post_logout_redirect_uri: `${baseUrl || window.location.origin}/login?state=success&reason=logout`,
       response_type: 'code',
       scope: oidc?.scopes || 'openid profile email',
       filterProtocolClaims: true,
