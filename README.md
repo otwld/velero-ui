@@ -63,7 +63,7 @@ kubectl apply -f kubernetes/manifests
 ```
 3. Access via kube-proxy
 ```bash
-kubectl port-forward service/velero-ui 3334:80 -n velero-ui
+kubectl port-forward service/velero-ui 3333:80 -n velero-ui
 ```
 4. Velero-ui is now reachable at `http://localhost:3333`
 
