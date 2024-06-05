@@ -199,8 +199,8 @@
           <span
             class="inline-flex justify-center text-gray-500 text-xs dark:text-white"
             >v{{ version }} - Powered by
-            <a class="ml-1 hover:text-blue-600" href="https://outworld.fr/"
-              >Outworld</a
+            <a class="ml-1 hover:text-blue-600" href="https://otwld.com/"
+              >Otwld</a
             ></span
           >
         </div>
