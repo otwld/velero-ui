@@ -19,7 +19,7 @@ export const useListStore = defineStore({
       offset: 0,
       limit: 20,
       filters: {
-        search: '',
+        startWith: '',
       },
     } as ListStore),
   actions: {
