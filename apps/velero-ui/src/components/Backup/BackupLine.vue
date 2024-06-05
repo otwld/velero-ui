@@ -46,7 +46,7 @@
         }"
         class="inline-flex items-center bg-gray-100 hover:bg-gray-200 text-gray-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-300"
       >
-        <FontAwesomeIcon :icon="faDatabase" class="w-3 h-3 mr-1.5" />
+        <FontAwesomeIcon :icon="faClockRotateLeft" class="w-3 h-3 mr-1.5" />
         {{ data?.metadata?.labels['velero.io/schedule-name'] }}
         <FontAwesomeIcon
           :icon="faArrowUpRightFromSquare"
@@ -158,7 +158,6 @@ import {
   faClockRotateLeft,
   faTrashCan,
   faDownload,
-  faDatabase,
   faArrowUpRightFromSquare,
   faCircleNotch,
 } from '@fortawesome/free-solid-svg-icons';
