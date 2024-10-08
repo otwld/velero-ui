@@ -33,7 +33,7 @@ jobs:
         run: npm ci
       - uses: nrwl/nx-set-shas@v4
       - name: Build
-        run: nx build docs
+        run: npm run nx build docs
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
