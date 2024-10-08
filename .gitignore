@@ -39,3 +39,7 @@ testem.log
 Thumbs.db
 
 .nx/cache
+
+# Generated Docusaurus files
+.docusaurus/
+.cache-loader/
