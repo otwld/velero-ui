@@ -22,6 +22,7 @@
       "@velero-ui-app/api/*": ["apps/velero-ui/src/api/*"],
       "@velero-ui-app/assets/*": ["apps/velero-ui/src/assets/*"],
       "@velero-ui-app/components/*": ["apps/velero-ui/src/components/*"],
+      "@velero-ui-app/composables/*": ["apps/velero-ui/src/composables/*"],
       "@velero-ui-app/layouts/*": ["apps/velero-ui/src/layouts/*"],
       "@velero-ui-app/plugins/*": ["apps/velero-ui/src/plugins/*"],
       "@velero-ui-app/stores/*": ["apps/velero-ui/src/stores/*"],
