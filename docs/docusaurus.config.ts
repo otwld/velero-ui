@@ -89,6 +89,10 @@ const config: Config = {
               label: 'Discord',
               href: 'https://discord.gg/U24mpqTynB',
             },
+            {
+              label: 'GitHub',
+              href: 'https://github.com/otwld/velero-ui',
+            },
           ],
         },
         {
@@ -99,13 +103,17 @@ const config: Config = {
               to: 'https://github.com/otwld/velero-ui/releases',
             },
             {
-              label: 'GitHub',
-              href: 'https://github.com/otwld/velero-ui',
+              label: 'Velero',
+              to: 'https://velero.io/',
+            },
+            {
+              label: 'OTWLD',
+              to: 'https://otwld.com/',
             },
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} Velero UI, Powered by OTWLD. Built with Docusaurus.`,
+      copyright: `Copyright © ${new Date().getFullYear()} Velero UI, Powered by <a href="https://otwld.com">OTWLD</a>. Built with Docusaurus.`,
     },
     prism: {
       theme: prismThemes.github,
