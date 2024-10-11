@@ -11,7 +11,7 @@ import {
 import { RestoreService } from './restore.service';
 import { Observable } from 'rxjs';
 import {
-  Ressources,
+  Resources,
   V1DeleteBackupRequest,
   V1DownloadRequest,
   V1DownloadTargetKind,
@@ -22,50 +22,55 @@ import { K8sCustomObjectService } from '@velero-ui-api/shared/modules/k8s-custom
 import { DownloadRequestService } from '@velero-ui-api/modules/download-request/download-request.service';
 import { DeleteBackupRequestService } from '@velero-ui-api/modules/delete-backup-request/delete-backup-request.service';
 
-@Controller('restores')
+@Controller(Resources.RESTORE.route)
 export class RestoreController {
   constructor(
     private readonly restoreService: RestoreService,
     private readonly deleteBackupRequestService: DeleteBackupRequestService,
     private readonly downloadRequestService: DownloadRequestService,
-    private readonly k8sCustomObjectService: K8sCustomObjectService
+    private readonly k8sCustomObjectService: K8sCustomObjectService,
   ) {}
 
   @Get()
   public get(
     @Query('offset', new DefaultValuePipe(0), ParseIntPipe) offset: number,
     @Query('limit', new DefaultValuePipe(20), ParseIntPipe) limit: number,
-    @Query('search', new DefaultValuePipe('')) search: string
+    @Query('search', new DefaultValuePipe('')) search: string,
+    @Query('sortColumnName', new DefaultValuePipe('')) sortColumnName: string,
+    @Query('sortColumnAscending', new DefaultValuePipe(''))
+    sortColumnAscending: boolean,
   ): Observable<V1RestoreList> {
     return this.k8sCustomObjectService.get<V1Restore, V1RestoreList>(
-      Ressources.RESTORE.plurial,
+      Resources.RESTORE.plurial,
       offset,
       limit,
-      search
+      search,
+      sortColumnName,
+      sortColumnAscending,
     );
   }
 
   @Get('/:name')
   public getByName(@Param('name') name: string): Observable<V1Restore> {
     return this.k8sCustomObjectService.getByName<V1Restore>(
-      Ressources.BACKUP.plurial,
-      name
+      Resources.RESTORE.plurial,
+      name,
     );
   }
 
   @Post('/:name/logs/download')
   public downloadLogs(
-    @Param('name') name: string
+    @Param('name') name: string,
   ): Observable<V1DownloadRequest> {
     return this.downloadRequestService.create({
       name,
-      kind: V1DownloadTargetKind.BackupLog,
+      kind: V1DownloadTargetKind.RestoreLog,
     });
   }
 
   @Delete('/:name')
   public deleteByName(
-    @Param('name') name: string
+    @Param('name') name: string,
   ): Observable<V1DeleteBackupRequest> {
     return this.deleteBackupRequestService.create({
       name,

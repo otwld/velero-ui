@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { K8S_CONNECTION } from '@velero-ui-api/shared/modules/k8s/k8s.constants';
 import { CustomObjectsApi, KubeConfig } from '@kubernetes/client-node';
 import {
-  Ressources,
+  Resources,
   V1DownloadRequest,
   V1DownloadRequestPhase,
 } from '@velero-ui/velero';
@@ -38,7 +38,7 @@ export class DownloadRequestService {
             VELERO.GROUP,
             VELERO.VERSION,
             this.configService.get('velero.namespace'),
-            Ressources.DOWNLOAD_REQUEST.plurial,
+            Resources.DOWNLOAD_REQUEST.plurial,
             request
           )
         )
@@ -64,7 +64,7 @@ export class DownloadRequestService {
         VELERO.GROUP,
         VELERO.VERSION,
         this.configService.get('velero.namespace'),
-        Ressources.DOWNLOAD_REQUEST.plurial,
+        Resources.DOWNLOAD_REQUEST.plurial,
         request.metadata.name
       )
     )
@@ -88,5 +88,17 @@ export class DownloadRequestService {
           delay: 1000,
         })
       );
+  }
+
+  public deleteByName(name: string): void {
+    from(
+      this.k8sCustomObjectApi.deleteNamespacedCustomObject(
+        VELERO.GROUP,
+        VELERO.VERSION,
+        this.configService.get('velero.namespace'),
+        Resources.DOWNLOAD_REQUEST.plurial,
+        name
+      )
+    )
   }
 }

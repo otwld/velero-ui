@@ -1,23 +1,72 @@
 <template>
-  <List
-    v-if="downloadRequests"
-    :component="DownloadRequestLine"
-    :data="downloadRequests"
-    :loading="isGettingMany"
-    :headers="headers"
-    @onRefresh="getMany"
-  ></List>
+  <ListHeader>
+    <template v-slot:bulk-buttons>
+      <button
+        class="inline-flex justify-center p-1 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+        type="button"
+      >
+        <FontAwesomeIcon :icon="faTrashCan" class="w-5 h-5" />
+      </button>
+    </template>
+  </ListHeader>
+  <ListContent :component="DownloadRequestLine"></ListContent>
+  <ListFooter></ListFooter>
 </template>
-<script setup lang="ts">
+<script lang="ts" setup>
 import { onBeforeMount } from 'vue';
-import List from '@velero-ui-app/components/List/List.vue';
-import { useDownloadRequestGetMany } from '@velero-ui-app/use/download-request/useDownloadRequestGetMany';
+import { useListStore } from '@velero-ui-app/stores/list.store';
+import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import ListHeader from '@velero-ui-app/components/List/ListHeader.vue';
+import ListFooter from '@velero-ui-app/components/List/ListFooter.vue';
+import ListContent from '@velero-ui-app/components/List/ListContent.vue';
 import DownloadRequestLine from '@velero-ui-app/components/Request/DownloadRequestLine.vue';
 
-const { getMany, isGettingMany, downloadRequests } =
-  useDownloadRequestGetMany();
+const listStore = useListStore();
 
-onBeforeMount(() => getMany());
-
-const headers = ['Name', 'Target', 'Kind', 'Expire In', 'Status', 'Actions'];
+onBeforeMount(() =>
+  listStore.setHeaders([
+    {
+      name: 'Name',
+      sort: {
+        enabled: true,
+        selected: true,
+        ascending: true,
+      },
+    },
+    {
+      name: 'Target',
+      sort: {
+        enabled: true,
+        selected: false,
+      },
+    },
+    {
+      name: 'Kind',
+      sort: {
+        enabled: true,
+        selected: false,
+      },
+    },
+    {
+      name: 'Expire In',
+      sort: {
+        enabled: true,
+        selected: false,
+      },
+    },
+    {
+      name: 'Status',
+      sort: {
+        enabled: false,
+      },
+    },
+    {
+      name: 'Actions',
+      sort: {
+        enabled: false,
+      },
+    },
+  ]),
+);
 </script>

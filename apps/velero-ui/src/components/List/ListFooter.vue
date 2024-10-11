@@ -19,15 +19,12 @@
         class="ml-3 pl-3 text-sm font-normal text-gray-500 dark:text-gray-400"
       >
         <div class="max-w-sm mx-auto inline-flex items-center">
-          <label for="underline_select" class="pr-1">Entries per page:</label>
+          <label class="pr-1" for="underline_select">Entries per page:</label>
           <select
-            v-model="limit"
-            @change="
-              listStore.setLimit(parseInt($event.target.value));
-              emit('onRefresh');
-            "
             id="underline_select"
+            v-model="limit"
             class="text-xs text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer"
+            @change="listStore.setLimit(parseInt($event.target.value))"
           >
             <option value="20">20</option>
             <option value="50">50</option>
@@ -39,27 +36,21 @@
 
     <div class="inline-flex rounded-md shadow-sm" role="group">
       <button
+        :class="{ 'cursor-not-allowed': disablePrev() }"
+        :disabled="disablePrev()"
+        class="inline-flex items-center justify-center flex-1 px-3 py-2 text-sm font-medium text-center rounded-l-lg text-gray-900 bg-white border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white"
         type="button"
-        :disabled="loading"
-        :class="{ 'cursor-not-allowed': loading }"
-        @click="
-          listStore.previous();
-          emit('onRefresh');
-        "
-        class="inline-flex items-center justify-center flex-1 px-3 py-2 text-sm font-medium text-center rounded-l-lg text-gray-900 bg-white border border-gray-200 rounded-s-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white"
+        @click="listStore.previous()"
       >
         <FontAwesomeIcon :icon="faChevronLeft" class="w-3 h-3 mr-1" />
         Previous
       </button>
       <button
+        :class="{ 'cursor-not-allowed': disableNext() }"
+        :disabled="disableNext()"
+        class="inline-flex items-center justify-center flex-1 px-3 py-2 text-sm font-medium text-center rounded-r-lg text-gray-900 bg-white border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white"
         type="button"
-        :disabled="loading"
-        :class="{ 'cursor-not-allowed': loading }"
-        @click="
-          listStore.next();
-          emit('onRefresh');
-        "
-        class="inline-flex items-center justify-center flex-1 px-3 py-2 text-sm font-medium text-center rounded-r-lg text-gray-900 bg-white border border-gray-200 rounded-s-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white"
+        @click="listStore.next()"
       >
         Next
         <FontAwesomeIcon :icon="faChevronRight" class="w-3 h-3 ml-1" />
@@ -68,21 +59,23 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import {
-  faChevronRight,
   faChevronLeft,
+  faChevronRight,
 } from '@fortawesome/free-solid-svg-icons';
 import { useListStore } from '../../stores/list.store';
 import { storeToRefs } from 'pinia';
+import { useKubernetesListObject } from '@velero-ui-app/composables/useKubernetesListObject';
 
 const listStore = useListStore();
-const { offset, limit, total } = storeToRefs(listStore);
+const { offset, limit, total, objectType } = storeToRefs(listStore);
 
-const emit = defineEmits(['onRefresh']);
+const { isFetching } = useKubernetesListObject(objectType.value);
 
-defineProps({
-  loading: Boolean,
-});
+const disablePrev = () => isFetching.value || listStore.offset === 0;
+const disableNext = () =>
+  isFetching.value || listStore.offset + listStore.limit > listStore.total;
+
 </script>

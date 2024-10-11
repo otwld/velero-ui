@@ -5,10 +5,10 @@ import {
   PatchUtils,
 } from '@kubernetes/client-node';
 import { K8S_CONNECTION } from '../../shared/modules/k8s/k8s.constants';
-import { concatMap, map, Observable, of } from 'rxjs';
+import {concatMap, from, map, Observable, of} from 'rxjs';
 import { VELERO } from '../../shared/modules/velero/velero.constants';
 import http from 'http';
-import { Ressources, V1Schedule } from '@velero-ui/velero';
+import { Resources, V1Schedule } from '@velero-ui/velero';
 import { ConfigService } from '@nestjs/config';
 import { patchPauseSchedule } from './schedule.utils';
 
@@ -35,7 +35,7 @@ export class ScheduleService {
             VELERO.GROUP,
             VELERO.VERSION,
             this.configService.get('velero.namespace'),
-            Ressources.SCHEDULE.plurial,
+            Resources.SCHEDULE.plurial,
             name,
             body,
             undefined,
@@ -48,5 +48,17 @@ export class ScheduleService {
       .pipe(
         map((r: { response: http.IncomingMessage; body: V1Schedule }) => r.body)
       );
+  }
+
+  public deleteByName(name: string): void {
+    from(
+      this.k8sCustomObjectApi.deleteNamespacedCustomObject(
+        VELERO.GROUP,
+        VELERO.VERSION,
+        this.configService.get('velero.namespace'),
+        Resources.SCHEDULE.plurial,
+        name
+      )
+    )
   }
 }

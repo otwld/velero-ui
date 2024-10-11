@@ -1,27 +1,58 @@
 <template>
-  <List
-    v-if="locations"
-    :component="SnapshotLocationLine"
-    :data="locations"
-    :loading="isGettingMany"
-    :headers="headers"
-    @onRefresh="getMany"
-  ></List>
+  <ListHeader>
+    <template v-slot:bulk-buttons>
+      <button
+        class="inline-flex justify-center p-1 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+        type="button"
+      >
+        <FontAwesomeIcon :icon="faTrashCan" class="w-5 h-5" />
+      </button>
+    </template>
+  </ListHeader>
+  <ListContent :component="SnapshotLocationLine"></ListContent>
+  <ListFooter></ListFooter>
 </template>
-<script setup lang="ts">
-import List from '@velero-ui-app/components/List/List.vue';
-import { storeToRefs } from 'pinia';
-import { useSnapshotLocationStore } from '@velero-ui-app/stores/snapshot-location.store';
-import SnapshotLocationLine from '@velero-ui-app/components/SnapshotLocation/SnapshotLocationLine.vue';
+<script lang="ts" setup>
 import { onBeforeMount } from 'vue';
-import { useSnapshotLocationGetMany } from '@velero-ui-app/use/snapshot-location/useSnapshotLocationGetMany';
+import { useListStore } from '@velero-ui-app/stores/list.store';
+import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import ListHeader from '@velero-ui-app/components/List/ListHeader.vue';
+import ListFooter from '@velero-ui-app/components/List/ListFooter.vue';
+import ListContent from '@velero-ui-app/components/List/ListContent.vue';
+import SnapshotLocationLine from '@velero-ui-app/components/SnapshotLocation/SnapshotLocationLine.vue';
 
-const snapshotLocationStore = useSnapshotLocationStore();
-const { locations } = storeToRefs(snapshotLocationStore);
+const listStore = useListStore();
 
-const { getMany, isGettingMany } = useSnapshotLocationGetMany();
-
-onBeforeMount(() => getMany());
-
-const headers = ['Name', 'Provider', 'Status', 'Actions'];
+onBeforeMount(() =>
+  listStore.setHeaders([
+    {
+      name: 'Name',
+      sort: {
+        enabled: true,
+        selected: true,
+        ascending: true,
+      },
+    },
+    {
+      name: 'Provider',
+      sort: {
+        enabled: true,
+        selected: false,
+      },
+    },
+    {
+      name: 'Status',
+      sort: {
+        enabled: false,
+      },
+    },
+    {
+      name: 'Actions',
+      sort: {
+        enabled: false,
+      },
+    },
+  ]),
+);
 </script>

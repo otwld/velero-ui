@@ -1,6 +1,5 @@
-import { KubernetesObject } from '@kubernetes/client-node';
+import { KubernetesObject, V1ObjectMeta } from '@kubernetes/client-node';
 import { V1Metadata } from '../shared';
-import { V1ObjectMeta } from '@kubernetes/client-node/dist/api';
 
 export interface V1Backup extends KubernetesObject {
   metadata?: V1ObjectMeta & V1Metadata;
@@ -19,7 +18,7 @@ export interface V1BackupSpec {
   includedNamespaceScopedResources?: string[];
   excludedNamespaceScopedResources?: string[];
   labelSelector?: object;
-  orLabelSelectors?: object;
+  orLabelSelectors?: Record<string, string>;
   snapshotVolumes?: boolean;
   ttl?: string;
   includeClusterResources?: boolean;
@@ -28,10 +27,10 @@ export interface V1BackupSpec {
   volumeSnapshotLocations?: string[];
   defaultVolumesToRestic?: boolean;
   defaultVolumesToFsBackup?: boolean;
-  orderedResources?: Record<string, string>;
+  orderedResources?: string[];
   csiSnapshotTimeout?: string;
   itemOperationTimeout?: string;
-  snapshotMoveData?: string;
+  snapshotMoveData?: boolean;
   datamover?: string;
   uploaderConfig?: V1UploaderConfigForBackup;
 }
@@ -92,10 +91,10 @@ export const enum V1BackupPhase {
 export interface V1BackupStatus {
   version?: number;
   formatVersion?: string;
-  expiration?: Date;
+  expiration?: string;
   phase?: V1BackupPhase;
   validationErrors?: string[];
-  startTimestamp?: Date;
+  startTimestamp?: string;
   completionTimestamp?: string;
   volumeSnapshotsAttempted?: Date;
   volumeSnapshotsCompleted?: Date;

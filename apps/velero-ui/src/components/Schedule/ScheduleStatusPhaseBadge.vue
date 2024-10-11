@@ -52,5 +52,4 @@ const getClass = () => {
       ];
   }
 };
-
 </script>

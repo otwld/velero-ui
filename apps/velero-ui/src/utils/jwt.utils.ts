@@ -5,3 +5,4 @@ export const hasExpired = (token: string): boolean =>
 
 export const getUser = (token: string) =>
   token ? jwtDecode(token) : null;
+

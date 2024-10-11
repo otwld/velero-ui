@@ -1,11 +1,11 @@
 apiVersion: v2
 name: velero-ui
-description: A Helm chart for Kubernetes
+description: A Helm chart for Velero UI
 type: application
 
-version: 0.1.0
+version: 0.3.0
 
-appVersion: "0.1.0"
+appVersion: "0.2.0"
 
 kubeVersion: "^1.16.0-0"
 
@@ -21,6 +21,7 @@ keywords:
   - dashboard
 sources:
   - https://github.com/otwld/velero-ui
+  - https://github.com/vmware-tanzu/velero
 maintainers:
-  - name: Outworld
-    email: tech@outworld.fr
+  - name: OTWLD
+    email: tech@otwld.coù

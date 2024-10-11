@@ -77,63 +77,9 @@ spec:
               value: {{ .Values.configuration.logLevel | default "info"  | quote }}
             - name: VELERO_NAMESPACE
               value: {{ .Values.configuration.general.veleroNamespace | default "velero"  | quote }}
-            {{- if .Values.configuration.general.secretPassPhrase.useSecret }}
-            - name: SECRET_PASSPHRASE
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "velero-ui.passPhraseSecretName" . }}
-                  key: {{ .Values.configuration.general.secretPassPhrase.key }}
-            {{- else }}
-            - name: SECRET_PASSPHRASE
-              value: {{ .Values.configuration.general.secretPassPhrase.value | quote}}
-            {{- end }}
             {{- if .Values.configuration.general.grafanaUrl }}
             - name: GRAFANA_URL
               value: {{ .Values.configuration.general.grafanaUrl  | quote }}
-            {{- end }}
-            {{- if .Values.configuration.auth.enabled }}
-            - name: BASIC_AUTH_ENABLED
-              value: {{ .Values.configuration.auth.enabled | default "true"  | quote }}
-            - name: BASIC_AUTH_USERNAME
-              value: {{ .Values.configuration.auth.username | default "admin"  | quote }}
-            {{- if .Values.configuration.auth.password.useSecret }}
-            - name: BASIC_AUTH_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "velero-ui.authPasswordSecretName" . }}
-                  key: {{ .Values.configuration.auth.password.key }}
-            {{- else }}
-            - name: BASIC_AUTH_PASSWORD
-              value: {{ .Values.configuration.auth.password.value  | quote }}
-            {{- end }}
-            {{- end }}
-            {{- if .Values.configuration.oidc.enabled }}
-            - name: OIDC_ENABLED
-              value: {{ .Values.configuration.oidc.enabled  | quote }}
-            - name: OIDC_AUTHORITY
-              value: {{ .Values.configuration.oidc.authority  | quote }}
-            - name: OIDC_CLIENT_ID
-              value: {{ .Values.configuration.oidc.clientId  | quote }}
-            - name: OIDC_JWKS_URI
-              value: {{ .Values.configuration.oidc.jwksUri  | quote }}
-            - name: OIDC_SCOPES
-              value: {{ .Values.configuration.oidc.scopes  | quote }}
-            {{- end }}
-            {{- if .Values.configuration.ldap.enabled }}
-            - name: LDAP_ENABLED
-              value: {{ .Values.configuration.ldap.enabled  | quote }}
-            - name: LDAP_URL
-              value: {{ .Values.configuration.ldap.url  | quote }}
-            - name: LDAP_BIND_DN
-              value: {{ .Values.configuration.ldap.bindDn  | quote }}
-            - name: LDAP_BIND_CREDENTIALS
-              value: {{ .Values.configuration.ldap.bindCredentials | quote }}
-            - name: LDAP_SEARCH_BASE
-              value: {{ .Values.configuration.ldap.searchBase | quote }}
-            - name: LDAP_SEARCH_FILTER
-              value: {{ .Values.configuration.ldap.searchFilter | quote }}
-            - name: LDAP_SEARCH_ATTRIBUTES
-              value: {{ .Values.configuration.ldap.searchAttributes  | quote }}
             {{- end }}
           envFrom:
             {{- with .Values.envFrom }}

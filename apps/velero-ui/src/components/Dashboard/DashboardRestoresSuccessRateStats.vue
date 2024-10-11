@@ -1,5 +1,5 @@
 <template>
-  <div class="col-span-full xl:col-auto">
+  <div class="col-span-full mb-2 xl:col-auto">
     <div
       class="p-4 mb-4 flex justify-between bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800 h-full"
     >
@@ -16,21 +16,24 @@
         <div class="flex mt-4 w-full self-center items-center justify-center">
           <apexchart
             v-if="data"
-            width="500"
-            type="radialBar"
-            :options="{ labels: ['Success'], noData: { text: 'No Data' } }"
+            :options="{
+              labels: ['Success'],
+              noData: { text: 'No Data' },
+              chart: {
+                events: {},
+              },
+            }"
             :series="data.series"
+            type="radialBar"
+            width="500"
           ></apexchart>
         </div>
       </div>
     </div>
   </div>
 </template>
-<script setup lang="ts">
-import { onBeforeMount } from 'vue';
-import { useStatsRestoresSuccessRateGet } from '@velero-ui-app/use/stats/useStatsRestoresSuccessRateGet';
+<script lang="ts" setup>
+import { useStatsRestoresSuccessRate } from '@velero-ui-app/composables/stats/useStatsRestoresSuccessRate';
 
-const { get, data } = useStatsRestoresSuccessRateGet();
-
-onBeforeMount(() => get());
+const { data } = useStatsRestoresSuccessRate();
 </script>

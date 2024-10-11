@@ -4,7 +4,7 @@ import { CustomObjectsApi, KubeConfig } from '@kubernetes/client-node';
 import { ConfigService } from '@nestjs/config';
 import { concatMap, from, map, Observable, of, retry, throwError } from 'rxjs';
 import {
-  Ressources,
+  Resources,
   V1ServerStatusRequest,
   V1ServerStatusRequestPhase,
 } from '@velero-ui/velero';
@@ -33,7 +33,7 @@ export class ServerStatusRequestService {
             VELERO.GROUP,
             VELERO.VERSION,
             this.configService.get('velero.namespace'),
-            Ressources.SERVER_STATUS_REQUEST.plurial,
+            Resources.SERVER_STATUS_REQUEST.plurial,
             request
           )
         )
@@ -61,7 +61,7 @@ export class ServerStatusRequestService {
         VELERO.GROUP,
         VELERO.VERSION,
         this.configService.get('velero.namespace'),
-        Ressources.SERVER_STATUS_REQUEST.plurial,
+        Resources.SERVER_STATUS_REQUEST.plurial,
         request.metadata.name
       )
     )
@@ -87,5 +87,17 @@ export class ServerStatusRequestService {
           delay: 1000,
         })
       );
+  }
+
+  public deleteByName(name: string): void {
+    from(
+      this.k8sCustomObjectApi.deleteNamespacedCustomObject(
+        VELERO.GROUP,
+        VELERO.VERSION,
+        this.configService.get('velero.namespace'),
+        Resources.SERVER_STATUS_REQUEST.plurial,
+        name
+      )
+    )
   }
 }

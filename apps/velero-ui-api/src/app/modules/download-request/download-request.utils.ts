@@ -1,6 +1,6 @@
 import { getApiVersion } from '@velero-ui-api/shared/utils/velero.utils';
 import {
-  Ressources,
+  Resources,
   V1DownloadRequest,
   V1DownloadTargetKind,
 } from '@velero-ui/velero';
@@ -12,7 +12,7 @@ export const createDownloadRequest = (
   kind: V1DownloadTargetKind
 ): V1DownloadRequest => ({
   apiVersion: getApiVersion(),
-  kind: Ressources.DOWNLOAD_REQUEST.kind,
+  kind: Resources.DOWNLOAD_REQUEST.kind,
   metadata: {
     name: generateUuidName(name),
     namespace,

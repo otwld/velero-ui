@@ -1,4 +1,4 @@
-import { V1BackupSpec, V1Metadata } from '@velero-ui/velero';
+import {V1BackupSpec, V1Metadata} from '@velero-ui/velero';
 import { KubernetesObject } from '@kubernetes/client-node';
 import { V1ObjectMeta } from '@kubernetes/client-node/dist/api';
 
@@ -24,7 +24,7 @@ export const enum V1SchedulePhase {
 
 export interface V1ScheduleStatus {
   phase?: V1SchedulePhase;
-  lastBackup?: Date;
-  lastSkipped?: Date;
+  lastBackup?: string;
+  lastSkipped?: string;
   validationErrors: string[];
 }

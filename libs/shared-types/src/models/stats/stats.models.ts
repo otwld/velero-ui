@@ -22,4 +22,3 @@ export interface RestoresStatusStats {
 export interface RestoresSuccessRateStats {
   series: number[];
 }
-

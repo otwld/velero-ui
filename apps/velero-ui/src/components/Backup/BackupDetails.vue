@@ -87,7 +87,7 @@
     </div>
     <div v-if="spec?.includedResources" class="mt-4 flex flex-col">
       <span class="text-base font-medium text-gray-900 dark:text-white"
-        >Included Ressources</span
+        >Included Resources</span
       >
       <i class="mt-1 text-xs text-gray-500 dark:text-gray-400">{{
         spec?.includedResources.join(', ')
@@ -95,7 +95,7 @@
     </div>
     <div v-if="spec?.excludedResources" class="mt-4 flex flex-col">
       <span class="text-base font-medium text-gray-900 dark:text-white"
-        >Excluded Ressources</span
+        >Excluded Resources</span
       >
       <i class="mt-1 text-xs text-gray-500 dark:text-gray-400">{{
         spec?.excludedResources.join(', ')
@@ -103,7 +103,7 @@
     </div>
     <div v-if="spec?.includedClusterScopedResources" class="mt-4 flex flex-col">
       <span class="text-base font-medium text-gray-900 dark:text-white"
-        >Included Cluster Scoped Ressources</span
+        >Included Cluster Scoped Resources</span
       >
       <i class="mt-1 text-xs text-gray-500 dark:text-gray-400">{{
         spec?.includedClusterScopedResources.join(', ')
@@ -111,7 +111,7 @@
     </div>
     <div v-if="spec?.excludedClusterScopedResources" class="mt-4 flex flex-col">
       <span class="text-base font-medium text-gray-900 dark:text-white"
-        >Excluded Cluster Scoped Ressources</span
+        >Excluded Cluster Scoped Resources</span
       >
       <i class="mt-1 text-xs text-gray-500 dark:text-gray-400">{{
         spec?.excludedClusterScopedResources.join(', ')
@@ -122,7 +122,7 @@
       class="mt-4 flex flex-col"
     >
       <span class="text-base font-medium text-gray-900 dark:text-white"
-        >Included Namespace Cluster Scoped Ressources</span
+        >Included Namespace Cluster Scoped Resources</span
       >
       <i class="mt-1 text-xs text-gray-500 dark:text-gray-400">{{
         spec?.includedNamespaceScopedResources.join(', ')
@@ -133,7 +133,7 @@
       class="mt-4 flex flex-col"
     >
       <span class="text-base font-medium text-gray-900 dark:text-white"
-        >Excluded Namespace Cluster Scoped Ressources</span
+        >Excluded Namespace Cluster Scoped Resources</span
       >
       <i class="mt-1 text-xs text-gray-500 dark:text-gray-400">{{
         spec?.excludedNamespaceScopedResources.join(', ')

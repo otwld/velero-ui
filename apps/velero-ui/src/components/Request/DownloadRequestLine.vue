@@ -3,26 +3,28 @@
     <td class="w-4 p-4">
       <div class="flex items-center">
         <input
-          id="checkbox-"
-          aria-describedby="checkbox-1"
-          type="checkbox"
+          :checked="checked"
           class="w-4 h-4 border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600"
+          type="checkbox"
+          @click="emit('onChecked')"
         />
-        <label for="checkbox-" class="sr-only">checkbox</label>
+        <label class="sr-only" for="checkbox-">checkbox</label>
       </div>
     </td>
     <td class="flex items-center p-4 mr-12 space-x-6 whitespace-nowrap">
       <div class="text-sm font-normal text-gray-500 dark:text-gray-400">
-        <div class="text-base font-semibold text-gray-900 dark:text-white">
-          {{
-            data?.metadata?.name.length > 42
-              ? data?.metadata?.name.slice(0, 42) + '...'
-              : data?.metadata?.name
-          }}
-        </div>
-        <div class="text-xs font-normal text-gray-500 dark:text-gray-400">
+        <p
+          :title="data?.metadata?.name"
+          class="text-base font-semibold text-gray-900 dark:text-white"
+        >
+          {{ truncate(data?.metadata?.name) }}
+        </p>
+        <p
+          :title="data?.metadata?.uid"
+          class="text-xs font-normal text-gray-500 dark:text-gray-400"
+        >
           {{ data?.metadata?.uid }}
-        </div>
+        </p>
       </div>
     </td>
     <td class="p-4 text-base text-gray-900 whitespace-nowrap dark:text-white">
@@ -58,38 +60,37 @@
     <td class="p-4 space-x-2 whitespace-nowrap">
       <div class="inline-flex rounded-md shadow-sm" role="group">
         <button
-          type="button"
-          title="Describe"
           :disabled="isDeleting"
-          :data-modal-target="`modal-describe-${data?.metadata?.name}`"
-          :data-modal-toggle="`modal-describe-${data?.metadata?.name}`"
           class="inline-flex items-center px-3 py-2 text-sm font-medium rounded-l-lg text-center text-gray-900 focus:outline-none bg-white border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+          title="Describe"
+          type="button"
+          @click="showModalDescribe = !showModalDescribe"
         >
           <FontAwesomeIcon :icon="faFileCode" class="w-4 h-4" />
         </button>
         <button
-          type="button"
-          title="Download"
-          @click="download()"
           class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+          title="Download"
+          type="button"
+          @click="download()"
         >
           <FontAwesomeIcon :icon="faDownload" class="w-4 h-4" />
           <div
             id="tooltip-button-download"
-            role="tooltip"
             class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
+            role="tooltip"
           >
             Download
             <div class="tooltip-arrow" data-popper-arrow></div>
           </div>
         </button>
         <button
-          type="button"
-          title="Delete"
+          :class="{ 'cursor-not-allowed': isDeleting }"
           :disabled="isDeleting"
-          :data-modal-target="`modal-delete-${data?.metadata?.name}`"
-          :data-modal-toggle="`modal-delete-${data?.metadata?.name}`"
           class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-red-600 rounded-r-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"
+          title="Delete"
+          type="button"
+          @click="showModalDelete = !showModalDelete"
         >
           <FontAwesomeIcon
             v-if="isDeleting"
@@ -105,51 +106,67 @@
       </div>
     </td>
   </tr>
-  <ModalDelete
-    :id="`modal-delete-${data?.metadata?.name}`"
-    @onConfirm="remove"
+  <ModalConfirmation
+    v-if="showModalDelete"
+    :icon="faExclamationCircle"
     :name="data?.metadata?.name"
-  ></ModalDelete>
+    text="Are you sure you want to delete:"
+    @onClose="showModalDelete = false"
+    @onConfirm="remove(data?.metadata?.name)"
+  />
   <ModalDescribe
-    :id="`modal-describe-${data?.metadata?.name}`"
-    :name="data?.metadata?.name"
+    v-if="showModalDescribe"
     :data="data"
+    :name="data?.metadata?.name"
+    @onClose="showModalDescribe = false"
   ></ModalDescribe>
 </template>
 
-<script setup lang="ts">
-import { onMounted, onUnmounted, ref } from 'vue';
-import type { V1DownloadRequest } from '@velero-ui/velero';
-import { getRemainingTime } from '../../utils/date.utils';
+<script lang="ts" setup>
 import type { PropType } from 'vue';
+import { onMounted, onUnmounted, ref } from 'vue';
+import {
+  Resources,
+  type V1DownloadRequest,
+  V1DownloadRequestPhase,
+} from '@velero-ui/velero';
+import { getRemainingTime } from '../../utils/date.utils';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import {
-  faTrashCan,
+  faCircleNotch,
   faDownload,
-  faCircleNotch, faFileCode,
+  faExclamationCircle,
+  faFileCode,
+  faTrashCan,
 } from '@fortawesome/free-solid-svg-icons';
-import { initModals, initTooltips } from 'flowbite';
-import ModalDelete from '../Modals/ModalDelete.vue';
-import { V1DownloadRequestPhase } from '@velero-ui/velero';
-import ModalDescribe from "@velero-ui-app/components/Modals/ModalDescribe.vue";
+import { initTooltips } from 'flowbite';
+import ModalDescribe from '@velero-ui-app/components/Modals/ModalDescribe.vue';
+import ModalConfirmation from '@velero-ui-app/components/Modals/ModalConfirmation.vue';
+import { truncate } from '../../utils/string.utils';
+import { useDeleteKubernetesObject } from '@velero-ui-app/composables/useDeleteKubernetesObject';
 
 const props = defineProps({
   data: Object as PropType<V1DownloadRequest>,
 });
 
-const remainingTime = ref(0);
+const remainingTime = ref('');
 
 onMounted(() => initTooltips());
-onMounted(() => initModals());
 
 const interval = setInterval(
-  () => (remainingTime.value = getRemainingTime(props.data.status.expiration))
+  () => (remainingTime.value = getRemainingTime(props.data.status.expiration)),
 );
 
 onUnmounted(() => clearInterval(interval));
 
-const isDeleting = false;
+const showModalDelete = ref(false);
+const showModalDescribe = ref(false);
 
-const remove = () => {};
+const emit = defineEmits(['onChecked']);
+
 const download = () => window.open(props.data.status.downloadURL);
+
+const { isPending: isDeleting, mutate: remove } = useDeleteKubernetesObject(
+  Resources.DOWNLOAD_REQUEST,
+);
 </script>

@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsString } from 'class-validator';
 
-export class CreateDeleteBackRequestDto {
+export class CreateDeleteBackupRequestDto {
   @IsString()
   @IsNotEmpty()
   name: string;

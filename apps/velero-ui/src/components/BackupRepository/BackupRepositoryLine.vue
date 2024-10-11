@@ -3,31 +3,37 @@
     <td class="w-4 p-4">
       <div class="flex items-center">
         <input
-          id="checkbox-"
-          aria-describedby="checkbox-1"
-          type="checkbox"
+          :checked="checked"
           class="w-4 h-4 border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600"
+          type="checkbox"
+          @click="emit('onChecked')"
         />
-        <label for="checkbox-" class="sr-only">checkbox</label>
+        <label class="sr-only" for="checkbox-">checkbox</label>
       </div>
     </td>
     <router-link
-      router-link
       :to="{
         name: Pages.BACKUP_REPOSITORY.name,
         params: {
           name: data?.metadata?.name,
         },
       }"
+      router-link
     >
       <td class="flex items-center p-4 mr-12 space-x-6 whitespace-nowrap">
         <div class="text-sm font-normal text-gray-500 dark:text-gray-400">
-          <div class="text-base font-semibold text-gray-900 dark:text-white">
-            {{ data?.metadata?.name }}
-          </div>
-          <div class="text-xs font-normal text-gray-500 dark:text-gray-400">
+          <p
+            :title="data?.metadata?.name"
+            class="text-base font-semibold text-gray-900 dark:text-white"
+          >
+            {{ truncate(data?.metadata?.name) }}
+          </p>
+          <p
+            :title="data?.metadata?.uid"
+            class="text-xs font-normal text-gray-500 dark:text-gray-400"
+          >
             {{ data?.metadata?.uid }}
-          </div>
+          </p>
         </div>
       </td>
     </router-link>
@@ -101,36 +107,68 @@
     </td>
     <td class="p-4 space-x-2 whitespace-nowrap">
       <button
-        type="button"
-        title="Delete"
-        @click="remove()"
+        :class="{ 'cursor-not-allowed': isDeleting }"
+        :disabled="isDeleting"
         class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"
+        title="Delete"
+        type="button"
+        @click="showModalDelete = !showModalDelete"
       >
-        <FontAwesomeIcon :icon="faTrashCan" class="w-4 h-4" />
+        <FontAwesomeIcon
+          v-if="isDeleting"
+          :icon="faCircleNotch"
+          class="w-4 h-4 animate-spin"
+        />
+        <FontAwesomeIcon
+          v-if="!isDeleting"
+          :icon="faTrashCan"
+          class="w-4 h-4"
+        />
       </button>
     </td>
   </tr>
+
+  <ModalConfirmation
+    v-if="showModalDelete"
+    :icon="faExclamationCircle"
+    :name="data?.metadata?.name"
+    text="Are you sure you want to delete:"
+    @onClose="showModalDelete = false"
+    @onConfirm="remove(data?.metadata?.name)"
+  />
 </template>
 
-<script setup lang="ts">
-import type { V1BackupRepository } from '@velero-ui/velero';
+<script lang="ts" setup>
 import {
+  Resources,
+  type V1BackupRepository,
   V1BackupRepositoryPhase,
   V1BackupRepositoryType,
 } from '@velero-ui/velero';
-import type { PropType } from 'vue';
+import { type PropType, ref } from 'vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import {
   faArrowUpRightFromSquare,
+  faCircleNotch, faExclamationCircle,
   faServer,
   faTrashCan,
 } from '@fortawesome/free-solid-svg-icons';
 import { Pages } from '../../utils/constants.utils';
 import { convertTimestampToDate } from '../../utils/date.utils';
+import { truncate } from '../../utils/string.utils';
+import { useDeleteKubernetesObject } from '@velero-ui-app/composables/useDeleteKubernetesObject';
+import ModalConfirmation from "@velero-ui-app/components/Modals/ModalConfirmation.vue";
 
 defineProps({
   data: Object as PropType<V1BackupRepository>,
+  checked: Boolean,
 });
 
-const remove = () => {};
+const showModalDelete = ref(false);
+
+const emit = defineEmits(['onChecked']);
+
+const { isPending: isDeleting, mutate: remove } = useDeleteKubernetesObject(
+  Resources.BACKUP_REPOSITORY,
+);
 </script>

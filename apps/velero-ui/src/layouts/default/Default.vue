@@ -1,12 +1,13 @@
 <template>
   <Header></Header>
-  <div class="flex pt-16 overflow-hidden">
+  <div class="flex overflow-hidden">
     <Sidebar></Sidebar>
     <div
-      class="relative w-full h-full min-h-[calc(100vh-4rem)] overflow-y-auto lg:ml-64"
+      :class="{ 'lg:ml-64': hideSidebar }"
+      class="relative w-full mt-16 h-full min-h-[calc(100vh-4rem)] overflow-y-auto"
     >
       <BreadCrumb></BreadCrumb>
-        <router-view></router-view>
+      <router-view></router-view>
     </div>
   </div>
   <Toasts></Toasts>
@@ -16,4 +17,9 @@ import Header from '@velero-ui-app/layouts/default/components/Header.vue';
 import Sidebar from '@velero-ui-app/layouts/default/components/Sidebar.vue';
 import BreadCrumb from '@velero-ui-app/layouts/default/components/BreadCrumb.vue';
 import Toasts from '@velero-ui-app/components/Toasts/Toasts.vue';
+import { useAppStore } from '@velero-ui-app/stores/app.store';
+import { storeToRefs } from 'pinia';
+
+const appStore = useAppStore();
+const { hideSidebar } = storeToRefs(appStore);
 </script>

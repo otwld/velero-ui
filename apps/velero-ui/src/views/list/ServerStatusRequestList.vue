@@ -1,23 +1,58 @@
 <template>
-  <List
-    v-if="serverStatusRequests"
-    :component="ServerStatusRequestLine"
-    :data="serverStatusRequests"
-    :loading="isGettingMany"
-    :headers="headers"
-    @onRefresh="getMany"
-  ></List>
+  <ListHeader>
+    <template v-slot:bulk-buttons>
+      <button
+        class="inline-flex justify-center p-1 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+        type="button"
+      >
+        <FontAwesomeIcon :icon="faTrashCan" class="w-5 h-5" />
+      </button>
+    </template>
+  </ListHeader>
+  <ListContent :component="ServerStatusRequestLine"></ListContent>
+  <ListFooter></ListFooter>
 </template>
-<script setup lang="ts">
+<script lang="ts" setup>
 import { onBeforeMount } from 'vue';
-import List from '@velero-ui-app/components/List/List.vue';
-import { useServerStatusRequestGetMany } from '@velero-ui-app/use/server-status-request/useServerStatusRequestGetMany';
 import ServerStatusRequestLine from '@velero-ui-app/components/Request/ServerStatusRequestLine.vue';
+import { useListStore } from '@velero-ui-app/stores/list.store';
+import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import ListHeader from '@velero-ui-app/components/List/ListHeader.vue';
+import ListFooter from '@velero-ui-app/components/List/ListFooter.vue';
+import ListContent from '@velero-ui-app/components/List/ListContent.vue';
 
-const { getMany, isGettingMany, serverStatusRequests } =
-  useServerStatusRequestGetMany();
+const listStore = useListStore();
 
-onBeforeMount(() => getMany());
-
-const headers = ['Name', 'Processed On', 'Status', 'Actions'];
+onBeforeMount(() =>
+  listStore.setHeaders([
+    {
+      name: 'Name',
+      sort: {
+        enabled: true,
+        selected: true,
+        ascending: true,
+      },
+    },
+    {
+      name: 'Processed On',
+      sort: {
+        enabled: true,
+        selected: false,
+      },
+    },
+    {
+      name: 'Status',
+      sort: {
+        enabled: false,
+      },
+    },
+    {
+      name: 'Actions',
+      sort: {
+        enabled: false,
+      },
+    },
+  ]),
+);
 </script>

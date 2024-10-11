@@ -23,6 +23,6 @@ It supports all Velero ressources and can be use as a replacement of [Velero CLI
 
 ## Getting Started
 
-- [🚀 **Getting Started with Docker**](/getting-started/docker)
-- [🚀 **Getting Started with Helm Chart**](/getting-started/helm)
-- [🚀 **Getting Started with Kubernetes**](/getting-started/kubernetes)
+- [🐳 **Getting Started with Docker**](/getting-started/docker)
+- [☸️ **Getting Started with Helm Chart**](/getting-started/helm)
+- [⚙️ **Getting Started with Kubernetes**](/getting-started/kubernetes)

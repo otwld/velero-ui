@@ -4,7 +4,7 @@ import { Reflector } from '@nestjs/core';
 import { IS_PUBLIC_KEY } from '@velero-ui-api/shared/decorators/public.decorator';
 
 @Injectable()
-export class JwtAuthGuard extends AuthGuard(['jwt', 'oidc', 'ldap']) {
+export class JwtAuthGuard extends AuthGuard(['jwt']) {
   constructor(private reflector: Reflector) {
     super();
   }

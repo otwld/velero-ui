@@ -93,8 +93,8 @@ export interface V1RestoreStatus {
   warnings: number;
   errors?: number;
   failureReason?: string;
-  startTimestamp?: Date;
-  completionTimestamp?: Date;
+  startTimestamp?: string;
+  completionTimestamp?: string;
   progress?: V1RestoreProgress;
   restoreItemOperationsAttempted?: number;
   restoreItemOperationsCompleted?: number;

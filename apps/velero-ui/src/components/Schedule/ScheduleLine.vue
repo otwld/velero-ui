@@ -3,31 +3,37 @@
     <td class="w-4 p-4">
       <div class="flex items-center">
         <input
-          id="checkbox-"
-          aria-describedby="checkbox-1"
-          type="checkbox"
+          :checked="checked"
           class="w-4 h-4 border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600"
+          type="checkbox"
+          @click="emit('onChecked')"
         />
-        <label for="checkbox-" class="sr-only">checkbox</label>
+        <label class="sr-only" for="checkbox-">checkbox</label>
       </div>
     </td>
     <router-link
-      router-link
       :to="{
         name: Pages.SCHEDULE.name,
         params: {
           name: data.metadata.name,
         },
       }"
+      router-link
     >
       <td class="flex items-center p-4 mr-12 space-x-6 whitespace-nowrap">
         <div class="text-sm font-normal text-gray-500 dark:text-gray-400">
-          <div class="text-base font-semibold text-gray-900 dark:text-white">
-            {{ data.metadata.name }}
-          </div>
-          <div class="text-xs font-normal text-gray-500 dark:text-gray-400">
+          <p
+            :title="data?.metadata?.name"
+            class="text-base font-semibold text-gray-900 dark:text-white"
+          >
+            {{ truncate(data?.metadata?.name) }}
+          </p>
+          <p
+            :title="data?.metadata?.uid"
+            class="text-xs font-normal text-gray-500 dark:text-gray-400"
+          >
             {{ data.metadata.uid }}
-          </div>
+          </p>
         </div>
       </td>
     </router-link>
@@ -65,10 +71,10 @@
     <td
       class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white"
     >
-      <div class="flex items-center flex-col">
+      <div class="flex items-start flex-col">
         <ScheduleStatusPhaseBadge
-          :status="data.status.phase"
           :paused="data.status.paused"
+          :status="data.status.phase"
         ></ScheduleStatusPhaseBadge>
         <span
           v-if="data?.spec?.paused"
@@ -81,15 +87,23 @@
     <td class="p-4 space-x-2 whitespace-nowrap">
       <div class="inline-flex rounded-md shadow-sm" role="group">
         <button
+          class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-l-lg bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:ring-teal-300 dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
+          title="Edit"
+          type="button"
+        >
+          <FontAwesomeIcon :icon="faPen" class="w-4 h-4" />
+        </button>
+        <button
           v-if="
             data?.status?.phase !== V1SchedulePhase.FailedValidation &&
             data?.spec?.paused
           "
-          type="button"
-          title="Unpause"
+          :data-tooltip-target="`tooltip-button-unpause-${data?.metadata?.uid}`"
           :disabled="togglePauseLoading"
+          class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-green-600 hover:bg-green-800 focus:ring-4 focus:ring-green-300 dark:focus:ring-green-900"
+          title="Unpause"
+          type="button"
           @click="togglePause(false)"
-          class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-green-600 rounded-l-lg hover:bg-green-800 focus:ring-4 focus:ring-green-300 dark:focus:ring-green-900"
         >
           <FontAwesomeIcon
             v-if="!togglePauseLoading"
@@ -101,17 +115,26 @@
             :icon="faCircleNotch"
             class="w-4 h-4 animate-spin"
           />
+          <div
+            :id="`tooltip-button-unpause-${data?.metadata?.uid}`"
+            class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
+            role="tooltip"
+          >
+            Unpause
+            <div class="tooltip-arrow" data-popper-arrow></div>
+          </div>
         </button>
         <button
           v-if="
             data?.status?.phase !== V1SchedulePhase.FailedValidation &&
             !data?.spec?.paused
           "
-          type="button"
-          title="Pause"
+          :data-tooltip-target="`tooltip-button-pause-${data?.metadata?.uid}`"
           :disabled="togglePauseLoading"
+          class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900"
+          title="Pause"
+          type="button"
           @click="togglePause(true)"
-          class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-600 rounded-l-lg hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900"
         >
           <FontAwesomeIcon
             v-if="!togglePauseLoading"
@@ -123,50 +146,96 @@
             :icon="faCircleNotch"
             class="w-4 h-4 animate-spin"
           />
+          <div
+            :id="`tooltip-button-pause-${data?.metadata?.uid}`"
+            class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
+            role="tooltip"
+          >
+            Pause
+            <div class="tooltip-arrow" data-popper-arrow></div>
+          </div>
         </button>
 
         <button
-          type="button"
-          title="Delete"
-          @click="remove()"
+          :class="{ 'cursor-not-allowed': isDeleting }"
+          :data-tooltip-target="`tooltip-button-delete-${data?.metadata?.uid}`"
+          :disabled="isDeleting"
           class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-red-600 rounded-r-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"
+          title="Delete"
+          type="button"
+          @click="showModalDelete = !showModalDelete"
         >
-          <FontAwesomeIcon :icon="faTrashCan" class="w-4 h-4" />
+          <FontAwesomeIcon
+            v-if="isDeleting"
+            :icon="faCircleNotch"
+            class="w-4 h-4 animate-spin"
+          />
+          <FontAwesomeIcon
+            v-if="!isDeleting"
+            :icon="faTrashCan"
+            class="w-4 h-4"
+          />
+          <div
+            :id="`tooltip-button-delete-${data?.metadata?.uid}`"
+            class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
+            role="tooltip"
+          >
+            Delete
+            <div class="tooltip-arrow" data-popper-arrow></div>
+          </div>
         </button>
       </div>
     </td>
   </tr>
+  <ModalConfirmation
+    v-if="showModalDelete"
+    :icon="faExclamationCircle"
+    :name="data?.metadata?.name"
+    text="Are you sure you want to delete:"
+    @onClose="showModalDelete = false"
+    @onConfirm="remove(data.metadata.name)"
+  />
 </template>
 
-<script setup lang="ts">
-import type { V1Schedule } from '@velero-ui/velero';
+<script lang="ts" setup>
+import { Resources, type V1Schedule, V1SchedulePhase } from '@velero-ui/velero';
 import { convertTimestampToDate } from '../../utils/date.utils';
-import type { PropType } from 'vue';
+import { onMounted, type PropType, ref, toRef } from 'vue';
 import {
-  faPause,
-  faPlay,
-  faTrashCan,
-  faServer,
   faArrowUpRightFromSquare,
   faCircleNotch,
+  faExclamationCircle,
+  faPause,
+  faPen,
+  faPlay,
+  faServer,
+  faTrashCan,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { Pages } from '../../utils/constants.utils';
 import ScheduleStatusPhaseBadge from './ScheduleStatusPhaseBadge.vue';
-import { V1SchedulePhase } from '@velero-ui/velero';
-import { toRef } from 'vue';
-import { useSchedulePause } from '@velero-ui-app/use/schedule/useSchedulePause';
-import { useScheduleRemove } from '@velero-ui-app/use/schedule/useScheduleRemove';
+import { initTooltips } from 'flowbite';
+import ModalConfirmation from '@velero-ui-app/components/Modals/ModalConfirmation.vue';
+import { Pages } from '@velero-ui-app/utils/constants.utils';
+import { truncate } from '../../utils/string.utils';
+import { useDeleteKubernetesObject } from '@velero-ui-app/composables/useDeleteKubernetesObject';
+import { usePauseSchedule } from '@velero-ui-app/composables/schedule/usePauseSchedule';
 
 const props = defineProps({
   data: Object as PropType<V1Schedule>,
+  checked: Boolean,
 });
 
-const { togglePause, togglePauseLoading } = useSchedulePause(
-  toRef(() => props.data?.metadata?.name)
+const emit = defineEmits(['onChecked']);
+
+onMounted(() => initTooltips());
+
+const showModalDelete = ref(false);
+
+const { mutate: togglePause, isPending: togglePauseLoading } = usePauseSchedule(
+  toRef(() => props.data?.metadata?.name),
 );
 
-const { remove } = useScheduleRemove(
-  toRef(() => props.data?.metadata?.name)
+const { isPending: isDeleting, mutate: remove } = useDeleteKubernetesObject(
+  Resources.SCHEDULE,
 );
 </script>

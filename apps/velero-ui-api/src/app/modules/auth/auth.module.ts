@@ -8,15 +8,21 @@ import { ConfigService } from '@nestjs/config';
 import { JwtModuleOptions } from '@nestjs/jwt/dist/interfaces/jwt-module-options.interface';
 import { JwtStrategy } from '@velero-ui-api/modules/auth/strategies/jwt.strategy';
 import { LdapStrategy } from '@velero-ui-api/modules/auth/strategies/ldap.strategy';
-import { OidcStrategy } from '@velero-ui-api/modules/auth/strategies/oidc.strategy';
+import { GoogleStrategy } from '@velero-ui-api/modules/auth/strategies/google.strategy';
+import { GithubStrategy } from '@velero-ui-api/modules/auth/strategies/github.strategy';
+import { GitlabStrategy } from '@velero-ui-api/modules/auth/strategies/gitlab.strategy';
+import { MicrosoftStrategy } from '@velero-ui-api/modules/auth/strategies/microsoft.strategy';
+import { OauthStrategy } from '@velero-ui-api/modules/auth/strategies/oauth.strategy';
 
 @Module({
   imports: [
     PassportModule,
     JwtModule.registerAsync({
       useFactory: (configService: ConfigService): JwtModuleOptions => ({
-        secret: configService.get('basicAuth.secret'),
-        signOptions: { expiresIn: '1h' },
+        secret: configService.get('app.secret'),
+        signOptions: {
+          expiresIn: configService.get('app.sessionDuration'),
+        },
       }),
       inject: [ConfigService],
     }),
@@ -27,7 +33,11 @@ import { OidcStrategy } from '@velero-ui-api/modules/auth/strategies/oidc.strate
     LocalStrategy,
     JwtStrategy,
     LdapStrategy,
-    OidcStrategy,
+    GoogleStrategy,
+    GithubStrategy,
+    GitlabStrategy,
+    MicrosoftStrategy,
+    OauthStrategy,
   ],
   exports: [AuthService],
 })

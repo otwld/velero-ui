@@ -1,17 +1,20 @@
 import {
-  IsArray, IsBoolean,
+  IsArray,
+  IsBoolean,
   IsEnum,
-  IsNotEmpty, IsNumber,
-  IsObject, IsOptional,
+  IsNotEmpty,
+  IsNumber,
+  IsObject,
+  IsOptional,
   IsString,
   ValidateNested,
 } from 'class-validator';
 import { Type } from 'class-transformer';
-
-enum CreateBackupTypeEnum {
-  FROM_SCHEDULE = 'schedule',
-  FROM_SCRATCH = 'custom',
-}
+import { V1BackupSpec } from '@velero-ui/velero';
+import {
+  type CreateBackupFormBody,
+  CreateBackupTypeEnum,
+} from '@velero-ui/shared-types';
 
 export class CreateBackupDataFromScheduleDto {
   @IsString()
@@ -19,122 +22,106 @@ export class CreateBackupDataFromScheduleDto {
   name: string;
 }
 
-export class CreateBackupDataFromScratchDto {
+export class CreateBackupDataFromScratchDto implements V1BackupSpec {
   @IsOptional()
   @IsNumber()
-  sciSnapshotTimeout: number;
+  sciSnapshotTimeout?: number;
 
   @IsOptional()
   @IsString()
-  dataMover: string;
+  dataMover?: string;
 
   @IsOptional()
   @IsBoolean()
-  defaultVolumesToFsBackup: boolean = true;
+  defaultVolumesToFsBackup? = true;
 
   @IsOptional()
   @IsArray()
   @IsString({ each: true })
-  excludeClusterScopedResources: string[];
+  excludedClusterScopedResources?: string[];
 
   @IsOptional()
   @IsArray()
   @IsString({ each: true })
-  excludeNamespaceScopedResources: string[];
+  excludedNamespaceScopedResources?: string[];
 
   @IsOptional()
   @IsArray()
   @IsString({ each: true })
-  excludeNamespaces: string[];
+  excludedNamespaces?: string[];
 
   @IsOptional()
   @IsArray()
   @IsString({ each: true })
-  excludeResources: string[];
+  excludedResources?: string[];
 
   @IsOptional()
   @IsBoolean()
-  includeClusterResources: boolean = true;
+  includeClusterResources? = true;
 
   @IsOptional()
   @IsArray()
   @IsString({ each: true })
-  includeClusterScopedResources: string[];
+  includedClusterScopedResources?: string[];
 
   @IsOptional()
   @IsArray()
   @IsString({ each: true })
-  includeNamespaceScopedResources: string[];
+  includedNamespaceScopedResources?: string[];
 
-  @IsOptional()
   @IsArray()
   @IsString({ each: true })
-  includeNamespaces: string[];
+  includedNamespaces: string[];
 
-  @IsOptional()
   @IsArray()
   @IsString({ each: true })
-  includeResources: string[];
+  includedResources: string[];
 
   @IsOptional()
   @IsNumber()
-  itemOperationTimeout: number;
+  itemOperationTimeout?: string;
+
+  @IsOptional()
+  @IsObject()
+  labelSelector?: object;
+
+  @IsOptional()
+  @IsObject()
+  orSelector?: Record<string, string>;
 
   @IsOptional()
   @IsArray()
   @IsString({ each: true })
-  labelColumns: string[];
-
-  @IsOptional()
-  @IsArray()
-  @IsString({ each: true })
-  labels: Record<string, string>;
-
-  @IsOptional()
-  @IsArray()
-  @IsString({ each: true })
-  orSelector: string[];
-
-  @IsOptional()
-  @IsArray()
-  @IsString({ each: true })
-  orderedResources: string[];
+  orderedResources?: string[];
 
   @IsOptional()
   @IsNumber()
-  parallelFilesUpload: number;
+  parallelFilesUpload?: number;
 
   @IsOptional()
   @IsString()
-  resourcePoliciesConfigmap: string;
-
-  @IsOptional()
-  @IsString()
-  selector: string;
+  resourcePoliciesConfigmap?: string;
 
   @IsOptional()
   @IsBoolean()
-  snapshotMoveData: boolean = true;
+  snapshotMoveData? = true;
 
   @IsOptional()
   @IsBoolean()
-  snapshotVolumes: boolean = true;
+  snapshotVolumes? = true;
 
-  @IsOptional()
   @IsString()
   storageLocation: string;
 
-  @IsOptional()
-  @IsNumber()
-  ttl: number;
+  @IsString()
+  ttl: string;
 
-  @IsOptional()
   @IsArray()
   @IsString({ each: true })
   volumeSnapshotLocations: string[];
 }
 
-export class CreateBackupDto {
+export class CreateBackupDto implements CreateBackupFormBody {
   @IsString()
   @IsNotEmpty()
   name: string;
@@ -143,23 +130,14 @@ export class CreateBackupDto {
   @IsEnum(CreateBackupTypeEnum)
   type: CreateBackupTypeEnum;
 
+  @IsOptional()
+  labels: Record<string, string>;
+
   @IsObject()
-  @ValidateNested()
-  @Type(() => CreateBackupDto, {
-    discriminator: {
-      property: 'type',
-      subTypes: [
-        {
-          value: CreateBackupDataFromScheduleDto,
-          name: CreateBackupTypeEnum.FROM_SCHEDULE,
-        },
-        {
-          value: CreateBackupDataFromScratchDto,
-          name: CreateBackupTypeEnum.FROM_SCRATCH,
-        },
-      ],
-    },
-    keepDiscriminatorProperty: true,
-  })
+  @Type((opts) =>
+    opts.object.type === CreateBackupTypeEnum.FROM_SCHEDULE
+      ? CreateBackupDataFromScheduleDto
+      : CreateBackupDataFromScratchDto,
+  )
   data: CreateBackupDataFromScheduleDto | CreateBackupDataFromScratchDto;
 }

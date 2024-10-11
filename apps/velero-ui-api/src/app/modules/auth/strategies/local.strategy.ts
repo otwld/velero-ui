@@ -9,15 +9,19 @@ export class LocalStrategy extends PassportStrategy(Strategy, 'local') {
     super();
   }
 
-  public validate(username: string, password: string): boolean {
+  public validate(username: string, password: string) {
     const success: boolean = this.authService.validateBasicUser(
       username,
-      password
+      password,
     );
 
     if (!success) {
       throw new UnauthorizedException();
     }
-    return success;
+    return {
+      id: 'local',
+      provider: 'local',
+      displayName: username,
+    };
   }
 }

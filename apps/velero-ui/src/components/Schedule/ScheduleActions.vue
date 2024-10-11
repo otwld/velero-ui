@@ -30,8 +30,8 @@
         ></div>
         <div v-if="schedule" class="flex items-center space-x-4">
           <button
-            type="button"
             class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:ring-teal-300 dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
+            type="button"
           >
             <FontAwesomeIcon :icon="faPen" class="w-4 h-4 mr-2" />
             Edit
@@ -41,10 +41,10 @@
               schedule?.status?.phase !== V1SchedulePhase.FailedValidation &&
               schedule?.spec?.paused
             "
-            type="button"
             :disabled="togglePauseLoading"
-            @click="togglePause(false)"
             class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+            type="button"
+            @click="togglePause(false)"
           >
             <FontAwesomeIcon
               v-if="!togglePauseLoading"
@@ -63,10 +63,10 @@
               schedule?.status?.phase !== V1SchedulePhase.FailedValidation &&
               !schedule?.spec?.paused
             "
-            type="button"
             :disabled="togglePauseLoading"
-            @click="togglePause(true)"
             class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            type="button"
+            @click="togglePause(true)"
           >
             <FontAwesomeIcon
               v-if="!togglePauseLoading"
@@ -81,42 +81,66 @@
             Pause
           </button>
           <button
-            type="button"
-            @click="this.$parent.remove()"
+            :class="{ 'cursor-not-allowed': isDisabled || !schedule }"
+            :disabled="isDeleting || !schedule"
             class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-red-600 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"
+            type="button"
+            @click="showModalDelete = !showModalDelete"
           >
-            <FontAwesomeIcon :icon="faTrashCan" class="w-4 h-4 mr-2" />
-            Delete
+            <FontAwesomeIcon
+              v-if="isDeleting"
+              :icon="faCircleNotch"
+              class="w-4 h-4 animate-spin mr-2"
+            />
+            <FontAwesomeIcon
+              v-if="!isDeleting"
+              :icon="faTrashCan"
+              class="w-4 h-4 mr-2"
+            />
+            {{ isDeleting ? 'Deleting' : 'Delete' }}
           </button>
         </div>
       </div>
     </div>
   </div>
+  <ModalConfirmation
+    v-if="showModalDelete"
+    :icon="faExclamationCircle"
+    :name="schedule?.metadata?.name"
+    text="Are you sure you want to delete:"
+    @onClose="showModalDelete = false"
+    @onConfirm="remove(schedule.metadata.name)"
+  />
 </template>
 
-<script setup lang="ts">
-import type { PropType } from 'vue';
-import type { V1Schedule } from '@velero-ui/velero';
+<script lang="ts" setup>
+import { type PropType, ref, toRef } from 'vue';
+import { Resources, type V1Schedule, V1SchedulePhase } from '@velero-ui/velero';
 import {
+  faCircleNotch,
+  faClock,
+  faExclamationCircle,
   faPause,
+  faPen,
   faPlay,
   faTrashCan,
-  faClock,
-  faPen,
-  faCircleNotch,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { V1SchedulePhase } from '@velero-ui/velero';
-import { ref, toRef } from 'vue';
-import { useSchedulePause } from '@velero-ui-app/use/schedule/useSchedulePause';
+import ModalConfirmation from '@velero-ui-app/components/Modals/ModalConfirmation.vue';
+import { useDeleteKubernetesObject } from '@velero-ui-app/composables/useDeleteKubernetesObject';
+import { usePauseSchedule } from '@velero-ui-app/composables/schedule/usePauseSchedule';
 
 const props = defineProps({
   schedule: Object as PropType<V1Schedule>,
 });
 
-const { togglePause, togglePauseLoading } = useSchedulePause(
-  toRef(() => props.schedule?.metadata?.name)
+const showModalDelete = ref(false);
+
+const { mutate: togglePause, isPending: togglePauseLoading } = usePauseSchedule(
+  toRef(() => props.schedule?.metadata?.name),
 );
 
-// const deleteLoading = ref(false);
+const { isPending: isDeleting, mutate: remove } = useDeleteKubernetesObject(
+  Resources.SCHEDULE,
+);
 </script>

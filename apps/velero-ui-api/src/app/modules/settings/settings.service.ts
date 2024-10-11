@@ -127,4 +127,7 @@ export class SettingsService {
       mode: this.k8s.getCurrentUser().token ? 'In cluster' : 'Standalone',
     });
   }
+
+  public getServerLogs() {
+  }
 }

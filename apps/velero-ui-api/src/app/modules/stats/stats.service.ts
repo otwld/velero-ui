@@ -9,7 +9,7 @@ import {
 } from '@velero-ui/shared-types';
 import { K8sCustomObjectService } from '@velero-ui-api/shared/modules/k8s-custom-object/k8s-custom-object.service';
 import {
-  Ressources,
+  Resources,
   V1Backup,
   V1BackupList,
   V1BackupPhase,
@@ -27,23 +27,23 @@ export class StatsService {
   public getBasicStats(): Observable<BasicStats> {
     return forkJoin({
       totalBackups: this.k8sCustomObjectService.count(
-        Ressources.BACKUP.plurial
+        Resources.BACKUP.plurial
       ),
       totalSchedules: this.k8sCustomObjectService.count(
-        Ressources.SCHEDULE.plurial
+        Resources.SCHEDULE.plurial
       ),
       totalRestores: this.k8sCustomObjectService.count(
-        Ressources.RESTORE.plurial
+        Resources.RESTORE.plurial
       ),
       totalStorageLocations: this.k8sCustomObjectService.count(
-        Ressources.BACKUP_STORAGE_LOCATION.plurial
+        Resources.BACKUP_STORAGE_LOCATION.plurial
       ),
     });
   }
 
   public getBackupsStatus(): Observable<BackupsStatusStats> {
     return this.k8sCustomObjectService
-      .get<V1Backup, V1BackupList>(Ressources.BACKUP.plurial)
+      .get<V1Backup, V1BackupList>(Resources.BACKUP.plurial)
       .pipe(
         map((backupList: V1BackupList): BackupsStatusStats => {
           const stats: BackupsStatusStats = {
@@ -68,7 +68,7 @@ export class StatsService {
 
   public getBackupsSuccessRate(): Observable<BackupsSuccessRateStats> {
     return this.k8sCustomObjectService
-      .get<V1Backup, V1BackupList>(Ressources.BACKUP.plurial)
+      .get<V1Backup, V1BackupList>(Resources.BACKUP.plurial)
       .pipe(
         map((backupList: V1BackupList): BackupsSuccessRateStats => {
           const stats: BackupsSuccessRateStats = {
@@ -90,7 +90,7 @@ export class StatsService {
 
   public getRestoresStatus(): Observable<RestoresStatusStats> {
     return this.k8sCustomObjectService
-      .get<V1Restore, V1RestoreList>(Ressources.RESTORE.plurial)
+      .get<V1Restore, V1RestoreList>(Resources.RESTORE.plurial)
       .pipe(
         map((restoreList: V1RestoreList): RestoresStatusStats => {
           const stats: RestoresStatusStats = {
@@ -115,7 +115,7 @@ export class StatsService {
 
   public getRestoresSuccessRate(): Observable<RestoresSuccessRateStats> {
     return this.k8sCustomObjectService
-      .get<V1Restore, V1RestoreList>(Ressources.RESTORE.plurial)
+      .get<V1Restore, V1RestoreList>(Resources.RESTORE.plurial)
       .pipe(
         map((restoreList: V1RestoreList): RestoresSuccessRateStats => {
           const stats: RestoresSuccessRateStats = {

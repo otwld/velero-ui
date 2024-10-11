@@ -33,25 +33,59 @@
         ></div>
         <div v-if="repository" class="flex items-center space-x-4">
           <button
-            type="button"
+            :class="{ 'cursor-not-allowed': isDisabled || !repository }"
+            :disabled="isDeleting || !repository"
             class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-red-600 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"
+            type="button"
+            @click="showModalDelete = !showModalDelete"
           >
-            <FontAwesomeIcon :icon="faTrashCan" class="w-4 h-4 mr-2" />
-            Delete
+            <FontAwesomeIcon
+              v-if="isDeleting"
+              :icon="faCircleNotch"
+              class="w-4 h-4 animate-spin mr-2"
+            />
+            <FontAwesomeIcon
+              v-if="!isDeleting"
+              :icon="faTrashCan"
+              class="w-4 h-4 mr-2"
+            />
+            {{ isDeleting ? 'Deleting' : 'Delete' }}
           </button>
         </div>
       </div>
     </div>
   </div>
+
+  <ModalConfirmation
+    v-if="showModalDelete"
+    :icon="faExclamationCircle"
+    :name="repository?.metadata?.name"
+    text="Are you sure you want to delete:"
+    @onClose="showModalDelete = false"
+    @onConfirm="remove(repository.metadata.name)"
+  />
 </template>
 
-<script setup lang="ts">
-import type { PropType } from 'vue';
+<script lang="ts" setup>
+import { type PropType, ref } from 'vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import type { V1BackupRepository } from '@velero-ui/velero';
-import { faTrashCan, faFolderTree } from '@fortawesome/free-solid-svg-icons';
+import { Resources, type V1BackupRepository } from '@velero-ui/velero';
+import {
+  faCircleNotch,
+  faExclamationCircle,
+  faFolderTree,
+  faTrashCan,
+} from '@fortawesome/free-solid-svg-icons';
+import { useDeleteKubernetesObject } from '@velero-ui-app/composables/useDeleteKubernetesObject';
+import ModalConfirmation from '@velero-ui-app/components/Modals/ModalConfirmation.vue';
 
 defineProps({
   repository: Object as PropType<V1BackupRepository>,
 });
+
+const showModalDelete = ref(false);
+
+const { isPending: isDeleting, mutate: remove } = useDeleteKubernetesObject(
+  Resources.BACKUP_REPOSITORY,
+);
 </script>

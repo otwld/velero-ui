@@ -22,7 +22,7 @@ export interface V1PluginInfo {
 
 export interface V1ServerStatusRequestStatus {
   phase: V1ServerStatusRequestPhase;
-  processedTimestamp?: Date;
+  processedTimestamp?: string;
   serverVersion?: string;
   plugins: V1PluginInfo[];
 }

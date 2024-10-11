@@ -1,7 +1,7 @@
 <template>
   <div
-    id="toast-success"
-    class="flex items-center w-full max-w-xs px-3 py-2 mb-4 text-gray-500 bg-white rounded-lg shadow dark:text-gray-400 dark:bg-gray-800"
+    id="toast"
+    class="flex items-center w-full max-w-xs px-3 py-2 mb-4 text-gray-500 bg-white rounded-lg shadow dark:text-gray-400 dark:bg-gray-800 "
     role="alert"
   >
     <div

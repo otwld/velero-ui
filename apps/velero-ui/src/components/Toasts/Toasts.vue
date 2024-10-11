@@ -1,5 +1,5 @@
 <template>
-  <div class="fixed z-5 right-2 bottom-2 min-w-[350px]">
+  <div class="fixed z-50 right-2 bottom-2 min-w-[350px]">
     <div v-for="(toast, index) in toasts" :key="`toast-${index}`">
       <ToastItem
         @onDismiss="dismiss(index)"

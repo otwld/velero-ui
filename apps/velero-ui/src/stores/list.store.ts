@@ -1,7 +1,26 @@
 import { defineStore } from 'pinia';
+import type { Resource } from '@velero-ui/velero';
 
 export interface ListSearchFilters {
   startWith: string;
+}
+
+export interface ListSort {
+  column: ListSortColumn;
+}
+
+export interface ListSortColumn {
+  name: string;
+  ascending: boolean;
+}
+
+export interface ListHeader {
+  name: string;
+  sort: {
+    enabled: boolean;
+    selected?: boolean;
+    ascending?: true;
+  };
 }
 
 export interface ListStore {
@@ -9,6 +28,9 @@ export interface ListStore {
   offset: number;
   limit: number;
   filters: ListSearchFilters;
+  sort: ListSort;
+  headers: ListHeader[];
+  objectType: Resource;
 }
 
 export const useListStore = defineStore({
@@ -17,26 +39,46 @@ export const useListStore = defineStore({
     ({
       total: 0,
       offset: 0,
-      limit: 20,
+      limit: parseInt(localStorage.getItem('list_limit')) || 20,
       filters: {
         startWith: '',
       },
-    } as ListStore),
+      sort: {
+        column: {
+          name: 'Name',
+          ascending: true,
+        },
+      },
+      headers: [],
+      objectType: null,
+    }) as ListStore,
   actions: {
     reset(): void {
       this.total = 0;
       this.offset = 0;
 
       this.resetSearch();
+      this.resetSort();
     },
     resetSearch(): void {
       this.filters.startWith = '';
+    },
+    resetSort(): void {
+      this.sort.column.name = 'Name';
+      this.sort.column.ascending = true;
+    },
+    resetChecked(): void {
+      this.checked = {};
     },
     setTotal(total: number): void {
       this.total = total;
     },
     setLimit(limit: number): void {
       this.limit = limit;
+      localStorage.setItem('localStorage', limit.toString());
+    },
+    setObjectType(type: Resource): void {
+      this.objectType = type;
     },
     next(): void {
       if (this.offset + this.limit < this.total) {
@@ -52,6 +94,29 @@ export const useListStore = defineStore({
     },
     applyNameFilter(name: string): void {
       this.filters.startWith = name;
+    },
+    setHeaders(headers: ListHeader[]): void {
+      this.headers = headers;
+    },
+    applyHeaderSort(name: string): void {
+      const index = this.headers.findIndex((h) => h.name === name);
+
+      if (index !== -1 && this.headers[index].sort.selected) {
+        this.headers[index].sort.ascending =
+          !this.headers[index].sort.ascending;
+        this.sort.column.ascending = this.headers[index].sort.ascending;
+      } else if (index !== -1 && this.headers[index]?.sort.enabled) {
+        this.headers.forEach((h) => {
+          if (h.sort.selected) {
+            h.sort.selected = false;
+          }
+        });
+
+        this.headers[index].sort.selected = true;
+        this.headers[index].sort.ascending = true;
+        this.sort.column.name = this.headers[index].name;
+        this.sort.column.ascending = true;
+      }
     },
   },
 });

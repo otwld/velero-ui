@@ -1,27 +1,99 @@
 <template>
-  <List
-    v-if="locations"
-    :component="StorageLocationLine"
-    :data="locations"
-    :headers="headers"
-    :loading="isGettingMany"
-    @onRefresh="getMany"
-  ></List>
+  <ListHeader>
+    <template v-slot:bulk-buttons>
+      <button
+        class="inline-flex justify-center p-1 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+        type="button"
+      >
+        <FontAwesomeIcon :icon="faTrashCan" class="w-5 h-5" />
+      </button>
+    </template>
+    <template v-slot:buttons>
+      <button
+        class="inline-flex items-center justify-center w-1/2 px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 sm:w-auto dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+        type="button"
+        @click="showModalAdd = !showModalAdd"
+      >
+        <FontAwesomeIcon :icon="faPlus" class="w-4 h-4 mr-2" />
+        New
+      </button>
+    </template>
+  </ListHeader>
+  <ListContent :component="StorageLocationLine"></ListContent>
+  <ListFooter></ListFooter>
+
+  <VModal v-if="showModalAdd" id="modal-add" @onClose="showModalAdd = false">
+    <template v-slot:header>
+      <h3 class="text-lg text-gray-500 dark:text-gray-400">
+        Create a new Storage Location
+      </h3>
+    </template>
+    <template v-slot:content>
+      <StorageLocationCreate
+        @onClose="showModalAdd = false"
+      ></StorageLocationCreate>
+    </template>
+  </VModal>
 </template>
-<script setup lang="ts">
-import List from '@velero-ui-app/components/List/List.vue';
-import { storeToRefs } from 'pinia';
-import { useStorageLocationStore } from '@velero-ui-app/stores/storage-location.store';
+<script lang="ts" setup>
+import { onBeforeMount, ref } from 'vue';
+import { useListStore } from '@velero-ui-app/stores/list.store';
+import ListHeader from '@velero-ui-app/components/List/ListHeader.vue';
+import ListFooter from '@velero-ui-app/components/List/ListFooter.vue';
+import ListContent from '@velero-ui-app/components/List/ListContent.vue';
 import StorageLocationLine from '@velero-ui-app/components/StorageLocation/StorageLocationLine.vue';
-import { onBeforeMount } from 'vue';
-import { useStorageLocationGetMany } from '@velero-ui-app/use/storage-location/useStorageLocationGetMany';
+import {faPlus, faTrashCan} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import VModal from '@velero-ui-app/components/Modals/VModal.vue';
+import StorageLocationCreate from '@velero-ui-app/components/StorageLocation/StorageLocationCreate.vue';
 
-const storageLocationStore = useStorageLocationStore();
-const { locations } = storeToRefs(storageLocationStore);
+const listStore = useListStore();
 
-const { getMany, isGettingMany } = useStorageLocationGetMany();
+onBeforeMount(() =>
+  listStore.setHeaders([
+    {
+      name: 'Name',
+      sort: {
+        enabled: true,
+        selected: true,
+        ascending: true,
+      },
+    },
+    {
+      name: 'Provider',
+      sort: {
+        enabled: true,
+        selected: false,
+      },
+    },
+    {
+      name: 'Access Mode',
+      sort: {
+        enabled: true,
+        selected: false,
+      },
+    },
+    {
+      name: 'Last Sync',
+      sort: {
+        enabled: true,
+        selected: false,
+      },
+    },
+    {
+      name: 'Status',
+      sort: {
+        enabled: false,
+      },
+    },
+    {
+      name: 'Actions',
+      sort: {
+        enabled: false,
+      },
+    },
+  ]),
+);
 
-onBeforeMount(() => getMany());
-
-const headers = ['Name', 'Provider', 'Access Mode', 'Last Sync', 'Status', 'Actions'];
+const showModalAdd = ref(false);
 </script>

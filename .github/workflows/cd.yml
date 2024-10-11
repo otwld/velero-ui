@@ -30,13 +30,13 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 20
-          cache: 'yarn'
+          cache: 'npm'
 
-      - run: yarn install --frozen-lockfile
+      - run: npm ci
 
-      - uses: nrwl/nx-set-shas@v3
+      - uses: nrwl/nx-set-shas@v4
 
-      - run: yarn nx run-many -t build --prod
+      - run: npx nx run-many -t build --prod
 
       - name: get-npm-version
         id: package-version

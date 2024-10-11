@@ -7,6 +7,5 @@ export default registerAs('basicAuth', (): BasicAuthConfig => {
     enabled: process.env.BASIC_AUTH_ENABLED === 'true' || false,
     username: process.env.BASIC_AUTH_USERNAME || 'admin',
     password: process.env.BASIC_AUTH_PASSWORD || 'admin',
-    secret: process.env.SECRET_PASSPHRASE || 'this is the secret pass phrase',
   };
 });

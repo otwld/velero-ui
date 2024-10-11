@@ -7,7 +7,7 @@
     >
       <FontAwesomeIcon :icon="faHardDrive" class="w-16 h-16 dark:text-white" />
 
-      <div>
+      <div class="flex-1 min-w-0">
         <h3
           class="flex items-center mb-1 text-lg font-bold text-gray-900 dark:text-white"
         >
@@ -15,10 +15,12 @@
           <div
             v-if="veleroServer?.connected"
             class="h-2.5 w-2.5 rounded-full bg-green-400 ml-2"
+            title="Online"
           ></div>
           <div
             v-if="!veleroServer?.connected"
             class="h-2.5 w-2.5 rounded-full bg-red-500 ml-2"
+            title="Offline"
           ></div>
         </h3>
         <div class="mb-1 text-sm text-gray-500 dark:text-gray-400">
@@ -35,21 +37,53 @@
             class="h-2 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-72 mb-4"
           ></div>
         </div>
-        <div class="flex items-center space-x-4"></div>
+      </div>
+      <div class="inline-flex items-center">
+        <button
+          class="inline-flex items-center px-3 py-2 text-sm font-medium rounded-lg text-center text-gray-900 focus:outline-none bg-white border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+          data-tooltip-target="tooltip-button-logs-server"
+          type="button"
+          @click="showModal = !showModal"
+        >
+          <FontAwesomeIcon :icon="faEye" class="w-4 h-4" />
+        </button>
       </div>
     </div>
   </div>
+  <VModal v-if="showModal" id="modal-logs-server" @onClose="showModal = false">
+    <template v-slot:header>
+      <h3 class="text-lg text-gray-500 dark:text-gray-400">Server logs</h3>
+    </template>
+    <template v-slot:content>
+      <SettingsVeleroServerLogs></SettingsVeleroServerLogs>
+    </template>
+  </VModal>
+  <div
+    :id="`tooltip-button-logs-server`"
+    class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
+    role="tooltip"
+  >
+    Velero Server logs
+    <div class="tooltip-arrow" data-popper-arrow></div>
+  </div>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import { storeToRefs } from 'pinia';
 import { useSettingsStore } from '../../stores/settings.store';
-import { faHardDrive } from '@fortawesome/free-solid-svg-icons';
+import { faEye, faHardDrive } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { onBeforeMount } from 'vue';
+import { onBeforeMount, onMounted, ref } from 'vue';
+import { initTooltips } from 'flowbite';
+import VModal from '@velero-ui-app/components/Modals/VModal.vue';
+import SettingsVeleroServerLogs from '@velero-ui-app/components/Settings/SettingsVeleroServerLogs.vue';
 
 const settingsStore = useSettingsStore();
 const { veleroServer } = storeToRefs(settingsStore);
 
+const showModal = ref(false);
+
 onBeforeMount(() => settingsStore.fetchVeleroServer());
+
+onMounted(() => initTooltips());
 </script>

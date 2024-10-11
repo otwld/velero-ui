@@ -1,5 +1,5 @@
 <template>
-  <div class="col-span-full xl:col-auto">
+  <div class="col-span-full mb-2 xl:col-auto">
     <div
       class="p-4 mb-4 flex bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800 h-full"
     >
@@ -16,10 +16,16 @@
         <div class="flex mt-4 w-full self-center items-center justify-center">
           <apexchart
             v-if="data"
-            width="500"
-            type="donut"
-            :options="{ ...data, noData: { text: 'No Data' } }"
+            :options="{
+              ...data,
+              noData: { text: 'No Data' },
+              chart: {
+                events: {},
+              },
+            }"
             :series="data.series"
+            type="donut"
+            width="500"
           ></apexchart>
         </div>
       </div>
@@ -27,10 +33,8 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { onBeforeMount } from 'vue';
-import { useStatsRestoresStatusGet } from '@velero-ui-app/use/stats/useStatsRestoresStatusGet';
+<script lang="ts" setup>
+import { useStatsRestoresStatus } from '@velero-ui-app/composables/stats/useStatsRestoresStatus';
 
-const { get, data } = useStatsRestoresStatusGet();
-onBeforeMount(() => get());
+const { data } = useStatsRestoresStatus();
 </script>

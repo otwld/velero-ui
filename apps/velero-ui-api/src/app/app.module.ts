@@ -25,15 +25,31 @@ import { LoggerModule } from '@velero-ui-api/shared/modules/logger/logger.module
 import velero from '../config/velero.config';
 import k8s from '../config/k8s.config';
 import app from '../config/app.config';
-import oidc from '@velero-ui-api/config/oidc.config';
 import basicAuth from '../config/basic-auth.config';
 import ldap from '../config/ldap.config';
+import google from '../config/google.config';
+import github from '../config/github.config';
+import gitlab from '../config/gitlab.config';
+import microsoft from '../config/microsoft.config';
+import oauth from '../config/oauth.config';
+import { FormModule } from '@velero-ui-api/modules/form/form.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [velero, k8s, oidc, basicAuth, app, ldap],
+      load: [
+        velero,
+        k8s,
+        basicAuth,
+        app,
+        ldap,
+        google,
+        github,
+        gitlab,
+        microsoft,
+        oauth,
+      ],
     }),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, 'static'),
@@ -57,6 +73,7 @@ import ldap from '../config/ldap.config';
     StorageLocationModule,
     RestoreModule,
     HealthModule,
+    FormModule,
     VeleroModule,
     SettingsModule,
     SnapshotLocationModule,

@@ -15,6 +15,11 @@ export const ApiRoutes = {
   SETTINGS_VELERO_AGENTS: '/settings/velero/agents',
   SETTINGS_VELERO_UI: '/settings/velero/ui',
   SETTINGS_VELERO_PLUGINS: '/settings/velero/plugins',
+  FORM_SCHEDULES: '/form/schedules',
+  FORM_NAMESPACES: '/form/namespaces',
+  FORM_SECRETS: '/form/secrets',
+  FORM_STORAGE_LOCATIONS: '/form/storage-locations',
+  FORM_SNAPSHOT_LOCATIONS: '/form/snapshot-locations',
 };
 
 export const Pages = {

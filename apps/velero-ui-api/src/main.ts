@@ -1,5 +1,6 @@
 import { Logger, RequestMethod, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
+import { IoAdapter } from '@nestjs/platform-socket.io'
 
 import { AppModule } from './app/app.module';
 import passport from 'passport';
@@ -13,8 +14,9 @@ async function bootstrap() {
   });
   app.enableCors();
   app.use(passport.initialize());
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(new ValidationPipe({ transform: true }));
   app.useLogger(app.get(AppLogger));
+  app.useWebSocketAdapter(new IoAdapter(app))
 
   const port = process.env.PORT || 3000;
   await app.listen(port);

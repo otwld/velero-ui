@@ -29,11 +29,11 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 20
-          cache: 'yarn'
+          cache: 'npm'
 
-      - run: yarn install --frozen-lockfile
+      - run: npm run ci
 
-      - uses: nrwl/nx-set-shas@v3
+      - uses: nrwl/nx-set-shas@v4
 
       - run: git branch --track main origin/main
-      - run: yarn nx affected -t lint build
+      - run: npx affected -t lint build

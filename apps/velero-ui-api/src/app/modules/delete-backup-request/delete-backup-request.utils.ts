@@ -1,5 +1,5 @@
 import { getApiVersion } from '@velero-ui-api/shared/utils/velero.utils';
-import { Ressources, V1DeleteBackupRequest } from '@velero-ui/velero';
+import { Resources, V1DeleteBackupRequest } from '@velero-ui/velero';
 import { generateUuidName } from '@velero-ui-api/shared/utils/uuid.utils';
 
 export const createDeleteBackupRequest = (
@@ -7,7 +7,7 @@ export const createDeleteBackupRequest = (
   namespace: string
 ): V1DeleteBackupRequest => ({
   apiVersion: getApiVersion(),
-  kind: Ressources.DELETE_BACKUP_REQUEST.kind,
+  kind: Resources.DELETE_BACKUP_REQUEST.kind,
   metadata: {
     name: generateUuidName(name),
     namespace,

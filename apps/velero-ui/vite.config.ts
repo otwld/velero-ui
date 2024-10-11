@@ -9,7 +9,7 @@ export default defineConfig({
   cacheDir: '../../node_modules/.vite/apps/velero-ui',
 
   server: {
-    port: process.env.VITE_PORT,
+    port: parseInt(process.env.VITE_PORT),
     host: 'localhost',
   },
 
@@ -21,42 +21,8 @@ export default defineConfig({
   resolve: {
     alias: [
       {
-        find: '@assets',
-        replacement: fileURLToPath(new URL('./src/assets', import.meta.url)),
-      },
-      {
-        find: '@api',
-        replacement: fileURLToPath(new URL('./src/api', import.meta.url)),
-      },
-      {
-        find: '@components',
-        replacement: fileURLToPath(
-          new URL('./src/components', import.meta.url)
-        ),
-      },
-      {
-        find: '@use',
-        replacement: fileURLToPath(new URL('./src/use', import.meta.url)),
-      },
-      {
-        find: '@layouts',
-        replacement: fileURLToPath(new URL('./src/layouts', import.meta.url)),
-      },
-      {
-        find: '@stores',
-        replacement: fileURLToPath(new URL('./src/stores', import.meta.url)),
-      },
-      {
-        find: '@plugins',
-        replacement: fileURLToPath(new URL('./src/plugins', import.meta.url)),
-      },
-      {
-        find: '@views',
-        replacement: fileURLToPath(new URL('./src/views', import.meta.url)),
-      },
-      {
-        find: '@utils',
-        replacement: fileURLToPath(new URL('./src/utils', import.meta.url)),
+        find: '@velero-ui-app',
+        replacement: fileURLToPath(new URL('./src', import.meta.url)),
       },
     ],
   },

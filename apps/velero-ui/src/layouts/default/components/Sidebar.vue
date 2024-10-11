@@ -1,8 +1,13 @@
 <template>
   <aside
     id="sidebar"
-    class="fixed top-0 left-0 z-20 flex flex-col flex-shrink-0 hidden w-64 h-full pt-16 font-normal duration-75 lg:flex transition-width"
+    :class="{
+      hidden: hideSidebar,
+      'lg:flex': hideSidebar,
+      'lg:hidden': !hideSidebar,
+    }"
     aria-label="Sidebar"
+    class="fixed z-10 top-0 left-0 flex flex-col flex-shrink-0 w-64 min-h-[calc(100vh-4rem)] mt-16 font-normal duration-75 transition-width"
   >
     <div
       class="relative flex flex-col flex-1 min-h-0 pt-0 bg-white border-r border-gray-200 dark:bg-gray-800 dark:border-gray-700"
@@ -107,10 +112,11 @@
             </li>
             <li>
               <button
-                type="button"
-                class="flex w-full items-center p-2 text-base text-gray-900 rounded-lg transition duration-75 hover:bg-gray-100 group dark:text-gray-200 dark:hover:bg-gray-700"
                 aria-controls="dropdown-requests"
+                class="flex w-full items-center p-2 text-base text-gray-900 rounded-lg transition duration-75 hover:bg-gray-100 group dark:text-gray-200 dark:hover:bg-gray-700"
                 data-collapse-toggle="dropdown-requests"
+                type="button"
+                @click="toggleDropdown()"
               >
                 <FontAwesomeIcon
                   :icon="faFileLines"
@@ -118,11 +124,21 @@
                 />
                 <span class="flex-1 text-left ml-3">Requests</span>
                 <FontAwesomeIcon
+                  v-if="hiddenDropdown"
                   :icon="faAngleDown"
                   class="w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
                 />
+                <FontAwesomeIcon
+                  v-if="!hiddenDropdown"
+                  :icon="faAngleUp"
+                  class="w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
+                />
               </button>
-              <ul id="dropdown-requests" class="hidden py-2 space-y-2">
+              <ul
+                id="dropdown-requests"
+                :class="{ hidden: hiddenDropdown }"
+                class="py-2 space-y-2"
+              >
                 <li>
                   <router-link
                     :to="Pages.DELETE_BACKUP_REQUESTS.path"
@@ -186,9 +202,9 @@
         <div class="flex flex-col">
           <div class="flex justify-center">
             <a
+              class="inline-flex justify-center p-2 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
               href="https://github.com/otwld/velero-ui"
               target="_blank"
-              class="inline-flex justify-center p-2 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
             >
               <FontAwesomeIcon
                 :icon="faGithub"
@@ -199,8 +215,11 @@
           <span
             class="inline-flex justify-center text-gray-500 text-xs dark:text-white"
             >v{{ version }} - Powered by
-            <a class="ml-1 hover:text-blue-600" href="https://otwld.com/"
-              >Otwld</a
+            <a
+              class="ml-1 hover:text-blue-600"
+              href="https://otwld.com/"
+              target="_blank"
+              >OTWLD</a
             ></span
           >
         </div>
@@ -208,29 +227,36 @@
     </div>
   </aside>
 </template>
-<script setup lang="ts">
+<script lang="ts" setup>
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import {
+  faAngleDown,
+  faAngleUp,
   faChartPie,
-  faServer,
-  faDatabase,
-  faGear,
   faClock,
   faClockRotateLeft,
-  faFloppyDisk,
-  faFolderTree,
-  faAngleDown,
+  faDatabase,
   faFileArrowDown,
   faFileExcel,
-  faFileWaveform,
   faFileLines,
+  faFileWaveform,
+  faFloppyDisk,
+  faFolderTree,
+  faGear,
+  faServer,
 } from '@fortawesome/free-solid-svg-icons';
 import { faGithub } from '@fortawesome/free-brands-svg-icons';
-import { initDropdowns } from 'flowbite';
-import { onMounted } from 'vue';
 import { Pages } from '@velero-ui-app/utils/constants.utils';
+import { ref } from 'vue';
+import { useAppStore } from '@velero-ui-app/stores/app.store';
+import { storeToRefs } from 'pinia';
 
-onMounted(() => initDropdowns());
+const appStore = useAppStore();
+const { hideSidebar, authType } = storeToRefs(appStore);
+
+const hiddenDropdown = ref(true);
+
+const toggleDropdown = () => (hiddenDropdown.value = !hiddenDropdown.value);
 
 const version = import.meta.env.APP_VERSION;
 </script>

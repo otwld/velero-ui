@@ -33,25 +33,65 @@
         ></div>
         <div v-if="location" class="flex items-center space-x-4">
           <button
+            class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:ring-teal-300 dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
             type="button"
-            class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-red-600 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"
           >
-            <FontAwesomeIcon :icon="faTrashCan" class="w-4 h-4 mr-2" />
-            Delete
+            <FontAwesomeIcon :icon="faPen" class="w-4 h-4 mr-2" />
+            Edit
+          </button>
+          <button
+            :class="{ 'cursor-not-allowed': isDisabled || !location }"
+            :disabled="isDeleting || !location"
+            @click="showModalDelete = !showModalDelete"
+            class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-red-600 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"
+            type="button"
+          >
+            <FontAwesomeIcon
+              v-if="isDeleting"
+              :icon="faCircleNotch"
+              class="w-4 h-4 animate-spin mr-2"
+            />
+            <FontAwesomeIcon
+              v-if="!isDeleting"
+              :icon="faTrashCan"
+              class="w-4 h-4 mr-2"
+            />
+            {{ isDeleting ? 'Deleting' : 'Delete' }}
           </button>
         </div>
       </div>
     </div>
   </div>
+  <ModalConfirmation
+    v-if="showModalDelete"
+    :icon="faExclamationCircle"
+    :name="location?.metadata?.name"
+    text="Are you sure you want to delete:"
+    @onClose="showModalDelete = false"
+    @onConfirm="remove(location.metadata.name)"
+  />
 </template>
 
-<script setup lang="ts">
-import type { PropType } from 'vue';
+<script lang="ts" setup>
+import { type PropType, ref } from 'vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import type { V1VolumeSnapshotLocation } from '@velero-ui/velero';
-import { faTrashCan, faDatabase } from '@fortawesome/free-solid-svg-icons';
+import { Resources, type V1VolumeSnapshotLocation } from '@velero-ui/velero';
+import {
+  faCircleNotch,
+  faDatabase,
+  faExclamationCircle, faPen,
+  faTrashCan,
+} from '@fortawesome/free-solid-svg-icons';
+import ModalConfirmation from '@velero-ui-app/components/Modals/ModalConfirmation.vue';
+import { useDeleteKubernetesObject } from '@velero-ui-app/composables/useDeleteKubernetesObject';
 
 defineProps({
   location: Object as PropType<V1VolumeSnapshotLocation>,
 });
+
+const showModalDelete = ref(false);
+
+const { isPending: isDeleting, mutate: remove } = useDeleteKubernetesObject(
+  Resources.VOLUME_SNAPSHOT_LOCATION,
+);
 </script>

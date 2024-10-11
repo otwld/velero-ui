@@ -1,10 +1,9 @@
-export const getRemainingTime = (timeStamp: Date): string => {
-
+export const getRemainingTime = (timeStamp: string): string => {
   const total = Date.parse(timeStamp) - Date.parse(new Date());
-  const seconds = Math.floor( (total/1000) % 60 );
-  const minutes = Math.floor( (total/1000/60) % 60 );
-  const hours = Math.floor( (total/(1000*60*60)) % 24 );
-  const days = Math.floor( total/(1000*60*60*24) );
+  const seconds = Math.floor((total / 1000) % 60);
+  const minutes = Math.floor((total / 1000 / 60) % 60);
+  const hours = Math.floor((total / (1000 * 60 * 60)) % 24);
+  const days = Math.floor(total / (1000 * 60 * 60 * 24));
 
   let expireIn = '';
 
@@ -24,7 +23,6 @@ export const getRemainingTime = (timeStamp: Date): string => {
     expireIn += `${seconds}s`;
   }
 
-
   if (total <= 0 || !total) {
     expireIn = 'Expired';
   }
@@ -32,6 +30,7 @@ export const getRemainingTime = (timeStamp: Date): string => {
   return expireIn;
 };
 
-export const convertTimestampToDate = (timeStamp: Date) => {
-  return new Date(timeStamp).toLocaleString();
+export const convertTimestampToDate = (timeStamp: string) => {
+  const date: Date = new Date(timeStamp);
+  return date.getTime() ? date.toLocaleString() : '';
 };

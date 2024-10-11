@@ -1,20 +1,17 @@
 export interface AppPublicConfig extends AppConfig {
-  oidc: Partial<OIDCConfig>;
   basicAuth: Partial<BasicAuthConfig>;
+  google: Partial<GoogleConfig>;
+  github: Partial<GithubConfig>;
+  gitlab: Partial<GitlabConfig>;
+  microsoft: Partial<MicrosoftConfig>;
+  oauth: Partial<OauthConfig>;
 }
 
 export interface AppConfig {
   grafanaUrl?: string;
   baseUrl: string;
-}
-
-export interface OIDCConfig {
-  enabled: boolean;
-  clientId: string;
-  jwksUri: string;
-  authority: string;
-  clientSecret: string;
-  scopes: string;
+  secret?: string;
+  sessionDuration?: string;
 }
 
 export interface LDAPConfig {
@@ -31,7 +28,52 @@ export interface BasicAuthConfig {
   enabled: boolean;
   username: string;
   password: string;
-  secret: string;
+}
+
+export interface GoogleConfig {
+  enabled: boolean;
+  clientId: string;
+  clientSecret: string;
+  scopes: string;
+  redirectUri: string;
+}
+
+export interface GithubConfig {
+  enabled: boolean;
+  clientId: string;
+  clientSecret: string;
+  scopes: string;
+  redirectUri: string;
+}
+
+export interface MicrosoftConfig {
+  enabled: boolean;
+  clientId: string;
+  clientSecret: string;
+  scopes: string;
+  redirectUri: string;
+  tenant: string;
+}
+
+export interface GitlabConfig {
+  enabled: boolean;
+  clientId: string;
+  clientSecret: string;
+  scopes: string;
+  redirectUri: string;
+  baseUrl: string;
+}
+
+export interface OauthConfig {
+  enabled: boolean;
+  name: string;
+  clientId: string;
+  clientSecret: string;
+  scopes: string;
+  redirectUri: string;
+  tokenUrl: string;
+  authorizationUrl: string;
+  userInfoUrl: string;
 }
 
 export interface VeleroConfig {

@@ -27,7 +27,7 @@
         Backups
       </h1>
       <router-link
-        :to="Pages.BACKUPS.name"
+        :to="Pages.BACKUPS.path"
         class="inline-flex items-center p-2 text-xs font-medium uppercase rounded-lg text-blue-700 sm:text-sm hover:bg-gray-100 dark:text-blue-500 dark:hover:bg-gray-700"
       >
         See all backups
@@ -45,7 +45,7 @@
         Restores
       </h1>
       <router-link
-        :to="Pages.RESTORES.name"
+        :to="Pages.RESTORES.path"
         class="inline-flex items-center p-2 text-xs font-medium uppercase rounded-lg text-blue-700 sm:text-sm hover:bg-gray-100 dark:text-blue-500 dark:hover:bg-gray-700"
       >
         See all restores

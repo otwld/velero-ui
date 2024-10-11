@@ -25,25 +25,28 @@ const getClass = () => {
         'dark:bg-green-900',
         'dark:text-green-300',
       ];
-    case (V1BackupPhase.InProgress,
-    V1BackupPhase.WaitingForPluginOperations,
-    V1BackupPhase.Finalizing):
+    case V1BackupPhase.InProgress:
+    case V1BackupPhase.WaitingForPluginOperations:
+    case V1BackupPhase.Finalizing:
       return [
         'bg-yellow-100',
         'text-yellow-800',
         'dark:bg-yellow-900',
         'dark:text-yellow-300',
+        'animate-pulse'
       ];
-    case (V1BackupPhase.WaitingForPluginOperationsPartiallyFailed,
-    V1BackupPhase.FinalizingPartiallyFailed,
-    V1BackupPhase.PartiallyFailed):
+    case V1BackupPhase.WaitingForPluginOperationsPartiallyFailed:
+    case V1BackupPhase.FinalizingPartiallyFailed:
+    case V1BackupPhase.PartiallyFailed:
       return [
         'bg-orange-100',
         'text-orange-800',
         'dark:bg-orange-900',
         'dark:text-orange-300',
       ];
-    case (V1BackupPhase.Failed, V1BackupPhase.Deleting):
+    case V1BackupPhase.Deleting:
+    case V1BackupPhase.Failed:
+    case V1BackupPhase.FailedValidation:
       return [
         'bg-red-100',
         'text-red-800',

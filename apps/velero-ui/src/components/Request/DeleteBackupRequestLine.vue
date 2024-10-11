@@ -3,26 +3,28 @@
     <td class="w-4 p-4">
       <div class="flex items-center">
         <input
-          id="checkbox-"
-          aria-describedby="checkbox-1"
-          type="checkbox"
+          :checked="checked"
           class="w-4 h-4 border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600"
+          type="checkbox"
+          @click="emit('onChecked')"
         />
-        <label for="checkbox-" class="sr-only">checkbox</label>
+        <label class="sr-only" for="checkbox-">checkbox</label>
       </div>
     </td>
     <td class="flex items-center p-4 mr-12 space-x-6 whitespace-nowrap">
       <div class="text-sm font-normal text-gray-500 dark:text-gray-400">
-        <div class="text-base font-semibold text-gray-900 dark:text-white">
-          {{
-            data?.metadata?.name.length > 42
-              ? data?.metadata?.name.slice(0, 42) + '...'
-              : data?.metadata?.name
-          }}
-        </div>
-        <div class="text-xs font-normal text-gray-500 dark:text-gray-400">
+        <p
+          :title="data?.metadata?.name"
+          class="text-base font-semibold text-gray-900 dark:text-white"
+        >
+          {{ truncate(data?.metadata?.name) }}
+        </p>
+        <p
+          :title="data?.metadata?.uid"
+          class="text-xs font-normal text-gray-500 dark:text-gray-400"
+        >
           {{ data?.metadata?.uid }}
-        </div>
+        </p>
       </div>
     </td>
     <td
@@ -51,11 +53,17 @@
     >
       <div class="flex items-center">
         <div
-          v-if="data?.status?.phase === V1DeleteBackupRequestPhase.Processed && data?.status?.errors.length === 0"
+          v-if="
+            data?.status?.phase === V1DeleteBackupRequestPhase.Processed &&
+            data?.status?.errors.length === 0
+          "
           class="h-2.5 w-2.5 rounded-full bg-green-400 mr-2"
         ></div>
         <div
-          v-if="data?.status?.phase === V1DeleteBackupRequestPhase.Processed && data?.status?.errors.length > 0"
+          v-if="
+            data?.status?.phase === V1DeleteBackupRequestPhase.Processed &&
+            data?.status?.errors.length > 0
+          "
           class="h-2.5 w-2.5 rounded-full bg-orange-400 mr-2"
         ></div>
         <div
@@ -73,21 +81,20 @@
     <td class="p-4 space-x-2 whitespace-nowrap">
       <div class="inline-flex rounded-md shadow-sm" role="group">
         <button
-          type="button"
-          title="Describe"
-          :disabled="isDeleting"
-          :data-modal-target="`modal-describe-${data?.metadata?.name}`"
-          :data-modal-toggle="`modal-describe-${data?.metadata?.name}`"
+          :disabled="isLoading"
           class="inline-flex items-center px-3 py-2 text-sm font-medium rounded-l-lg text-center text-gray-900 focus:outline-none bg-white border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+          title="Describe"
+          type="button"
+          @click="showModalDescribe = !showModalDescribe"
         >
           <FontAwesomeIcon :icon="faFileCode" class="w-4 h-4" />
         </button>
         <button
-          type="button"
+          :class="{ 'cursor-not-allowed': isDeleting }"
           :disabled="isDeleting"
-          :data-modal-target="`modal-delete-${data?.metadata?.name}`"
-          :data-modal-toggle="`modal-delete-${data?.metadata?.name}`"
           class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-red-600 rounded-r-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"
+          type="button"
+          @click="showModalDelete = !showModalDelete"
         >
           <FontAwesomeIcon
             v-if="isDeleting"
@@ -103,43 +110,59 @@
       </div>
     </td>
   </tr>
-  <ModalDelete
-    :id="`modal-delete-${data?.metadata?.name}`"
-    @onConfirm="remove"
+  <ModalConfirmation
+    v-if="showModalDelete"
+    :icon="faExclamationCircle"
     :name="data?.metadata?.name"
-  ></ModalDelete>
+    text="Are you sure you want to delete:"
+    @onClose="showModalDelete = false"
+    @onConfirm="remove(data?.metadata?.name)"
+  />
   <ModalDescribe
-    :id="`modal-describe-${data?.metadata?.name}`"
-    :name="data?.metadata?.name"
+    v-if="showModalDescribe"
     :data="data"
+    :name="data?.metadata?.name"
+    @onClose="showModalDescribe = false"
   ></ModalDescribe>
 </template>
 
-<script setup lang="ts">
-import { onMounted } from 'vue';
-import type { V1DeleteBackupRequest } from '@velero-ui/velero';
+<script lang="ts" setup>
 import type { PropType } from 'vue';
+import { onMounted, ref } from 'vue';
+import {
+  Resources,
+  type V1DeleteBackupRequest,
+  V1DeleteBackupRequestPhase,
+} from '@velero-ui/velero';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import {
-  faTrashCan,
+  faArrowUpRightFromSquare,
   faCircleNotch,
+  faExclamationCircle,
+  faFileCode,
   faFloppyDisk,
-  faArrowUpRightFromSquare, faFileCode,
+  faTrashCan,
 } from '@fortawesome/free-solid-svg-icons';
-import { initModals, initTooltips } from 'flowbite';
-import ModalDelete from '../Modals/ModalDelete.vue';
-import { V1DeleteBackupRequestPhase } from '@velero-ui/velero';
+import { initTooltips } from 'flowbite';
 import { Pages } from '@velero-ui-app/utils/constants.utils';
-import ModalDescribe from "@velero-ui-app/components/Modals/ModalDescribe.vue";
+import ModalDescribe from '@velero-ui-app/components/Modals/ModalDescribe.vue';
+import ModalConfirmation from '@velero-ui-app/components/Modals/ModalConfirmation.vue';
+import { truncate } from '../../utils/string.utils';
+import { useDeleteKubernetesObject } from '@velero-ui-app/composables/useDeleteKubernetesObject';
 
 defineProps({
   data: Object as PropType<V1DeleteBackupRequest>,
+  checked: Boolean,
 });
 
 onMounted(() => initTooltips());
-onMounted(() => initModals());
 
-const isDeleting = false;
+const showModalDelete = ref(false);
+const showModalDescribe = ref(false);
 
-const remove = () => {};
+const emit = defineEmits(['onChecked']);
+
+const { isPending: isDeleting, mutate: remove } = useDeleteKubernetesObject(
+  Resources.DELETE_BACKUP_REQUEST,
+);
 </script>

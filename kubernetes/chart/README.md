@@ -1,11 +1,14 @@
 # Velero UI Helm Chart
 
-[![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/velero-ui)](https://artifacthub.io/packages/search?repo=velero-ui)
+![GitHub License](https://img.shields.io/github/license/otwld/velero-ui)
+[![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/velero-ui)](https://artifacthub.io/packages/helm/otwld/velero-ui)
+![Build Status](https://github.com/otwld/velero-ui/actions/workflows/cd.yml/badge.svg)
+[![Discord](https://img.shields.io/badge/Discord-OTWLD-blue?logo=discord&logoColor=white)](https://discord.gg/U24mpqTynB)
 
 
-A fully dashboard interface to interact with [Velero (vmware-tanzu)](https://github.com/vmware-tanzu/velero/issues).
+A fully lightweight dashboard interface to interact with [Velero (vmware-tanzu)](https://github.com/vmware-tanzu/velero/issues).
 
-This Chart is for deploying [Velero-UI](https://github.com/otwld/velero-ui). 
+This Chart is for deploying [Velero UI](https://github.com/otwld/velero-ui). 
 
 ## Requirements
 
@@ -41,22 +44,11 @@ helm delete velero-ui --namespace velero-ui
 
 Substitute your values if they differ from the examples. See `helm delete --help` for a full reference on `delete` parameters and flags.
 
-### Basic values.yaml
-```
-configuration:
-  general:
-    secretPassPhrase:
-      value: "Change me, this is not secure"
-    veleroNamespace: "velero"
-    
-  auth:
-    password:
-    value: "changeme"
-```
-
 ## Helm Values
 
 - See [values.yaml](values.yaml) to see the Chart's default values.
+
+## Values
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
@@ -65,35 +57,15 @@ configuration:
 | autoscaling.maxReplicas | int | `100` | Number of maximum replicas |
 | autoscaling.minReplicas | int | `1` | Number of minimum replicas |
 | autoscaling.targetCPUUtilizationPercentage | int | `80` | CPU usage to target replica |
-| configuration.auth.enabled | bool | `true` | Enable authentication |
-| configuration.auth.password.annotations | object | `{}` | Annotations to add to the secret |
-| configuration.auth.password.existingSecret | string | `""` | Name of a pre-existing secret (if any) Key used: password |
-| configuration.auth.password.key | string | `"password"` | key in the secret containing the password |
-| configuration.auth.password.name | string | `""` | Name of the secret to create if `useSecret` is true and `existingSecret` is empty |
-| configuration.auth.password.useSecret | bool | `false` | Whether a secret should be used. |
-| configuration.auth.password.value | string | `"admin"` | Value of the admin password, must be changed. if `useSecret` is true and `existingSecret` is empty, this value will be stored in secret at first deployment |
-| configuration.auth.username | string | `"admin"` | Username |
 | configuration.general.grafanaUrl | string | `""` | Add an URL to a grafana Dashboard |
 | configuration.general.secretPassPhrase.annotations | object | `{}` | Annotations to add to the secret |
 | configuration.general.secretPassPhrase.existingSecret | string | `""` | Name of a pre-existing secret (if any) |
 | configuration.general.secretPassPhrase.key | string | `"pass_phrase"` | key in the secret containing the passphrase |
 | configuration.general.secretPassPhrase.name | string | `""` | Name of the secret to create if `useSecret` is true and `existingSecret` is empty |
 | configuration.general.secretPassPhrase.useSecret | bool | `false` | Whether a secret should be used. |
-| configuration.general.secretPassPhrase.value | string | `""` | Value of the secret pass phrase, must be changed. if `useSecret` is true and `existingSecret` is empty, this value will be stored in secret at first deployment |
+| configuration.general.secretPassPhrase.value | string | `"this is not a secret passphrase"` | Value of the secret pass phrase, must be changed. if `useSecret` is true and `existingSecret` is empty, this value will be stored in secret at first deployment |
 | configuration.general.veleroNamespace | string | `"velero"` | Define the velero namespace By default velero is deployed in "velero" namespace |
-| configuration.ldap.bindCredentials | string | `""` | Bind credentials |
-| configuration.ldap.bindDn | string | `""` | BindDN |
-| configuration.ldap.enabled | bool | `false` | Enable LDAP |
-| configuration.ldap.searchAttributes | string | `""` | Search attributes |
-| configuration.ldap.searchBase | string | `""` | Search base |
-| configuration.ldap.searchFilter | string | `""` | Search filter |
-| configuration.ldap.url | string | `"ldap://"` | LDAP connection url |
 | configuration.logLevel | string | `"info"` | Define the logger level Allowed values: debug, info, error |
-| configuration.oidc.authority | string | `""` | Authority URL |
-| configuration.oidc.clientId | string | `""` | Client ID |
-| configuration.oidc.enabled | bool | `false` | Enable OIDC |
-| configuration.oidc.jwksUri | string | `""` | JWKS URIs URL |
-| configuration.oidc.scopes | string | `""` | Oauth Scopes |
 | env | list | `[]` | Additional environments variables on the output Deployment definition. |
 | envFrom | list | `[]` (See [values.yaml]) | envFrom to pass to all deployed Deployments. |
 | extraArgs | list | `[]` | Additional arguments on the output Deployment definition. |
@@ -153,4 +125,4 @@ configuration:
 - For questions, suggestions, and discussion about Velero please refer to
   the [Velero issue page](https://github.com/vmware-tanzu/velero/issues)
 - For questions, suggestions, and discussion about Velero UI please
-  visite [Velero-ui issue page](https://github.com/otwld/velero-ui/issues)
+  visit [Velero-ui issue page](https://github.com/otwld/velero-ui/issues) or join our [OTWLD Discord](https://discord.gg/U24mpqTynB)

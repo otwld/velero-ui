@@ -16,13 +16,13 @@ export const enum V1BackupStorageLocationAccessMode {
 export interface V1BackupStorageLocationSpec {
   provider: string;
   config?: Record<string, string>;
-  credential?: string;
+  credential?: object;
   // storageType?: V1BackupStorageLocationStorageType;
   objectStorage?: V1BackupStorageLocationObjectStorageLocation;
   default?: boolean;
   accessMode?: V1BackupStorageLocationAccessMode;
-  backupSyncPeriod?: Date;
-  validationFrequency?: Date;
+  backupSyncPeriod?: string;
+  validationFrequency?: string;
 }
 
 export interface V1BackupStorageLocationStorageType {
