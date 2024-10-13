@@ -30,6 +30,23 @@ jobs:
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
 
       - name: Run chart-releaser
-        uses: helm/chart-releaser-action@v1.6.0
+        uses: helm/chart-releaser-action@v1.6.1
+        with:
+          charts_dir: kubernetes
         env:
+          CR_SKIP_EXISTING: true
+          CR_GENERATE_RELEASE_NOTES: true
           CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          CR_RELEASE_NAME_TEMPLATE: "{{ .Version }}-helm"
+
+      - name: Push to central helm-charts repo
+        uses: cpina/github-action-push-to-another-repository@v1.7.2
+        env:
+          API_TOKEN_GITHUB: ${{ secrets.HELM_CHARTS_REPO_TOKEN }}
+        with:
+          source-directory: "kubernetes/chart"
+          target-directory: "charts/velero-ui"
+          destination-github-username: ${{ github.repository_owner }}
+          destination-repository-name: "helm-charts"
+          user-email: "$GITHUB_ACTOR@users.noreply.github.com"
+          target-branch: main
