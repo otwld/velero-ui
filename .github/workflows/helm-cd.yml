@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - kubernetes/chart/**
+      - .github/workflows/helm-cd.yml
   workflow_dispatch:
 
 jobs:
@@ -30,7 +31,7 @@ jobs:
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
 
       - name: Run chart-releaser
-        uses: helm/chart-releaser-action@v1.6.1
+        uses: helm/chart-releaser-action@v1.6.0
         with:
           charts_dir: kubernetes
         env:
