@@ -1,4 +1,5 @@
 import {
+  Body,
   Controller,
   DefaultValuePipe,
   Delete,
@@ -53,8 +54,19 @@ export class DownloadRequestController {
     );
   }
 
+  @Delete()
+  public delete(@Body() names: string[]): void {
+    return this.k8sCustomObjectService.delete(
+      Resources.DOWNLOAD_REQUEST.plurial,
+      names,
+    );
+  }
+
   @Delete('/:name')
   public deleteByName(@Param('name') name: string): void {
-    return this.downloadRequestService.deleteByName(name);
+    return this.k8sCustomObjectService.deleteByName(
+      Resources.DOWNLOAD_REQUEST.plurial,
+      name,
+    );
   }
 }

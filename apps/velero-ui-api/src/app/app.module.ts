@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
-import { APP_GUARD } from '@nestjs/core';
+import { APP_FILTER, APP_GUARD } from '@nestjs/core';
 import { K8sModule } from './shared/modules/k8s/k8s.module';
 import { BackupModule } from './modules/backup/backup.module';
 import { ScheduleModule } from './modules/schedule/schedule.module';
@@ -33,6 +33,7 @@ import gitlab from '../config/gitlab.config';
 import microsoft from '../config/microsoft.config';
 import oauth from '../config/oauth.config';
 import { FormModule } from '@velero-ui-api/modules/form/form.module';
+import { HttpExceptionFilter } from '@velero-ui-api/shared/exceptions/filters/http.exception-filter';
 
 @Module({
   imports: [
@@ -51,6 +52,7 @@ import { FormModule } from '@velero-ui-api/modules/form/form.module';
         oauth,
       ],
     }),
+    LoggerModule.forRoot(),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, 'static'),
     }),
@@ -86,6 +88,10 @@ import { FormModule } from '@velero-ui-api/modules/form/form.module';
   ],
   controllers: [],
   providers: [
+    {
+      provide: APP_FILTER,
+      useClass: HttpExceptionFilter,
+    },
     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard,

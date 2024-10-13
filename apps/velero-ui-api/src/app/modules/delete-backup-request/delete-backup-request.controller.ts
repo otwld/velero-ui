@@ -1,4 +1,5 @@
 import {
+  Body,
   Controller,
   DefaultValuePipe,
   Delete,
@@ -55,8 +56,19 @@ export class DeleteBackupRequestController {
     );
   }
 
+  @Delete()
+  public delete(@Body() names: string[]): void {
+    return this.k8sCustomObjectService.delete(
+      Resources.DELETE_BACKUP_REQUEST.plurial,
+      names,
+    );
+  }
+
   @Delete('/:name')
   public deleteByName(@Param('name') name: string): void {
-    return this.deleteBackupRequestService.deleteByName(name);
+    return this.k8sCustomObjectService.deleteByName(
+      Resources.DELETE_BACKUP_REQUEST.plurial,
+      name,
+    );
   }
 }

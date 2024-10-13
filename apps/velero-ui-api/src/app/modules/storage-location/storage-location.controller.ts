@@ -1,6 +1,8 @@
 import {
+  Body,
   Controller,
   DefaultValuePipe,
+  Delete,
   Get,
   Param,
   ParseIntPipe,
@@ -49,6 +51,22 @@ export class StorageLocationController {
     @Param('name') name: string,
   ): Observable<V1BackupStorageLocation> {
     return this.k8sCustomObjectService.getByName<V1BackupStorageLocation>(
+      Resources.BACKUP_STORAGE_LOCATION.plurial,
+      name,
+    );
+  }
+
+  @Delete()
+  public delete(@Body() names: string[]): void {
+    return this.k8sCustomObjectService.delete(
+      Resources.BACKUP_STORAGE_LOCATION.plurial,
+      names,
+    );
+  }
+
+  @Delete('/:name')
+  public deleteByName(@Param('name') name: string): void {
+    return this.k8sCustomObjectService.deleteByName(
       Resources.BACKUP_STORAGE_LOCATION.plurial,
       name,
     );

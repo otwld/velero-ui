@@ -19,7 +19,7 @@
 <script lang="ts" setup>
 import { faCircleNotch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { inject, onBeforeMount, ref } from 'vue';
+import { inject, ref, watch } from 'vue';
 import type { AppPublicConfig } from '@velero-ui/shared-types';
 import { faMicrosoft } from '@fortawesome/free-brands-svg-icons';
 import { useRoute } from 'vue-router';
@@ -41,15 +41,21 @@ const redirect = () => {
   window.location.href = `https://login.microsoftonline.com/${microsoft.tenant}/oauth2/v2.0/authorize?client_id=${microsoft.clientId}&redirect_uri=${microsoft.redirectUri}&scope=${microsoft.scopes}&response_type=code&state=${state}`;
 };
 
-onBeforeMount(async () => {
-  if (route.query?.code) {
-    const state = localStorage.getItem('auth.microsoft.state');
+watch(
+  () => route.query,
+  async () => {
+    if (route.query?.code) {
+      const state = localStorage.getItem('auth.microsoft.state');
 
-    if (route.query.state === state) {
-      loading.value = true;
-      login('microsoft');
-      localStorage.removeItem('auth.microsoft.state');
+      if (route.query.state === state) {
+        loading.value = true;
+        login('microsoft');
+        localStorage.removeItem('auth.microsoft.state');
+      }
+    } else {
+      loading.value = false;
     }
-  }
-});
+  },
+  { immediate: true },
+);
 </script>

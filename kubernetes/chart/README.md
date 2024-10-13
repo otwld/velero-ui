@@ -19,7 +19,7 @@ This Chart is for deploying [Velero UI](https://github.com/otwld/velero-ui).
 To install the `velero-ui` chart in the `velero-ui` namespace:
 
 ```console
-helm repo add otwld https://otwld.github.io/helm-charts/
+helm repo add otwld https://helm.otwld.com/
 helm repo update
 helm install velero-ui otwld/velero-ui --namespace velero-ui
 ```

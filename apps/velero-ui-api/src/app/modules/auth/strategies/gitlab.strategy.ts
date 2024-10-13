@@ -2,10 +2,15 @@ import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ConfigService } from '@nestjs/config';
 import { Strategy } from 'passport-gitlab2';
+import { AppLogger } from '@velero-ui-api/shared/modules/logger/logger.service';
+import {AuthenticationException} from "@velero-ui-api/shared/exceptions/authentication.exception";
 
 @Injectable()
 export class GitlabStrategy extends PassportStrategy(Strategy, 'gitlab') {
-  constructor(private readonly configService: ConfigService) {
+  constructor(
+    private logger: AppLogger,
+    private readonly configService: ConfigService,
+  ) {
     super({
       clientID: configService.get('gitlab.clientId') || ' ',
       clientSecret: configService.get('gitlab.clientSecret'),
@@ -20,10 +25,18 @@ export class GitlabStrategy extends PassportStrategy(Strategy, 'gitlab') {
     refreshToken: string,
     profile: any,
   ) {
-
-    console.log(profile)
-
     const { emails, avatarUrl, id, provider, displayName } = profile;
+
+    if (!profile) {
+      throw new AuthenticationException('Invalid User', {
+        cause: GitlabStrategy.name,
+      });
+    }
+
+    this.logger.info(
+      `Federated Gitlab user ${id} signed in.`,
+      GitlabStrategy.name,
+    );
 
     return {
       id,

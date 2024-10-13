@@ -1,3 +1,8 @@
+export enum Environment {
+  DEVELOPMENT = 'development',
+  PRODUCTION = 'production',
+}
+
 export interface AppPublicConfig extends AppConfig {
   basicAuth: Partial<BasicAuthConfig>;
   google: Partial<GoogleConfig>;
@@ -8,8 +13,10 @@ export interface AppPublicConfig extends AppConfig {
 }
 
 export interface AppConfig {
+  environment: Environment;
   grafanaUrl?: string;
   baseUrl: string;
+  logLevel: string;
   secret?: string;
   sessionDuration?: string;
 }

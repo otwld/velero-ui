@@ -22,6 +22,7 @@ import { K8sCustomObjectService } from '@velero-ui-api/shared/modules/k8s-custom
 import { createBackup } from '@velero-ui-api/modules/backup/backup.utils';
 import { ConfigService } from '@nestjs/config';
 import { CreateBackupTypeEnum } from '@velero-ui/shared-types';
+import { AppLogger } from '@velero-ui-api/shared/modules/logger/logger.service';
 
 @Injectable()
 export class BackupService {
@@ -29,6 +30,7 @@ export class BackupService {
 
   constructor(
     @Inject(K8S_CONNECTION) private readonly k8s: KubeConfig,
+    private logger: AppLogger,
     private readonly downloadRequestService: DownloadRequestService,
     private readonly httpService: HttpService,
     private readonly k8sCustomObjectService: K8sCustomObjectService,
@@ -38,6 +40,7 @@ export class BackupService {
   }
 
   public logs(name: string): Observable<string[]> {
+    this.logger.debug(`Getting logs for ${name}...`, BackupService.name);
     return from(
       this.downloadRequestService.create({
         name,
@@ -60,6 +63,7 @@ export class BackupService {
   }
 
   public create(data: CreateBackupDto) {
+    this.logger.debug(`Creating backup "${data.name}" (type: ${data.type})...`, BackupService.name);
     if (
       data.type === CreateBackupTypeEnum.FROM_SCRATCH &&
       data.data instanceof CreateBackupDataFromScratchDto

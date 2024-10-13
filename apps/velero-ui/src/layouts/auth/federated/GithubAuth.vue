@@ -19,7 +19,7 @@
 <script lang="ts" setup>
 import { faCircleNotch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { inject, onBeforeMount, ref } from 'vue';
+import { inject, ref, watch } from 'vue';
 import type { AppPublicConfig } from '@velero-ui/shared-types';
 import { faGithub } from '@fortawesome/free-brands-svg-icons';
 import { useRoute } from 'vue-router';
@@ -27,7 +27,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { useAuth } from '@velero-ui-app/composables/auth/useAuth';
 
 const route = useRoute();
-const { login, isLoading } = useAuth();
+const { login } = useAuth();
 
 const { github } = inject('config') as AppPublicConfig;
 
@@ -41,15 +41,21 @@ const redirect = () => {
   window.location.href = `https://github.com/login/oauth/authorize?client_id=${github.clientId}&redirect_uri=${github.redirectUri}&scope=${github.scopes}&response_type=code&state=${state}`;
 };
 
-onBeforeMount(async () => {
-  if (route.query?.code) {
-    const state = localStorage.getItem('auth.github.state');
+watch(
+  () => route.query,
+  async () => {
+    if (route.query?.code) {
+      const state = localStorage.getItem('auth.github.state');
 
-    if (route.query.state === state) {
-      loading.value = true;
-      login('github');
-      localStorage.removeItem('auth.github.state');
+      if (route.query.state === state) {
+        loading.value = true;
+        login('github');
+        localStorage.removeItem('auth.github.state');
+      }
+    } else {
+      loading.value = false;
     }
-  }
-});
+  },
+  { immediate: true },
+);
 </script>

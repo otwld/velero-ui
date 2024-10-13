@@ -19,7 +19,7 @@
 <script lang="ts" setup>
 import { faCircleNotch, faKey } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { inject, onBeforeMount, ref } from 'vue';
+import { inject, ref, watch } from 'vue';
 import type { AppPublicConfig } from '@velero-ui/shared-types';
 import { useRoute } from 'vue-router';
 import { v4 as uuidv4 } from 'uuid';
@@ -40,15 +40,21 @@ const redirect = () => {
   window.location.href = `${oauth.authorizationUrl}?client_id=${oauth.clientId}&redirect_uri=${oauth.redirectUri}&scope=${oauth.scopes}&response_type=code&state=${state}`;
 };
 
-onBeforeMount(async () => {
-  if (route.query?.code) {
-    const state = localStorage.getItem('auth.oauth.state');
+watch(
+  () => route.query,
+  async () => {
+    if (route.query?.code) {
+      const state = localStorage.getItem('auth.oauth.state');
 
-    if (route.query.state === state) {
-      loading.value = true;
-      login('oauth');
-      localStorage.removeItem('auth.oauth.state');
+      if (route.query.state === state) {
+        loading.value = true;
+        login('oauth');
+        localStorage.removeItem('auth.oauth.state');
+      }
+    } else {
+      loading.value = false;
     }
-  }
-});
+  },
+  { immediate: true },
+);
 </script>

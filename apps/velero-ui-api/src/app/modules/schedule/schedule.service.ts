@@ -49,16 +49,4 @@ export class ScheduleService {
         map((r: { response: http.IncomingMessage; body: V1Schedule }) => r.body)
       );
   }
-
-  public deleteByName(name: string): void {
-    from(
-      this.k8sCustomObjectApi.deleteNamespacedCustomObject(
-        VELERO.GROUP,
-        VELERO.VERSION,
-        this.configService.get('velero.namespace'),
-        Resources.SCHEDULE.plurial,
-        name
-      )
-    )
-  }
 }

@@ -58,7 +58,7 @@
                   class="text-xs text-gray-900 truncate dark:text-gray-300"
                   role="none"
                 >
-                  {{ user?.email ? user.email : 'Local account' }}
+                  {{ user?.email ? user.email : user.provider === 'ldap' ? 'LDAP account' : 'Local account' }}
                 </p>
               </div>
               <ul class="py-1" role="none">

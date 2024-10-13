@@ -1,40 +1,49 @@
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
-import { Strategy } from 'passport-local';
-import {ConfigService} from "@nestjs/config";
+import Strategy from 'passport-ldapauth';
+import { ConfigService } from '@nestjs/config';
+import { AppLogger } from '@velero-ui-api/shared/modules/logger/logger.service';
 
 @Injectable()
 export class LdapStrategy extends PassportStrategy(Strategy, 'ldap') {
-  constructor(private readonly configService: ConfigService) {
+  constructor(
+    private logger: AppLogger,
+    private readonly configService: ConfigService,
+  ) {
     super({
       passReqToCallback: true,
       server: {
         url: configService.get('ldap.url'),
         bindDN: configService.get('ldap.bindDn'),
+        usernameField: 'username',
+        passwordField: 'password',
         bindCredentials: configService.get('ldap.bindCredentials'),
         searchBase: configService.get('ldap.searchBase'),
         searchFilter: configService.get('ldap.searchFilter'),
         searchAttributes: configService.get('ldap.searchAttributes'),
       },
-    }, async (req: Request, user, done) => {
-        console.log("Passport LDAP authentication.");
-        console.log(user)
-       done(null, user);
+      credentialsLookup: (req: Request) => {
+        return req.body;
+      },
     });
   }
 
-  public validate(req: Request, username: string, password: string): boolean {
-    /*const success: boolean = this.authService.validateBasicUser(
-      username,
-      password
+  public validate(req, user: any) {
+    this.logger.debug(
+      `Try to validate LDAP user ${req.body?.username} with password ****...`,
+      LdapStrategy.name,
     );
 
-    if (!success) {
-      throw new UnauthorizedException();
-    }*/
-    console.log(req)
-    console.log('user:' + username);
-    console.log('passw:' + password);
-    return false;
+    if (!user) {
+      return null;
+    }
+
+    this.logger.info(`LDAP user ${user.uid} signed in.`, LdapStrategy.name);
+
+    return {
+      id: user.uid,
+      provider: 'ldap',
+      displayName: user.givenName,
+    };
   }
 }

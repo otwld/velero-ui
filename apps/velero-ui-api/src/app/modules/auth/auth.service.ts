@@ -1,8 +1,7 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { JwtService } from '@nestjs/jwt'; // import {AppLogger} from "@velero-ui-api/shared/modules/logger/logger.service";
-
-// import {AppLogger} from "@velero-ui-api/shared/modules/logger/logger.service";
+import { JwtService } from '@nestjs/jwt';
+import { AuthenticationException } from '@velero-ui-api/shared/exceptions/authentication.exception'; // import {AppLogger} from "@velero-ui-api/shared/modules/logger/logger.service";
 
 @Injectable()
 export class AuthService {
@@ -22,8 +21,10 @@ export class AuthService {
   }
 
   public login(req) {
-     if (!req.user) {
-      throw new UnauthorizedException('Invalid user');
+    if (!req.user) {
+      throw new AuthenticationException('Invalid user', {
+        cause: AuthService.name,
+      });
     }
 
     const payload = {

@@ -1,4 +1,5 @@
 import {
+  Body,
   Controller,
   DefaultValuePipe,
   Delete,
@@ -16,7 +17,6 @@ import {
   Resources,
   V1BackupRepository,
   V1BackupRepositoryList,
-  V1DeleteBackupRequest,
 } from '@velero-ui/velero';
 
 @Controller(Resources.BACKUP_REPOSITORY.route)
@@ -60,12 +60,19 @@ export class BackupRepositoryController {
     );
   }
 
+  @Delete()
+  public delete(@Body() names: string[]): void {
+    return this.k8sCustomObjectService.delete(
+      Resources.BACKUP_REPOSITORY.plurial,
+      names,
+    );
+  }
+
   @Delete('/:name')
-  public deleteByName(
-    @Param('name') name: string,
-  ): Observable<V1DeleteBackupRequest> {
-    return this.deleteBackupRequestService.create({
+  public deleteByName(@Param('name') name: string): void {
+    return this.k8sCustomObjectService.deleteByName(
+      Resources.BACKUP_REPOSITORY.plurial,
       name,
-    });
+    );
   }
 }

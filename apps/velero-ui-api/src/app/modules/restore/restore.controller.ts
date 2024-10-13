@@ -1,4 +1,5 @@
 import {
+  Body,
   Controller,
   DefaultValuePipe,
   Delete,
@@ -12,7 +13,6 @@ import { RestoreService } from './restore.service';
 import { Observable } from 'rxjs';
 import {
   Resources,
-  V1DeleteBackupRequest,
   V1DownloadRequest,
   V1DownloadTargetKind,
   V1Restore,
@@ -68,12 +68,19 @@ export class RestoreController {
     });
   }
 
+  @Delete()
+  public delete(@Body() names: string[]): void {
+    return this.k8sCustomObjectService.delete(
+      Resources.RESTORE.plurial,
+      names,
+    );
+  }
+
   @Delete('/:name')
-  public deleteByName(
-    @Param('name') name: string,
-  ): Observable<V1DeleteBackupRequest> {
-    return this.deleteBackupRequestService.create({
+  public deleteByName(@Param('name') name: string) {
+    return this.k8sCustomObjectService.deleteByName(
+      Resources.RESTORE.plurial,
       name,
-    });
+    );
   }
 }

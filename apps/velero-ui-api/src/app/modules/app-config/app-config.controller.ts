@@ -15,7 +15,7 @@ export class AppConfigController {
   constructor(private readonly configService: ConfigService) {}
 
   @Get()
-  public getAppConfig(): Observable<AppPublicConfig> {
+  public getAppConfig(): Observable<Partial<AppPublicConfig>> {
     const { grafanaUrl, baseUrl } = this.configService.get('app') as AppConfig;
     const { enabled: basicAuthEnabled } = this.configService.get(
       'basicAuth',

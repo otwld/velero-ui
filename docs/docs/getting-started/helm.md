@@ -21,7 +21,7 @@ The default credentials to sign in are:
 
 1. Add OTWLD repository
     ```bash
-    helm repo add otwld https://otwld.github.io/helm-charts/
+    helm repo add otwld https://helm.otwld.com/
     ```
 
 2. Update repository

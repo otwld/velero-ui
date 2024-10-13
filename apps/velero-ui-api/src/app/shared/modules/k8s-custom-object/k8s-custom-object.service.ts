@@ -2,15 +2,17 @@ import { Inject, Injectable } from '@nestjs/common';
 import {
   CustomObjectsApi,
   KubeConfig,
-  KubernetesListObject, KubernetesObject,
+  KubernetesListObject,
+  KubernetesObject,
 } from '@kubernetes/client-node';
 import { K8S_CONNECTION } from '@velero-ui-api/shared/modules/k8s/k8s.constants';
 import { VeleroService } from '@velero-ui-api/shared/modules/velero/velero.service';
 import { ConfigService } from '@nestjs/config';
-import { catchError, from, map, Observable, of } from 'rxjs';
+import {catchError, concatMap, from, map, mergeMap, Observable, of} from 'rxjs';
 import { VELERO } from '@velero-ui-api/shared/modules/velero/velero.constants';
 import http from 'http';
 import { sortObjects } from '@velero-ui-api/shared/utils/sorts.utils';
+import { AppLogger } from '@velero-ui-api/shared/modules/logger/logger.service';
 
 @Injectable()
 export class K8sCustomObjectService {
@@ -18,6 +20,7 @@ export class K8sCustomObjectService {
 
   constructor(
     @Inject(K8S_CONNECTION) private readonly k8s: KubeConfig,
+    private logger: AppLogger,
     private readonly veleroService: VeleroService,
     private configService: ConfigService,
   ) {
@@ -32,6 +35,10 @@ export class K8sCustomObjectService {
     sortColumnName?: string,
     sortColumnAscending?: boolean,
   ): Observable<T> {
+    this.logger.debug(
+      `Fetching resources in "${plural}" (offset: ${offset}, limit: ${limit}, search: ${search}, sortColumnName: ${sortColumnName}, sortColumnAscending: ${sortColumnAscending})...`,
+      K8sCustomObjectService.name,
+    );
     return from(
       this.k8sCustomObjectApi.listNamespacedCustomObject(
         VELERO.GROUP,
@@ -78,35 +85,14 @@ export class K8sCustomObjectService {
       );
   }
 
-  /*public async get<
-    R extends KubernetesObject,
-    T extends KubernetesListObject<R>,
-  >(plural: string, offset: number = 0, limit?: number, search?: string): Observable<any> {
-    try {
-      const response = <
-        {
-          response: http.IncomingMessage;
-          body: T;
-        }
-      >await this.k8sCustomObjectApi.listNamespacedCustomObject(VELERO.GROUP, VELERO.VERSION, this.configService.get('velero.namespace'), plural);
-
-      const items: R[] = response.body.items
-        .filter((i: R) => (search ? i.metadata.name.includes(search) : i))
-        .slice(offset, offset + limit);
-
-      return of({
-        total: r.items.length,
-        items,
-      });
-    } catch (e) {
-      console.error(e);
-    }
-  }*/
-
   public getByName<T extends KubernetesObject>(
     plural: string,
     name: string,
   ): Observable<T> {
+    this.logger.debug(
+      `Fetching resource ${name} in "${plural}"...`,
+      K8sCustomObjectService.name,
+    );
     return from(
       this.k8sCustomObjectApi.getNamespacedCustomObject(
         VELERO.GROUP,
@@ -119,6 +105,10 @@ export class K8sCustomObjectService {
   }
 
   public count(plural: string): Observable<number> {
+    this.logger.debug(
+      `Counting resources "${plural}"...`,
+      K8sCustomObjectService.name,
+    );
     return from(
       this.k8sCustomObjectApi.listNamespacedCustomObject(
         VELERO.GROUP,
@@ -136,6 +126,10 @@ export class K8sCustomObjectService {
   }
 
   public create(plural: string, body: object) {
+    this.logger.debug(
+      `Creating resource in "${plural}": ${body}`,
+      K8sCustomObjectService.name,
+    );
     return from(
       this.k8sCustomObjectApi.createNamespacedCustomObject(
         VELERO.GROUP,
@@ -143,6 +137,40 @@ export class K8sCustomObjectService {
         this.configService.get('velero.namespace'),
         plural,
         body,
+      ),
+    );
+  }
+
+  public delete(plural: string, names: string[]): void {
+    this.logger.debug(
+      `Deleting resources ${names.join(',')} in "${plural}"...`,
+      K8sCustomObjectService.name,
+    );
+    from(names).pipe(
+      concatMap((name: string) =>
+        this.k8sCustomObjectApi.deleteNamespacedCustomObject(
+          VELERO.GROUP,
+          VELERO.VERSION,
+          this.configService.get('velero.namespace'),
+          plural,
+          name,
+        ),
+      ),
+    );
+  }
+
+  public deleteByName(plural: string, name: string): void {
+    this.logger.debug(
+      `Deleting resource ${name} in "${plural}"...`,
+      K8sCustomObjectService.name,
+    );
+    from(
+      this.k8sCustomObjectApi.deleteNamespacedCustomObject(
+        VELERO.GROUP,
+        VELERO.VERSION,
+        this.configService.get('velero.namespace'),
+        plural,
+        name,
       ),
     );
   }

@@ -1,22 +1,20 @@
-import { Logger, RequestMethod, ValidationPipe } from '@nestjs/common';
-import { NestFactory } from '@nestjs/core';
-import { IoAdapter } from '@nestjs/platform-socket.io'
+import {Logger, RequestMethod, ValidationPipe} from '@nestjs/common';
+import {NestFactory} from '@nestjs/core';
+import {IoAdapter} from '@nestjs/platform-socket.io';
 
-import { AppModule } from './app/app.module';
+import {AppModule} from './app/app.module';
 import passport from 'passport';
-import { AppLogger } from '@velero-ui-api/shared/modules/logger/logger.service';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   app.setGlobalPrefix('api', {
-    exclude: [{ path: 'health', method: RequestMethod.GET }],
+    exclude: [{path: 'health', method: RequestMethod.GET}],
   });
   app.enableCors();
   app.use(passport.initialize());
-  app.useGlobalPipes(new ValidationPipe({ transform: true }));
-  app.useLogger(app.get(AppLogger));
-  app.useWebSocketAdapter(new IoAdapter(app))
+  app.useGlobalPipes(new ValidationPipe({transform: true}));
+  app.useWebSocketAdapter(new IoAdapter(app));
 
   const port = process.env.PORT || 3000;
   await app.listen(port);

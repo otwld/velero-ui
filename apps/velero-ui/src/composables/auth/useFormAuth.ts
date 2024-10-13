@@ -6,7 +6,7 @@ import { ApiRoutes } from '../../utils/constants.utils';
 import { useRouter } from 'vue-router';
 import type { Router } from 'vue-router';
 
-export const useBasicLogin = (username: Ref<string>, password: Ref<string>) => {
+export const useFormAuth = (username: Ref<string>, password: Ref<string>) => {
   const axiosInstance: AxiosInstance = inject('axios') as AxiosInstance;
   const router: Router = useRouter();
 
@@ -30,6 +30,7 @@ export const useBasicLogin = (username: Ref<string>, password: Ref<string>) => {
         await router.push('/');
       }
     } catch (e) {
+      await router.push('/?state=error&reason=credentials');
       console.error(e);
     }
   };

@@ -88,16 +88,4 @@ export class ServerStatusRequestService {
         })
       );
   }
-
-  public deleteByName(name: string): void {
-    from(
-      this.k8sCustomObjectApi.deleteNamespacedCustomObject(
-        VELERO.GROUP,
-        VELERO.VERSION,
-        this.configService.get('velero.namespace'),
-        Resources.SERVER_STATUS_REQUEST.plurial,
-        name
-      )
-    )
-  }
 }

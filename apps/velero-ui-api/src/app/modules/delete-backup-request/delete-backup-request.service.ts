@@ -49,16 +49,4 @@ export class DeleteBackupRequestService {
         )
       );
   }
-
-  public deleteByName(name: string): void {
-    from(
-      this.k8sCustomObjectApi.deleteNamespacedCustomObject(
-        VELERO.GROUP,
-        VELERO.VERSION,
-        this.configService.get('velero.namespace'),
-        Resources.DELETE_BACKUP_REQUEST.plurial,
-        name
-      )
-    )
-  }
 }

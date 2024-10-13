@@ -32,7 +32,7 @@
             color="green"
           ></Alert>
           <div class="space-y-4 md:space-y-6">
-            <form v-if="basicAuth?.enabled" @submit="basicLogin($event)">
+            <form v-if="basicAuth?.enabled" @submit="classicLogin($event)">
               <div class="mb-6">
                 <label
                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -115,9 +115,8 @@
 
 <script lang="ts" setup>
 import type { Ref } from 'vue';
-import { inject, onBeforeMount, ref, watch } from 'vue';
-import type { Router } from 'vue-router';
-import { useRoute, useRouter } from 'vue-router';
+import { inject, ref, watch } from 'vue';
+import { useRoute } from 'vue-router';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import {
   faCircleExclamation,
@@ -125,17 +124,16 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import Alert from '@velero-ui-app/components/Alert.vue';
 import type { AppPublicConfig } from '@velero-ui/shared-types';
-import { useBasicLogin } from '@velero-ui-app/use/auth/useBasicLogin';
 import GoogleAuth from '@velero-ui-app/layouts/auth/federated/GoogleAuth.vue';
 import GithubAuth from '@velero-ui-app/layouts/auth/federated/GithubAuth.vue';
 import GitlabAuth from '@velero-ui-app/layouts/auth/federated/GitlabAuth.vue';
 import MicrosoftAuth from '@velero-ui-app/layouts/auth/federated/MicrosoftAuth.vue';
 import OauthAuth from '@velero-ui-app/layouts/auth/federated/OauthAuth.vue';
+import {useFormAuth} from "@velero-ui-app/composables/auth/useFormAuth";
 
 const { basicAuth, google, gitlab, github, microsoft, oauth } = inject(
   'config',
 ) as AppPublicConfig;
-const router: Router = useRouter();
 const route = useRoute();
 
 const version = import.meta.env.APP_VERSION;
@@ -146,46 +144,45 @@ const password: Ref<string> = ref('');
 const isFederatedAuthEnabled = () =>
   google.enabled ||
   gitlab.enabled ||
-  gitlab.enabled ||
+  github.enabled ||
   microsoft.enabled ||
   oauth.enabled;
 
-const {
-  isLoading: basicLoading,
-  error: basicError,
-  login,
-} = useBasicLogin(username, password);
+const { isLoading: basicLoading, login } = useFormAuth(username, password);
 
-const basicLogin = ($event) => {
-  $event.stopPropagation();
+const classicLogin = ($event) => {
+  $event.preventDefault();
   login();
 };
 
 const error: Ref<string> = ref('');
 const success: Ref<string> = ref('');
 
-watch(basicError, () => {
-  error.value = 'Username or password incorrect!';
-});
-
-onBeforeMount(async () => {
-  if (route.query?.state === 'error') {
-    if (route.query?.reason === 'unauthorized') {
-      error.value = 'You must login to access this page.';
-    } else if (route.query?.reason === 'inactivity') {
-      error.value = 'Your session timed out.';
-    } else if (route.query?.reason === 'sso') {
-      error.value = 'Unable to process login with external SSO.';
+watch(
+  () => route.query,
+  async () => {
+    if (route.query?.state === 'error') {
+      if (route.query?.reason === 'unauthorized') {
+        error.value = 'You must login to access this page.';
+      } else if (route.query?.reason === 'inactivity') {
+        error.value = 'Your session timed out.';
+      } else if (route.query?.reason === 'sso') {
+        error.value = 'Unable to process login with external SSO.';
+      } else if (route.query?.reason === 'credentials') {
+        error.value = 'Invalid username or password.';
+      }
+      success.value = '';
+    } else if (route.query?.state === 'success') {
+      if (route.query?.reason === 'logout') {
+        success.value = 'You successfully logged out!';
+        error.value = '';
+      }
     }
-    success.value = '';
-  } else if (route.query?.state === 'success') {
-    if (route.query?.reason === 'logout') {
-      success.value = 'You successfully logged out!';
-    }
-  }
 
-  if (route.query?.code) {
-    success.value = 'Processing login, please wait...';
-  }
-});
+    if (route.query?.code) {
+      success.value = 'Processing login, please wait...';
+    }
+  },
+  { immediate: true },
+);
 </script>

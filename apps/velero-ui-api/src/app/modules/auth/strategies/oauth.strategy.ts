@@ -2,10 +2,15 @@ import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ConfigService } from '@nestjs/config';
 import { InternalOAuthError, Strategy } from 'passport-oauth2';
+import { AppLogger } from '@velero-ui-api/shared/modules/logger/logger.service';
+import {AuthenticationException} from "@velero-ui-api/shared/exceptions/authentication.exception";
 
 @Injectable()
 export class OauthStrategy extends PassportStrategy(Strategy, 'oauth') {
-  constructor(private readonly configService: ConfigService) {
+  constructor(
+    private logger: AppLogger,
+    private readonly configService: ConfigService,
+  ) {
     super({
       clientID: configService.get('oauth.clientId') || ' ',
       clientSecret: configService.get('oauth.clientSecret'),
@@ -21,6 +26,12 @@ export class OauthStrategy extends PassportStrategy(Strategy, 'oauth') {
       const profile = await this.getUserProfile(accessToken);
 
       const { id, emails, provider, displayName } = profile;
+
+      this.logger.info(
+        `Federated OAuth2 user ${id} signed in.`,
+        OauthStrategy.name,
+      );
+
       return {
         id,
         provider,
@@ -28,7 +39,9 @@ export class OauthStrategy extends PassportStrategy(Strategy, 'oauth') {
         email: emails[0].value,
       };
     } catch (e) {
-      console.error(e);
+      throw new AuthenticationException('Invalid User', {
+        cause: OauthStrategy.name,
+      });
     }
   }
 

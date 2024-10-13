@@ -89,16 +89,4 @@ export class DownloadRequestService {
         })
       );
   }
-
-  public deleteByName(name: string): void {
-    from(
-      this.k8sCustomObjectApi.deleteNamespacedCustomObject(
-        VELERO.GROUP,
-        VELERO.VERSION,
-        this.configService.get('velero.namespace'),
-        Resources.DOWNLOAD_REQUEST.plurial,
-        name
-      )
-    )
-  }
 }

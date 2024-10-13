@@ -1,4 +1,5 @@
 import {
+  Body,
   Controller,
   DefaultValuePipe,
   Delete,
@@ -55,8 +56,19 @@ export class ServerStatusRequestController {
     );
   }
 
+  @Delete()
+  public delete(@Body() names: string[]): void {
+    return this.k8sCustomObjectService.delete(
+      Resources.SERVER_STATUS_REQUEST.plurial,
+      names,
+    );
+  }
+
   @Delete('/:name')
   public deleteByName(@Param('name') name: string): void {
-    return this.serverStatusRequestService.deleteByName(name);
+    return this.k8sCustomObjectService.deleteByName(
+      Resources.SERVER_STATUS_REQUEST.plurial,
+      name,
+    );
   }
 }

@@ -19,7 +19,7 @@
 <script lang="ts" setup>
 import { faCircleNotch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { inject, onBeforeMount, ref } from 'vue';
+import { inject, ref, watch } from 'vue';
 import type { AppPublicConfig } from '@velero-ui/shared-types';
 import { faGoogle } from '@fortawesome/free-brands-svg-icons';
 import { useRoute } from 'vue-router';
@@ -41,15 +41,21 @@ const redirect = () => {
   window.location.href = `https://accounts.google.com/o/oauth2/auth?client_id=${google.clientId}&redirect_uri=${google.redirectUri}&scope=${google.scopes}&response_type=code&state=${state}`;
 };
 
-onBeforeMount(async () => {
-  if (route.query?.code) {
-    const state = localStorage.getItem('auth.google.state');
+watch(
+  () => route.query,
+  async () => {
+    if (route.query?.code) {
+      const state = localStorage.getItem('auth.google.state');
 
-    if (route.query.state === state) {
-      loading.value = true;
-      login('google');
-      localStorage.removeItem('auth.google.state');
+      if (route.query.state === state) {
+        loading.value = true;
+        login('google');
+        localStorage.removeItem('auth.google.state');
+      }
+    } else {
+      loading.value = false;
     }
-  }
-});
+  },
+  { immediate: true },
+);
 </script>

@@ -13,7 +13,7 @@ annotations:
   artifacthub.io/category: monitoring-logging
 
 
-home: https://velero.io/
+home: https://velero-ui.docs.otwld.com/
 icon: https://velero.io/img/Velero.svg
 keywords:
   - backup
@@ -24,4 +24,4 @@ sources:
   - https://github.com/vmware-tanzu/velero
 maintainers:
   - name: OTWLD
-    email: tech@otwld.coù
+    email: tech@otwld.com
