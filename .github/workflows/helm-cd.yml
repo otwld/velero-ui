@@ -34,6 +34,7 @@ jobs:
         uses: helm/chart-releaser-action@v1.6.0
         with:
           charts_dir: kubernetes
+          skip_upload: true
         env:
           CR_SKIP_EXISTING: true
           CR_GENERATE_RELEASE_NOTES: true
