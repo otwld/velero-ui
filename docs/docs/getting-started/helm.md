@@ -14,9 +14,6 @@ The default credentials to sign in are:
 
 :::
 
-:::info ⚠️ Helm chart is not yet deployed on Artifacthub
-:::
-
 ### 📦 Installing from Registry
 
 1. Add OTWLD repository

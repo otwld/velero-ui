@@ -1,8 +1,8 @@
-# Velero UI
+![otwld_velero_ui_banner](./banner.png)
 
 ![GitHub License](https://img.shields.io/github/license/otwld/velero-ui)
 [![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/velero-ui)](https://artifacthub.io/packages/helm/otwld/velero-ui)
-![Build Status](https://github.com/otwld/velero-ui/actions/workflows/cd.yml/badge.svg)
+![Build Status](https://github.com/otwld/velero-ui/actions/workflows/apps-cd.yml/badge.svg)
 [![Discord](https://img.shields.io/badge/Discord-OTWLD-blue?logo=discord&logoColor=white)](https://discord.gg/U24mpqTynB)
 ![Docker Image Version (latest semver)](https://img.shields.io/docker/v/otwld/velero-ui?label=docker%20image)
 ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/otwld/velero-ui/latest)
