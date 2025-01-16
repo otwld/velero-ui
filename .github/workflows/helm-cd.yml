@@ -30,16 +30,18 @@ jobs:
         env:
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
 
-      - name: Run chart-releaser
-        uses: helm/chart-releaser-action@v1.6.0
-        with:
-          charts_dir: kubernetes
-          skip_upload: true
-        env:
-          CR_SKIP_EXISTING: true
-          CR_GENERATE_RELEASE_NOTES: true
-          CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-          CR_RELEASE_NAME_TEMPLATE: "{{ .Version }}-helm"
+      # Skipped due to "skip_upload" not in latest release
+      # https://github.com/helm/chart-releaser-action/issues/191
+      # - name: Run chart-releaser
+      #  uses: helm/chart-releaser-action@v1.6.0
+      #  with:
+      #    charts_dir: kubernetes
+      #    skip_upload: true
+      #  env:
+      #    CR_SKIP_EXISTING: true
+      #    CR_GENERATE_RELEASE_NOTES: true
+      #    CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+      #    CR_RELEASE_NAME_TEMPLATE: "{{ .Version }}-helm"
 
       - name: Push to central helm-charts repo
         uses: cpina/github-action-push-to-another-repository@v1.7.2
