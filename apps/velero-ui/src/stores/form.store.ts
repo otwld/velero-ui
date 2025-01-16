@@ -4,6 +4,7 @@ export interface FormStore {
   totalSteps: number;
   currentStep: number;
   formContent: any[];
+  notApplicableFields: any;
 }
 
 export const useFormStore = defineStore({
@@ -13,15 +14,20 @@ export const useFormStore = defineStore({
       totalSteps: 0,
       currentStep: 0,
       formContent: [],
+      notApplicableFields: {}
     }) as FormStore,
   actions: {
     reset(): void {
       this.totalSteps = 0;
       this.currentStep = 0;
       this.formContent = [];
+      this.notApplicableFields = {};
     },
     setTotalSteps(total: number): void {
       this.totalSteps = total;
+    },
+    setNotApplicableFields(fields: object): void {
+      this.notApplicableFields = fields;
     },
     setCurrentStep(current: number): void {
       this.currentStep = current;

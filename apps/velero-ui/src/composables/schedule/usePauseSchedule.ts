@@ -1,16 +1,22 @@
-import { QueryClient, useMutation, useQueryClient } from '@tanstack/vue-query';
+import {
+  type QueryClient,
+  useMutation,
+  useQueryClient,
+} from '@tanstack/vue-query';
 import type { AxiosInstance } from 'axios';
 import { inject, type Ref } from 'vue';
 import { ToastType, useToastsStore } from '@velero-ui-app/stores/toasts.store';
+import { Resources, type V1Schedule } from '@velero-ui/velero';
 import { useListStore } from '@velero-ui-app/stores/list.store';
 import { storeToRefs } from 'pinia';
-import { Resources, type V1Schedule } from '@velero-ui/velero';
+import { useI18n } from 'vue-i18n';
 
 export const usePauseSchedule = (name: Ref<string>) => {
   const toastsStore = useToastsStore();
   const axiosInstance: AxiosInstance = inject('axios') as AxiosInstance;
   const queryClient: QueryClient = useQueryClient();
 
+  const { t } = useI18n();
   const listStore = useListStore();
   const { offset, limit, filters, sort } = storeToRefs(listStore);
 
@@ -22,7 +28,7 @@ export const usePauseSchedule = (name: Ref<string>) => {
     onSuccess: async (response, toggle: boolean) => {
       await queryClient.cancelQueries({
         queryKey: [
-          Resources.SCHEDULE.plurial,
+          Resources.SCHEDULE.plural,
           {
             limit,
             offset,
@@ -32,21 +38,16 @@ export const usePauseSchedule = (name: Ref<string>) => {
         ],
       });
       await queryClient.cancelQueries({
-        queryKey: [Resources.SCHEDULE.plurial, name.value],
+        queryKey: [Resources.SCHEDULE.plural, name.value],
       });
 
       queryClient.setQueryData(
-        [Resources.SCHEDULE.plurial, name.value],
+        [Resources.SCHEDULE.plural, name.value],
         response.data,
       );
 
-      toastsStore.push(
-        toggle ? 'Schedule paused' : 'Schedule unpaused',
-        ToastType.SUCCESS,
-      );
-
       const previousSchedules: V1Schedule[] = queryClient.getQueryData([
-        Resources.SCHEDULE.plurial,
+        Resources.SCHEDULE.plural,
         {
           limit,
           offset,
@@ -61,27 +62,34 @@ export const usePauseSchedule = (name: Ref<string>) => {
         );
 
         if (index !== -1) {
-          previousSchedules[index] = response.data;
-        }
+          const updatedSchedules: V1Schedule[] = [...previousSchedules];
+          updatedSchedules[index] = response.data;
 
-        queryClient.setQueryData(
-          [
-            Resources.SCHEDULE.plurial,
-            {
-              limit,
-              offset,
-              filters,
-              sort,
-            },
-          ],
-          () => [...previousSchedules],
-        );
-        return previousSchedules;
+          queryClient.setQueryData(
+            [
+              Resources.SCHEDULE.plural,
+              {
+                limit,
+                offset,
+                filters,
+                sort,
+              },
+            ],
+            () => updatedSchedules,
+          );
+        }
       }
+
+      toastsStore.push(
+        toggle
+          ? t('schedules.message.success.paused')
+          : t('schedules.message.success.resumed'),
+        ToastType.SUCCESS,
+      );
     },
     onError: (error: Error): void => {
       toastsStore.push(
-        'An unexpected error has occurred, please try again.',
+        t('global.message.error.unexpected'),
         ToastType.ERROR,
       );
       console.error(error);

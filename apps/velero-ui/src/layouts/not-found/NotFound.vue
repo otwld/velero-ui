@@ -10,22 +10,24 @@
         <p
           class="mb-4 text-3xl tracking-tight font-bold text-gray-900 md:text-4xl dark:text-white"
         >
-          Something's missing.
+          {{ t('notFound.title') }}
         </p>
         <p class="mb-4 text-lg font-light text-gray-500 dark:text-gray-400">
-          Sorry, we can't find that page. You'll find lots to explore on the
-          home page.
+          {{ t('notFound.description') }}
         </p>
         <router-link
           :to="Pages.HOME.path"
           class="inline-flex text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:focus:ring-blue-900 my-4"
-          >Back to Homepage
+          >{{ t('notFound.button.title') }}
         </router-link>
       </div>
     </div>
   </section>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import { Pages } from '@velero-ui-app/utils/constants.utils';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 </script>

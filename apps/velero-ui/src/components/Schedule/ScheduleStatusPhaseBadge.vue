@@ -4,30 +4,21 @@
     :class="getClass()"
     class="text-xs font-medium inline-flex items-center me-2 px-2.5 py-0.5 rounded"
   >
-    {{
-      paused && status !== V1SchedulePhase.FailedValidation ? 'Paused' : status
-    }}</span
+    {{ t(`resource.phase.${status}`) }}</span
   >
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
 import { V1SchedulePhase } from '@velero-ui/velero';
+import { useI18n } from 'vue-i18n';
 
+const { t } = useI18n();
 const props = defineProps({
   status: String as PropType<V1SchedulePhase>,
-  paused: Boolean,
 });
 
 const getClass = () => {
-  if (props.paused && props.status !== V1SchedulePhase.FailedValidation) {
-    return [
-      'bg-yellow-100',
-      'text-yellow-800',
-      'dark:bg-yellow-900',
-      'dark:text-yellow-300',
-    ];
-  }
   switch (props.status) {
     case V1SchedulePhase.Enabled:
       return [

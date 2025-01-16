@@ -14,15 +14,16 @@ import { HttpService } from '@nestjs/axios';
 import { AxiosResponse } from 'axios';
 import { unzipSync } from 'zlib';
 import {
-  CreateBackupDataFromScheduleDto,
-  CreateBackupDataFromScratchDto,
   CreateBackupDto,
+  CreateBackupScheduleDto,
+  CreateBackupScratchDto,
 } from '@velero-ui-api/shared/dto/backup.dto';
-import { K8sCustomObjectService } from '@velero-ui-api/shared/modules/k8s-custom-object/k8s-custom-object.service';
-import { createBackup } from '@velero-ui-api/modules/backup/backup.utils';
+import { K8sCustomObjectService } from '@velero-ui-api/modules/k8s-custom-object/k8s-custom-object.service';
 import { ConfigService } from '@nestjs/config';
 import { CreateBackupTypeEnum } from '@velero-ui/shared-types';
 import { AppLogger } from '@velero-ui-api/shared/modules/logger/logger.service';
+import { createK8sCustomObject } from '@velero-ui-api/modules/k8s-custom-object/k8s-custom-object.utils';
+import { KubernetesObjectWithSpec } from '@kubernetes/client-node/dist/types';
 
 @Injectable()
 export class BackupService {
@@ -41,6 +42,7 @@ export class BackupService {
 
   public logs(name: string): Observable<string[]> {
     this.logger.debug(`Getting logs for ${name}...`, BackupService.name);
+
     return from(
       this.downloadRequestService.create({
         name,
@@ -63,40 +65,40 @@ export class BackupService {
   }
 
   public create(data: CreateBackupDto) {
-    this.logger.debug(`Creating backup "${data.name}" (type: ${data.type})...`, BackupService.name);
     if (
       data.type === CreateBackupTypeEnum.FROM_SCRATCH &&
-      data.data instanceof CreateBackupDataFromScratchDto
+      data.spec instanceof CreateBackupScratchDto
     ) {
-      console.log('From scratch');
       return of(
-        createBackup(
+        createK8sCustomObject(
           data.name,
           this.configService.get('velero.namespace'),
+          Resources.BACKUP,
           data.labels,
-          data.data,
+          data.spec,
         ),
       ).pipe(
-        concatMap((body: V1Backup) =>
-          this.k8sCustomObjectService.create(Resources.BACKUP.plurial, body),
+        concatMap((body: KubernetesObjectWithSpec) =>
+          this.k8sCustomObjectService.create(Resources.BACKUP.plural, body),
         ),
       );
     } else if (
       data.type === CreateBackupTypeEnum.FROM_SCHEDULE &&
-      data.data instanceof CreateBackupDataFromScheduleDto
+      data.spec instanceof CreateBackupScheduleDto
     ) {
       return from(
         this.k8sCustomObjectService.getByName<V1Schedule>(
-          Resources.SCHEDULE.plurial,
-          data.data.name,
+          Resources.SCHEDULE.plural,
+          data.spec.name,
         ),
       )
         .pipe(
           map(
             (schedule: V1Schedule): V1Backup =>
-              createBackup(
+              createK8sCustomObject(
                 data.name,
                 this.configService.get('velero.namespace'),
+                Resources.BACKUP,
                 data.labels,
                 schedule.spec.template,
               ),
@@ -104,7 +106,7 @@ export class BackupService {
         )
         .pipe(
           concatMap((body: V1Backup) =>
-            this.k8sCustomObjectService.create(Resources.BACKUP.plurial, body),
+            this.k8sCustomObjectService.create(Resources.BACKUP.plural, body),
           ),
         );
     } else {

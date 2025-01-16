@@ -5,13 +5,9 @@
     >
       <div class="flow-root">
         <div class="flex items-center justify-between mb-4">
-          <h3 class="text-xl font-semibold dark:text-white">Plugins</h3>
-          <button
-            class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-          >
-            <FontAwesomeIcon :icon="faPlus" class="w-4 h-4 mr-2" />
-            Add
-          </button>
+          <h3 class="text-xl font-semibold dark:text-white">
+            {{ t('settings.plugins.title') }}
+          </h3>
         </div>
         <div class="flex flex-col">
           <div class="overflow-x-auto">
@@ -25,8 +21,8 @@
                       <th
                         v-for="(title, index) in headers"
                         :key="`th-${index}`"
-                        scope="col"
                         class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400"
+                        scope="col"
                       >
                         {{ title }}
                       </th>
@@ -36,11 +32,32 @@
                     class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700"
                   >
                     <SettingsVeleroPluginLine
-                      v-for="(plugin, index) in plugins" :key="`plugin-${index}`"
+                      v-for="(plugin, index) in data"
+                      :key="`plugin-${index}`"
                       :data="plugin"
-                    ></SettingsVeleroPluginLine>
+                    />
                   </tbody>
                 </table>
+                <div
+                  v-if="data?.length === 0 && !isFetching"
+                  class="w-full flex flex-col items-center py-10 text-gray-400 dark:text-gray-300 dark:bg-gray-800"
+                >
+                  <FontAwesomeIcon
+                    :icon="faInfoCircle"
+                    class="w-16 h-16 mb-5"
+                  />
+                  {{ t('list.text.noEntries') }}
+                </div>
+                <div
+                  v-if="isFetching && data?.length === 0"
+                  class="w-full flex flex-col items-center py-10 text-gray-600 dark:text-gray-300 dark:bg-gray-800"
+                >
+                  <FontAwesomeIcon
+                    :icon="faCircleNotch"
+                    class="w-16 h-16 mb-5 animate-spin"
+                  />
+                  {{ t('list.text.fetchingEntries') }}
+                </div>
               </div>
             </div>
           </div>
@@ -50,18 +67,15 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { storeToRefs } from 'pinia';
-import { useSettingsStore } from '../../stores/settings.store';
+<script lang="ts" setup>
 import SettingsVeleroPluginLine from './SettingsVeleroPluginLine.vue';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faCircleNotch, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { onBeforeMount } from 'vue';
+import { useSettingsPlugins } from '@velero-ui-app/composables/settings/useSettingsPlugins';
+import { useI18n } from 'vue-i18n';
 
-const settingsStore = useSettingsStore();
-const { plugins } = storeToRefs(settingsStore);
+const { t } = useI18n();
+const { data, isFetching } = useSettingsPlugins();
 
 const headers = ['Name', 'Type', 'Actions'];
-
-onBeforeMount(() => settingsStore.fetchVeleroPlugins());
 </script>

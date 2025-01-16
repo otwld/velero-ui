@@ -5,7 +5,16 @@ metadata:
   namespace: velero-ui
 rules:
 - apiGroups:
-    - "*"
+    - ""
+  resources:
+    - "pods"
+    - "secrets"
+  verbs:
+    - "get"
+    - "watch"
+    - "list"
+- apiGroups:
+    - "velero.io"
   resources:
     - "*"
   verbs:

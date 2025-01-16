@@ -5,7 +5,7 @@ export const sortAlphabetically = (
   a: string,
   b: string,
   ascending = true,
-): number => (ascending ? a.localeCompare(b) : -1 * a.localeCompare(b));
+): number => (ascending ? a?.localeCompare(b) : -1 * a?.localeCompare(b));
 
 export const sortDate = (a: Date, b: Date, ascending = true): number =>
   ascending ? a.getTime() - b.getTime() : b.getTime() - a.getTime();
@@ -24,7 +24,7 @@ export const sortObjects = <R extends KubernetesObject>(
           sortColumnAscending,
         ),
       );
-    case 'Schedule':
+    case 'Schedules':
       return objects.sort((a: R, b: R) =>
         sortAlphabetically(
           a.metadata?.labels['velero.io/schedule-name'],
@@ -32,7 +32,7 @@ export const sortObjects = <R extends KubernetesObject>(
           sortColumnAscending,
         ),
       );
-    case 'Storage Location':
+    case 'Storage Locations':
       return objects.sort((a: V1Schedule, b: V1Schedule) =>
         sortAlphabetically(
           a.spec?.template?.storageLocation || 'z',
@@ -56,7 +56,7 @@ export const sortObjects = <R extends KubernetesObject>(
           sortColumnAscending,
         ),
       );
-    case 'Expire in':
+    case 'Expire In':
       return objects.sort((a: V1Backup, b: V1Backup) =>
         sortDate(
           new Date(a.status?.expiration),

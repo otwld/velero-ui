@@ -1,15 +1,14 @@
 <template>
-  <div aria-hidden="true" class="relative z-10" tabindex="-1">
+  <div class="relative z-10" tabindex="-1">
     <div
-      aria-hidden="true"
       class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
-    ></div>
+    />
 
     <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
       <div
         class="flex min-h-full items-end justify-center p-4 sm:items-center sm:p-0"
       >
-        <div class="relative p-4 w-full max-w-4xl max-h-full">
+        <div class="relative max-h-full" :class="[width, height]">
           <div class="relative bg-white rounded-lg shadow dark:bg-gray-800">
             <div
               class="flex items-center justify-between p-4 md:p-5 border-b rounded-t border-gray-200 dark:border-gray-600"
@@ -20,10 +19,10 @@
                 <slot name="header"></slot>
               </h3>
               <button
-                @click="emit('onClose')"
                 class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-700 dark:hover:text-white"
                 title="Close"
                 type="button"
+                @click="emit('onClose')"
               >
                 <FontAwesomeIcon :icon="faXmark" class="w-5 h-5" />
               </button>
@@ -49,10 +48,11 @@
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
-defineProps({
+const { width = 'max-w-4xl', height = 'max-h-full' } = defineProps({
   footer: Boolean,
+  width: String,
+  height: String,
 });
 
 const emit = defineEmits(['onConfirm', 'onCancel', 'onClose']);
-
 </script>

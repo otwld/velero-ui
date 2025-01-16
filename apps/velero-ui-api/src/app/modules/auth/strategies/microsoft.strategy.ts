@@ -3,7 +3,7 @@ import { PassportStrategy } from '@nestjs/passport';
 import { ConfigService } from '@nestjs/config';
 import { Strategy } from 'passport-microsoft';
 import { AppLogger } from '@velero-ui-api/shared/modules/logger/logger.service';
-import {AuthenticationException} from "@velero-ui-api/shared/exceptions/authentication.exception";
+import { AuthenticationException } from '@velero-ui-api/shared/exceptions/authentication.exception';
 
 @Injectable()
 export class MicrosoftStrategy extends PassportStrategy(Strategy, 'microsoft') {

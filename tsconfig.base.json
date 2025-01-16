@@ -10,28 +10,72 @@
     "importHelpers": true,
     "target": "es2015",
     "module": "esnext",
-    "lib": ["es2020", "dom"],
+    "lib": [
+      "es2020",
+      "dom"
+    ],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@velero-ui-api/assets/*": ["apps/velero-ui-api/src/assets/*"],
-      "@velero-ui-api/config/*": ["apps/velero-ui-api/src/config/*"],
-      "@velero-ui-api/modules/*": ["apps/velero-ui-api/src/app/modules/*"],
-      "@velero-ui-api/shared/*": ["apps/velero-ui-api/src/app/shared/*"],
-      "@velero-ui-app/api/*": ["apps/velero-ui/src/api/*"],
-      "@velero-ui-app/assets/*": ["apps/velero-ui/src/assets/*"],
-      "@velero-ui-app/components/*": ["apps/velero-ui/src/components/*"],
-      "@velero-ui-app/composables/*": ["apps/velero-ui/src/composables/*"],
-      "@velero-ui-app/layouts/*": ["apps/velero-ui/src/layouts/*"],
-      "@velero-ui-app/plugins/*": ["apps/velero-ui/src/plugins/*"],
-      "@velero-ui-app/stores/*": ["apps/velero-ui/src/stores/*"],
-      "@velero-ui-app/use/*": ["apps/velero-ui/src/use/*"],
-      "@velero-ui-app/utils/*": ["apps/velero-ui/src/utils/*"],
-      "@velero-ui-app/views/*": ["apps/velero-ui/src/views/*"],
-      "@velero-ui/shared-types": ["libs/shared-types/src/index.ts"],
-      "@velero-ui/velero": ["libs/velero/src/index.ts"]
+      "@velero-ui/i18n": [
+        "libs/i18n/src/index.ts"
+      ],
+      "@velero-ui-api/assets/*": [
+        "apps/velero-ui-api/src/assets/*"
+      ],
+      "@velero-ui-api/config/*": [
+        "apps/velero-ui-api/src/config/*"
+      ],
+      "@velero-ui-api/modules/*": [
+        "apps/velero-ui-api/src/app/modules/*"
+      ],
+      "@velero-ui-api/shared/*": [
+        "apps/velero-ui-api/src/app/shared/*"
+      ],
+      "@velero-ui-app/api/*": [
+        "apps/velero-ui/src/api/*"
+      ],
+      "@velero-ui-app/assets/*": [
+        "apps/velero-ui/src/assets/*"
+      ],
+      "@velero-ui-app/directives/*": [
+        "apps/velero-ui/src/directives/*"
+      ],
+      "@velero-ui-app/components/*": [
+        "apps/velero-ui/src/components/*"
+      ],
+      "@velero-ui-app/composables/*": [
+        "apps/velero-ui/src/composables/*"
+      ],
+      "@velero-ui-app/layouts/*": [
+        "apps/velero-ui/src/layouts/*"
+      ],
+      "@velero-ui-app/plugins/*": [
+        "apps/velero-ui/src/plugins/*"
+      ],
+      "@velero-ui-app/stores/*": [
+        "apps/velero-ui/src/stores/*"
+      ],
+      "@velero-ui-app/use/*": [
+        "apps/velero-ui/src/use/*"
+      ],
+      "@velero-ui-app/utils/*": [
+        "apps/velero-ui/src/utils/*"
+      ],
+      "@velero-ui-app/views/*": [
+        "apps/velero-ui/src/views/*"
+      ],
+      "@velero-ui/shared-types": [
+        "libs/shared-types/src/index.ts"
+      ],
+      "@velero-ui/velero": [
+        "libs/velero/src/index.ts"
+      ]
     }
   },
-  "exclude": ["node_modules", "tmp"]
+  "exclude": [
+    "node_modules",
+    "tmp"
+  ]
 }

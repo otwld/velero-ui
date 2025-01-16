@@ -8,7 +8,16 @@ metadata:
       {{- include "velero-ui.labels" . | nindent 4 }}
 rules:
 - apiGroups:
-    - "*"
+    - ""
+  resources:
+    - "pods"
+    - "secrets"
+  verbs:
+    - "get"
+    - "watch"
+    - "list"
+- apiGroups:
+    - "velero.io"
   resources:
     - "*"
   verbs:

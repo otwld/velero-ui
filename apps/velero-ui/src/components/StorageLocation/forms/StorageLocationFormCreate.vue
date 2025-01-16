@@ -1,0 +1,111 @@
+<template>
+  <div class="flex p-4 md:p-5 justify-center flex-col sm:mx-10">
+    <Form
+      :is-loading="isPending"
+      :step-components="[
+        {
+          name: t('global.info'),
+          optional: false,
+          component: shallowRef(StorageLocationCreateInfo),
+        },
+        {
+          name: t('global.credentials'),
+          optional: true,
+          component: shallowRef(StorageLocationCreateCredential),
+        },
+        {
+          name: t('global.configurationAndLabels'),
+          optional: true,
+          component: shallowRef(StorageLocationCreateConfig),
+        },
+        {
+          name: t('global.confirmation'),
+          optional: false,
+          component: shallowRef(StorageLocationCreateConfirm),
+        },
+      ]"
+      @dismissError="dismissError()"
+      @onSubmit="onSubmit()"
+    />
+  </div>
+</template>
+
+<script lang="ts" setup>
+import Form from '@velero-ui-app/components/Form.vue';
+import { useFormStore } from '@velero-ui-app/stores/form.store';
+import { storeToRefs } from 'pinia';
+import StorageLocationCreateConfirm from '@velero-ui-app/components/StorageLocation/forms/StorageLocationFormConfirm.vue';
+import StorageLocationCreateInfo from '@velero-ui-app/components/StorageLocation/forms/StorageLocationFormInfo.vue';
+import StorageLocationCreateCredential from '@velero-ui-app/components/StorageLocation/forms/StorageLocationFormCredential.vue';
+import StorageLocationCreateConfig from '@velero-ui-app/components/StorageLocation/forms/StorageLocationFormConfig.vue';
+import type { CreateFormBody } from '@velero-ui/shared-types';
+import { onBeforeUnmount, shallowRef, watch } from 'vue';
+import { useKubernetesCreateObject } from '@velero-ui-app/composables/useKubernetesCreateObject';
+import { Resources, type V1BackupStorageLocationSpec } from '@velero-ui/velero';
+import { useI18n } from 'vue-i18n';
+
+const { mutate, isPending, isError, isSuccess } = useKubernetesCreateObject(
+  Resources.BACKUP_STORAGE_LOCATION,
+);
+
+const { t } = useI18n();
+const formStore = useFormStore();
+const { formContent } = storeToRefs(formStore);
+
+onBeforeUnmount(() => formStore.reset());
+
+const emit = defineEmits(['onConfirm', 'onCancel', 'onClose']);
+
+const dismissError = () => {};
+
+const onSubmit = () => {
+  const form: CreateFormBody<V1BackupStorageLocationSpec> = {
+    name: formContent.value[0].name,
+    spec: {
+      accessMode: formContent.value[0].accessMode,
+      objectStorage: {
+        bucket: formContent.value[0].bucket,
+        caCert: formContent.value[0].caCert,
+        prefix: formContent.value[0].prefix,
+      },
+      provider: formContent.value[0].provider,
+      default: formContent.value[0].default,
+
+      backupSyncPeriod:
+        formContent.value[0].backupSyncPeriod +
+        formContent.value[0].backupSyncPeriodUnit,
+      validationFrequency:
+        formContent.value[0].validationFrequency +
+        formContent.value[0].validationFrequencyUnit,
+    },
+  };
+
+  if (formContent.value[1].credential.name) {
+    form.spec.credential = {
+      key: formContent.value[1].credential.key,
+      name: formContent.value[1].credential.name,
+    };
+  }
+
+  if (Object.entries(formContent.value[2].configuration).length > 0) {
+    form.spec.config = formContent.value[2].configuration;
+  }
+
+  if (Object.entries(formContent.value[2].labels).length > 0) {
+    form.labels = formContent.value[2].labels;
+  }
+  mutate(form);
+};
+
+watch(isError, () => {
+  if (isError.value) {
+    formStore.previous();
+  }
+});
+
+watch(isSuccess, () => {
+  if (isSuccess.value) {
+    emit('onClose');
+  }
+});
+</script>

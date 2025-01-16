@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { DeleteBackupRequestService } from '@velero-ui-api/modules/delete-backup-request/delete-backup-request.service';
 import { DownloadRequestService } from '@velero-ui-api/modules/download-request/download-request.service';
-import { K8sCustomObjectService } from '@velero-ui-api/shared/modules/k8s-custom-object/k8s-custom-object.service';
+import { K8sCustomObjectService } from '@velero-ui-api/modules/k8s-custom-object/k8s-custom-object.service';
 import { BackupRepositoryService } from '@velero-ui-api/modules/backup-repository/backup-repository.service';
 import { Observable } from 'rxjs';
 import {
@@ -41,7 +41,7 @@ export class BackupRepositoryController {
       V1BackupRepository,
       V1BackupRepositoryList
     >(
-      Resources.BACKUP_REPOSITORY.plurial,
+      Resources.BACKUP_REPOSITORY.plural,
       offset,
       limit,
       search,
@@ -55,23 +55,23 @@ export class BackupRepositoryController {
     @Param('name') name: string,
   ): Observable<V1BackupRepository> {
     return this.k8sCustomObjectService.getByName<V1BackupRepository>(
-      Resources.BACKUP_REPOSITORY.plurial,
+      Resources.BACKUP_REPOSITORY.plural,
       name,
     );
   }
 
   @Delete()
-  public delete(@Body() names: string[]): void {
+  public delete(@Body() names: string[]): Observable<void> {
     return this.k8sCustomObjectService.delete(
-      Resources.BACKUP_REPOSITORY.plurial,
+      Resources.BACKUP_REPOSITORY.plural,
       names,
     );
   }
 
   @Delete('/:name')
-  public deleteByName(@Param('name') name: string): void {
+  public deleteByName(@Param('name') name: string): Observable<void> {
     return this.k8sCustomObjectService.deleteByName(
-      Resources.BACKUP_REPOSITORY.plurial,
+      Resources.BACKUP_REPOSITORY.plural,
       name,
     );
   }

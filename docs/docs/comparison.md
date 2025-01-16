@@ -5,5 +5,5 @@ title: ↔️ Comparison with Velero CLI
 hide_title: true
 ---
 
-:::info This page is under construction. 
+:::info This page is under construction.
 :::

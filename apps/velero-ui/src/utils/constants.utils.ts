@@ -16,8 +16,10 @@ export const ApiRoutes = {
   SETTINGS_VELERO_UI: '/settings/velero/ui',
   SETTINGS_VELERO_PLUGINS: '/settings/velero/plugins',
   FORM_SCHEDULES: '/form/schedules',
+  FORM_BACKUPS: '/form/backups',
   FORM_NAMESPACES: '/form/namespaces',
   FORM_SECRETS: '/form/secrets',
+  FORM_CONFIG_MAPS: '/form/config-maps',
   FORM_STORAGE_LOCATIONS: '/form/storage-locations',
   FORM_SNAPSHOT_LOCATIONS: '/form/snapshot-locations',
 };
@@ -29,10 +31,10 @@ export const Pages = {
   BACKUP: { name: 'Backup', path: '/backups/:name' },
   SCHEDULES: { name: 'Schedules', path: '/schedules' },
   SCHEDULE: { name: 'Schedule', path: '/schedules/:name' },
-  STORAGE_LOCATIONS: { name: 'Storage Locations', path: '/storage-locations' },
+  STORAGE_LOCATIONS: { name: 'Storage Locations', path: '/backup-storage-locations' },
   STORAGE_LOCATION: {
     name: 'Storage Location',
-    path: '/storage-locations/:name',
+    path: '/backup-storage-locations/:name',
   },
   BACKUP_REPOSITORIES: {
     name: 'Backup Repositories',
@@ -46,11 +48,11 @@ export const Pages = {
   RESTORE: { name: 'Restore', path: '/restores/:name' },
   SNAPSHOT_LOCATIONS: {
     name: 'Snapshot Locations',
-    path: '/snapshot-locations',
+    path: '/volume-snapshot-locations',
   },
   SNAPSHOT_LOCATION: {
     name: 'Snapshot Location',
-    path: '/snapshot-locations/:name',
+    path: '/volume-snapshot-locations/:name',
   },
   DELETE_BACKUP_REQUESTS: {
     name: 'Delete Backup Requests',
@@ -63,6 +65,22 @@ export const Pages = {
   SERVER_STATUS_REQUESTS: {
     name: 'Server Status Requests',
     path: '/requests/server-status-requests',
+  },
+  POD_VOLUME_BACKUPS: {
+    name: 'Pod Volume Backups',
+    path: '/pod-volumes/backups',
+  },
+  POD_VOLUME_BACKUP: {
+    name: 'Pod Volume Backup',
+    path: '/pod-volumes/backups/:name',
+  },
+  POD_VOLUME_RESTORES: {
+    name: 'Pod Volume Restores',
+    path: '/pod-volumes/restores',
+  },
+  POD_VOLUME_RESTORE: {
+    name: 'Pod Volume Restore',
+    path: '/pod-volumes/restores/:name',
   },
   SETTINGS: {
     name: 'Settings',

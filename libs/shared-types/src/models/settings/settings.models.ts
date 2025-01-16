@@ -1,3 +1,9 @@
+export enum ImagePullPolicyEnum {
+  ALWAYS = 'Always',
+  IF_NOT_PRESENT = 'IfNotPresent',
+  NEVER = 'never',
+}
+
 export interface ClusterSettings {
   connected: boolean;
   version: string;
@@ -22,6 +28,5 @@ export interface VeleroAgentSettings {
 
 export interface VeleroUiSettings {
   version: string;
-  connected: boolean;
   mode: string;
 }

@@ -18,15 +18,14 @@ import {
   V1Restore,
   V1RestoreList,
 } from '@velero-ui/velero';
-import { K8sCustomObjectService } from '@velero-ui-api/shared/modules/k8s-custom-object/k8s-custom-object.service';
+import { K8sCustomObjectService } from '@velero-ui-api/modules/k8s-custom-object/k8s-custom-object.service';
 import { DownloadRequestService } from '@velero-ui-api/modules/download-request/download-request.service';
-import { DeleteBackupRequestService } from '@velero-ui-api/modules/delete-backup-request/delete-backup-request.service';
+import { CreateRestoreDto } from '@velero-ui-api/shared/dto/restore.dto';
 
 @Controller(Resources.RESTORE.route)
 export class RestoreController {
   constructor(
     private readonly restoreService: RestoreService,
-    private readonly deleteBackupRequestService: DeleteBackupRequestService,
     private readonly downloadRequestService: DownloadRequestService,
     private readonly k8sCustomObjectService: K8sCustomObjectService,
   ) {}
@@ -41,7 +40,7 @@ export class RestoreController {
     sortColumnAscending: boolean,
   ): Observable<V1RestoreList> {
     return this.k8sCustomObjectService.get<V1Restore, V1RestoreList>(
-      Resources.RESTORE.plurial,
+      Resources.RESTORE.plural,
       offset,
       limit,
       search,
@@ -53,9 +52,19 @@ export class RestoreController {
   @Get('/:name')
   public getByName(@Param('name') name: string): Observable<V1Restore> {
     return this.k8sCustomObjectService.getByName<V1Restore>(
-      Resources.RESTORE.plurial,
+      Resources.RESTORE.plural,
       name,
     );
+  }
+
+  @Post()
+  public create(@Body() data: CreateRestoreDto) {
+    return this.restoreService.create(data);
+  }
+
+  @Get('/:name/logs')
+  public logs(@Param('name') name: string): Observable<string[]> {
+    return this.restoreService.logs(name);
   }
 
   @Post('/:name/logs/download')
@@ -69,17 +78,14 @@ export class RestoreController {
   }
 
   @Delete()
-  public delete(@Body() names: string[]): void {
-    return this.k8sCustomObjectService.delete(
-      Resources.RESTORE.plurial,
-      names,
-    );
+  public delete(@Body() names: string[]): Observable<void> {
+    return this.k8sCustomObjectService.delete(Resources.RESTORE.plural, names);
   }
 
   @Delete('/:name')
   public deleteByName(@Param('name') name: string) {
     return this.k8sCustomObjectService.deleteByName(
-      Resources.RESTORE.plurial,
+      Resources.RESTORE.plural,
       name,
     );
   }

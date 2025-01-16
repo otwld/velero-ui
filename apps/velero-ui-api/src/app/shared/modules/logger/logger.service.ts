@@ -40,6 +40,8 @@ export class AppLogger implements LoggerService {
 
   public error(message: string, scope: string): void;
 
+  public error(message: object, scope: string);
+
   public error(message: never, ...optionalParams: never[]): void {
     this.logger.error(message, optionalParams);
   }

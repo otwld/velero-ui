@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Request, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { AuthService } from '@velero-ui-api/modules/auth/auth.service';
 import { Public } from '@velero-ui-api/shared/decorators/public.decorator';
 import { AuthGuard } from '@nestjs/passport';
+import { Request } from 'express';
 
 @Public()
 @Controller('auth')
@@ -10,37 +11,37 @@ export class AuthController {
 
   @Post('/login')
   @UseGuards(AuthGuard(['local', 'ldap']))
-  public login(@Request() req: any) {
+  public login(@Req() req: Request) {
     return this.authService.login(req);
   }
 
   @Get('/google')
   @UseGuards(AuthGuard('google'))
-  public googleAuthRedirect(@Request() req: any) {
+  public googleAuthRedirect(@Req() req: Request) {
     return this.authService.login(req);
   }
 
   @Get('/github')
   @UseGuards(AuthGuard('github'))
-  public githubAuthRedirect(@Request() req: any) {
+  public githubAuthRedirect(@Req() req: Request) {
     return this.authService.login(req);
   }
 
   @Get('/gitlab')
   @UseGuards(AuthGuard('gitlab'))
-  public gitlabAuthRedirect(@Request() req: any) {
+  public gitlabAuthRedirect(@Req() req: Request) {
     return this.authService.login(req);
   }
 
   @Get('/microsoft')
   @UseGuards(AuthGuard('microsoft'))
-  public microsoftAuthRedirect(@Request() req: any) {
+  public microsoftAuthRedirect(@Req() req: Request) {
     return this.authService.login(req);
   }
 
   @Get('/oauth')
   @UseGuards(AuthGuard('oauth'))
-  public oauthAuthRedirect(@Request() req: any) {
+  public oauthAuthRedirect(@Req() req: Request) {
     return this.authService.login(req);
   }
 }

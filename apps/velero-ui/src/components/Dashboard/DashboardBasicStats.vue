@@ -18,9 +18,9 @@
               v-if="data"
               class="mb-1 text-2xl font-bold text-gray-900 dark:text-white"
             >
-              {{ data?.totalBackups.toString() || 'N/A' }}
+              {{ data?.totalBackups.toString() || t('global.na') }}
             </h3>
-            <div class="text-gray-500 dark:text-gray-400">Backups</div>
+            <div class="text-gray-500 dark:text-gray-400">{{ t('global.backup', data?.totalBackups) }}</div>
           </div>
         </div>
         <div class="flex self-center">
@@ -53,9 +53,9 @@
               v-if="data"
               class="mb-1 text-2xl font-bold text-gray-900 dark:text-white"
             >
-              {{ data?.totalSchedules.toString() || 'N/A' }}
+              {{ data?.totalSchedules.toString() || t('global.na') }}
             </h3>
-            <div class="text-gray-500 dark:text-gray-400">Schedules</div>
+            <div class="text-gray-500 dark:text-gray-400">{{ t('global.schedule', data?.totalSchedules) }}</div>
           </div>
         </div>
         <div class="flex self-center">
@@ -88,9 +88,9 @@
               v-if="data"
               class="mb-1 text-2xl font-bold text-gray-900 dark:text-white"
             >
-              {{ data?.totalRestores.toString() || 'N/A' }}
+              {{ data?.totalRestores.toString() || t('global.na') }}
             </h3>
-            <div class="text-gray-500 dark:text-gray-400">Restores</div>
+            <div class="text-gray-500 dark:text-gray-400">{{ t('global.restore', data?.totalRestores) }}</div>
           </div>
         </div>
         <div class="flex self-center">
@@ -123,10 +123,10 @@
               v-if="data"
               class="mb-1 text-2xl font-bold text-gray-900 dark:text-white"
             >
-              {{ data?.totalStorageLocations.toString() || 'N/A' }}
+              {{ data?.totalStorageLocations.toString() || t('global.na') }}
             </h3>
             <div class="text-gray-500 dark:text-gray-400">
-              Storage Locations
+              {{ t('global.storageLocation', data?.totalStorageLocations) }}
             </div>
           </div>
         </div>
@@ -155,6 +155,8 @@ import {
 import { Pages } from '@velero-ui-app/utils/constants.utils';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { useStatsBasic } from '@velero-ui-app/composables/stats/useStatsBasic';
+import { useI18n } from 'vue-i18n';
 
+const { t } = useI18n();
 const { isFetching, data } = useStatsBasic();
 </script>

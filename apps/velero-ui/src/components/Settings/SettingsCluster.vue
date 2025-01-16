@@ -7,9 +7,9 @@
         class="items-center sm:flex xl:block 2xl:flex sm:space-x-4 xl:space-x-0 2xl:space-x-4"
       >
         <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 32 32"
           class="mb-4 rounded-lg w-20 h-20 sm:mb-0 xl:mb-4 2xl:mb-0 dark:text-white"
+          viewBox="0 0 32 32"
+          xmlns="http://www.w3.org/2000/svg"
         >
           <path
             d="M15.9.476a2.14 2.14 0 0 0-.823.218L3.932 6.01c-.582.277-1.005.804-1.15 1.432L.054 19.373c-.13.56-.025 1.147.3 1.627q.057.087.12.168l7.7 9.574c.407.5 1.018.787 1.662.784h12.35c.646.001 1.258-.3 1.664-.793l7.696-9.576c.404-.5.555-1.16.4-1.786L29.2 7.43c-.145-.628-.57-1.155-1.15-1.432L16.923.695A2.14 2.14 0 0 0 15.89.476z"
@@ -27,27 +27,27 @@
           <h3
             class="flex items-center mb-1 text-lg font-bold text-gray-900 dark:text-white"
           >
-            Kubernetes Cluster
-            <div
-              v-if="cluster?.connected"
+            {{ t('settings.cluster.title') }}
+            <span
+              v-if="data?.connected && socket.connected"
               class="h-2.5 w-2.5 rounded-full bg-green-400 ml-2"
-            ></div>
-            <div
-              v-if="!cluster?.connected"
+            />
+            <span
+              v-if="!data?.connected || !socket.connected"
               class="h-2.5 w-2.5 rounded-full bg-red-500 ml-2"
-            ></div>
+            />
           </h3>
           <div class="mb-1 text-sm text-gray-500 dark:text-gray-400">
-            {{ cluster?.server }}
+            {{ data?.server }}
             <div
-              v-if="!cluster"
+              v-if="!data"
               class="h-2.5 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-48 mb-5"
             ></div>
           </div>
           <div class="mb-4 text-xs text-gray-500 dark:text-gray-400">
-            {{ cluster?.version }}
+            {{ data?.version }}
             <div
-              v-if="!cluster"
+              v-if="!data"
               class="h-2 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-72 mb-4"
             ></div>
           </div>
@@ -58,13 +58,14 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { onBeforeMount } from 'vue';
-import { storeToRefs } from 'pinia';
-import { useSettingsStore } from '../../stores/settings.store';
+<script lang="ts" setup>
+import { inject } from 'vue';
+import { useSettingsCluster } from '@velero-ui-app/composables/settings/useSettingsCluster';
+import { useI18n } from 'vue-i18n';
+import type { SocketIO } from '@velero-ui-app/plugins/socket.plugin';
 
-const settingsStore = useSettingsStore();
-const { cluster } = storeToRefs(settingsStore);
+const socket: SocketIO = inject('socketIo');
 
-onBeforeMount(() => settingsStore.fetchCluster());
+const { t } = useI18n();
+const { data } = useSettingsCluster();
 </script>

@@ -9,8 +9,8 @@
       </button>
     </template>
   </ListHeader>
-  <ListContent :component="DownloadRequestLine"></ListContent>
-  <ListFooter></ListFooter>
+  <ListContent :component="DownloadRequestLine" />
+  <ListFooter />
 </template>
 <script lang="ts" setup>
 import { onBeforeMount } from 'vue';
@@ -27,7 +27,7 @@ const listStore = useListStore();
 onBeforeMount(() =>
   listStore.setHeaders([
     {
-      name: 'Name',
+      name: 'list.header.name',
       sort: {
         enabled: true,
         selected: true,
@@ -35,34 +35,34 @@ onBeforeMount(() =>
       },
     },
     {
-      name: 'Target',
+      name: 'list.header.target',
       sort: {
         enabled: true,
         selected: false,
       },
     },
     {
-      name: 'Kind',
+      name: 'list.header.kind',
       sort: {
         enabled: true,
         selected: false,
       },
     },
     {
-      name: 'Expire In',
+      name: 'list.header.expireIn',
       sort: {
         enabled: true,
         selected: false,
       },
     },
     {
-      name: 'Status',
+      name: 'list.header.status',
       sort: {
         enabled: false,
       },
     },
     {
-      name: 'Actions',
+      name: 'list.header.actions',
       sort: {
         enabled: false,
       },

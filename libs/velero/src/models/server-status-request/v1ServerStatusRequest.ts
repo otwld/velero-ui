@@ -8,7 +8,7 @@ export interface V1ServerStatusRequest extends KubernetesObject {
   status?: V1ServerStatusRequestStatus;
 }
 
-export interface V1ServerStatusRequestSpec {}
+export type V1ServerStatusRequestSpec = object;
 
 export const enum V1ServerStatusRequestPhase {
   New = 'New',

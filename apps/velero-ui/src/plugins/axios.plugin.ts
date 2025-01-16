@@ -1,27 +1,33 @@
 import type { AxiosInstance, InternalAxiosRequestConfig } from 'axios';
 import axios from 'axios';
 import type { App } from 'vue';
-import type { Pinia } from 'pinia';
 import { hasExpired } from '@velero-ui-app/utils/jwt.utils';
 
-export const registerAxios = (app: App, store: Pinia): void => {
-  const axiosInstance: AxiosInstance = axios.create({
-    baseURL: import.meta.env.VITE_API_URL || '/api',
-  });
+export const Axios = {
+  install(app: App) {
+    let baseURL = '/api';
 
-  axiosInstance.interceptors.request.use(
-    async (onFulfilled: InternalAxiosRequestConfig) => {
-      const accessToken: string = localStorage.getItem('access_token');
+    if (import.meta.env.VITE_API_URL) {
+      baseURL = `${import.meta.env.VITE_API_URL}/api`;
+    }
 
-      if (accessToken && !hasExpired(accessToken)) {
-        onFulfilled.headers['Authorization'] = `Bearer ${accessToken}`;
-      }
+    const axiosInstance: AxiosInstance = axios.create({
+      baseURL,
+    });
 
-      return onFulfilled;
-    },
-  );
+    axiosInstance.interceptors.request.use(
+      async (onFulfilled: InternalAxiosRequestConfig) => {
+        const accessToken: string = localStorage.getItem('access_token');
 
-  app.config.globalProperties.axios = axiosInstance;
-  app.provide('axios', axiosInstance);
-  store.use(() => ({ axios: axiosInstance }));
+        if (accessToken && !hasExpired(accessToken)) {
+          onFulfilled.headers['Authorization'] = `Bearer ${accessToken}`;
+        }
+
+        return onFulfilled;
+      },
+    );
+
+    app.config.globalProperties.axios = axiosInstance;
+    app.provide('axios', axiosInstance);
+  },
 };

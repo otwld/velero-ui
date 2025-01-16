@@ -8,5 +8,4 @@ import { VeleroService } from './velero.service';
   exports: [VeleroService]
 })
 export class VeleroModule {
-  constructor() {}
 }

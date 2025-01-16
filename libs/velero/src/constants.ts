@@ -1,6 +1,7 @@
 export interface Resource {
+  name: string;
   kind: string;
-  plurial: string;
+  plural: string;
   route: string;
 }
 
@@ -18,67 +19,94 @@ export type ResourcesNames =
   | 'VOLUME_SNAPSHOT_LOCATION'
   | 'SERVER_STATUS_REQUEST';
 
+export const PLURALS: string[] = [
+  'backups',
+  'restores',
+  'schedules',
+  'downloadrequests',
+  'deletebackuprequests',
+  'podvolumebackups',
+  'podvolumerestores',
+  'backuprepositories',
+  'ResticRepository',
+  'backupstoragelocations',
+  'volumesnapshotlocations',
+  'serverstatusrequests'
+];
+
 export const Resources: Record<ResourcesNames, Resource> = {
   BACKUP: {
+    name: 'Backup',
     kind: 'Backup',
-    plurial: 'backups',
+    plural: 'backups',
     route: '/backups',
   },
   RESTORE: {
+    name: 'Restore',
     kind: 'Restore',
-    plurial: 'restores',
+    plural: 'restores',
     route: '/restores',
   },
   SCHEDULE: {
+    name: 'Schedule',
     kind: 'Schedule',
-    plurial: 'schedules',
+    plural: 'schedules',
     route: '/schedules',
   },
   DOWNLOAD_REQUEST: {
+    name: 'Download Request',
     kind: 'DownloadRequest',
-    plurial: 'downloadrequests',
+    plural: 'downloadrequests',
     route: '/download-requests',
   },
   DELETE_BACKUP_REQUEST: {
+    name: 'Delete backup Request',
     kind: 'DeleteBackupRequest',
-    plurial: 'deletebackuprequests',
+    plural: 'deletebackuprequests',
     route: '/delete-backup-requests',
   },
   POD_VOLUME_BACKUP: {
+    name: 'Pod Volume Backup',
     kind: 'PodVolumeBackup',
-    plurial: 'podvolumebackups',
+    plural: 'podvolumebackups',
     route: '/pod-volume-backups',
   },
   POD_VOLUME_RESTORE: {
+    name: 'Pod Volume Restore',
     kind: 'PodVolumeRestore',
-    plurial: 'podvolumerestores',
-    route: '/pod-volume-restores',
+    plural: 'podvolumerestores',
+    route: '/podvolumerestores',
   },
   BACKUP_REPOSITORY: {
     // >= v1.10.x
+    name: 'Backup Repository',
     kind: 'BackupRepository',
-    plurial: 'backuprepositories',
+    plural: 'backuprepositories',
     route: '/backup-repositories',
   },
   RESTIC_REPOSITORY: {
     // < v1.10.x
+    name: 'Restic Repository',
     kind: 'ResticRepository',
-    plurial: 'resticrepositories',
+    plural: 'resticrepositories',
     route: '/restic-repositories',
   },
   BACKUP_STORAGE_LOCATION: {
+    name: 'backup Storage Location',
     kind: 'BackupStorageLocation',
-    plurial: 'backupstoragelocations',
+    plural: 'backupstoragelocations',
     route: '/backup-storage-locations',
   },
   VOLUME_SNAPSHOT_LOCATION: {
+    name: 'Volume Snapshot Location',
     kind: 'VolumeSnapshotLocation',
-    plurial: 'volumesnapshotlocations',
+    plural: 'volumesnapshotlocations',
     route: '/volume-snapshot-locations',
   },
   SERVER_STATUS_REQUEST: {
+    name: 'Server Status Request',
     kind: 'ServerStatusRequest',
-    plurial: 'serverstatusrequests',
+    plural: 'serverstatusrequests',
     route: '/server-status-requests',
   },
 };

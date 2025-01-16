@@ -3,7 +3,7 @@
     class="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800"
   >
     <div class="flex items-center">
-      <h3 class="text-xl font-semibold dark:text-white">Details</h3>
+      <h3 class="text-xl font-semibold dark:text-white">{{ t('global.details') }}</h3>
       <div
         v-if="!location"
         class="ml-4 h-2 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-24"
@@ -17,7 +17,7 @@
         class="ml-4 bg-green-100 text-green-800 text-xs font-medium inline-flex items-center me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300"
       >
         <FontAwesomeIcon :icon="faStar" class="w-3 h-3 mr-1.5" />
-        Default</span
+        {{ t('resource.spec.default') }}</span
       >
       <span
         v-if="location?.spec?.accessMode"
@@ -35,25 +35,25 @@
       ></div>
     </div>
     <div v-if="location?.spec?.provider" class="mt-4 flex flex-col">
-      <span class="text-base font-medium text-gray-900 dark:text-white"
-        >Provider</span
-      >
+      <span class="text-base font-medium text-gray-900 dark:text-white">{{
+        t('resource.spec.provider')
+      }}</span>
       <i class="mt-1 text-xs text-gray-500 dark:text-gray-400">{{
         location?.spec?.provider
       }}</i>
     </div>
     <div v-if="location?.spec?.backupSyncPeriod" class="mt-4 flex flex-col">
-      <span class="text-base font-medium text-gray-900 dark:text-white"
-        >Synchronization Period</span
-      >
+      <span class="text-base font-medium text-gray-900 dark:text-white">{{
+        t('resource.spec.backupSyncPeriod')
+      }}</span>
       <i class="mt-1 text-xs text-gray-500 dark:text-gray-400">{{
         location?.spec?.backupSyncPeriod
       }}</i>
     </div>
     <div v-if="location?.spec?.validationFrequency" class="mt-4 flex flex-col">
-      <span class="text-base font-medium text-gray-900 dark:text-white"
-        >Validation Frequency</span
-      >
+      <span class="text-base font-medium text-gray-900 dark:text-white">{{
+        t('resource.spec.validationFrequency')
+      }}</span>
       <i class="mt-1 text-xs text-gray-500 dark:text-gray-400">{{
         location?.spec?.validationFrequency
       }}</i>
@@ -62,21 +62,23 @@
       v-if="location?.spec?.objectStorage?.bucket"
       class="mt-4 flex flex-col"
     >
-      <span class="text-base font-medium text-gray-900 dark:text-white"
-        >Object Storage Bucket</span
-      >
+      <span class="text-base font-medium text-gray-900 dark:text-white">{{
+        t('resource.spec.bucket')
+      }}</span>
       <i class="mt-1 text-xs text-gray-500 dark:text-gray-400">{{
         location?.spec?.objectStorage.bucket
       }}</i>
     </div>
   </div>
 </template>
-<script setup lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
 import type { V1BackupStorageLocation } from '@velero-ui/velero';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { useI18n } from 'vue-i18n';
 
+const { t } = useI18n();
 defineProps({
   location: Object as PropType<V1BackupStorageLocation>,
 });

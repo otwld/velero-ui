@@ -4,13 +4,13 @@
   >
     <div class="flex items-center mb-4 sm:mb-0 divide-x divide-gray-200">
       <span class="text-sm font-normal text-gray-500 dark:text-gray-400"
-        >Showing
+        >{{ t('list.text.showing') }}
         <span class="font-semibold text-gray-900 dark:text-white"
           >{{ offset }}-{{
             offset + limit > total ? total : offset + limit
           }}</span
         >
-        of
+        {{ t('list.text.of') }}
         <span class="font-semibold text-gray-900 dark:text-white">{{
           total
         }}</span></span
@@ -19,7 +19,9 @@
         class="ml-3 pl-3 text-sm font-normal text-gray-500 dark:text-gray-400"
       >
         <div class="max-w-sm mx-auto inline-flex items-center">
-          <label class="pr-1" for="underline_select">Entries per page:</label>
+          <label class="pr-1" for="underline_select">{{
+            t('list.text.entriesPerPage')
+          }}</label>
           <select
             id="underline_select"
             v-model="limit"
@@ -43,7 +45,7 @@
         @click="listStore.previous()"
       >
         <FontAwesomeIcon :icon="faChevronLeft" class="w-3 h-3 mr-1" />
-        Previous
+        {{ t('global.button.previous.title') }}
       </button>
       <button
         :class="{ 'cursor-not-allowed': disableNext() }"
@@ -52,7 +54,7 @@
         type="button"
         @click="listStore.next()"
       >
-        Next
+        {{ t('global.button.next.title') }}
         <FontAwesomeIcon :icon="faChevronRight" class="w-3 h-3 ml-1" />
       </button>
     </div>
@@ -67,15 +69,17 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { useListStore } from '../../stores/list.store';
 import { storeToRefs } from 'pinia';
-import { useKubernetesListObject } from '@velero-ui-app/composables/useKubernetesListObject';
+import { useI18n } from 'vue-i18n';
+import { useKubernetesWatchListObject } from '@velero-ui-app/composables/useKubernetesWatchListObject';
+
+const { t } = useI18n();
 
 const listStore = useListStore();
 const { offset, limit, total, objectType } = storeToRefs(listStore);
 
-const { isFetching } = useKubernetesListObject(objectType.value);
+const { isFetching } = useKubernetesWatchListObject(objectType.value);
 
 const disablePrev = () => isFetching.value || listStore.offset === 0;
 const disableNext = () =>
   isFetching.value || listStore.offset + listStore.limit > listStore.total;
-
 </script>

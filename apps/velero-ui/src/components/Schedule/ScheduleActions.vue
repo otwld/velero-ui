@@ -17,7 +17,7 @@
         <div
           v-if="!schedule"
           class="h-2.5 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-48 mb-4"
-        ></div>
+        />
         <div
           v-if="schedule"
           class="mb-4 text-xs text-gray-500 dark:text-gray-400"
@@ -27,14 +27,14 @@
         <div
           v-if="!schedule"
           class="h-1.5 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-48 mb-4"
-        ></div>
+        />
         <div v-if="schedule" class="flex items-center space-x-4">
           <button
             class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:ring-teal-300 dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
             type="button"
           >
             <FontAwesomeIcon :icon="faPen" class="w-4 h-4 mr-2" />
-            Edit
+            {{ t('global.button.edit.title')}}
           </button>
           <button
             v-if="
@@ -56,7 +56,7 @@
               :icon="faCircleNotch"
               class="w-4 h-4 animate-spin mr-2"
             />
-            Enable
+            {{ t('global.button.enable.title')}}
           </button>
           <button
             v-if="
@@ -78,10 +78,10 @@
               :icon="faCircleNotch"
               class="w-4 h-4 animate-spin mr-2"
             />
-            Pause
+            {{ t('global.button.pause.title')}}
           </button>
           <button
-            :class="{ 'cursor-not-allowed': isDisabled || !schedule }"
+            :class="{ 'cursor-not-allowed': isDeleting || !schedule }"
             :disabled="isDeleting || !schedule"
             class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-red-600 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"
             type="button"
@@ -97,7 +97,11 @@
               :icon="faTrashCan"
               class="w-4 h-4 mr-2"
             />
-            {{ isDeleting ? 'Deleting' : 'Delete' }}
+            {{
+              isDeleting
+                ? t('global.button.delete.loading')
+                : t('global.button.delete.title')
+            }}
           </button>
         </div>
       </div>
@@ -106,8 +110,7 @@
   <ModalConfirmation
     v-if="showModalDelete"
     :icon="faExclamationCircle"
-    :name="schedule?.metadata?.name"
-    text="Are you sure you want to delete:"
+    :text="t('modal.text.confirmation.delete')"
     @onClose="showModalDelete = false"
     @onConfirm="remove(schedule.metadata.name)"
   />
@@ -129,7 +132,9 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import ModalConfirmation from '@velero-ui-app/components/Modals/ModalConfirmation.vue';
 import { useDeleteKubernetesObject } from '@velero-ui-app/composables/useDeleteKubernetesObject';
 import { usePauseSchedule } from '@velero-ui-app/composables/schedule/usePauseSchedule';
+import { useI18n } from 'vue-i18n';
 
+const { t } = useI18n();
 const props = defineProps({
   schedule: Object as PropType<V1Schedule>,
 });

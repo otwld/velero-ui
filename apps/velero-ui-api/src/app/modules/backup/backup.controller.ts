@@ -22,7 +22,7 @@ import {
 import { CreateDeleteBackupRequestDto } from '../../shared/dto/delete-backup-request.dto';
 import { DeleteBackupRequestService } from '@velero-ui-api/modules/delete-backup-request/delete-backup-request.service';
 import { DownloadRequestService } from '@velero-ui-api/modules/download-request/download-request.service';
-import { K8sCustomObjectService } from '@velero-ui-api/shared/modules/k8s-custom-object/k8s-custom-object.service';
+import { K8sCustomObjectService } from '@velero-ui-api/modules/k8s-custom-object/k8s-custom-object.service';
 import { CreateBackupDto } from '@velero-ui-api/shared/dto/backup.dto';
 
 @Controller(Resources.BACKUP.route)
@@ -44,7 +44,7 @@ export class BackupController {
     sortColumnAscending: boolean,
   ): Observable<V1BackupList> {
     return this.k8sCustomObjectService.get<V1Backup, V1BackupList>(
-      Resources.BACKUP.plurial,
+      Resources.BACKUP.plural,
       offset,
       limit,
       search,
@@ -75,14 +75,14 @@ export class BackupController {
   }
 
   @Post()
-  public create(@Body() data: CreateBackupDto) {
+  public create(@Body() data: CreateBackupDto)  {
     return this.backupService.create(data);
   }
 
   @Get('/:name')
   public getByName(@Param('name') name: string): Observable<V1Backup> {
     return this.k8sCustomObjectService.getByName<V1Backup>(
-      Resources.BACKUP.plurial,
+      Resources.BACKUP.plural,
       name,
     );
   }

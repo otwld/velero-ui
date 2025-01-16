@@ -17,9 +17,11 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const status: number = exception.getStatus();
     const cause: string = <string>exception.cause;
 
+    console.error(exception)
+
     this.logger.error(exception.message, cause ? cause : HttpExceptionFilter.name);
 
-    // @ts-ignore
+    // @ts-expect-error handle response.status as function
     response.status(status).json({
       statusCode: status,
       timestamp: new Date().toISOString(),

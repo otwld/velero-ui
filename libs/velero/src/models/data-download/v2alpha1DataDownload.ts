@@ -1,1 +1,1 @@
-export interface V2alpha1DataDownload {}
+export type V2alpha1DataDownload = object;

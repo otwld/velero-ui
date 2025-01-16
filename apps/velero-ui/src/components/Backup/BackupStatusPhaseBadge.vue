@@ -4,13 +4,16 @@
     :class="getClass()"
     class="text-xs font-medium inline-flex items-center me-2 px-2.5 py-0.5 rounded"
   >
-    {{ status }}</span
+    {{ t(`resource.phase.${status}`) }}</span
   >
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
 import { V1BackupPhase } from '@velero-ui/velero';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 const props = defineProps({
   status: String as PropType<V1BackupPhase>,
@@ -33,7 +36,7 @@ const getClass = () => {
         'text-yellow-800',
         'dark:bg-yellow-900',
         'dark:text-yellow-300',
-        'animate-pulse'
+        'animate-pulse',
       ];
     case V1BackupPhase.WaitingForPluginOperationsPartiallyFailed:
     case V1BackupPhase.FinalizingPartiallyFailed:

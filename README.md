@@ -7,9 +7,9 @@
 ![Docker Image Version (latest semver)](https://img.shields.io/docker/v/otwld/velero-ui?label=docker%20image)
 ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/otwld/velero-ui/latest)
 
-### ℹ️ **ALPHA 0.2.0** ℹ️
+### ℹ️ **ALPHA 0.3.0** ℹ️
 
-A fully lightweight dashboard interface to interact with [Velero (vmware-tanzu)](https://github.com/vmware-tanzu/velero/issues).
+A fully realtime lightweight dashboard interface to interact with [Velero (vmware-tanzu)](https://github.com/vmware-tanzu/velero/issues).
 
 This dashboard implement the same functionalities as the velero CLI.
 
@@ -24,8 +24,9 @@ This dashboard implement the same functionalities as the velero CLI.
 - 🔒 **Authentication:** Secure dashboard with multiple authentication methods.
 - 🔍 **Resource Management:** Search, sort, and perform quick actions on Velero resources.
 - ⚠️ **Action Confirmation:** Double-check confirmation modals for critical actions.
-- 🧩 **Intuitive Forms:** Step-by-step form wizard for easy resource creation.
+- 🧩 **Intuitive Forms:** Step-by-step form wizard for easy resource creation and edition.
 - 📄 **Detailed Resource Pages:** Each resource has a dedicated page displaying specifications, status, manifests, and logs.
+- 🏳️ **Languages**: Multi languages are available.
 
 ### Authentication
 
@@ -53,7 +54,7 @@ This dashboard implement the same functionalities as the velero CLI.
 
 - **Velero server >= 1.13.0**
 
-> ⚠️ This dashboard has only been tested on version **1.13.x** and **1.14.x**, using an older version may cause bugs with an outdated or
+> ⚠️ This dashboard has only been tested on version **1.13.x**, **1.14.x** and **1.15.x**, using an older version may cause bugs with an outdated or
 > unmanaged API
 
 ## 📚 Documentation

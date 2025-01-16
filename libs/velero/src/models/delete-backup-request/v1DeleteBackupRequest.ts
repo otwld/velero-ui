@@ -12,7 +12,7 @@ export interface V1DeleteBackupRequestSpec {
   backupName: string;
 }
 
-export const enum V1DeleteBackupRequestPhase {
+export enum V1DeleteBackupRequestPhase {
   New = 'New',
   InProgress = 'InProgress',
   Processed = 'Processed',

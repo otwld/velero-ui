@@ -22,6 +22,46 @@
           </router-link>
         </div>
         <div class="flex items-center">
+          <div v-click-out="clickOutsideLanguageDropdown" class="">
+            <button
+              class="flex ml-3 text-gray-600 rounded dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 text-sm p-2"
+              type="button"
+              @click="toggleLanguageDropdown()"
+            >
+              <FontAwesomeIcon :icon="faLanguage" class="w-5 h-5" />
+            </button>
+            <div
+              id="dropdown-3"
+              :class="{ hidden: hiddenLanguageDropdown }"
+              class="absolute z-50 mt-2 ml-3 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700"
+            >
+              <ul
+                aria-labelledby="dropdownDefaultButton"
+                class="max-h-48 py-2 overflow-y-auto text-sm text-gray-700 dark:text-gray-200"
+              >
+                <li v-for="(lang, index) of getLanguages()" :key="index">
+                  <button
+                    :class="{
+                      'bg-gray-100': isCurrentLanguage(lang.code),
+                      'dark:bg-gray-600': isCurrentLanguage(lang.code),
+                    }"
+                    class="w-full block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                    @click="switchLanguage(lang.code)"
+                  >
+                    {{ lang.title }}
+                  </button>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <!--
+          <button
+            class="flex ml-3 text-gray-600 rounded dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 text-sm p-2"
+            type="button"
+          >
+            <FontAwesomeIcon :icon="faSun" class="w-5 h-5" />
+            <FontAwesomeIcon :icon="faMoon" class="hidden w-5 h-5" />
+          </button> -->
           <div v-click-out="clickOutside" class="flex flex-col items-center">
             <div class="flex items-center ml-3">
               <button
@@ -41,13 +81,12 @@
                 <FontAwesomeIcon
                   v-if="!user.picture"
                   :icon="faUserCircle"
-                  class="w-8 h-8 text-gray-900"
+                  class="w-8 h-8 text-gray-900 dark:text-white"
                 />
                 <p class="ms-3">{{ user.name }}</p>
                 <FontAwesomeIcon :icon="faAngleDown" class="w-2.5 h-2.5 ms-3" />
               </button>
             </div>
-            <!-- Dropdown menu -->
             <div
               id="dropdown-2"
               :class="{ hidden: hiddenDropdown }"
@@ -58,7 +97,13 @@
                   class="text-xs text-gray-900 truncate dark:text-gray-300"
                   role="none"
                 >
-                  {{ user?.email ? user.email : user.provider === 'ldap' ? 'LDAP account' : 'Local account' }}
+                  {{
+                    user?.email
+                      ? user.email
+                      : user.provider === 'ldap'
+                        ? t('header.account.ldap')
+                        : t('header.account.local')
+                  }}
                 </p>
               </div>
               <ul class="py-1" role="none">
@@ -69,7 +114,7 @@
                     type="button"
                     @click="logout()"
                   >
-                    Sign out
+                    {{ t('header.signOut.button.title') }}
                   </button>
                 </li>
               </ul>
@@ -81,10 +126,13 @@
   </nav>
 </template>
 <script lang="ts" setup>
-import { type Ref, ref } from 'vue';
+import { inject, type Ref, ref } from 'vue';
 import {
   faAngleDown,
   faBars,
+  faLanguage,
+  faMoon,
+  faSun,
   faUserCircle,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
@@ -93,26 +141,46 @@ import { useRouter } from 'vue-router';
 import { getUser } from '@velero-ui-app/utils/jwt.utils';
 import type { JwtPayload } from '@velero-ui/shared-types';
 import { useAppStore } from '@velero-ui-app/stores/app.store';
+import { useI18n } from 'vue-i18n';
+import { getLanguages } from '@velero-ui/i18n';
+import type { SocketIO } from '@velero-ui-app/plugins/socket.plugin';
+
+const { t, locale } = useI18n();
+const socket: SocketIO = inject('socketIo');
 
 const router: Router = useRouter();
 const appStore = useAppStore();
 
 const isLoading: Ref<boolean> = ref(false);
 const hiddenDropdown = ref(true);
+const hiddenLanguageDropdown = ref(true);
 
 const user: JwtPayload = getUser(localStorage.getItem('access_token'));
 
 const toggleDropdown = () => (hiddenDropdown.value = !hiddenDropdown.value);
+const toggleLanguageDropdown = () =>
+  (hiddenLanguageDropdown.value = !hiddenLanguageDropdown.value);
 
 const clickOutside = () => (hiddenDropdown.value ? null : toggleDropdown());
+const clickOutsideLanguageDropdown = () =>
+  hiddenLanguageDropdown.value ? null : toggleLanguageDropdown();
 
 const logout = async () => {
   try {
     isLoading.value = true;
     localStorage.removeItem('access_token');
     await router.push('/login?state=success&reason=logout');
+    socket.io.close();
   } catch (e) {
     console.error(e);
   }
 };
+
+const switchLanguage = (code: string) => {
+  localStorage.setItem('language', code);
+  locale.value = code;
+};
+
+const isCurrentLanguage = (lang: string) =>
+  localStorage.getItem('language') === lang;
 </script>

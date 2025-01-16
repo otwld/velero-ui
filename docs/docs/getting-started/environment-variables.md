@@ -88,7 +88,7 @@ configuration.
 #### `VITE_API_URL` (development only)
 
 - **Type**: `string`
-- **Default**: `http://localhost:${PORT}/api`
+- **Default**: `http://localhost:${PORT}`
 - **Description**: The base URL for the API that the frontend application will interact with during development.
 
 ### Authentication

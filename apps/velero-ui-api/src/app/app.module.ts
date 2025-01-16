@@ -15,7 +15,7 @@ import { VeleroModule } from './shared/modules/velero/velero.module';
 import { SettingsModule } from './modules/settings/settings.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { SnapshotLocationModule } from './modules/snapshot-location/snapshot-location.module';
-import { K8sCustomObjectModule } from '@velero-ui-api/shared/modules/k8s-custom-object/k8s-custom-object.module';
+import { K8sCustomObjectModule } from '@velero-ui-api/modules/k8s-custom-object/k8s-custom-object.module';
 import { BackupRepositoryModule } from '@velero-ui-api/modules/backup-repository/backup-repository.module';
 import { StatsModule } from '@velero-ui-api/modules/stats/stats.module';
 import { AppConfigModule } from '@velero-ui-api/modules/app-config/app-config.module';
@@ -34,6 +34,9 @@ import microsoft from '../config/microsoft.config';
 import oauth from '../config/oauth.config';
 import { FormModule } from '@velero-ui-api/modules/form/form.module';
 import { HttpExceptionFilter } from '@velero-ui-api/shared/exceptions/filters/http.exception-filter';
+import { WsJwtAuthGuard } from '@velero-ui-api/shared/guards/ws-jwt-auth.guard';
+import {PodVolumeBackupModule} from "@velero-ui-api/modules/pod-volume-backup/pod-volume-backup.module";
+import {PodVolumeRestoreModule} from "@velero-ui-api/modules/pod-volume-restore/pod-volume-restore.module";
 
 @Module({
   imports: [
@@ -81,6 +84,8 @@ import { HttpExceptionFilter } from '@velero-ui-api/shared/exceptions/filters/ht
     SnapshotLocationModule,
     K8sCustomObjectModule,
     BackupRepositoryModule,
+    PodVolumeBackupModule,
+    PodVolumeRestoreModule,
     StatsModule,
     AppConfigModule,
     AuthModule,

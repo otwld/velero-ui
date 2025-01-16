@@ -14,7 +14,7 @@ import {
   V1ServerStatusRequest,
   V1ServerStatusRequestList,
 } from '@velero-ui/velero';
-import { K8sCustomObjectService } from '@velero-ui-api/shared/modules/k8s-custom-object/k8s-custom-object.service';
+import { K8sCustomObjectService } from '@velero-ui-api/modules/k8s-custom-object/k8s-custom-object.service';
 import { ServerStatusRequestService } from '@velero-ui-api/modules/server-status-request/server-status-request.service';
 
 @Controller(Resources.SERVER_STATUS_REQUEST.route)
@@ -37,7 +37,7 @@ export class ServerStatusRequestController {
       V1ServerStatusRequest,
       V1ServerStatusRequestList
     >(
-      Resources.SERVER_STATUS_REQUEST.plurial,
+      Resources.SERVER_STATUS_REQUEST.plural,
       offset,
       limit,
       search,
@@ -51,23 +51,23 @@ export class ServerStatusRequestController {
     @Param('name') name: string,
   ): Observable<V1ServerStatusRequest> {
     return this.k8sCustomObjectService.getByName<V1ServerStatusRequest>(
-      Resources.SERVER_STATUS_REQUEST.plurial,
+      Resources.SERVER_STATUS_REQUEST.plural,
       name,
     );
   }
 
   @Delete()
-  public delete(@Body() names: string[]): void {
+  public delete(@Body() names: string[]): Observable<void> {
     return this.k8sCustomObjectService.delete(
-      Resources.SERVER_STATUS_REQUEST.plurial,
+      Resources.SERVER_STATUS_REQUEST.plural,
       names,
     );
   }
 
   @Delete('/:name')
-  public deleteByName(@Param('name') name: string): void {
+  public deleteByName(@Param('name') name: string): Observable<void> {
     return this.k8sCustomObjectService.deleteByName(
-      Resources.SERVER_STATUS_REQUEST.plurial,
+      Resources.SERVER_STATUS_REQUEST.plural,
       name,
     );
   }

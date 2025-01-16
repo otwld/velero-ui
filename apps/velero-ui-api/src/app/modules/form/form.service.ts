@@ -3,6 +3,7 @@ import {
   CoreV1Api,
   KubeConfig,
   KubernetesListObject,
+  V1ConfigMapList,
   V1Namespace,
   V1Secret,
   V1SecretList,
@@ -11,9 +12,12 @@ import { K8S_CONNECTION } from '@velero-ui-api/shared/modules/k8s/k8s.constants'
 import { from, map, Observable } from 'rxjs';
 import http from 'http';
 import { V1NamespaceList } from '@kubernetes/client-node/dist/gen/model/v1NamespaceList';
-import { K8sCustomObjectService } from '@velero-ui-api/shared/modules/k8s-custom-object/k8s-custom-object.service';
+import { K8sCustomObjectService } from '@velero-ui-api/modules/k8s-custom-object/k8s-custom-object.service';
 import {
   Resources,
+  V1Backup,
+  V1BackupList,
+  V1BackupPhase,
   V1BackupStorageLocation,
   V1BackupStorageLocationList,
   V1Schedule,
@@ -57,7 +61,7 @@ export class FormService {
   public getSchedules(): Observable<FormList<string>> {
     return from(
       this.k8sCustomObjectService.get<V1Schedule, V1ScheduleList>(
-        Resources.SCHEDULE.plurial,
+        Resources.SCHEDULE.plural,
       ),
     ).pipe(
       map(
@@ -69,12 +73,39 @@ export class FormService {
     );
   }
 
+  public getBackups(): Observable<FormList<string>> {
+    return from(
+      this.k8sCustomObjectService.get<V1Backup, V1BackupList>(
+        Resources.BACKUP.plural,
+      ),
+    ).pipe(
+      map(
+        (r: KubernetesListObject<V1Backup>): FormList<string> => ({
+          items: r.items
+            .filter(
+              (b) =>
+                b.status.phase === V1BackupPhase.Completed ||
+                b.status.phase === V1BackupPhase.PartiallyFailed,
+            )
+            .map((b: V1Backup): string => b.metadata.name),
+          total: 0,
+        }),
+      ),
+      map(
+        (r: FormList<string>): FormList<string> => ({
+          ...r,
+          total: r.items.length,
+        }),
+      ),
+    );
+  }
+
   public getStorageLocations(): Observable<FormList<string>> {
     return from(
       this.k8sCustomObjectService.get<
         V1BackupStorageLocation,
         V1BackupStorageLocationList
-      >(Resources.BACKUP_STORAGE_LOCATION.plurial),
+      >(Resources.BACKUP_STORAGE_LOCATION.plural),
     ).pipe(
       map(
         (
@@ -94,7 +125,7 @@ export class FormService {
       this.k8sCustomObjectService.get<
         V1VolumeSnapshotLocation,
         V1VolumeSnapshotLocationList
-      >(Resources.VOLUME_SNAPSHOT_LOCATION.plurial),
+      >(Resources.VOLUME_SNAPSHOT_LOCATION.plural),
     ).pipe(
       map(
         (
@@ -117,13 +148,34 @@ export class FormService {
     )
       .pipe(
         map(
-          (r: { response: http.IncomingMessage; body: V1NamespaceList }) =>
-            r.body,
+          (r: { response: http.IncomingMessage; body: V1SecretList }) => r.body,
         ),
       )
       .pipe(
         map(
           (r: V1SecretList): FormList<string> => ({
+            total: r.items.length,
+            items: r.items.map((n: V1Secret): string => n.metadata.name),
+          }),
+        ),
+      );
+  }
+
+  public getConfigMaps(): Observable<FormList<string>> {
+    return from(
+      this.k8sCoreApi.listNamespacedConfigMap(
+        this.configService.get('velero.namespace'),
+      ),
+    )
+      .pipe(
+        map(
+          (r: { response: http.IncomingMessage; body: V1ConfigMapList }) =>
+            r.body,
+        ),
+      )
+      .pipe(
+        map(
+          (r: V1ConfigMapList): FormList<string> => ({
             total: r.items.length,
             items: r.items.map((n: V1Secret): string => n.metadata.name),
           }),

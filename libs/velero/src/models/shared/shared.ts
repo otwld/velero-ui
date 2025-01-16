@@ -7,6 +7,18 @@ export interface V1Metadata {
   labels?: Partial<V1LabelsAnnotations>;
 }
 
+export interface V1SpecCredential {
+  key: string;
+  name: string;
+}
+
+export interface V1VolumePod {
+  name: string;
+  kind: string;
+  namespace: string;
+  uuid: string;
+}
+
 export interface V1LabelsAnnotations {
   'velero.io/backup-name'?: string;
   'velero.io/backup-uid'?: string;

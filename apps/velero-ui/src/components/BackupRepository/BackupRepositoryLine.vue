@@ -102,15 +102,16 @@
           v-if="!data?.status?.phase"
           class="h-2.5 w-2.5 rounded-full bg-gray-500 mr-2"
         ></div>
-        {{ data?.status?.phase ? data.status.phase : 'Unknown' }}
+        {{ data?.status?.phase ? data.status.phase : t('global.unknown') }}
       </div>
     </td>
     <td class="p-4 space-x-2 whitespace-nowrap">
       <button
         :class="{ 'cursor-not-allowed': isDeleting }"
+        :data-tooltip-target="`tooltip-button-delete-${data?.metadata?.uid}`"
         :disabled="isDeleting"
+        :title="t('global.button.delete.title')"
         class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"
-        title="Delete"
         type="button"
         @click="showModalDelete = !showModalDelete"
       >
@@ -128,11 +129,19 @@
     </td>
   </tr>
 
+  <div
+    :id="`tooltip-button-delete-${data?.metadata?.uid}`"
+    class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
+    role="tooltip"
+  >
+    {{ t('global.button.delete.title') }}
+    <div class="tooltip-arrow" data-popper-arrow></div>
+  </div>
   <ModalConfirmation
     v-if="showModalDelete"
     :icon="faExclamationCircle"
     :name="data?.metadata?.name"
-    text="Are you sure you want to delete:"
+    :text="t('modal.text.confirmation.delete')"
     @onClose="showModalDelete = false"
     @onConfirm="remove(data?.metadata?.name)"
   />
@@ -145,11 +154,12 @@ import {
   V1BackupRepositoryPhase,
   V1BackupRepositoryType,
 } from '@velero-ui/velero';
-import { type PropType, ref } from 'vue';
+import { onMounted, type PropType, ref } from 'vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import {
   faArrowUpRightFromSquare,
-  faCircleNotch, faExclamationCircle,
+  faCircleNotch,
+  faExclamationCircle,
   faServer,
   faTrashCan,
 } from '@fortawesome/free-solid-svg-icons';
@@ -157,8 +167,11 @@ import { Pages } from '../../utils/constants.utils';
 import { convertTimestampToDate } from '../../utils/date.utils';
 import { truncate } from '../../utils/string.utils';
 import { useDeleteKubernetesObject } from '@velero-ui-app/composables/useDeleteKubernetesObject';
-import ModalConfirmation from "@velero-ui-app/components/Modals/ModalConfirmation.vue";
+import ModalConfirmation from '@velero-ui-app/components/Modals/ModalConfirmation.vue';
+import { useI18n } from 'vue-i18n';
+import { initTooltips } from 'flowbite';
 
+const { t } = useI18n();
 defineProps({
   data: Object as PropType<V1BackupRepository>,
   checked: Boolean,
@@ -171,4 +184,5 @@ const emit = defineEmits(['onChecked']);
 const { isPending: isDeleting, mutate: remove } = useDeleteKubernetesObject(
   Resources.BACKUP_REPOSITORY,
 );
+onMounted(() => initTooltips());
 </script>

@@ -1,21 +1,18 @@
-import { Controller, Get } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { SettingsService } from './settings.service';
 import { Observable } from 'rxjs';
-import {
+import type {
   ClusterSettings,
   VeleroAgentSettings,
   VeleroServerSettings,
   VeleroUiSettings,
 } from '@velero-ui/shared-types';
-import {V1ServerStatusRequest} from "@velero-ui/velero";
-import {ServerStatusRequestService} from "@velero-ui-api/modules/server-status-request/server-status-request.service";
+import { V1PluginInfo } from '@velero-ui/velero';
+import { AddVeleroPluginDTO } from '@velero-ui-api/shared/dto/settings.dto';
 
 @Controller('/settings')
 export class SettingsController {
-  constructor(
-    private readonly settingsService: SettingsService,
-    private readonly serverStatusRequestService: ServerStatusRequestService
-  ) {}
+  constructor(private readonly settingsService: SettingsService) {}
 
   @Get('/cluster')
   public getCluster(): Observable<ClusterSettings> {
@@ -38,7 +35,17 @@ export class SettingsController {
   }
 
   @Get('/velero/plugins')
-  public getVeleroPlugins(): Observable<V1ServerStatusRequest> {
-    return this.serverStatusRequestService.create()
+  public getVeleroPlugins(): Observable<V1PluginInfo[]> {
+    return this.settingsService.getPlugins();
+  }
+
+  @Post('/velero/plugins')
+  public addVeleroPlugin(@Body() data: AddVeleroPluginDTO) {
+    return {};
+  }
+
+  @Delete('/velero/plugins/:name')
+  public deleteVeleroPluginByName(@Param('name') name: string) {
+    return {};
   }
 }

@@ -12,8 +12,9 @@ hide_title: true
 - 🔒 **Authentication:** Secure dashboard with multiple authentication methods.
 - 🔍 **Resource Management:** Search, sort, and perform quick actions on Velero resources.
 - ⚠️ **Action Confirmation:** Double-check confirmation modals for critical actions.
-- 🧩 **Intuitive Forms:** Step-by-step form wizard for easy resource creation.
+- 🧩 **Intuitive Forms:** Step-by-step form wizard for easy resource creation and edition.
 - 📄 **Detailed Resource Pages:** Each resource has a dedicated page displaying specifications, status, manifests, and logs.
+- 🏳️ **Languages**: Multi languages are available.
 
 ### Authentication
 

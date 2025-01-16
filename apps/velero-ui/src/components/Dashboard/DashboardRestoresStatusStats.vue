@@ -7,10 +7,10 @@
         <div>
           <span
             class="text-xl font-bold leading-none text-gray-900 sm:text-2xl dark:text-white"
-            >Status</span
+            >{{ t('dashboard.stats.title.status') }}</span
           >
           <h3 class="text-base font-light text-gray-500 dark:text-gray-400">
-            Over all restores
+            {{ t('dashboard.stats.restores.description') }}
           </h3>
         </div>
         <div class="flex mt-4 w-full self-center items-center justify-center">
@@ -18,7 +18,8 @@
             v-if="data"
             :options="{
               ...data,
-              noData: { text: 'No Data' },
+              labels: labels,
+              noData: { text: t('global.noData') },
               chart: {
                 events: {},
               },
@@ -26,7 +27,7 @@
             :series="data.series"
             type="donut"
             width="500"
-          ></apexchart>
+          />
         </div>
       </div>
     </div>
@@ -35,6 +36,12 @@
 
 <script lang="ts" setup>
 import { useStatsRestoresStatus } from '@velero-ui-app/composables/stats/useStatsRestoresStatus';
+import { useI18n } from 'vue-i18n';
+import {computed} from "vue";
 
+const { t } = useI18n();
 const { data } = useStatsRestoresStatus();
+
+const labels = computed(() => data.value.labels.map((l) => t(`resource.phase.${l}`)))
+
 </script>

@@ -6,6 +6,7 @@ import { ToastType, useToastsStore } from '@velero-ui-app/stores/toasts.store';
 import type { KubernetesObject } from '@kubernetes/client-node';
 import { useListStore } from '@velero-ui-app/stores/list.store';
 import { storeToRefs } from 'pinia';
+import {useI18n} from "vue-i18n";
 
 export const useDeleteKubernetesObject = <T extends KubernetesObject>(
   resource: Resource,
@@ -14,16 +15,17 @@ export const useDeleteKubernetesObject = <T extends KubernetesObject>(
   const axiosInstance: AxiosInstance = inject('axios') as AxiosInstance;
   const queryClient: QueryClient = useQueryClient();
 
+  const { t } = useI18n();
   const listStore = useListStore();
   const { offset, limit, filters, sort } = storeToRefs(listStore);
 
   return useMutation({
-    mutationFn: (name: string) =>
-      axiosInstance.delete(`${resource.route}/${name}`),
+    mutationFn: async (name: string) =>
+      await axiosInstance.delete(`${resource.route}/${name}`),
     onSuccess: async (response, name: string) => {
       await queryClient.cancelQueries({
         queryKey: [
-          resource.plurial,
+          resource.plural,
           {
             limit,
             offset,
@@ -32,10 +34,10 @@ export const useDeleteKubernetesObject = <T extends KubernetesObject>(
           },
         ],
       });
-      await queryClient.cancelQueries({ queryKey: [resource.plurial, name] });
+      await queryClient.cancelQueries({ queryKey: [resource.plural, name] });
 
       const previousObjects: T[] = queryClient.getQueryData([
-        resource.plurial,
+        resource.plural,
         {
           limit,
           offset,
@@ -47,7 +49,7 @@ export const useDeleteKubernetesObject = <T extends KubernetesObject>(
       if (previousObjects) {
         queryClient.setQueryData(
           [
-            resource.plurial,
+            resource.plural,
             {
               limit,
               offset,
@@ -61,17 +63,17 @@ export const useDeleteKubernetesObject = <T extends KubernetesObject>(
       }
 
       queryClient.resetQueries({
-        queryKey: [resource.plurial, name],
+        queryKey: [resource.plural, name],
         exact: true,
       });
 
       toastsStore.push(
-        'Delete request created, request will now be processed by velero server.',
+        t('global.message.success.deleteRequestCreated'),
         ToastType.SUCCESS,
       );
     },
     onError: (error: Error): void => {
-      toastsStore.push('Unable to delete, please try again.', ToastType.ERROR);
+      toastsStore.push(t('global.message.error.unexpected'), ToastType.ERROR);
       console.error(error);
     },
   });

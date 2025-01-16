@@ -6,6 +6,7 @@ import {
   Get,
   Param,
   ParseIntPipe,
+  Post, Put,
   Query,
 } from '@nestjs/common';
 import { StorageLocationService } from './storage-location.service';
@@ -15,7 +16,11 @@ import {
   V1BackupStorageLocation,
   V1BackupStorageLocationList,
 } from '@velero-ui/velero';
-import { K8sCustomObjectService } from '@velero-ui-api/shared/modules/k8s-custom-object/k8s-custom-object.service';
+import { K8sCustomObjectService } from '@velero-ui-api/modules/k8s-custom-object/k8s-custom-object.service';
+import {
+  CreateStorageLocationDto,
+  EditStorageLocationDto,
+} from '@velero-ui-api/shared/dto/storage-location.dto';
 
 @Controller(Resources.BACKUP_STORAGE_LOCATION.route)
 export class StorageLocationController {
@@ -37,7 +42,7 @@ export class StorageLocationController {
       V1BackupStorageLocation,
       V1BackupStorageLocationList
     >(
-      Resources.BACKUP_STORAGE_LOCATION.plurial,
+      Resources.BACKUP_STORAGE_LOCATION.plural,
       offset,
       limit,
       search,
@@ -51,23 +56,36 @@ export class StorageLocationController {
     @Param('name') name: string,
   ): Observable<V1BackupStorageLocation> {
     return this.k8sCustomObjectService.getByName<V1BackupStorageLocation>(
-      Resources.BACKUP_STORAGE_LOCATION.plurial,
+      Resources.BACKUP_STORAGE_LOCATION.plural,
       name,
     );
   }
 
+  @Post()
+  public create(@Body() data: CreateStorageLocationDto) {
+    return this.storageLocationService.create(data);
+  }
+
+  @Put('/:name')
+  public editByName(
+    @Param('name') name: string,
+    @Body() data: EditStorageLocationDto,
+  ) {
+    return this.storageLocationService.edit(name, data);
+  }
+
   @Delete()
-  public delete(@Body() names: string[]): void {
+  public delete(@Body() names: string[]): Observable<void> {
     return this.k8sCustomObjectService.delete(
-      Resources.BACKUP_STORAGE_LOCATION.plurial,
+      Resources.BACKUP_STORAGE_LOCATION.plural,
       names,
     );
   }
 
   @Delete('/:name')
-  public deleteByName(@Param('name') name: string): void {
+  public deleteByName(@Param('name') name: string): Observable<void> {
     return this.k8sCustomObjectService.deleteByName(
-      Resources.BACKUP_STORAGE_LOCATION.plurial,
+      Resources.BACKUP_STORAGE_LOCATION.plural,
       name,
     );
   }

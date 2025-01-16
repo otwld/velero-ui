@@ -1,6 +1,6 @@
 import { registerAs } from '@nestjs/config';
 import * as process from 'process';
-import {MicrosoftConfig, OauthConfig} from '@velero-ui/shared-types';
+import { OauthConfig } from '@velero-ui/shared-types';
 
 export default registerAs('oauth', (): OauthConfig => {
   return {

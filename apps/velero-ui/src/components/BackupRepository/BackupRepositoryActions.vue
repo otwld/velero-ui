@@ -33,7 +33,7 @@
         ></div>
         <div v-if="repository" class="flex items-center space-x-4">
           <button
-            :class="{ 'cursor-not-allowed': isDisabled || !repository }"
+            :class="{ 'cursor-not-allowed': isDeleting || !repository }"
             :disabled="isDeleting || !repository"
             class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-red-600 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"
             type="button"
@@ -49,7 +49,7 @@
               :icon="faTrashCan"
               class="w-4 h-4 mr-2"
             />
-            {{ isDeleting ? 'Deleting' : 'Delete' }}
+            {{ isDeleting ? t('global.button.delete.loading') : t('global.button.delete.title')}}
           </button>
         </div>
       </div>
@@ -60,7 +60,7 @@
     v-if="showModalDelete"
     :icon="faExclamationCircle"
     :name="repository?.metadata?.name"
-    text="Are you sure you want to delete:"
+    :text="t('modal.text.confirmation.delete')"
     @onClose="showModalDelete = false"
     @onConfirm="remove(repository.metadata.name)"
   />
@@ -78,6 +78,9 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { useDeleteKubernetesObject } from '@velero-ui-app/composables/useDeleteKubernetesObject';
 import ModalConfirmation from '@velero-ui-app/components/Modals/ModalConfirmation.vue';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 defineProps({
   repository: Object as PropType<V1BackupRepository>,

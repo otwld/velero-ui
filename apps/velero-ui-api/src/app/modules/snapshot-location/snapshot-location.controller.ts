@@ -6,6 +6,8 @@ import {
   Get,
   Param,
   ParseIntPipe,
+  Post,
+  Put,
   Query,
 } from '@nestjs/common';
 import { SnapshotLocationService } from './snapshot-location.service';
@@ -15,7 +17,11 @@ import {
   V1VolumeSnapshotLocation,
   V1VolumeSnapshotLocationList,
 } from '@velero-ui/velero';
-import { K8sCustomObjectService } from '@velero-ui-api/shared/modules/k8s-custom-object/k8s-custom-object.service';
+import { K8sCustomObjectService } from '@velero-ui-api/modules/k8s-custom-object/k8s-custom-object.service';
+import {
+  CreateVolumeSnapshotLocationDto,
+  EditVolumeSnapshotLocationDto,
+} from '@velero-ui-api/shared/dto/snapshot-location.dto';
 
 @Controller(Resources.VOLUME_SNAPSHOT_LOCATION.route)
 export class SnapshotLocationController {
@@ -37,7 +43,7 @@ export class SnapshotLocationController {
       V1VolumeSnapshotLocation,
       V1VolumeSnapshotLocationList
     >(
-      Resources.VOLUME_SNAPSHOT_LOCATION.plurial,
+      Resources.VOLUME_SNAPSHOT_LOCATION.plural,
       offset,
       limit,
       search,
@@ -51,23 +57,36 @@ export class SnapshotLocationController {
     @Param('name') name: string,
   ): Observable<V1VolumeSnapshotLocation> {
     return this.k8sCustomObjectService.getByName<V1VolumeSnapshotLocation>(
-      Resources.VOLUME_SNAPSHOT_LOCATION.plurial,
+      Resources.VOLUME_SNAPSHOT_LOCATION.plural,
       name,
     );
   }
 
+  @Post()
+  public create(@Body() data: CreateVolumeSnapshotLocationDto) {
+    return this.snapshotLocationService.create(data);
+  }
+
+  @Put('/:name')
+  public editByName(
+    @Param('name') name: string,
+    @Body() data: EditVolumeSnapshotLocationDto,
+  ) {
+    return this.snapshotLocationService.edit(name, data);
+  }
+
   @Delete()
-  public delete(@Body() names: string[]): void {
+  public delete(@Body() names: string[]): Observable<void> {
     return this.k8sCustomObjectService.delete(
-      Resources.VOLUME_SNAPSHOT_LOCATION.plurial,
+      Resources.VOLUME_SNAPSHOT_LOCATION.plural,
       names,
     );
   }
 
   @Delete('/:name')
-  public deleteByName(@Param('name') name: string): void {
+  public deleteByName(@Param('name') name: string): Observable<void> {
     return this.k8sCustomObjectService.deleteByName(
-      Resources.VOLUME_SNAPSHOT_LOCATION.plurial,
+      Resources.VOLUME_SNAPSHOT_LOCATION.plural,
       name,
     );
   }

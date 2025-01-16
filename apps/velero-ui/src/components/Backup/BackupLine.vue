@@ -77,8 +77,8 @@
     </td>
     <td class="p-4">
       <BackupStatusPhaseBadge
-        :status="data?.status.phase"
-      ></BackupStatusPhaseBadge>
+        :status="data?.status?.phase"
+      />
     </td>
     <td class="p-4 space-x-2 whitespace-nowrap">
       <div class="inline-flex rounded-md shadow-sm" role="group">
@@ -86,8 +86,8 @@
           :class="{ 'cursor-not-allowed': isDisabled }"
           :data-tooltip-target="`tooltip-button-restore-${data?.metadata?.uid}`"
           :disabled="isDisabled"
+          :title="t('global.button.restore.title')"
           class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-l-lg bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:ring-teal-300 dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
-          title="Restore"
           type="button"
           @click="showModalRestore = !showModalRestore"
         >
@@ -97,8 +97,8 @@
           :class="{ 'cursor-not-allowed': isDisabled || downloadLoading }"
           :data-tooltip-target="`tooltip-button-download-${data?.metadata?.uid}`"
           :disabled="isDisabled || downloadLoading"
+          :title="t('global.button.download.title')"
           class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-          title="Download"
           type="button"
           @click="download()"
         >
@@ -117,8 +117,8 @@
           :class="{ 'cursor-not-allowed': isDisabled }"
           :data-tooltip-target="`tooltip-button-delete-${data?.metadata?.uid}`"
           :disabled="isDisabled"
+          :title="t('global.button.delete.title')"
           class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-red-600 rounded-r-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"
-          title="Delete"
           type="button"
           @click="showModalDelete = !showModalDelete"
         >
@@ -142,7 +142,7 @@
     class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
     role="tooltip"
   >
-    Restore
+    {{ t('global.button.restore.title') }}
     <div class="tooltip-arrow" data-popper-arrow></div>
   </div>
   <div
@@ -150,7 +150,7 @@
     class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
     role="tooltip"
   >
-    Download
+    {{ t('global.button.download.title') }}
     <div class="tooltip-arrow" data-popper-arrow></div>
   </div>
   <div
@@ -158,7 +158,7 @@
     class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
     role="tooltip"
   >
-    Delete
+    {{ t('global.button.delete.title') }}
     <div class="tooltip-arrow" data-popper-arrow></div>
   </div>
 
@@ -166,18 +166,29 @@
     v-if="showModalDelete"
     :icon="faExclamationCircle"
     :name="data?.metadata?.name"
-    text="Are you sure you want to delete:"
+    :text="t('modal.text.confirmation.delete')"
     @onClose="showModalDelete = false"
     @onConfirm="remove(data?.metadata?.name)"
   />
-  <ModalConfirmation
+  <VModal
     v-if="showModalRestore"
-    :icon="faClockRotateLeft"
-    :name="data?.metadata?.name"
-    text="Are you sure you want to restore:"
+    :id="`modal-restore-${data?.metadata?.name}`"
+    width="w-6/12"
     @onClose="showModalRestore = false"
-    @onConfirm="restore()"
-  />
+  >
+    <template v-slot:header>
+      <h3 class="text-lg text-gray-500 dark:text-gray-400">
+        {{ t('modal.text.title.restoreFromBackup') }}
+        <span class="font-normal text-sm ml-2">{{ data?.metadata?.name }}</span>
+      </h3>
+    </template>
+    <template v-slot:content>
+      <BackupFormRestore
+        :backup="data"
+        @onClose="showModalRestore = false"
+      />
+    </template>
+  </VModal>
 </template>
 
 <script lang="ts" setup>
@@ -194,7 +205,6 @@ import {
   convertTimestampToDate,
   getRemainingTime,
 } from '../../utils/date.utils';
-import { Pages } from '@velero-ui-app/utils/constants.utils';
 import BackupStatusPhaseBadge from './BackupStatusPhaseBadge.vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import {
@@ -206,11 +216,17 @@ import {
   faTrashCan,
 } from '@fortawesome/free-solid-svg-icons';
 import { initTooltips } from 'flowbite';
-import { useBackupDownloadContent } from '@velero-ui-app/use/backup/useBackupDownloadContent';
+import { Pages } from '@velero-ui-app/utils/constants.utils';
+import { useBackupDownloadContent } from '@velero-ui-app/composables/backup/useBackupDownloadContent';
 import ModalConfirmation from '@velero-ui-app/components/Modals/ModalConfirmation.vue';
 import { truncate } from '../../utils/string.utils';
 import { useDeleteKubernetesObject } from '@velero-ui-app/composables/useDeleteKubernetesObject';
+import { useI18n } from 'vue-i18n';
+import SnapshotLocationFormEdit from "@velero-ui-app/components/SnapshotLocation/forms/SnapshotLocationFormEdit.vue";
+import VModal from "@velero-ui-app/components/Modals/VModal.vue";
+import BackupFormRestore from "@velero-ui-app/components/Backup/forms/BackupFormRestore.vue";
 
+const { t } = useI18n();
 const props = defineProps({
   data: Object as PropType<V1Backup>,
   checked: Boolean,
@@ -229,7 +245,7 @@ const { download, downloadLoading } = useBackupDownloadContent(
 );
 
 const interval = setInterval(
-  () => (expireTime.value = getRemainingTime(props.data.status.expiration)),
+  () => (expireTime.value = getRemainingTime(props.data?.status?.expiration || '0')),
 );
 
 onUnmounted(() => clearInterval(interval));
@@ -238,20 +254,17 @@ const { mutate: remove, isPending: isLoading } = useDeleteKubernetesObject(
   Resources.BACKUP,
 );
 
-const isDisabled = computed(() => {
-  return (
+const isDisabled = computed(
+  () =>
     isLoading.value ||
     ![V1BackupPhase.Completed, V1BackupPhase.PartiallyFailed].includes(
       props.data?.status?.phase,
-    )
-  );
-});
+    ),
+);
 
-const isDeleting = computed(() => {
-  return (
-    isLoading.value || props.data?.status?.phase === V1BackupPhase.Deleting
-  );
-});
+const isDeleting = computed(
+  () => isLoading.value || props.data?.status?.phase === V1BackupPhase.Deleting,
+);
 
 const restore = () => {};
 </script>

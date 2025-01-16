@@ -19,6 +19,7 @@ export const useStatsBackupsStatus = () => {
     initialData: {
       labels: [],
       series: [],
+      colors: [],
     },
   });
 };

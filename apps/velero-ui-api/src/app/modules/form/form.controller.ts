@@ -12,6 +12,11 @@ export class FormController {
     return this.formService.getSchedules();
   }
 
+  @Get('/backups')
+  public getFormBackups(): Observable<FormList<string>> {
+    return this.formService.getBackups();
+  }
+
   @Get('/namespaces')
   public getNamespaces(): Observable<FormList<string>> {
     return this.formService.getNamespaces();
@@ -30,5 +35,10 @@ export class FormController {
   @Get('/secrets')
   public getFormSecrets(): Observable<FormList<string>> {
     return this.formService.getSecrets();
+  }
+
+  @Get('/config-maps')
+  public getFormConfigMaps(): Observable<FormList<string>> {
+    return this.formService.getConfigMaps();
   }
 }

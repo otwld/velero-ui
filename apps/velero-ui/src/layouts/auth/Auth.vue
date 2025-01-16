@@ -19,7 +19,7 @@
           <h1
             class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white"
           >
-            Sign in
+            {{ t('auth.signIn') }}
           </h1>
           <Alert
             :icon="faCircleExclamation"
@@ -37,15 +37,16 @@
                 <label
                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                   for="username"
-                  >Your username</label
+                >
+                  {{ t('auth.form.username.label') }}</label
                 >
                 <input
                   id="username"
                   v-model="username"
                   :disabled="basicLoading"
+                  :placeholder="t('auth.form.username.placeholder')"
                   class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   name="username"
-                  placeholder="username"
                   required
                   type="text"
                 />
@@ -54,7 +55,7 @@
                 <label
                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                   for="password"
-                  >Password</label
+                  >{{ t('auth.form.password.label') }}</label
                 >
                 <input
                   id="password"
@@ -78,7 +79,7 @@
                   :icon="faCircleNotch"
                   class="w-4 h-4 animate-spin mr-2"
                 />
-                Sign in
+                {{ t('auth.form.button.title') }}
               </button>
             </form>
             <div
@@ -86,7 +87,9 @@
               class="flex items-center mb-1.5 mt-1.5"
             >
               <div class="w-full bg-gray-300 h-0.5"></div>
-              <div class="px-3 text-gray-600 text-center">or</div>
+              <div class="px-3 text-gray-600 text-center">
+                {{ t('auth.divider') }}
+              </div>
               <div class="w-full bg-gray-300 h-0.5"></div>
             </div>
             <GithubAuth />
@@ -100,7 +103,7 @@
       <div class="flex justify-center mt-5">
         <span
           class="inline-flex justify-center text-gray-500 text-xs dark:text-white"
-          >v{{ version }} - Powered by
+          >{{ t('global.powered', { version }) }}
           <a
             class="ml-1 hover:text-blue-600"
             href="https://otwld.com/"
@@ -129,7 +132,10 @@ import GithubAuth from '@velero-ui-app/layouts/auth/federated/GithubAuth.vue';
 import GitlabAuth from '@velero-ui-app/layouts/auth/federated/GitlabAuth.vue';
 import MicrosoftAuth from '@velero-ui-app/layouts/auth/federated/MicrosoftAuth.vue';
 import OauthAuth from '@velero-ui-app/layouts/auth/federated/OauthAuth.vue';
-import {useFormAuth} from "@velero-ui-app/composables/auth/useFormAuth";
+import { useFormAuth } from '@velero-ui-app/composables/auth/useFormAuth';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 const { basicAuth, google, gitlab, github, microsoft, oauth } = inject(
   'config',
@@ -162,25 +168,14 @@ watch(
   () => route.query,
   async () => {
     if (route.query?.state === 'error') {
-      if (route.query?.reason === 'unauthorized') {
-        error.value = 'You must login to access this page.';
-      } else if (route.query?.reason === 'inactivity') {
-        error.value = 'Your session timed out.';
-      } else if (route.query?.reason === 'sso') {
-        error.value = 'Unable to process login with external SSO.';
-      } else if (route.query?.reason === 'credentials') {
-        error.value = 'Invalid username or password.';
-      }
-      success.value = '';
+      error.value = t(`auth.message.error.${route.query?.reason}`);
     } else if (route.query?.state === 'success') {
-      if (route.query?.reason === 'logout') {
-        success.value = 'You successfully logged out!';
-        error.value = '';
-      }
+      success.value = t(`auth.message.success.${route.query?.reason}`);
+      error.value = '';
     }
 
     if (route.query?.code) {
-      success.value = 'Processing login, please wait...';
+      success.value = t(`auth.message.success.code`);
     }
   },
   { immediate: true },

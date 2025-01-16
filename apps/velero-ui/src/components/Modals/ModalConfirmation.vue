@@ -6,17 +6,15 @@
     role="dialog"
   >
     <div
-      aria-hidden="true"
+
       class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
-    ></div>
+    />
 
     <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
       <div
         class="flex min-h-full items-end justify-center p-4 sm:items-center sm:p-0"
       >
-        <div
-          class="relative w-full h-full max-w-md px-4 md:h-auto"
-        >
+        <div class="relative w-full h-full max-w-md px-4 md:h-auto">
           <div class="relative bg-white rounded-lg shadow dark:bg-gray-800">
             <div class="flex justify-end p-2">
               <button
@@ -50,7 +48,7 @@
                   emit('onClose');
                 "
               >
-                Yes, I'm sure
+                {{ t('modal.button.yes.title')}}
               </button>
               <button
                 class="text-gray-900 bg-white hover:bg-gray-100 focus:ring-4 focus:ring-primary-300 border border-gray-200 font-medium inline-flex items-center rounded-lg text-base px-3 py-2.5 text-center dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-gray-700"
@@ -60,7 +58,7 @@
                   emit('onClose');
                 "
               >
-                No, cancel
+                {{ t('modal.button.no.title')}}
               </button>
             </div>
           </div>
@@ -75,7 +73,9 @@ import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import type { PropType } from 'vue';
 import type { IconDefinition } from '@fortawesome/fontawesome-svg-core';
+import { useI18n } from 'vue-i18n';
 
+const { t } = useI18n();
 defineProps({
   name: String,
   icon: Object as PropType<IconDefinition>,

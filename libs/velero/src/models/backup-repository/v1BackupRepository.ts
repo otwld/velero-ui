@@ -30,5 +30,5 @@ export const enum V1BackupRepositoryType {
 export interface V1BackupRepositoryStatus {
   phase: V1BackupRepositoryPhase;
   message: string;
-  lastMaintenanceTime: Date;
+  lastMaintenanceTime: string;
 }

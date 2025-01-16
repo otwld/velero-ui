@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { K8S_CONNECTION } from '@velero-ui-api/shared/modules/k8s/k8s.constants';
 import { CustomObjectsApi, KubeConfig } from '@kubernetes/client-node';
 import { ConfigService } from '@nestjs/config';
-import { concatMap, from, map, Observable, of, retry, throwError } from 'rxjs';
+import {catchError, concatMap, from, map, Observable, of, retry, throwError} from 'rxjs';
 import {
   Resources,
   V1ServerStatusRequest,
@@ -33,7 +33,7 @@ export class ServerStatusRequestService {
             VELERO.GROUP,
             VELERO.VERSION,
             this.configService.get('velero.namespace'),
-            Resources.SERVER_STATUS_REQUEST.plurial,
+            Resources.SERVER_STATUS_REQUEST.plural,
             request
           )
         )
@@ -61,7 +61,7 @@ export class ServerStatusRequestService {
         VELERO.GROUP,
         VELERO.VERSION,
         this.configService.get('velero.namespace'),
-        Resources.SERVER_STATUS_REQUEST.plurial,
+        Resources.SERVER_STATUS_REQUEST.plural,
         request.metadata.name
       )
     )
@@ -78,14 +78,19 @@ export class ServerStatusRequestService {
           if (
             requestStatus?.status?.phase !== V1ServerStatusRequestPhase.Processed
           ) {
-            throwError(() => 'Server status request not ready!');
+            throw new Error('Server status request is not ready!');
           }
           return requestStatus;
         }),
         retry({
           count: 5,
-          delay: 1000,
-        })
+          delay: 4000,
+        }),
+        catchError((e) => {
+          return throwError(
+            () => new Error('Server status request is not ready after 5 retries!'),
+          );
+        }),
       );
   }
 }

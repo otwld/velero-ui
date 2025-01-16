@@ -42,7 +42,7 @@
                     type="button"
                     @click="listStore.applyHeaderSort(header.name)"
                   >
-                    {{ header.name }}
+                    {{ t(header.name) }}
                     <FontAwesomeIcon
                       v-if="header.sort.selected && header.sort?.ascending"
                       :icon="faSortDown"
@@ -54,7 +54,7 @@
                       class="w-4 h-4 pt-2 pl-2"
                     />
                   </button>
-                  <span v-if="!header.sort.enabled">{{ header.name }}</span>
+                  <span v-if="!header.sort.enabled">{{ t(header.name) }}</span>
                 </th>
               </tr>
             </thead>
@@ -80,7 +80,7 @@
             class="w-full flex flex-col items-center py-10 text-gray-400 dark:text-gray-300 dark:bg-gray-800"
           >
             <FontAwesomeIcon :icon="faInfoCircle" class="w-16 h-16 mb-5" />
-            There are no entries.
+            {{ t('list.text.noEntries') }}
           </div>
           <div
             v-if="isFetching && data?.length === 0"
@@ -90,7 +90,7 @@
               :icon="faCircleNotch"
               class="w-16 h-16 mb-5 animate-spin"
             />
-            Fetching entries
+            {{ t('list.text.fetchingEntries') }}
           </div>
         </div>
       </div>
@@ -99,7 +99,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { onBeforeMount, onBeforeUnmount, ref } from 'vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import {
   faCircleNotch,
@@ -110,16 +110,23 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { useListStore } from '@velero-ui-app/stores/list.store';
 import { storeToRefs } from 'pinia';
-import { useKubernetesListObject } from '@velero-ui-app/composables/useKubernetesListObject';
+import { useI18n } from 'vue-i18n';
+import { useKubernetesWatchListObject } from '@velero-ui-app/composables/useKubernetesWatchListObject';
 
+const { t } = useI18n();
 const listStore = useListStore();
 const { headers, objectType } = storeToRefs(listStore);
 
-const { data, isFetching } = useKubernetesListObject(objectType.value);
+const { on, off, data, isFetching } = useKubernetesWatchListObject(
+  objectType.value,
+);
 
 defineProps({
   component: Object,
 });
+
+onBeforeMount(() => on());
+onBeforeUnmount(() => off());
 
 const checkedItems = ref({});
 const checked = ref('false');
@@ -139,7 +146,6 @@ const globalCheck = ($event) => {
     checked.value = 'true';
   }
   $event.preventDefault();
-  console.log(checked.value);
 };
 
 const setCheckedItem = (index: number) => {
@@ -151,7 +157,6 @@ const setCheckedItem = (index: number) => {
   if (!totalChecked) {
     checked.value = 'false';
   } else if (totalChecked === Object.keys(checkedItems.value).length) {
-    console.log(totalChecked);
     checked.value = 'true';
   } else {
     checked.value = 'partial';

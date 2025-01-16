@@ -1,4 +1,5 @@
 import {
+  ArrayMinSize,
   IsArray,
   IsBoolean,
   IsEnum,
@@ -10,26 +11,101 @@ import {
   ValidateNested,
 } from 'class-validator';
 import { Type } from 'class-transformer';
-import { V1BackupSpec } from '@velero-ui/velero';
+import { V1BackupSpec, V1UploaderConfigForBackup } from '@velero-ui/velero';
 import {
-  type CreateBackupFormBody,
+  CreateBackupScheduleBody,
   CreateBackupTypeEnum,
+  type CreateFormBody,
 } from '@velero-ui/shared-types';
 
-export class CreateBackupDataFromScheduleDto {
+export class CreateBackupScheduleDto implements CreateBackupScheduleBody {
   @IsString()
   @IsNotEmpty()
   name: string;
 }
 
-export class CreateBackupDataFromScratchDto implements V1BackupSpec {
+export class CreateBackupUploaderConfigDto
+  implements V1UploaderConfigForBackup
+{
   @IsOptional()
   @IsNumber()
-  sciSnapshotTimeout?: number;
+  parallelFilesUpload?: number;
+}
+
+export class CreateBackupScratchDto implements V1BackupSpec {
+  @IsOptional()
+  @IsArray()
+  @ArrayMinSize(0)
+  @IsString({ each: true })
+  includedNamespaces?: string[];
 
   @IsOptional()
+  @IsArray()
+  @ArrayMinSize(0)
+  @IsString({ each: true })
+  excludedNamespaces?: string[];
+
+  @IsArray()
+  @ArrayMinSize(0)
+  @IsString({ each: true })
+  includedResources: string[];
+
+  @IsOptional()
+  @IsArray()
+  @ArrayMinSize(0)
+  @IsString({ each: true })
+  excludedResources?: string[];
+
+  @IsOptional()
+  @IsArray()
+  @ArrayMinSize(0)
+  @IsString({ each: true })
+  includedClusterScopedResources?: string[];
+
+  @IsOptional()
+  @IsArray()
+  @ArrayMinSize(0)
+  @IsString({ each: true })
+  excludedClusterScopedResources?: string[];
+
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  includedNamespaceScopedResources?: string[];
+
+  @IsOptional()
+  @IsArray()
+  @ArrayMinSize(0)
+  @IsString({ each: true })
+  excludedNamespaceScopedResources?: string[];
+
+  @IsOptional()
+  @IsObject()
+  labelSelector?: object;
+
+  @IsOptional()
+  @IsObject()
+  orLabelSelectors?: Record<string, string>;
+
+  @IsOptional()
+  @IsBoolean()
+  snapshotVolumes?: boolean = true;
+
+  @IsNotEmpty()
   @IsString()
-  dataMover?: string;
+  ttl: string;
+
+  @IsOptional()
+  @IsBoolean()
+  includeClusterResources?: boolean = true;
+
+  @IsNotEmpty()
+  @IsString()
+  storageLocation: string;
+
+  @IsArray()
+  @IsString({ each: true })
+  volumeSnapshotLocations: string[];
 
   @IsOptional()
   @IsBoolean()
@@ -38,90 +114,38 @@ export class CreateBackupDataFromScratchDto implements V1BackupSpec {
   @IsOptional()
   @IsArray()
   @IsString({ each: true })
-  excludedClusterScopedResources?: string[];
-
-  @IsOptional()
-  @IsArray()
-  @IsString({ each: true })
-  excludedNamespaceScopedResources?: string[];
-
-  @IsOptional()
-  @IsArray()
-  @IsString({ each: true })
-  excludedNamespaces?: string[];
-
-  @IsOptional()
-  @IsArray()
-  @IsString({ each: true })
-  excludedResources?: string[];
-
-  @IsOptional()
-  @IsBoolean()
-  includeClusterResources? = true;
-
-  @IsOptional()
-  @IsArray()
-  @IsString({ each: true })
-  includedClusterScopedResources?: string[];
-
-  @IsOptional()
-  @IsArray()
-  @IsString({ each: true })
-  includedNamespaceScopedResources?: string[];
-
-  @IsArray()
-  @IsString({ each: true })
-  includedNamespaces: string[];
-
-  @IsArray()
-  @IsString({ each: true })
-  includedResources: string[];
-
-  @IsOptional()
-  @IsNumber()
-  itemOperationTimeout?: string;
-
-  @IsOptional()
-  @IsObject()
-  labelSelector?: object;
-
-  @IsOptional()
-  @IsObject()
-  orSelector?: Record<string, string>;
-
-  @IsOptional()
-  @IsArray()
-  @IsString({ each: true })
   orderedResources?: string[];
 
   @IsOptional()
-  @IsNumber()
-  parallelFilesUpload?: number;
+  @IsString()
+  sciSnapshotTimeout?: string;
 
   @IsOptional()
   @IsString()
-  resourcePoliciesConfigmap?: string;
-
-  @IsOptional()
-  @IsBoolean()
-  snapshotMoveData? = true;
+  itemOperationTimeout?: string;
 
   @IsOptional()
   @IsBoolean()
-  snapshotVolumes? = true;
+  snapshotMoveData?: boolean = true;
 
+  @IsOptional()
   @IsString()
-  storageLocation: string;
+  dataMover?: string;
 
-  @IsString()
-  ttl: string;
+  @IsOptional()
+  @IsObject()
+  resourcePolicy?: object;
 
-  @IsArray()
-  @IsString({ each: true })
-  volumeSnapshotLocations: string[];
+  @IsOptional()
+  @IsObject()
+  @ValidateNested()
+  @Type(() => CreateBackupUploaderConfigDto)
+  uploaderConfig?: V1UploaderConfigForBackup;
 }
 
-export class CreateBackupDto implements CreateBackupFormBody {
+export class CreateBackupDto
+  implements CreateFormBody<V1BackupSpec | CreateBackupScheduleBody>
+{
   @IsString()
   @IsNotEmpty()
   name: string;
@@ -136,8 +160,9 @@ export class CreateBackupDto implements CreateBackupFormBody {
   @IsObject()
   @Type((opts) =>
     opts.object.type === CreateBackupTypeEnum.FROM_SCHEDULE
-      ? CreateBackupDataFromScheduleDto
-      : CreateBackupDataFromScratchDto,
+      ? CreateBackupScheduleDto
+      : CreateBackupScratchDto,
   )
-  data: CreateBackupDataFromScheduleDto | CreateBackupDataFromScratchDto;
+  @ValidateNested()
+  spec: CreateBackupScheduleDto | CreateBackupScratchDto;
 }

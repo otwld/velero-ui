@@ -1,14 +1,14 @@
 <template>
   <div class="h-full bg-gray-50 dark:bg-gray-900">
-    <SettingsCluster></SettingsCluster>
+    <SettingsCluster/>
     <div class="grid grid-cols-1 px-4 pt-4 xl:grid-cols-3 xl:gap-4">
       <div class="col-span-full xl:col-auto">
-        <SettingsVeleroServer></SettingsVeleroServer>
-        <SetttingsVeleroUi></SetttingsVeleroUi>
+        <SettingsVeleroServer/>
+        <SetttingsVeleroUi/>
       </div>
-      <SettingsVeleroAgents></SettingsVeleroAgents>
+      <SettingsVeleroAgents/>
     </div>
-    <SettingsVeleroPlugins class="pb-6"></SettingsVeleroPlugins>
+    <SettingsVeleroPlugins class="pb-6"/>
   </div>
 </template>
 

@@ -14,7 +14,6 @@ import {
 @Global()
 @Module({})
 export class K8sModule {
-  constructor() {}
 
   static forRootAsync(options: K8sModuleAsyncOptions): DynamicModule {
     const k8sConnectionNameProvider = {
@@ -31,7 +30,7 @@ export class K8sModule {
 
         return await lastValueFrom(
           defer(async (): Promise<KubeConfig> => {
-            const k8sConfig = new KubeConfig();
+            const k8sConfig: KubeConfig = new KubeConfig();
 
             if (!options.configPath) {
               k8sConfig.loadFromCluster();
@@ -51,7 +50,7 @@ export class K8sModule {
       },
       inject: [K8S_MODULE_OPTIONS],
     };
-    const asyncProviders = this.createAsyncProviders(options);
+    const asyncProviders: Provider[] = this.createAsyncProviders(options);
     return {
       module: K8sModule,
       imports: options.imports,

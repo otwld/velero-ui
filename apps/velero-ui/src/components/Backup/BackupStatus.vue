@@ -3,7 +3,7 @@
     class="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800"
   >
     <div class="flex items-center">
-      <h3 class="text-xl font-semibold dark:text-white">Status</h3>
+      <h3 class="text-xl font-semibold dark:text-white">{{ t('global.status') }}</h3>
       <div
         v-if="!backup"
         class="ml-4 h-2 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-24"
@@ -41,9 +41,9 @@
     </div>
     <div v-if="backup?.status.progress" class="mt-4">
       <div class="flex items-center justify-between mb-1">
-        <span class="text-base font-medium text-gray-900 dark:text-white"
-          >Items</span
-        >
+        <span class="text-base font-medium text-gray-900 dark:text-white">{{
+          t('resource.status.items')
+        }}</span>
         <div
           v-if="!backup"
           class="ml-4 h-2 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-24"
@@ -72,15 +72,19 @@
     </div>
     <div v-if="backup?.status.failureReason" class="mt-4 flex flex-col">
       <span class="text-base font-medium text-gray-900 dark:text-white"
-        >Reason</span
+        >{{
+          t('resource.status.reason')
+        }}</span
       >
-      <i class="mt-1 text-xs text-gray-500 dark:text-gray-400">- {{
-        backup?.status.failureReason
-      }}</i>
+      <i class="mt-1 text-xs text-gray-500 dark:text-gray-400"
+        >{{ backup?.status.failureReason }}</i
+      >
     </div>
     <div v-if="backup?.status.validationErrors" class="mt-4 flex flex-col">
       <span class="text-base font-medium text-gray-900 dark:text-white"
-        >Validation errors</span
+        >{{
+          t('resource.status.validationErrors')
+        }}</span
       >
       <i
         v-for="(error, index) of backup?.status.validationErrors"
@@ -104,7 +108,9 @@ import {
   faHourglass,
   faTriangleExclamation,
 } from '@fortawesome/free-solid-svg-icons';
+import { useI18n } from 'vue-i18n';
 
+const { t } = useI18n();
 const props = defineProps({
   backup: Object as PropType<V1Backup>,
 });

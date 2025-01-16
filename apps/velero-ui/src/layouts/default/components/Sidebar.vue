@@ -27,7 +27,7 @@
                   :icon="faChartPie"
                   class="w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
                 />
-                <span class="ml-3">Dashboard</span>
+                <span class="ml-3">{{ t('dashboard.title') }}</span>
               </router-link>
             </li>
             <li>
@@ -40,7 +40,7 @@
                   :icon="faFloppyDisk"
                   class="w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
                 />
-                <span class="ml-3">Backups</span>
+                <span class="ml-3">{{ t('backups.title') }}</span>
               </router-link>
             </li>
             <li>
@@ -53,7 +53,7 @@
                   :icon="faClock"
                   class="w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
                 />
-                <span class="ml-3">Schedules</span>
+                <span class="ml-3">{{ t('schedules.title') }}</span>
               </router-link>
             </li>
             <li>
@@ -68,7 +68,7 @@
                   class="w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
                 />
 
-                <span class="ml-3">Restores</span>
+                <span class="ml-3">{{ t('restores.title') }}</span>
               </router-link>
             </li>
             <li>
@@ -81,7 +81,7 @@
                   :icon="faFolderTree"
                   class="w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
                 />
-                <span class="ml-3">Backup Repositories</span>
+                <span class="ml-3">{{ t('backupRepositories.title') }}</span>
               </router-link>
             </li>
             <li>
@@ -94,7 +94,7 @@
                   :icon="faServer"
                   class="w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
                 />
-                <span class="ml-3">Storage Locations</span>
+                <span class="ml-3">{{ t('storageLocations.title') }}</span>
               </router-link>
             </li>
             <li>
@@ -107,8 +107,67 @@
                   :icon="faDatabase"
                   class="w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
                 />
-                <span class="ml-3">Snapshot Locations</span>
+                <span class="ml-3">{{ t('snapshotLocations.title') }}</span>
               </router-link>
+            </li>
+            <li>
+              <button
+                aria-controls="dropdown-pod-volumes"
+                class="flex w-full items-center p-2 text-base text-gray-900 rounded-lg transition duration-75 hover:bg-gray-100 group dark:text-gray-200 dark:hover:bg-gray-700"
+                data-collapse-toggle="dropdown-pod-volumes"
+                type="button"
+                @click="toggleDropdownPodVolumes()"
+              >
+                <FontAwesomeIcon
+                  :icon="faCubes"
+                  class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
+                />
+                <span class="flex-1 text-left ml-3">{{
+                  t('podVolumes.title')
+                }}</span>
+                <FontAwesomeIcon
+                  v-if="hiddenDropdownPodVolumes"
+                  :icon="faAngleDown"
+                  class="w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
+                />
+                <FontAwesomeIcon
+                  v-if="!hiddenDropdownPodVolumes"
+                  :icon="faAngleUp"
+                  class="w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
+                />
+              </button>
+              <ul
+                id="dropdown-pod-volumes"
+                :class="{ hidden: hiddenDropdownPodVolumes }"
+                class="py-2 space-y-2"
+              >
+                <li>
+                  <router-link
+                    :to="Pages.POD_VOLUME_BACKUPS.path"
+                    active-class="bg-gray-100 dark:bg-gray-700"
+                    class="flex items-center p-2 text-base text-gray-900 transition duration-75 rounded-lg pl-6 group hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700"
+                  >
+                    <FontAwesomeIcon
+                      :icon="faCube"
+                      class="w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
+                    />
+                    <span class="ml-3">{{ t('podVolumeBackups.title')}}</span>
+                  </router-link>
+                </li>
+                <li>
+                  <router-link
+                    :to="Pages.POD_VOLUME_RESTORES.path"
+                    active-class="bg-gray-100 dark:bg-gray-700"
+                    class="flex items-center p-2 text-base text-gray-900 transition duration-75 rounded-lg pl-6 group hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700"
+                  >
+                    <FontAwesomeIcon
+                      :icon="faCube"
+                      class="w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
+                    />
+                    <span class="ml-3">{{ t('podVolumeRestores.title')}}</span>
+                  </router-link>
+                </li>
+              </ul>
             </li>
             <li>
               <button
@@ -122,7 +181,9 @@
                   :icon="faFileLines"
                   class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
                 />
-                <span class="flex-1 text-left ml-3">Requests</span>
+                <span class="flex-1 text-left ml-3">{{
+                  t('requests.title')
+                }}</span>
                 <FontAwesomeIcon
                   v-if="hiddenDropdown"
                   :icon="faAngleDown"
@@ -149,7 +210,9 @@
                       :icon="faFileExcel"
                       class="w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
                     />
-                    <span class="ml-3">Delete Backup Requests</span>
+                    <span class="ml-3">{{
+                      t('deleteBackupRequests.title')
+                    }}</span>
                   </router-link>
                 </li>
                 <li>
@@ -162,7 +225,7 @@
                       :icon="faFileArrowDown"
                       class="w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
                     />
-                    <span class="ml-3">Download Requests</span>
+                    <span class="ml-3">{{ t('downloadRequests.title') }}</span>
                   </router-link>
                 </li>
                 <li>
@@ -175,7 +238,9 @@
                       :icon="faFileWaveform"
                       class="w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
                     />
-                    <span class="ml-3">Server Status Requests</span>
+                    <span class="ml-3">{{
+                      t('serverStatusRequest.title')
+                    }}</span>
                   </router-link>
                 </li>
               </ul>
@@ -191,7 +256,7 @@
                 :icon="faGear"
                 class="w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
               />
-              <span class="ml-3">Settings</span>
+              <span class="ml-3">{{ t('settings.title') }}</span>
             </router-link>
           </div>
         </div>
@@ -214,7 +279,7 @@
           </div>
           <span
             class="inline-flex justify-center text-gray-500 text-xs dark:text-white"
-            >v{{ version }} - Powered by
+            >{{ t('global.powered', { version }) }}
             <a
               class="ml-1 hover:text-blue-600"
               href="https://otwld.com/"
@@ -235,6 +300,8 @@ import {
   faChartPie,
   faClock,
   faClockRotateLeft,
+  faCube,
+  faCubes,
   faDatabase,
   faFileArrowDown,
   faFileExcel,
@@ -250,13 +317,19 @@ import { Pages } from '@velero-ui-app/utils/constants.utils';
 import { ref } from 'vue';
 import { useAppStore } from '@velero-ui-app/stores/app.store';
 import { storeToRefs } from 'pinia';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 const appStore = useAppStore();
-const { hideSidebar, authType } = storeToRefs(appStore);
+const { hideSidebar } = storeToRefs(appStore);
 
 const hiddenDropdown = ref(true);
+const hiddenDropdownPodVolumes = ref(true);
 
 const toggleDropdown = () => (hiddenDropdown.value = !hiddenDropdown.value);
+const toggleDropdownPodVolumes = () =>
+  (hiddenDropdownPodVolumes.value = !hiddenDropdownPodVolumes.value);
 
 const version = import.meta.env.APP_VERSION;
 </script>

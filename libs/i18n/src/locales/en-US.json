@@ -1,0 +1,583 @@
+{
+  "global": {
+    "powered": "v{version} - Powered by",
+    "backup": " no backup | backup | backups",
+    "schedule": "no schedule | schedule | schedules",
+    "restore": "no restore | restore | restores",
+    "backupRepository": " no backup repository | backup repository | backup repositories",
+    "storageLocation": "no storage location | storage location | storage locations",
+    "snapshotLocation": "no snapshot location | snapshot location | snapshot locations",
+    "request": "no request | request | requests",
+    "deleteBackupRequest": "no delete backup request | delete backup request | delete backup requests",
+    "downloadRequest": "no download request | download request | download requests",
+    "serverStatusRequest": "no server status request | server status request | server status requests",
+    "setting": "no setting | setting | settings",
+    "button": {
+      "edit": {
+        "title": "Edit"
+      },
+      "new": {
+        "title": "New"
+      },
+      "add": {
+        "title": "Add"
+      },
+      "refresh": {
+        "title": "Refresh",
+        "loading": "Refreshing"
+      },
+      "next": {
+        "title": "Next"
+      },
+      "enable": {
+        "title": "Enable"
+      },
+      "pause": {
+        "title": "Pause"
+      },
+      "resume": {
+        "title": "Resume"
+      },
+      "close": {
+        "title": "Close"
+      },
+      "previous": {
+        "title": "Previous"
+      },
+      "download": {
+        "title": "Download",
+        "loading": "Downloading"
+      },
+      "restore": {
+        "title": "Restore",
+        "loading": "Restoring"
+      },
+      "delete": {
+        "title": "Delete",
+        "loading": "Deleting"
+      },
+      "describe": {
+        "title": "Describe"
+      },
+      "confirm": {
+        "title": "Confirm"
+      },
+      "nextStep": {
+        "title": "Next step"
+      },
+      "previousStep": {
+        "title": "Previous step"
+      },
+      "learnMore": {
+        "title": "Learn More"
+      }
+    },
+    "message": {
+      "error": {
+        "unexpected": "An unexpected error has occurred, please try again.",
+        "unableToCreate": "Unable to create the {resource}, please try again.",
+        "unableToEdit": "Unable to edit {resource}, please try again.",
+        "unableToDownloadLogs": "Unable to download logs, please try again.",
+        "unableToDownload": "Unable to download backup content, please try again.",
+        "unableToRetrieveLogs": "Unable to retrieve logs, please try again."
+      },
+      "success": {
+        "created": "{resource} created, request will now be processed by velero server.",
+        "edited": "{resource} edited, request will now be processed by velero server.",
+        "deleteRequestCreated": "Delete request created, request will now be processed by velero server.",
+        "downloadStarted": "Download started..."
+      }
+    },
+    "optional": "(Optional)",
+    "na": "N/A",
+    "error": "Error",
+    "noData": "No Data",
+    "details": "Details",
+    "status": "Status",
+    "paused": "Paused",
+    "unknown": "Unknown",
+    "documentation": "Documentation",
+    "options": "Options",
+    "docs": "Docs",
+    "mappingAndLabels": "Mapping & Labels",
+    "key": "Key",
+    "Value": "Value",
+    "From": "From",
+    "To": "To",
+    "online": "Online",
+    "offline": "Offline",
+    "labels": "Labels",
+    "confirmation": "Confirmation",
+    "info": "Info",
+    "backupInfo": "Backup Info",
+    "backupResources": "Backup Resources",
+    "backupLabels": "Backup Labels",
+    "credentials": "Credentials",
+    "configurationAndLabels": "Configuration & Labels",
+    "resources": "Resources",
+    "seconds": "Second(s)",
+    "minutes": "Minute(s)",
+    "hours": "Hour(s)",
+    "type": "Type",
+    "connectionLost": "Connecting to server..."
+  },
+  "manifest": {
+    "title": "Manifest",
+    "text": {
+      "loading": "Retrieving manifest..."
+    }
+  },
+  "log": {
+    "title": "Logs",
+    "text": {
+      "loading": "Retrieving logs...",
+      "noResult": "No logs to show!"
+    }
+  },
+  "resource": {
+    "metadata": {
+      "labels": "Labels"
+    },
+    "spec": {
+      "includedNamespaces": "Included Namespaces",
+      "excludedNamespaces": "Excluded Namespaces",
+      "includedResources": "Included Resources",
+      "excludedResources": "Excluded Resources",
+      "includedClusterScopedResources": "Included Cluster Scoped Resources",
+      "excludedClusterScopedResources": "Excluded Cluster Scoped Resources",
+      "includedNamespaceScopedResources": "Included Namespace Cluster Scoped Resources",
+      "excludedNamespaceScopedResources": "Excluded Namespace Cluster Scoped Resources",
+      "restoreStatusIncludedResources": "Status Included Resources",
+      "restoreStatusExcludedResources": "Status Excluded Resources",
+      "volumeNamespace": "Volume Namespace",
+      "resticIdentifier": "Restic Identifier",
+      "default": "Default",
+      "ttl": "TTL",
+      "resourcePolicy": "Resource Policies Configmap",
+      "storageLocation": "Storage Location",
+      "volumeSnapshotLocations": "Volume Snapshot Locations",
+      "provider": "Provider",
+      "backupSyncPeriod": "Synchronization Period",
+      "validationFrequency": "Validation Frequency",
+      "bucket": "Object Storage Bucket",
+      "prefix": "Prefix",
+      "certificate": "Certificate",
+      "snapshotVolumes": "Snapshot Volumes",
+      "snapshotMoveData": "Snapshot Move Data",
+      "defaultVolumesToFsBackup": "Default Volumes to FS Backup",
+      "includeClusterResources": "Include Cluster Resources",
+      "csiSnapshotTimeout": "CSI Snapshot Timeout",
+      "itemOperationTimeout": "Item Operation Timeout",
+      "labelSelector": "Labels Selector",
+      "orLabelSelectors": "Or Label Selectors",
+      "datamover": "Data Mover",
+      "parallelFilesUpload": "Parallel Files Upload",
+      "parallelFilesDownload": "Parallel Files Download",
+      "credentialName": "Secret Referent",
+      "credentialKey": "Secret Key",
+      "backup": "Backup",
+      "schedule": "Schedule",
+      "node": "Node",
+      "config": "Configuration Fields",
+      "volume": "Volume",
+      "paused": "Paused",
+      "accessMode": "Access Mode",
+      "useOwnerReferencesInBackup": "Use Owner References In Backup",
+      "skipImmediately": "Skip Immediately",
+      "namespaceMapping": "Namespace Mapping",
+      "existingResourcePolicy": "Existing Resource Policy",
+      "restorePVs": "Restore Volumes",
+      "preserveNodePorts": "Preserve Node Ports",
+      "writeSparseFiles": "Write Sparse Files",
+      "resourceModifier": "Resource Modifier Configmap"
+    },
+    "status": {
+      "items": "Items",
+      "bytes": "Bytes",
+      "reason": "Reason",
+      "validationErrors": "Validation errors",
+      "lastMaintenanceTime": "Last Maintenance",
+      "message": "Message",
+      "startTime": "Start Time",
+      "completionTime": "Completion Time",
+      "lastBackup": "Last Backup",
+      "lastSkipped": "Last Skipped",
+      "lastSyncedTime": "Last Synchronization",
+      "lastValidationTime": "Last Validation"
+    },
+    "phase": {
+      "Completed": "Completed",
+      "InProgress": "In Progress",
+      "WaitingForPluginOperations": "Waiting For Plugin Operations",
+      "Finalizing": "Finalizing",
+      "WaitingForPluginOperationsPartiallyFailed": "Waiting For Plugin Operations Partially Failed",
+      "FinalizingPartiallyFailed": "Finalizing Partially Failed",
+      "PartiallyFailed": "Partially Failed",
+      "Deleting": "Deleting",
+      "Failed": "Failed",
+      "FailedValidation": "Failed Validation",
+      "New": "New",
+      "Ready": "Ready",
+      "NotReady": "Not Ready",
+      "Processed": "Processed",
+      "Enabled": "Enabled",
+      "Available": "Available",
+      "Unavailable": "Unavailable"
+    }
+  },
+  "modal": {
+    "button": {
+      "yes": {
+        "title": "Yes, I'm sure"
+      },
+      "no": {
+        "title": "No, cancel"
+      }
+    },
+    "text": {
+      "title": {
+        "manifest": "Describe manifest:",
+        "restoreFromBackup": "Restore from Backup:",
+        "editBackupStorageLocation": "Edit Backup Storage Location:",
+        "editVolumeSnapshotLocation": "Edit Volume Snapshot Location:",
+        "createNewBackup": "Create a new Backup",
+        "createNewRestore": "Create a new Restore",
+        "createNewSchedule": "Create a new Schedule",
+        "createNewVolumeSnapshotLocation": "Create a new Volume Snapshot Location",
+        "createNewBackupStorageLocation": "Create a new Storage Location"
+      },
+      "confirmation": {
+        "delete": "Are you sure you want to delete:",
+        "restore": "Are you sure you want to restore:"
+      }
+    }
+  },
+  "form": {
+    "field": {
+      "backupName": "Backup Name",
+      "restoreName": "Restore Name",
+      "backupStorageLocationName": "Backup Storage Location name",
+      "volumeSnapshotLocationName": "Volume Snapshot Location name",
+      "scheduleName": "Schedule Name",
+      "schedule": "Schedule",
+      "fromSchedule": "From a Schedule",
+      "fromScratch": "From Scratch",
+      "fromBackup": "From a Backup",
+      "scheduleOptions": "Schedule Options",
+      "backupOptions": "Backup Options"
+    },
+    "hint": {
+      "storageProvider": "See your object storage provider’s plugin documentation",
+      "typeBackup": "Type of backup:",
+      "typeRestore": "Type of restore:",
+      "ttl": "(ex 72h)",
+      "fromSchedule": "Use a existing schedule as template",
+      "fromLatestSchedule": "Create a restore from the latest successful OR partially-failed backup triggered by schedule",
+      "fromScratch": "Create your own template",
+      "fromBackup": "Create a restore from backup"
+    },
+    "placeholder": {
+      "backupName": "Type backup name",
+      "restoreName": "Type restore name",
+      "scheduleName": "Type schedule name",
+      "storageLocation": "Select a storage location",
+      "storageLocationName": "Type storage location name",
+      "resourcePolicy": "Select a existing config map",
+      "schedule": "Select schedule",
+      "secret": "Select a existing secret",
+      "secretName": "Type secret name",
+      "accessMode": "Select an access mode",
+      "cron": "Type cron",
+      "backup": "Select backup",
+      "provider": "Type provider",
+      "notApplicable": "Not applicable",
+      "datamover": "Type data mover",
+      "resource": "Type resource",
+      "bucket": "Type bucket name",
+      "prefix": "Type prefix"
+    },
+    "tooltip": {
+      "labels": "Labels to apply to the {type}. (key=value)",
+      "ttl": "How long before the backup can be garbage collected.",
+      "includedNamespaces": "Namespaces to include in the {type}. If nothing is selected, all namespaces  are included.",
+      "excludedNamespaces": "Namespaces to exclude from the {type}.",
+      "includedResources": "Resources to include in the {type}, formatted as resource.group, such as storageclasses.storage.k8s.io (use '*' for all resources).",
+      "excludedResources": "Resources to exclude from the {type}, formatted as resource.group, such as storageclasses.storage.k8s.io.",
+      "includedClusterScopedResources": "Cluster-scoped resources to include in the {type}, formatted as resource.group, such as storageclasses.storage.k8s.io(use '*' for all resources).",
+      "excludedClusterScopedResources": "Cluster-scoped resources to exclude from the {type}, formatted as resource.group, such as storageclasses.storage.k8s.io.",
+      "includedNamespaceScopedResources": "Namespaced resources to include in the {type}, formatted as resource.group, such as deployments.apps(use '*' for all resources).",
+      "excludedNamespaceScopedResources": "Namespaced resources to exclude from the {type}, formatted as resource.group, such as deployments.apps.",
+      "restoreStatusIncludedResources": "Resources to include in the restore status, formatted as resource.group, such as storageclasses.storage.k8s.io.",
+      "restoreStatusExcludedResources": "Resources to exclude from the restore status, formatted as resource.group, such as storageclasses.storage.k8s.io.",
+      "default": "Sets this new location to be the new default backup storage location.",
+      "storageLocation": "Location in which to store the backup.",
+      "volumeSnapshotLocations": "List of locations (at most one per provider) where volume snapshots should be stored.",
+      "provider": "Name of the volume snapshot location provider (e.g. aws, azure, gcp).",
+      "backupSyncPeriod": "How often to ensure all Velero backups in object storage exist as Backup API objects in the cluster. Set this to 0s to disable sync.",
+      "validationFrequency": "How often to verify if the backup storage location is valid. Set this to 0s to disable sync. Default 1 minute.",
+      "bucket": "Name of the object storage bucket where backups should be stored.",
+      "prefix": "Prefix under which all Velero data should be stored within the bucket.",
+      "certificate": "File containing a certificate bundle to use when verifying TLS connections to the object store.",
+      "accessMode": "Access mode for the backup storage location.",
+      "credentialName": "Name of the secret referent.",
+      "credentialKey": "The key of the secret to select from. Must be a valid secret key.",
+      "config": "Configuration keyConfig-value pairs.",
+      "useOwnerReferencesInBackup": "Specifies whether to use OwnerReferences on backups created by this Schedule. Notice: if set to true, when schedule is deleted, backups will be deleted too.",
+      "skipImmediately": "Skip the next scheduled backup immediately.",
+      "paused": "Specifies whether the newly created schedule is paused or not.",
+      "schedule": "A cron expression specifying a recurring schedule for this backup to run.",
+      "namespaceMapping": "Namespace mappings from name in the backup to desired restored name.",
+      "resourcePolicy": "Reference to the resource policies configmap that backup using.",
+      "snapshotVolumes": "Take snapshots of PersistentVolumes as part of the backup.",
+      "snapshotMoveData": "Specify whether snapshot data should be moved.",
+      "defaultVolumesToFsBackup": "Use pod volume file system backup by default for volumes.",
+      "includeClusterResources": "Include cluster-scoped resources in the {type}.",
+      "csiSnapshotTimeout": "How long to wait for CSI snapshot creation before timeout.",
+      "itemOperationTimeout": "How long to wait for async plugin operations before timeout.",
+      "labelSelector": "Only back up resources matching this labels selector.",
+      "orLabelSelectors": "Backup resources matching at least one of the labels selector from the list.",
+      "datamover": "Specify the data mover to be used by the backup. If the parameter is not set or set as 'velero', the built-in data mover will be used",
+      "parallelFilesUpload": "Number of files uploads simultaneously when running a backup. This is only applicable for the kopia uploader",
+      "parallelFilesDownload": "The number of restore operations to run in parallel. If set to 0, the default parallelism will be the number of CPUs for the node that node agent pod is running.",
+      "existingResourcePolicy": "Restore Policy to be used during the restore workflow, can be - none or update.",
+      "restorePVs": "Whether to restore volumes from snapshots.",
+      "preserveNodePorts": "Whether to preserve nodeports of Services when restoring.",
+      "writeSparseFiles": "Whether to write sparse files during restoring volumes.",
+      "resourceModifier": "Reference to the resource modifier configmap that restore will use."
+    },
+    "message": {
+      "error": {
+        "orLabelSelectors": "Or Labels Selectors is not implemented yet."
+      }
+    }
+  },
+  "list": {
+    "text": {
+      "noEntries": "There are no entries.",
+      "fetchingEntries": "Fetching entries",
+      "entriesPerPage": "Entries per page:",
+      "showing": "Showing",
+      "of": "of"
+    },
+    "search": {
+      "label": "Search",
+      "placeholder": "Search..."
+    },
+    "header": {
+      "name": "Name",
+      "date": "Date",
+      "expireIn": "Expire In",
+      "lastMaintenanceTime": "Last Maintenance Time",
+      "status": "Status",
+      "cron": "Cron",
+      "provider": "Provider",
+      "fromBackup": "From Backup",
+      "lastBackup": "Last Backup",
+      "lastSync": "Last Sync",
+      "accessMode": "Access Mode",
+      "processedOn": "Processed On",
+      "kind": "Kind",
+      "type": "Type",
+      "target": "Target",
+      "actions": "Actions",
+      "volume": "Volume"
+    }
+  },
+  "auth": {
+    "signIn": "Sign In",
+    "divider": "or",
+    "powered": "v{version} - Powered by",
+    "form": {
+      "username": {
+        "label": "Your username",
+        "placeholder": "username"
+      },
+      "password": {
+        "label": "Password"
+      },
+      "button": {
+        "title": "Sign in"
+      }
+    },
+    "federated": {
+      "button": {
+        "title": "Sign in with {strategy}"
+      }
+    },
+    "message": {
+      "error": {
+        "unauthorized": "You must login to access this page.",
+        "inactivity": "Your session timed out.",
+        "sso": "Unable to process login with external SSO.",
+        "credentials": "Invalid username or password."
+      },
+      "success": {
+        "logout": "You successfully logged out!",
+        "code": "Processing login, please wait..."
+      }
+    }
+  },
+  "notFound": {
+    "title": "Something's missing",
+    "description": "Sorry, we can't find that page. You'll find lots to explore on the home page.",
+    "button": {
+      "title": "Back to Homepage"
+    }
+  },
+  "resourceNotFound": {
+    "title": "Resource not found",
+    "description": "Sorry, we can't retrieve resource at this time.",
+    "button": {
+      "title": "Back to {resource} list"
+    }
+  },
+  "header": {
+    "signOut": {
+      "button": {
+        "title": "Sign out"
+      }
+    },
+    "account": {
+      "ldap": "LDAP account",
+      "local": "Local account"
+    }
+  },
+  "sidebar": {
+    "menu": {}
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "stats": {
+      "title": {
+        "global": "Global",
+        "status": "Status",
+        "successRate": "Success Rate"
+      },
+      "label": {
+        "success": "Success"
+      },
+      "global": {
+        "button": {
+          "grafana": {
+            "title": "See in Grafana"
+          }
+        }
+      },
+      "backups": {
+        "description": "Over all backups",
+        "button": {
+          "see": {
+            "title": "See all backups"
+          }
+        }
+      },
+      "restores": {
+        "description": "Over all restores",
+        "button": {
+          "see": {
+            "title": "See all restores"
+          }
+        }
+      }
+    }
+  },
+  "backups": {
+    "title": "Backups"
+  },
+  "schedules": {
+    "title": "Schedules",
+    "message:": {
+      "error": {
+        "unexpected": "Unable to download backup content, please try again."
+      },
+      "success": {
+        "paused": "Schedule paused",
+        "resumed": "Schedule resumed"
+      }
+    }
+  },
+  "restores": {
+    "title": "Restores"
+  },
+  "backupRepositories": {
+    "title": "Backup Repositories"
+  },
+  "storageLocations": {
+    "title": "Storage Locations"
+  },
+  "snapshotLocations": {
+    "title": "Snapshot Locations"
+  },
+  "requests": {
+    "title": "Requests"
+  },
+  "deleteBackupRequests": {
+    "title": "Delete Backup Requests"
+  },
+  "downloadRequests": {
+    "title": "Download Requests"
+  },
+  "serverStatusRequest": {
+    "title": "Server Status Requests"
+  },
+  "podVolumes": {
+    "title": "Pod Volumes"
+  },
+  "podVolumeBackups": {
+    "title": "Pod Volume Backups"
+  },
+  "podVolumeRestores": {
+    "title": "Pod Volume Restores"
+  },
+  "settings": {
+    "title": "Settings",
+    "cluster": {
+      "title": "Kubernetes Cluster"
+    },
+    "agents": {
+      "title": "Velero Node Agents",
+      "modal": {
+        "logs": {
+          "title": "Node Agent logs:"
+        }
+      },
+      "tooltip": {
+        "logs": {
+          "title": "Node logs"
+        }
+      }
+    },
+    "plugins": {
+      "title": "Plugins"
+    },
+    "server": {
+      "title": "Velero Server",
+      "modal": {
+        "logs": {
+          "title": "Server logs"
+        }
+      },
+      "tooltip": {
+        "logs": {
+          "title": "Velero Server logs"
+        }
+      }
+    },
+    "ui": {
+      "title": "Velero UI",
+      "modal": {
+        "logs": {
+          "title": "UI logs"
+        }
+      },
+      "tooltip": {
+        "logs": {
+          "title": "Velero UI logs"
+        },
+        "standalone": {
+          "title": "Logs are only available when Velero UI is deployed inside K8S Cluster"
+        }
+      }
+    }
+  }
+}

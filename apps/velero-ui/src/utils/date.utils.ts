@@ -34,3 +34,27 @@ export const convertTimestampToDate = (timeStamp: string) => {
   const date: Date = new Date(timeStamp);
   return date.getTime() ? date.toLocaleString() : '';
 };
+
+export const parseTimeString = (
+  input: string,
+): {
+  value: number;
+  unit: string;
+} | null => {
+
+  if (!input) {
+    return null;
+  }
+
+  const match: RegExpMatchArray = input.match(/^(\d+)([a-zA-Z]+)$/);
+
+  if (!match) {
+    return null;
+  }
+
+  const [, value, unit] = match;
+  return {
+    value: parseInt(value, 10),
+    unit,
+  };
+};

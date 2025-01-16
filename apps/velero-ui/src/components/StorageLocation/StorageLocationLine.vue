@@ -64,23 +64,33 @@
           v-if="!data?.status?.phase"
           class="h-2.5 w-2.5 rounded-full bg-gray-500 mr-2"
         ></div>
-        {{ data?.status?.phase ? data.status.phase : 'Unknown' }}
+        {{ data?.status?.phase ? t(`resource.phase.${data?.status?.phase}`) : t('global.unknown') }}
       </div>
     </td>
     <td class="p-4 space-x-2 whitespace-nowrap">
       <div class="inline-flex rounded-md shadow-sm" role="group">
         <button
+          :class="{ 'cursor-not-allowed': isEditing }"
+          :disabled="isEditing"
+          :data-tooltip-target="`tooltip-button-edit-${data?.metadata?.uid}`"
+          :title="t('global.button.edit.title')"
           class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-teal-700 hover:bg-teal-800 rounded-l-lg focus:ring-4 focus:ring-teal-300 dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
-          title="Edit"
           type="button"
+          @click="showModalEdit = !showModalEdit"
         >
-          <FontAwesomeIcon :icon="faPen" class="w-4 h-4" />
+          <FontAwesomeIcon
+            v-if="isEditing"
+            :icon="faCircleNotch"
+            class="w-4 h-4 animate-spin"
+          />
+          <FontAwesomeIcon v-if="!isEditing" :icon="faPen" class="w-4 h-4" />
         </button>
         <button
           :class="{ 'cursor-not-allowed': isDeleting }"
+          :data-tooltip-target="`tooltip-button-delete-${data?.metadata?.uid}`"
           :disabled="isDeleting"
+          :title="t('global.button.delete.title')"
           class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-red-600 rounded-r-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"
-          title="Delete"
           type="button"
           @click="showModalDelete = !showModalDelete"
         >
@@ -98,14 +108,46 @@
       </div>
     </td>
   </tr>
+  <div
+    :id="`tooltip-button-edit-${data?.metadata?.uid}`"
+    class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
+    role="tooltip"
+  >
+    {{ t('global.button.edit.title') }}
+    <div class="tooltip-arrow" data-popper-arrow></div>
+  </div>
+  <div
+    :id="`tooltip-button-delete-${data?.metadata?.uid}`"
+    class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
+    role="tooltip"
+  >
+    {{ t('global.button.delete.title') }}
+    <div class="tooltip-arrow" data-popper-arrow></div>
+  </div>
   <ModalConfirmation
     v-if="showModalDelete"
     :icon="faExclamationCircle"
     :name="data?.metadata?.name"
-    text="Are you sure you want to delete:"
+    :text="t('modal.text.confirmation.delete')"
     @onClose="showModalDelete = false"
     @onConfirm="remove(data.metadata.name)"
   />
+  <VModal
+    v-if="showModalEdit"
+    :id="`modal-edit-${data?.metadata?.name}`"
+    width="w-6/12"
+    @onClose="showModalEdit = false"
+  >
+    <template v-slot:header>
+      <h3 class="text-lg text-gray-500 dark:text-gray-400">
+        {{ t('modal.text.title.editBackupStorageLocation') }}
+        <span class="font-normal text-sm ml-2">{{ data?.metadata?.name }}</span>
+      </h3>
+    </template>
+    <template v-slot:content>
+      <StorageLocationFormEdit @onClose="showModalEdit = false" :storage-location="data" />
+    </template>
+  </VModal>
 </template>
 
 <script lang="ts" setup>
@@ -114,7 +156,7 @@ import {
   type V1BackupStorageLocation,
   V1BackupStorageLocationPhase,
 } from '@velero-ui/velero';
-import { type PropType, ref } from 'vue';
+import { onMounted, type PropType, ref } from 'vue';
 import { convertTimestampToDate } from '../../utils/date.utils';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import {
@@ -127,17 +169,31 @@ import { truncate } from '../../utils/string.utils';
 import { useDeleteKubernetesObject } from '@velero-ui-app/composables/useDeleteKubernetesObject';
 import ModalConfirmation from '@velero-ui-app/components/Modals/ModalConfirmation.vue';
 import { Pages } from '../../utils/constants.utils';
+import { useI18n } from 'vue-i18n';
+import { initTooltips } from 'flowbite';
+import VModal from '@velero-ui-app/components/Modals/VModal.vue';
+import StorageLocationFormEdit from '@velero-ui-app/components/StorageLocation/forms/StorageLocationFormEdit.vue';
+import {useKubernetesEditObject} from "@velero-ui-app/composables/useKubernetesEditObject";
 
-defineProps({
+const { t } = useI18n();
+const props = defineProps({
   data: Object as PropType<V1BackupStorageLocation>,
   checked: Boolean,
 });
 
 const showModalDelete = ref(false);
+const showModalEdit = ref(false);
 
 const emit = defineEmits(['onChecked']);
 
 const { isPending: isDeleting, mutate: remove } = useDeleteKubernetesObject(
   Resources.BACKUP_STORAGE_LOCATION,
 );
+
+const { isPending: isEditing } = useKubernetesEditObject(
+  Resources.BACKUP_STORAGE_LOCATION,
+  props.data.metadata.name,
+);
+
+onMounted(() => initTooltips());
 </script>

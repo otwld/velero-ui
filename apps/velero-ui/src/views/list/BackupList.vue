@@ -5,12 +5,6 @@
         class="inline-flex justify-center p-1 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
         type="button"
       >
-        <FontAwesomeIcon :icon="faClockRotateLeft" class="w-5 h-5" />
-      </button>
-      <button
-        class="inline-flex justify-center p-1 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-        type="button"
-      >
         <FontAwesomeIcon :icon="faDownload" class="w-5 h-5" />
       </button>
       <button
@@ -27,20 +21,20 @@
         @click="showModalAdd = !showModalAdd"
       >
         <FontAwesomeIcon :icon="faPlus" class="w-4 h-4 mr-2" />
-        New
+        {{ t('global.button.new.title')}}
       </button>
     </template>
   </ListHeader>
-  <ListContent :component="BackupLine"></ListContent>
-  <ListFooter></ListFooter>
-  <VModal v-if="showModalAdd" id="modal-add" @onClose="showModalAdd = false">
+  <ListContent :component="BackupLine"/>
+  <ListFooter/>
+  <VModal v-if="showModalAdd" id="modal-add" width="w-6/12" @onClose="showModalAdd = false">
     <template v-slot:header>
       <h3 class="text-lg text-gray-500 dark:text-gray-400">
-        Create a new Backup
+        {{ t('modal.text.title.createNewBackup') }}
       </h3>
     </template>
     <template v-slot:content>
-      <BackupCreate @onClose="showModalAdd = false"></BackupCreate>
+      <BackupCreate @onClose="showModalAdd = false"/>
     </template>
   </VModal>
 </template>
@@ -54,19 +48,22 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import VModal from '@velero-ui-app/components/Modals/VModal.vue';
-import BackupCreate from '@velero-ui-app/components/Backup/BackupCreate.vue';
+import BackupCreate from '@velero-ui-app/components/Backup/forms/BackupFormCreate.vue';
 import { useListStore } from '@velero-ui-app/stores/list.store';
 import ListFooter from '@velero-ui-app/components/List/ListFooter.vue';
 import ListContent from '@velero-ui-app/components/List/ListContent.vue';
 import ListHeader from '@velero-ui-app/components/List/ListHeader.vue';
 import { onBeforeMount, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 const listStore = useListStore();
 
 onBeforeMount(() =>
   listStore.setHeaders([
     {
-      name: 'Name',
+      name: 'list.header.name',
       sort: {
         enabled: true,
         selected: true,
@@ -74,34 +71,34 @@ onBeforeMount(() =>
       },
     },
     {
-      name: 'Schedule',
+      name: 'schedules.title',
       sort: {
         enabled: true,
         selected: false,
       },
     },
     {
-      name: 'Date',
+      name: 'list.header.date',
       sort: {
         enabled: true,
         selected: false,
       },
     },
     {
-      name: 'Expire in',
+      name: 'list.header.expireIn',
       sort: {
         enabled: true,
         selected: false,
       },
     },
     {
-      name: 'Status',
+      name: 'list.header.status',
       sort: {
         enabled: false,
       },
     },
     {
-      name: 'Actions',
+      name: 'list.header.actions',
       sort: {
         enabled: false,
       },

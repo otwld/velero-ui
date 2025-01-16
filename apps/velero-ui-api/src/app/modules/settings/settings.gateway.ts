@@ -1,38 +1,51 @@
 import {
+  ConnectedSocket,
   MessageBody,
   OnGatewayConnection,
   OnGatewayDisconnect,
-  OnGatewayInit,
   SubscribeMessage,
   WebSocketGateway,
 } from '@nestjs/websockets';
-import { Server, Socket } from 'socket.io';
+import { Socket } from 'socket.io';
+import { SettingsService } from '@velero-ui-api/modules/settings/settings.service';
+import { AppLogger } from '@velero-ui-api/shared/modules/logger/logger.service';
+import { UseGuards } from '@nestjs/common';
+import { WsJwtAuthGuard } from '@velero-ui-api/shared/guards/ws-jwt-auth.guard';
 
 @WebSocketGateway({ cors: true })
 export class SettingsGateway
-  implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
+  implements OnGatewayConnection, OnGatewayDisconnect
 {
-  constructor() {}
+  constructor(
+    private readonly settingsService: SettingsService,
+    private logger: AppLogger,
+  ) {}
 
-  afterInit(server: Server) {
-    console.log('Initialized');
+  handleConnection(@ConnectedSocket() client: Socket): void {
+    this.logger.debug(`Client connected ${client.id}`, WebSocketGateway.name);
   }
 
-  handleConnection(client: Socket) {
-    console.log(`client connected ${client.id}`);
+  handleDisconnect(@ConnectedSocket() client: Socket): void {
+    this.logger.debug(
+      `Client disconnected ${client.id}`,
+      WebSocketGateway.name,
+    );
+    this.settingsService.closeLogsSteam(client);
   }
 
-  handleDisconnect(client: Socket) {
-    console.log(`client connected ${client.id}`);
+  @UseGuards(WsJwtAuthGuard)
+  @SubscribeMessage('settings:logs:on')
+  public logsServerOn(
+    @ConnectedSocket() client: Socket,
+    @MessageBody('type') type: string,
+    @MessageBody('name') name: string,
+  ): void {
+    this.settingsService.openLogsStream(client, type, name);
   }
 
-  @SubscribeMessage('logs:server')
-  logsServer(): string[] {
-    return ['id'];
-  }
-
-  @SubscribeMessage('logs:node')
-  logsNode(@MessageBody('name') name: string): string[] {
-    return ['id'];
+  @UseGuards(WsJwtAuthGuard)
+  @SubscribeMessage('settings:logs:off')
+  public logsServerOff(@ConnectedSocket() client: Socket): void {
+    this.settingsService.closeLogsSteam(client);
   }
 }

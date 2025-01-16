@@ -19,6 +19,7 @@ export const useStatsRestoresStatus = () => {
     initialData: {
       series: [],
       labels: [],
+      colors: []
     },
   });
 };

@@ -7,7 +7,7 @@
     @click="redirect()"
   >
     <FontAwesomeIcon :icon="faGithub" class="w-4 h-4 mr-2" />
-    <p>Sign in with Github</p>
+    <p>{{ t('auth.federated.button.title', { strategy: 'Github' }) }}</p>
     <FontAwesomeIcon
       v-if="loading"
       :icon="faCircleNotch"
@@ -25,6 +25,9 @@ import { faGithub } from '@fortawesome/free-brands-svg-icons';
 import { useRoute } from 'vue-router';
 import { v4 as uuidv4 } from 'uuid';
 import { useAuth } from '@velero-ui-app/composables/auth/useAuth';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 const route = useRoute();
 const { login } = useAuth();

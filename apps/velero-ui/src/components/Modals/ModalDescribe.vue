@@ -6,7 +6,7 @@
     role="dialog"
   >
     <div
-      aria-hidden="true"
+
       class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
     ></div>
 
@@ -22,7 +22,7 @@
               <h3
                 class="inline-flex items-center text-lg font-semibold text-gray-900 dark:text-white"
               >
-                Describe manifest:
+                {{ t('modal.text.title.manifest') }}
                 <span class="font-normal text-sm ml-2">{{ name }}</span>
               </h3>
               <button
@@ -60,7 +60,7 @@
                 "
                 class="text-white inline-flex justify-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
               >
-                Close
+                {{ t('global.button.close.title') }}
               </button>
             </div>
           </div>
@@ -75,7 +75,9 @@ import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import type { PropType } from 'vue';
 import { indentYaml, parseYaml } from '@velero-ui-app/utils/yaml.utils';
+import { useI18n } from 'vue-i18n';
 
+const { t } = useI18n();
 defineProps({
   name: String,
   data: Object as PropType<any>,

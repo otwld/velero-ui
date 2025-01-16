@@ -4,7 +4,9 @@ import { Observable } from 'rxjs';
 import {
   BackupsStatusStats,
   BackupsSuccessRateStats,
-  BasicStats, RestoresStatusStats, RestoresSuccessRateStats,
+  BasicStats,
+  RestoresStatusStats,
+  RestoresSuccessRateStats,
 } from '@velero-ui/shared-types';
 
 @Controller('stats')

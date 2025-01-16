@@ -15,23 +15,26 @@
         @click="showModalAdd = !showModalAdd"
       >
         <FontAwesomeIcon :icon="faPlus" class="w-4 h-4 mr-2" />
-        New
+        {{ t('global.button.new.title') }}
       </button>
     </template>
   </ListHeader>
-  <ListContent :component="StorageLocationLine"></ListContent>
-  <ListFooter></ListFooter>
+  <ListContent :component="StorageLocationLine" />
+  <ListFooter />
 
-  <VModal v-if="showModalAdd" id="modal-add" @onClose="showModalAdd = false">
+  <VModal
+    v-if="showModalAdd"
+    id="modal-add"
+    width="w-6/12"
+    @onClose="showModalAdd = false"
+  >
     <template v-slot:header>
       <h3 class="text-lg text-gray-500 dark:text-gray-400">
-        Create a new Storage Location
+        {{ t('modal.text.title.createNewBackupStorageLocation') }}
       </h3>
     </template>
     <template v-slot:content>
-      <StorageLocationCreate
-        @onClose="showModalAdd = false"
-      ></StorageLocationCreate>
+      <StorageLocationCreate @onClose="showModalAdd = false" />
     </template>
   </VModal>
 </template>
@@ -42,17 +45,19 @@ import ListHeader from '@velero-ui-app/components/List/ListHeader.vue';
 import ListFooter from '@velero-ui-app/components/List/ListFooter.vue';
 import ListContent from '@velero-ui-app/components/List/ListContent.vue';
 import StorageLocationLine from '@velero-ui-app/components/StorageLocation/StorageLocationLine.vue';
-import {faPlus, faTrashCan} from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import VModal from '@velero-ui-app/components/Modals/VModal.vue';
-import StorageLocationCreate from '@velero-ui-app/components/StorageLocation/StorageLocationCreate.vue';
+import StorageLocationCreate from '@velero-ui-app/components/StorageLocation/forms/StorageLocationFormCreate.vue';
+import { useI18n } from 'vue-i18n';
 
+const { t } = useI18n();
 const listStore = useListStore();
 
 onBeforeMount(() =>
   listStore.setHeaders([
     {
-      name: 'Name',
+      name: 'list.header.name',
       sort: {
         enabled: true,
         selected: true,
@@ -60,34 +65,34 @@ onBeforeMount(() =>
       },
     },
     {
-      name: 'Provider',
+      name: 'list.header.provider',
       sort: {
         enabled: true,
         selected: false,
       },
     },
     {
-      name: 'Access Mode',
+      name: 'list.header.accessMode',
       sort: {
         enabled: true,
         selected: false,
       },
     },
     {
-      name: 'Last Sync',
+      name: 'list.header.lastSync',
       sort: {
         enabled: true,
         selected: false,
       },
     },
     {
-      name: 'Status',
+      name: 'list.header.status',
       sort: {
         enabled: false,
       },
     },
     {
-      name: 'Actions',
+      name: 'list.header.actions',
       sort: {
         enabled: false,
       },

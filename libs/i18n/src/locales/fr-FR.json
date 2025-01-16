@@ -1,0 +1,281 @@
+{
+  "global": {
+    "powered": "v{version} - Propulsé par",
+    "backup": "aucune sauvegarde | sauvegarde | sauvegardes",
+    "schedule": "aucun planning | planning | plannings",
+    "restore": "aucune restauration | restauration | restaurations",
+    "backupRepository": "aucun dépôt de sauvegarde | dépôt de sauvegarde | dépôts de sauvegarde",
+    "storageLocation": "aucun emplacement de stockage | emplacement de stockage | emplacements de stockage",
+    "snapshotLocation": "aucun emplacement de snapshot | emplacement de snapshot | emplacements de snapshot",
+    "request": "aucune requête | requête | requêtes",
+    "deleteBackupRequest": "aucune requête de suppression de sauvegarde | requête de suppression de sauvegarde | requêtes de suppression de sauvegarde",
+    "downloadRequest": "aucune requête de téléchargement | requête de téléchargement | requêtes de téléchargement",
+    "serverStatusRequest": "aucune requête d'état du serveur | requête d'état du serveur | requêtes d'état du serveur",
+    "setting": "aucun paramètre | paramètre | paramètres",
+    "button": {
+      "edit": {
+        "title": "Modifier"
+      },
+      "new": {
+        "title": "Nouveau"
+      },
+      "refresh": {
+        "title": "Actualiser",
+        "loading": "Actualisation"
+      },
+      "next": {
+        "title": "Suivant"
+      },
+      "enable": {
+        "title": "Activer"
+      },
+      "pause": {
+        "title": "Pause"
+      },
+      "resume": {
+        "title": "Reprendre"
+      },
+      "close": {
+        "title": "Fermer"
+      },
+      "previous": {
+        "title": "Précédent"
+      },
+      "download": {
+        "title": "Télécharger",
+        "loading": "Téléchargement"
+      },
+      "restore": {
+        "title": "Restaurer",
+        "loading": "Restauration"
+      },
+      "delete": {
+        "title": "Supprimer",
+        "loading": "Suppression"
+      }
+    },
+    "na": "N/D",
+    "noData": "Aucune donnée",
+    "details": "Détails",
+    "status": "Statut",
+    "paused": "En pause",
+    "unknown": "Inconnu"
+  },
+  "manifest": {
+    "title": "Manifeste",
+    "text": {
+      "loading": "Récupération du manifeste..."
+    }
+  },
+  "log": {
+    "title": "Logs",
+    "text": {
+      "loading": "Récupération des logs...",
+      "noResult": "Aucun log à afficher !"
+    }
+  },
+  "resource": {
+    "spec": {
+      "includedNamespaces": "Namespaces inclus",
+      "excludedNamespaces": "Namespaces exclus",
+      "includedResources": "Ressources incluses",
+      "excludedResources": "Ressources exclues",
+      "includedClusterScopedResources": "Ressources à portée de cluster incluses",
+      "excludedClusterScopedResources": "Ressources à portée de cluster exclues",
+      "includedNamespaceScopedResources": "Ressources à portée de namespace incluses",
+      "excludedNamespaceScopedResources": "Ressources à portée de namespace exclues",
+      "volumeNamespace": "Namespace des volumes",
+      "resticIdentifier": "Identifiant Restic",
+      "default": "Par défaut",
+      "provider": "Fournisseur",
+      "backupSyncPeriod": "Période de synchronisation",
+      "validationFrequency": "Fréquence de validation",
+      "bucket": "Bucket de stockage d'objets"
+    },
+    "status": {
+      "items": "Éléments",
+      "reason": "Raison",
+      "validationErrors": "Erreurs de validation",
+      "lastMaintenanceTime": "Dernière maintenance",
+      "message": "Message",
+      "lastBackup": "Dernière sauvegarde",
+      "lastSkipped": "Dernier ignoré",
+      "lastSyncedTime": "Dernière synchronisation",
+      "lastValidationTime": "Dernière validation"
+    }
+  },
+  "modal": {
+    "button": {
+      "yes": {
+        "title": "Oui, je suis sûr"
+      },
+      "no": {
+        "title": "Non, annuler"
+      }
+    },
+    "text": {
+      "title": {
+        "manifest": "Décrire le manifeste :"
+      },
+      "confirmation": {
+        "delete": "Êtes-vous sûr de vouloir supprimer :",
+        "restore": "Êtes-vous sûr de vouloir restaurer :"
+      }
+    }
+  },
+  "list": {
+    "text": {
+      "noEntries": "Aucune entrée.",
+      "fetchingEntries": "Récupération des entrées",
+      "entriesPerPage": "Entrées par page :",
+      "showing": "Affichage",
+      "of": "de"
+    },
+    "search": {
+      "label": "Rechercher",
+      "placeholder": "Rechercher..."
+    },
+    "header": {
+      "name": "Nom",
+      "date": "Date",
+      "expireIn": "Expire dans",
+      "lastMaintenanceTime": "Dernière maintenance",
+      "status": "Statut",
+      "cron": "Cron",
+      "provider": "Fournisseur",
+      "fromBackup": "Depuis sauvegarde",
+      "lastBackup": "Dernière sauvegarde",
+      "lastSync": "Dernière synchronisation",
+      "accessMode": "Mode d'accès",
+      "processedOn": "Traité le",
+      "kind": "Type",
+      "type": "Type",
+      "target": "Cible",
+      "actions": "Actions"
+    }
+  },
+  "auth": {
+    "signIn": "Se connecter",
+    "divider": "ou",
+    "powered": "v{version} - Propulsé par",
+    "form": {
+      "username": {
+        "label": "Votre nom d'utilisateur",
+        "placeholder": "nom d'utilisateur"
+      },
+      "password": {
+        "label": "Mot de passe"
+      },
+      "button": {
+        "title": "Se connecter"
+      }
+    },
+    "federated": {
+      "button": {
+        "title": "Se connecter avec {strategy}"
+      }
+    },
+    "message": {
+      "error": {
+        "unauthorized": "Vous devez vous connecter pour accéder à cette page.",
+        "inactivity": "Votre session a expiré.",
+        "sso": "Impossible de traiter la connexion avec SSO externe.",
+        "credentials": "Nom d'utilisateur ou mot de passe invalide."
+      },
+      "success": {
+        "logout": "Vous vous êtes déconnecté avec succès !",
+        "code": "Connexion en cours, veuillez patienter..."
+      }
+    }
+  },
+  "notFound": {
+    "title": "Il manque quelque chose.",
+    "description": "Désolé, nous ne trouvons pas cette page. Vous trouverez beaucoup à explorer sur la page d'accueil.",
+    "button": {
+      "title": "Retour à la page d'accueil"
+    }
+  },
+  "header": {
+    "signOut": {
+      "button": {
+        "title": "Se déconnecter"
+      }
+    },
+    "account": {
+      "ldap": "Compte LDAP",
+      "local": "Compte local"
+    }
+  },
+  "sidebar": {
+    "menu": {}
+  },
+  "dashboard": {
+    "title": "Tableau de bord",
+    "stats": {
+      "title": {
+        "global": "Global",
+        "status": "Statut",
+        "successRate": "Taux de réussite"
+      },
+      "label": {
+        "success": "Succès"
+      },
+      "global": {
+        "button": {
+          "grafana": {
+            "title": "Voir dans Grafana"
+          }
+        }
+      },
+      "backups": {
+        "description": "Sur toutes les sauvegardes",
+        "button": {
+          "see": {
+            "title": "Voir toutes les sauvegardes"
+          }
+        }
+      },
+      "restores": {
+        "description": "Sur toutes les restaurations",
+        "button": {
+          "see": {
+            "title": "Voir toutes les restaurations"
+          }
+        }
+      }
+    }
+  },
+  "backups": {
+    "title": "Sauvegardes"
+  },
+  "schedules": {
+    "title": "Plannings"
+  },
+  "restores": {
+    "title": "Restaurations"
+  },
+  "backupRepositories": {
+    "title": "Dépôts de sauvegarde"
+  },
+  "storageLocations": {
+    "title": "Emplacements de stockage"
+  },
+  "snapshotLocations": {
+    "title": "Emplacements de snapshot"
+  },
+  "requests": {
+    "title": "Requêtes"
+  },
+  "deleteBackupRequests": {
+    "title": "Requêtes de suppression de sauvegarde"
+  },
+  "downloadRequests": {
+    "title": "Requêtes de téléchargement"
+  },
+  "serverStatusRequest": {
+    "title": "Requêtes d'état du serveur"
+  },
+  "settings": {
+    "title": "Paramètres"
+  }
+}

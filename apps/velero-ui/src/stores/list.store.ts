@@ -1,27 +1,10 @@
 import { defineStore } from 'pinia';
 import type { Resource } from '@velero-ui/velero';
-
-export interface ListSearchFilters {
-  startWith: string;
-}
-
-export interface ListSort {
-  column: ListSortColumn;
-}
-
-export interface ListSortColumn {
-  name: string;
-  ascending: boolean;
-}
-
-export interface ListHeader {
-  name: string;
-  sort: {
-    enabled: boolean;
-    selected?: boolean;
-    ascending?: true;
-  };
-}
+import type {
+  ListHeader,
+  ListSearchFilters,
+  ListSort,
+} from '@velero-ui/shared-types';
 
 export interface ListStore {
   total: number;
@@ -39,7 +22,7 @@ export const useListStore = defineStore({
     ({
       total: 0,
       offset: 0,
-      limit: parseInt(localStorage.getItem('list_limit')) || 20,
+      limit: parseInt(localStorage.getItem('list.limit')) || 20,
       filters: {
         startWith: '',
       },
@@ -75,9 +58,10 @@ export const useListStore = defineStore({
     },
     setLimit(limit: number): void {
       this.limit = limit;
-      localStorage.setItem('localStorage', limit.toString());
+      localStorage.setItem('list.limit', limit.toString());
     },
     setObjectType(type: Resource): void {
+      this.reset();
       this.objectType = type;
     },
     next(): void {

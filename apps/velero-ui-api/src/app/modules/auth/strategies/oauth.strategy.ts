@@ -21,7 +21,7 @@ export class OauthStrategy extends PassportStrategy(Strategy, 'oauth') {
     });
   }
 
-  public async validate(accessToken: string, refreshToken: string) {
+  public async validate(accessToken: string) {
     try {
       const profile = await this.getUserProfile(accessToken);
 
@@ -47,11 +47,10 @@ export class OauthStrategy extends PassportStrategy(Strategy, 'oauth') {
 
   private async getUserProfile(accessToken: string): Promise<any> {
     return new Promise((resolve, reject) => {
-      console.log(this.configService.get('oauth.userInfoUrl'));
       this._oauth2.get(
         this.configService.get('oauth.userInfoUrl'),
         accessToken,
-        function (err, body: string, res) {
+        function (err, body: string) {
           if (err) {
             reject(new InternalOAuthError('Failed to fetch user profile', err));
           }

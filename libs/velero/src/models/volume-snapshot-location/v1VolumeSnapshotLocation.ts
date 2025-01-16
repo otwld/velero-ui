@@ -1,6 +1,6 @@
 import { KubernetesObject } from '@kubernetes/client-node';
 import { V1ObjectMeta } from '@kubernetes/client-node/dist/api';
-import { V1Metadata } from '../shared';
+import { V1Metadata, V1SpecCredential } from '../shared';
 
 export interface V1VolumeSnapshotLocation extends KubernetesObject {
   metadata?: V1ObjectMeta & V1Metadata;
@@ -15,8 +15,8 @@ export const enum V1VolumeSnapshotLocationPhase {
 
 export interface V1VolumeSnapshotLocationSpec {
   provider: string;
-  config: Record<string, string>;
-  credential: string;
+  config?: object;
+  credential?: V1SpecCredential;
 }
 
 export interface V1VolumeSnapshotLocationStatus {

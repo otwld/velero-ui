@@ -5,17 +5,20 @@
     <div class="w-full mb-1">
       <div class="sm:flex">
         <div
+          v-if="router.currentRoute.value.name !== Pages.SCHEDULE.name"
           class="items-center hidden mb-3 sm:flex sm:divide-x sm:divide-gray-100 sm:mb-0 dark:divide-gray-700"
         >
-          <div class="lg:pr-3">
-            <label class="sr-only" for="backups-search">Search</label>
+          <div class="lg:pr-3" >
+            <label class="sr-only" for="backups-search">{{
+              t('list.search.label')
+            }}</label>
             <div class="relative mt-1 lg:w-64 xl:w-96">
               <input
                 id="backups-search"
                 v-model="searchInput"
+                :placeholder="t('list.search.placeholder')"
                 class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 name="backup"
-                placeholder="Search..."
                 type="text"
               />
             </div>
@@ -40,7 +43,7 @@
               :icon="faArrowsRotate"
               class="w-4 h-4 mr-2"
             />
-            Refresh
+            {{ t('global.button.refresh.title') }}
           </button>
         </div>
       </div>
@@ -54,12 +57,18 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { faArrowsRotate } from '@fortawesome/free-solid-svg-icons';
 import { useListStore } from '../../stores/list.store';
 import { storeToRefs } from 'pinia';
-import { useKubernetesListObject } from '@velero-ui-app/composables/useKubernetesListObject';
+import { useI18n } from 'vue-i18n';
+import { useKubernetesWatchListObject } from '@velero-ui-app/composables/useKubernetesWatchListObject';
+import {type Router, useRouter} from "vue-router";
+import {Pages} from "@velero-ui-app/utils/constants.utils";
 
+const router: Router = useRouter();
+
+const { t } = useI18n();
 const listStore = useListStore();
 const { objectType } = storeToRefs(listStore);
 
-const { refetch, isFetching } = useKubernetesListObject(objectType.value);
+const { refetch, isFetching } = useKubernetesWatchListObject(objectType.value);
 
 const searchInput = ref('');
 
@@ -76,4 +85,5 @@ watch(searchInput, () => {
 
 onBeforeUnmount(() => clearTimeout(timeout));
 onBeforeUnmount(() => listStore.reset());
+
 </script>

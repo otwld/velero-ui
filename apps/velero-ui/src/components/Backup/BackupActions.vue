@@ -29,9 +29,9 @@
         </div>
         <div
           v-if="!backup"
-          class="h-1.5 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-48 mb-4"
+          class="bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-48 mb-4"
         ></div>
-        <div class="flex items-center space-x-4">
+        <div class="flex items-center space-x-4 flex-wrap">
           <button
             :class="{ 'cursor-not-allowed': isDisabled || !backup }"
             :disabled="!backup"
@@ -40,7 +40,7 @@
             @click="showModalRestore = !showModalRestore"
           >
             <FontAwesomeIcon :icon="faClockRotateLeft" class="w-4 h-4 mr-2" />
-            Restore
+            {{ t('global.button.restore.title') }}
           </button>
           <button
             :class="{
@@ -61,26 +61,34 @@
               :icon="faCircleNotch"
               class="w-4 h-4 animate-spin mr-2"
             />
-            Download
+            {{
+              downloadLoading
+                ? t('global.button.download.loading')
+                : t('global.button.download.title')
+            }}
           </button>
           <button
             :class="{ 'cursor-not-allowed': isDisabled || !backup }"
             :disabled="isDisabled || !backup"
-            class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-red-600 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"
+            class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"
             type="button"
             @click="showModalDelete = !showModalDelete"
           >
             <FontAwesomeIcon
-              v-if="isDisabled"
+              v-if="isDeleting"
               :icon="faCircleNotch"
               class="w-4 h-4 animate-spin mr-2"
             />
             <FontAwesomeIcon
-              v-if="!isDisabled"
+              v-if="!isDeleting"
               :icon="faTrashCan"
               class="w-4 h-4 mr-2"
             />
-            {{ isDisabled ? 'Deleting' : 'Delete' }}
+            {{
+              isDeleting
+                ? t('global.button.delete.loading')
+                : t('global.button.delete.title')
+            }}
           </button>
         </div>
       </div>
@@ -90,17 +98,29 @@
     v-if="showModalDelete"
     :icon="faExclamationCircle"
     :name="backup?.metadata?.name"
-    text="Are you sure you want to delete:"
+    :text="t('modal.text.confirmation.delete')"
     @onClose="showModalDelete = false"
     @onConfirm="remove(backup.metadata.name)"
   />
-  <ModalConfirmation
+  <VModal
     v-if="showModalRestore"
-    :icon="faClockRotateLeft"
-    :name="backup?.metadata?.name"
-    text="Are you sure you want to restore:"
+    :id="`modal-restore-${backup?.metadata?.name}`"
+    width="w-6/12"
     @onClose="showModalRestore = false"
-  />
+  >
+    <template v-slot:header>
+      <h3 class="text-lg text-gray-500 dark:text-gray-400">
+        {{ t('modal.text.title.restoreFromBackup') }}
+        <span class="font-normal text-sm ml-2">{{ backup?.metadata?.name }}</span>
+      </h3>
+    </template>
+    <template v-slot:content>
+      <BackupFormRestore
+        :backup="backup"
+        @onClose="showModalRestore = false"
+      />
+    </template>
+  </VModal>
 </template>
 
 <script lang="ts" setup>
@@ -115,9 +135,14 @@ import {
   faTrashCan,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { useBackupDownloadContent } from '@velero-ui-app/use/backup/useBackupDownloadContent';
+import { useBackupDownloadContent } from '@velero-ui-app/composables/backup/useBackupDownloadContent';
 import ModalConfirmation from '@velero-ui-app/components/Modals/ModalConfirmation.vue';
 import { useDeleteKubernetesObject } from '@velero-ui-app/composables/useDeleteKubernetesObject';
+import { useI18n } from 'vue-i18n';
+import VModal from "@velero-ui-app/components/Modals/VModal.vue";
+import BackupFormRestore from "@velero-ui-app/components/Backup/forms/BackupFormRestore.vue";
+
+const { t } = useI18n();
 
 const props = defineProps({
   backup: Object as PropType<V1Backup>,
@@ -127,7 +152,9 @@ const { download, downloadLoading } = useBackupDownloadContent(
   toRef(() => props.backup?.metadata?.name),
 );
 
-const { isPending, mutate: remove } = useDeleteKubernetesObject(Resources.BACKUP);
+const { isPending, mutate: remove } = useDeleteKubernetesObject(
+  Resources.BACKUP,
+);
 
 const showModalDelete = ref(false);
 const showModalRestore = ref(false);
@@ -140,4 +167,8 @@ const isDisabled = computed(() => {
     )
   );
 });
+
+const isDeleting = computed(
+  () => isPending.value || props.backup?.status?.phase === V1BackupPhase.Deleting,
+);
 </script>

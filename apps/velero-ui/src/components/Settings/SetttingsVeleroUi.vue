@@ -11,27 +11,29 @@
           <h3
             class="flex items-center mb-1 text-lg font-bold text-gray-900 dark:text-white"
           >
-            Velero UI
-            <div
-              v-if="veleroUi?.connected"
+            {{ t('settings.ui.title') }}
+            <span
+              v-if="socket.connected"
+              :title="t('global.online')"
               class="h-2.5 w-2.5 rounded-full bg-green-400 ml-2"
-            ></div>
-            <div
-              v-if="!veleroUi?.connected"
+            />
+            <span
+              v-if="!socket.connected"
+              :title="t('global.offline')"
               class="h-2.5 w-2.5 rounded-full bg-red-500 ml-2"
-            ></div>
+            />
           </h3>
           <div class="mb-1 text-sm text-gray-500 dark:text-gray-400">
-            {{ veleroUi?.mode }}
+            {{ data?.mode }}
             <div
-              v-if="!veleroUi"
+              v-if="!data"
               class="h-2.5 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-48 mb-4"
             ></div>
           </div>
           <div class="mb-1 text-xs text-gray-500 dark:text-gray-400">
-            {{ veleroUi?.version }}
+            {{ data?.version }}
             <div
-              v-if="!veleroUi"
+              v-if="!data"
               class="h-2 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-72 mb-4"
             ></div>
           </div>
@@ -40,37 +42,61 @@
       </div>
       <div class="inline-flex items-center">
         <button
-          data-tooltip-target="tooltip-button-logs-ui"
+          :class="{'cursor-not-allowed': isStandalone()}"
           class="inline-flex items-center px-3 py-2 text-sm font-medium rounded-lg text-center text-gray-900 focus:outline-none bg-white border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+          data-tooltip-target="tooltip-button-logs-ui"
           type="button"
+          :disabled="isStandalone()"
+          @click="showModal = !showModal"
         >
           <FontAwesomeIcon :icon="faEye" class="w-4 h-4" />
         </button>
       </div>
     </div>
   </div>
+  <VModal
+    v-if="showModal"
+    id="modal-logs-server"
+    width="w-10/12"
+    @onClose="showModal = false"
+  >
+    <template v-slot:header>
+      <h3 class="text-lg text-gray-500 dark:text-gray-400">
+        {{ t('settings.ui.modal.logs.title') }}
+      </h3>
+    </template>
+    <template v-slot:content>
+      <SettingsLogs type="ui"/>
+    </template>
+  </VModal>
   <div
     :id="`tooltip-button-logs-ui`"
     class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
     role="tooltip"
   >
-    Velero UI logs
+    {{ isStandalone() ? t('settings.ui.tooltip.standalone.title') : t('settings.ui.tooltip.logs.title') }}
     <div class="tooltip-arrow" data-popper-arrow></div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { storeToRefs } from 'pinia';
-import { useSettingsStore } from '../../stores/settings.store';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { faEye, faHardDrive } from '@fortawesome/free-solid-svg-icons';
-import { onBeforeMount, onMounted } from 'vue';
+import { inject, onMounted, ref } from 'vue';
 import { initTooltips } from 'flowbite';
+import { useSettingsUI } from '@velero-ui-app/composables/settings/useSettingsUI';
+import VModal from '@velero-ui-app/components/Modals/VModal.vue';
+import SettingsLogs from '@velero-ui-app/components/Settings/SettingsLogs.vue';
+import { useI18n } from 'vue-i18n';
+import type { SocketIO } from '@velero-ui-app/plugins/socket.plugin';
 
-const settingsStore = useSettingsStore();
-const { veleroUi } = storeToRefs(settingsStore);
+const showModal = ref(false);
+const { data } = useSettingsUI();
+const { t } = useI18n();
 
-onBeforeMount(() => settingsStore.fetchVeleroUi());
+const socket: SocketIO = inject('socketIo');
+
+const isStandalone = () => data.value?.mode === 'Standalone';
 
 onMounted(() => initTooltips());
 </script>

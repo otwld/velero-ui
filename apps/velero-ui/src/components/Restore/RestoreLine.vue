@@ -61,7 +61,23 @@
     <td
       class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white"
     >
-      {{ data.spec?.scheduleName }}
+      <router-link
+        v-if="data.spec?.scheduleName"
+        :to="{
+          name: Pages.SCHEDULE.name,
+          params: {
+            name: data.spec?.scheduleName,
+          },
+        }"
+        class="inline-flex items-center bg-gray-100 hover:bg-gray-200 text-gray-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-300"
+      >
+        <FontAwesomeIcon :icon="faClock" class="w-3 h-3 mr-1.5" />
+        {{ data.spec?.scheduleName }}
+        <FontAwesomeIcon
+          :icon="faArrowUpRightFromSquare"
+          class="w-2 h-2 ml-1.5"
+        />
+      </router-link>
     </td>
     <td
       class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white"
@@ -71,15 +87,16 @@
     <td
       class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white"
     >
-      <div class="flex items-center flex-col">
-        {{ data.status.phase }}
-      </div>
+      <RestoreStatusPhaseBadge :status="data?.status.phase" />
     </td>
     <td class="p-4 space-x-2 whitespace-nowrap">
       <div class="inline-flex rounded-md shadow-sm" role="group">
         <button
+          :class="{ 'cursor-not-allowed': isDeleting }"
+          :data-tooltip-target="`tooltip-button-delete-${data?.metadata?.uid}`"
+          :disabled="isDeleting"
+          :title="t('global.button.delete.title')"
           class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"
-          title="Delete"
           type="button"
           @click="showModalDelete = !showModalDelete"
         >
@@ -98,11 +115,19 @@
     </td>
   </tr>
 
+  <div
+    :id="`tooltip-button-delete-${data?.metadata?.uid}`"
+    class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
+    role="tooltip"
+  >
+    {{ t('global.button.delete.title') }}
+    <div class="tooltip-arrow" data-popper-arrow></div>
+  </div>
   <ModalConfirmation
     v-if="showModalDelete"
     :icon="faExclamationCircle"
     :name="data?.metadata?.name"
-    text="Are you sure you want to delete:"
+    :text="t('modal.text.confirmation.delete')"
     @onClose="showModalDelete = false"
     @onConfirm="remove(data?.metadata?.name)"
   />
@@ -111,20 +136,25 @@
 <script lang="ts" setup>
 import { Resources, type V1Restore } from '@velero-ui/velero';
 import { convertTimestampToDate } from '../../utils/date.utils';
-import { type PropType, ref } from 'vue';
+import { onMounted, type PropType, ref } from 'vue';
 import {
   faArrowUpRightFromSquare,
   faCircleNotch,
+  faClock,
   faExclamationCircle,
   faFloppyDisk,
   faTrashCan,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { Pages } from '../../utils/constants.utils';
+import { Pages } from '@velero-ui-app/utils/constants.utils';
 import { truncate } from '../../utils/string.utils';
 import ModalConfirmation from '@velero-ui-app/components/Modals/ModalConfirmation.vue';
 import { useDeleteKubernetesObject } from '@velero-ui-app/composables/useDeleteKubernetesObject';
+import { useI18n } from 'vue-i18n';
+import RestoreStatusPhaseBadge from '@velero-ui-app/components/Restore/RestoreStatusPhaseBadge.vue';
+import { initTooltips } from 'flowbite';
 
+const { t } = useI18n();
 defineProps({
   data: Object as PropType<V1Restore>,
   checked: Boolean,
@@ -137,4 +167,6 @@ const emit = defineEmits(['onChecked']);
 const { isPending: isDeleting, mutate: remove } = useDeleteKubernetesObject(
   Resources.RESTORE,
 );
+
+onMounted(() => initTooltips());
 </script>

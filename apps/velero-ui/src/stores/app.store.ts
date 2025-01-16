@@ -1,20 +1,20 @@
 import { defineStore } from 'pinia';
 
 export interface AppStore {
-  authType: string;
   hideSidebar: boolean;
+  language: string;
 }
 
 export const useAppStore = defineStore({
   id: 'app',
   state: () =>
     ({
-      authType: 'test',
       hideSidebar: true,
+      language: 'en',
     }) as AppStore,
   actions: {
     toggleSidebar(): void {
       this.hideSidebar = !this.hideSidebar;
-    },
+    }
   },
 });

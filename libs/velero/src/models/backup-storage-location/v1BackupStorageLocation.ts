@@ -1,6 +1,6 @@
 import { KubernetesObject } from '@kubernetes/client-node';
 import { V1ObjectMeta } from '@kubernetes/client-node/dist/api';
-import { V1Metadata } from '../shared';
+import { V1Metadata, V1SpecCredential } from '../shared';
 
 export interface V1BackupStorageLocation extends KubernetesObject {
   metadata?: V1ObjectMeta & V1Metadata;
@@ -8,15 +8,15 @@ export interface V1BackupStorageLocation extends KubernetesObject {
   status?: V1BackupStorageLocationStatus;
 }
 
-export const enum V1BackupStorageLocationAccessMode {
+export enum V1BackupStorageLocationAccessMode {
   ReadOnly = 'ReadOnly',
   ReadWrite = 'ReadWrite',
 }
 
 export interface V1BackupStorageLocationSpec {
   provider: string;
-  config?: Record<string, string>;
-  credential?: object;
+  config?: object;
+  credential?: V1SpecCredential;
   // storageType?: V1BackupStorageLocationStorageType;
   objectStorage?: V1BackupStorageLocationObjectStorageLocation;
   default?: boolean;
@@ -42,8 +42,8 @@ export const enum V1BackupStorageLocationPhase {
 
 export interface V1BackupStorageLocationStatus {
   phase?: V1BackupStorageLocationPhase;
-  lastSyncedTime?: Date;
-  lastValidationTime?: Date;
+  lastSyncedTime?: string;
+  lastValidationTime?: string;
   message?: string;
   lastSyncedRevision?: string;
   accessMode?: V1BackupStorageLocationAccessMode;

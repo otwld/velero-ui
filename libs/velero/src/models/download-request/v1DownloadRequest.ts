@@ -41,5 +41,5 @@ export interface V1DownloadTarget {
 export interface V1DownloadRequestStatus {
   phase: V1DownloadRequestPhase;
   downloadURL: string;
-  expiration: Date;
+  expiration: string;
 }

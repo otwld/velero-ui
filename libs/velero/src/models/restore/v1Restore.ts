@@ -9,13 +9,13 @@ export interface V1Restore extends KubernetesObject {
 }
 
 export interface V1RestoreSpec {
-  backupName: string;
+  backupName?: string;
   scheduleName?: string;
   includedNamespaces?: string[];
   excludedNamespaces?: string[];
   includedResources?: string[];
   excludedResources?: string[];
-  namespaceMapping?: Record<string, string>;
+  namespaceMapping?: object;
   labelSelector?: object;
   orLabelSelectors?: object;
   restorePVs?: boolean;
@@ -24,7 +24,7 @@ export interface V1RestoreSpec {
   includeClusterResources?: boolean;
   hooks?: V1RestoreHooks;
   existingResourcePolicy?: V1PolicyType;
-  itemOperationTimeout?: Date;
+  itemOperationTimeout?: string;
   resourceModifier?: object;
   uploaderConfig?: V1UploaderConfigForRestore;
 }
@@ -69,9 +69,10 @@ export interface V1RestoreHooks {
 
 export interface V1UploaderConfigForRestore {
   writeSparseFiles?: boolean;
+  parallelFilesDownload?: number;
 }
 
-export const enum V1PolicyType {
+export enum V1PolicyType {
   none = 'none',
   update = 'update',
 }

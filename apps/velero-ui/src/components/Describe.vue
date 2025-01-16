@@ -3,22 +3,28 @@
     class="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800"
   >
     <div class="flow-root">
-      <h3 class="text-xl pb-4 font-semibold dark:text-white">Manifest</h3>
+      <h3 class="text-xl pb-4 font-semibold dark:text-white">
+        {{ t('manifest.title') }}
+      </h3>
       <div
         class="p-4 text-sm bg-gray-50 border border-gray-300 text-gray-900 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white h-[600px] overflow-auto"
       >
         <div v-if="data">
-          <p v-for="(line, index) of parseYaml(data)" :style="indentYaml(line)" :key="`line-describe-${index}`">
+          <p
+            v-for="(line, index) of parseYaml(data)"
+            :key="`line-describe-${index}`"
+            :style="indentYaml(line)"
+          >
             {{ line }}
           </p>
         </div>
         <div v-if="!data" class="inline-flex items-center">
           <svg
-            aria-hidden="true"
-            role="status"
+
             class="w-4 h-4 animate-spin"
-            viewBox="0 0 100 101"
             fill="currentColor"
+            role="status"
+            viewBox="0 0 100 101"
             xmlns="http://www.w3.org/2000/svg"
           >
             <path
@@ -30,17 +36,19 @@
               fill="currentColor"
             />
           </svg>
-          <i class="ml-2">Retrieving manifest...</i>
+          <i class="ml-2">{{ t('manifest.text.loading') }}</i>
         </div>
       </div>
     </div>
   </div>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import type { PropType } from 'vue';
 import { indentYaml, parseYaml } from '@velero-ui-app/utils/yaml.utils';
+import { useI18n } from 'vue-i18n';
 
+const { t } = useI18n();
 defineProps({
   data: Object as PropType<any>,
 });

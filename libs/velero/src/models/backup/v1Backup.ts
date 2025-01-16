@@ -32,6 +32,7 @@ export interface V1BackupSpec {
   itemOperationTimeout?: string;
   snapshotMoveData?: boolean;
   datamover?: string;
+  resourcePolicy?: object;
   uploaderConfig?: V1UploaderConfigForBackup;
 }
 
