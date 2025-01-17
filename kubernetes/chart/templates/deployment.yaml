@@ -77,6 +77,8 @@ spec:
               value: {{ .Values.configuration.logLevel | default "info"  | quote }}
             - name: VELERO_NAMESPACE
               value: {{ .Values.configuration.general.veleroNamespace | default "velero"  | quote }}
+            - name: VELERO_UI_NAMESPACE
+              value: {{ .Release.Namespace | default "velero-ui"  | quote }}
             {{- if .Values.configuration.general.grafanaUrl }}
             - name: GRAFANA_URL
               value: {{ .Values.configuration.general.grafanaUrl  | quote }}
