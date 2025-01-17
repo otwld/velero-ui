@@ -36,7 +36,7 @@ export class VeleroService {
   public checkVeleroUI(): Observable<string> {
     return this.getVeleroUIStatus()
       .pipe(catchError(() => this.findVeleroUI()))
-      .pipe(map(() => this.podServerName));
+      .pipe(map(() => this.podVeleroUIName));
   }
 
   public getServerStatus(): Observable<V1PodStatus> {
@@ -64,7 +64,7 @@ export class VeleroService {
   public getVeleroUI(): Observable<V1Pod> {
     return from(
       this.k8sCoreV1Api.readNamespacedPod(
-        this.podServerName,
+        this.podVeleroUIName,
         this.configService.get('velero.namespace')
       )
     ).pipe(map((r: { response: http.IncomingMessage; body: V1Pod }) => r.body));
