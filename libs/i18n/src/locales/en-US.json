@@ -222,7 +222,8 @@
       "Processed": "Processed",
       "Enabled": "Enabled",
       "Available": "Available",
-      "Unavailable": "Unavailable"
+      "Unavailable": "Unavailable",
+      "null": "Unknown"
     }
   },
   "modal": {
@@ -486,7 +487,7 @@
   },
   "schedules": {
     "title": "Schedules",
-    "message:": {
+    "message": {
       "error": {
         "unexpected": "Unable to download backup content, please try again."
       },
