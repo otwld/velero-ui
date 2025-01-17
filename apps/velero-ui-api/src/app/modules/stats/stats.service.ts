@@ -80,7 +80,7 @@ export class StatsService {
           };
           let success = 0;
           for (const backup of backupList.items) {
-            if (backup.status.phase === V1BackupPhase.Completed) {
+            if (backup?.status?.phase === V1BackupPhase.Completed) {
               success += 1;
             }
           }
@@ -132,7 +132,7 @@ export class StatsService {
           };
           let success = 0;
           for (const restore of restoreList.items) {
-            if (restore.status.phase === V1RestorePhase.Completed) {
+            if (restore?.status?.phase === V1RestorePhase.Completed) {
               success += 1;
             }
           }
