@@ -59,28 +59,28 @@
           "
           class="h-2.5 w-2.5 rounded-full bg-green-400 mr-2"
         />
-      </div>
-      <div
-        v-if="
-          data?.status?.phase === V1DeleteBackupRequestPhase.Processed &&
-          data?.status?.errors.length > 0
-        "
-        class="h-2.5 w-2.5 rounded-full bg-orange-400 mr-2"
-      >
         <div
           v-if="data?.status?.phase === V1DeleteBackupRequestPhase.New"
           class="h-2.5 w-2.5 rounded-full bg-blue-500 mr-2"
         />
         <div
-          v-if="!data?.status?.phase"
-          class="h-2.5 w-2.5 rounded-full bg-gray-500 mr-2"
-        />
-        {{
-          data?.status?.phase
-            ? t(`resource.phase.${data?.status?.phase}`)
-            : t('global.unknown')
-        }}
-        {{ data?.status?.errors.length ? 'with errors' : '' }}
+          v-if="
+            data?.status?.phase === V1DeleteBackupRequestPhase.Processed &&
+            data?.status?.errors.length > 0
+          "
+          class="h-2.5 w-2.5 rounded-full bg-orange-400 mr-2"
+        >
+          <div
+            v-if="!data?.status?.phase"
+            class="h-2.5 w-2.5 rounded-full bg-gray-500 mr-2"
+          />
+          {{
+            data?.status?.phase
+              ? t(`resource.phase.${data?.status?.phase}`)
+              : t('global.unknown')
+          }}
+          {{ data?.status?.errors.length ? 'with errors' : '' }}
+        </div>
       </div>
     </td>
     <td class="p-4 space-x-2 whitespace-nowrap">

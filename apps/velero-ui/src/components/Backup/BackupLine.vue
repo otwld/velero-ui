@@ -173,7 +173,7 @@
   <VModal
     v-if="showModalRestore"
     :id="`modal-restore-${data?.metadata?.name}`"
-    width="w-6/12"
+    width="lg:w-6/12"
     @onClose="showModalRestore = false"
   >
     <template v-slot:header>

@@ -2,26 +2,22 @@
   <div
     class="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800"
   >
-    <div class="flex items-center">
+    <div class="flex items-center flex-wrap gap-x-4">
       <h3 class="text-xl font-semibold dark:text-white">
         {{ t('global.status') }}
       </h3>
       <div
         v-if="!podVolume"
-        class="ml-4 h-2 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-24"
-      ></div>
-      <div
-        v-if="!podVolume"
-        class="ml-4 h-2 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-24"
-      ></div>
-      <PodVolumePhaseBadge :status="podVolume?.status?.phase" class="ml-4" />
+        class="h-2 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-24"
+      />
+      <PodVolumePhaseBadge :status="podVolume?.status?.phase" />
     </div>
     <div v-if="podVolume?.status?.startTimestamp" class="mt-4 flex flex-col">
       <span class="text-base font-medium text-gray-900 dark:text-white">{{
         t('resource.status.startTime')
       }}</span>
       <i class="mt-1 text-xs text-gray-500 dark:text-gray-400">{{
-        convertTimestampToDate(podVolume?.status.startTimestamp)
+        convertTimestampToDate(podVolume.status.startTimestamp)
       }}</i>
     </div>
     <div
@@ -32,7 +28,7 @@
         t('resource.status.completionTime')
       }}</span>
       <i class="mt-1 text-xs text-gray-500 dark:text-gray-400">{{
-        convertTimestampToDate(podVolume?.status.completionTimestamp)
+        convertTimestampToDate(podVolume.status.completionTimestamp)
       }}</i>
     </div>
     <div v-if="podVolume?.status?.progress" class="mt-4">
@@ -40,14 +36,10 @@
         <span class="text-base font-medium text-gray-900 dark:text-white">{{
           t('resource.status.bytes')
         }}</span>
-        <div
-          v-if="!podVolume"
-          class="ml-4 h-2 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-24"
-        ></div>
         <span class="text-xs font-medium text-gray-900 dark:text-white"
-          >{{ convertBytes(podVolume?.status?.progress.bytesDone) || '0' }} /
+          >{{ convertBytes(podVolume.status.progress?.bytesDone) || '0' }} /
           {{
-            convertBytes(podVolume?.status?.progress.totalBytes) || '0'
+            convertBytes(podVolume.status.progress?.totalBytes) || '0'
           }}</span
         >
       </div>
@@ -75,8 +67,8 @@
         }}
       </span>
       <i class="mt-1 text-xs text-gray-500 dark:text-gray-400">{{
-        podVolume?.status.message
-      }}</i>
+          podVolume.status.message
+        }}</i>
     </div>
   </div>
 </template>
@@ -96,8 +88,8 @@ const props = defineProps({
 
 const getPercent = () => {
   const percent = Math.round(
-    ((props.podVolume?.status?.progress.bytesDone || 0) * 100) /
-      props.podVolume?.status?.progress.totalBytes,
+    ((props.podVolume?.status?.progress?.bytesDone || 0) * 100) /
+      props.podVolume?.status?.progress?.totalBytes,
   );
   return {
     width: `${percent}%`,

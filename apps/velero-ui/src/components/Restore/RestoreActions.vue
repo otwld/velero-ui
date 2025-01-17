@@ -20,7 +20,7 @@
         <div
           v-if="!restore"
           class="h-2.5 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-48 mb-4"
-        ></div>
+        />
         <div
           v-if="restore"
           class="mb-4 text-xs text-gray-500 dark:text-gray-400"
@@ -30,8 +30,8 @@
         <div
           v-if="!restore"
           class="h-1.5 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-48 mb-4"
-        ></div>
-        <div class="flex items-center space-x-4">
+        />
+        <div class="flex items-center gap-x-4 gap-y-2">
           <button
             :class="{ 'cursor-not-allowed': isDisabled || !restore }"
             :disabled="isDisabled || !restore"

@@ -3,7 +3,10 @@
     <Form
       :is-loading="isPending"
       :step-components="[
-        { name: t('global.type'), component: shallowRef(RestoreFormCreateType) },
+        {
+          name: t('global.type'),
+          component: shallowRef(RestoreFormCreateType),
+        },
         {
           name: t('resource.spec.schedule'),
           component: shallowRef(RestoreFormCreateFromSchedule),
@@ -46,7 +49,7 @@ import {
   type CreateFormBody,
   CreateRestoreTypeEnum,
 } from '@velero-ui/shared-types';
-import { shallowRef, watch } from 'vue';
+import { onBeforeUnmount, shallowRef, watch } from 'vue';
 import { useKubernetesCreateObject } from '@velero-ui-app/composables/useKubernetesCreateObject';
 import { Resources, type V1RestoreSpec } from '@velero-ui/velero';
 import RestoreFormCreateType from '@velero-ui-app/components/Restore/forms/RestoreFormType.vue';
@@ -56,7 +59,7 @@ import RestoreFormCreateInfo from '@velero-ui-app/components/Restore/forms/Resto
 import RestoreFormCreateResources from '@velero-ui-app/components/Restore/forms/RestoreFormResources.vue';
 import RestoreFormCreateConfig from '@velero-ui-app/components/Restore/forms/RestoreFormConfig.vue';
 import RestoreFormCreateConfirm from '@velero-ui-app/components/Restore/forms/RestoreFormConfirm.vue';
-import {useI18n} from "vue-i18n";
+import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
 
@@ -66,6 +69,8 @@ const { mutate, isPending, isError, isSuccess } = useKubernetesCreateObject(
 
 const formStore = useFormStore();
 const { formContent } = storeToRefs(formStore);
+
+onBeforeUnmount(() => formStore.reset());
 
 const emit = defineEmits(['onConfirm', 'onCancel', 'onClose']);
 

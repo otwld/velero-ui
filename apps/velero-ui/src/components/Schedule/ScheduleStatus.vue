@@ -2,32 +2,29 @@
   <div
     class="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800"
   >
-    <div class="flex items-center">
+    <div class="flex items-center flex-wrap gap-x-4">
       <h3 class="text-xl font-semibold dark:text-white">
         {{ t('global.status') }}
       </h3>
       <div
         v-if="!schedule"
-        class="ml-4 h-2 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-24"
-      ></div>
+        class="h-2 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-24"
+      />
       <div
         v-if="!schedule"
-        class="ml-4 h-2 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-24"
-      ></div>
-      <ScheduleStatusPhaseBadge
-        :status="schedule?.status?.phase"
-        class="ml-4"
+        class="h-2 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-24"
       />
+      <ScheduleStatusPhaseBadge :status="schedule?.status?.phase" />
       <span
         v-if="schedule?.spec?.paused"
-        class="ml-4 bg-yellow-100 text-yellow-800 text-xs font-medium inline-flex items-center me-2 px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300"
+        class="bg-yellow-100 text-yellow-800 text-xs font-medium inline-flex items-center me-2 px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300"
       >
         <FontAwesomeIcon :icon="faPause" class="w-3 h-3 mr-1.5" />
-        {{ t('global.paused') }}}
+        {{ t('global.paused') }}
       </span>
       <span
         v-if="schedule?.spec.schedule"
-        class="ml-4 bg-blue-100 text-blue-800 text-xs font-medium inline-flex items-center me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300"
+        class="bg-blue-100 text-blue-800 text-xs font-medium inline-flex items-center me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300"
       >
         <FontAwesomeIcon :icon="faCalendar" class="w-3 h-3 mr-1.5" />
         {{ schedule.spec.schedule }}

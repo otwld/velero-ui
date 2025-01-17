@@ -31,7 +31,7 @@
           v-if="!backup"
           class="bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-48 mb-4"
         ></div>
-        <div class="flex items-center space-x-4 flex-wrap">
+        <div class="flex items-center gap-x-4 gap-y-2 flex-wrap">
           <button
             :class="{ 'cursor-not-allowed': isDisabled || !backup }"
             :disabled="!backup"
@@ -105,7 +105,7 @@
   <VModal
     v-if="showModalRestore"
     :id="`modal-restore-${backup?.metadata?.name}`"
-    width="w-6/12"
+    width="lg:w-6/12"
     @onClose="showModalRestore = false"
   >
     <template v-slot:header>

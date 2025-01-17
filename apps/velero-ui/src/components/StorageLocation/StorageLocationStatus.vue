@@ -2,33 +2,33 @@
   <div
     class="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800"
   >
-    <div class="flex items-center">
+    <div class="flex items-center flex-wrap gap-x-4">
       <h3 class="text-xl font-semibold dark:text-white">
         {{ t('global.status') }}
       </h3>
       <div
         v-if="!location"
-        class="ml-4 h-2 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-24"
-      ></div>
+        class="h-2 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-24"
+      />
       <div
         v-if="!location"
-        class="ml-4 h-2 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-24"
-      ></div>
+        class="h-2 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-24"
+      />
       <span
         v-if="
           location?.status?.phase === V1BackupStorageLocationPhase.Available
         "
-        class="ml-4 bg-green-100 text-green-800 text-xs font-medium inline-flex items-center me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300"
+        class="bg-green-100 text-green-800 text-xs font-medium inline-flex items-center me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300"
       >
-        {{ location?.status?.phase }}
+        {{ location.status.phase }}
       </span>
       <span
         v-if="
-          location?.spec?.phase === V1BackupStorageLocationPhase.Unavailable
+          location?.status?.phase === V1BackupStorageLocationPhase.Unavailable
         "
-        class="ml-4 bg-red-100 text-red-800 text-xs font-medium inline-flex items-center me-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300"
+        class="bg-red-100 text-red-800 text-xs font-medium inline-flex items-center me-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300"
       >
-        {{ location?.status?.phase }}
+        {{ location.status.phase }}
       </span>
     </div>
     <div v-if="location?.status?.lastSyncedTime" class="mt-4 flex flex-col">

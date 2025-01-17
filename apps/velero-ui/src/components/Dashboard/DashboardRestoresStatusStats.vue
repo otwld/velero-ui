@@ -20,13 +20,26 @@
               ...data,
               labels: labels,
               noData: { text: t('global.noData') },
+              legend: {
+                position: 'bottom',
+              },
               chart: {
+                width: 500,
                 events: {},
               },
+              responsive: [
+                {
+                  breakpoint: 1000,
+                  options: {
+                    chart: {
+                      width: 300,
+                    },
+                  },
+                },
+              ],
             }"
             :series="data.series"
             type="donut"
-            width="500"
           />
         </div>
       </div>
@@ -37,11 +50,12 @@
 <script lang="ts" setup>
 import { useStatsRestoresStatus } from '@velero-ui-app/composables/stats/useStatsRestoresStatus';
 import { useI18n } from 'vue-i18n';
-import {computed} from "vue";
+import { computed } from 'vue';
 
 const { t } = useI18n();
 const { data } = useStatsRestoresStatus();
 
-const labels = computed(() => data.value.labels.map((l) => t(`resource.phase.${l}`)))
-
+const labels = computed(() =>
+  data.value.labels.map((l) => t(`resource.phase.${l}`)),
+);
 </script>

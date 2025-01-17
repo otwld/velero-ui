@@ -6,7 +6,7 @@
       <div class="sm:flex">
         <div
           v-if="router.currentRoute.value.name !== Pages.SCHEDULE.name"
-          class="items-center hidden mb-3 sm:flex sm:divide-x sm:divide-gray-100 sm:mb-0 dark:divide-gray-700"
+          class="items-center mb-3 sm:flex sm:divide-x sm:divide-gray-100 sm:mb-0 dark:divide-gray-700"
         >
           <div class="lg:pr-3" >
             <label class="sr-only" for="backups-search">{{

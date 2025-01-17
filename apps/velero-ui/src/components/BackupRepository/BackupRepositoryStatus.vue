@@ -41,7 +41,7 @@
         t('resource.status.lastMaintenanceTime')
       }}</span>
       <i class="mt-1 text-xs text-gray-500 dark:text-gray-400">{{
-        convertTimestampToDate(repository?.status.lastMaintenanceTime)
+        convertTimestampToDate(repository.status.lastMaintenanceTime)
       }}</i>
     </div>
     <div v-if="repository?.status?.message" class="mt-4 flex flex-col">
@@ -49,7 +49,7 @@
         t('resource.status.message')
       }}</span>
       <i class="mt-1 text-xs text-gray-500 dark:text-gray-400">{{
-        repository?.status?.message
+        repository.status.message
       }}</i>
     </div>
   </div>

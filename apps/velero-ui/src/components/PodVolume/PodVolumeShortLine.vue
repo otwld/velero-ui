@@ -1,5 +1,5 @@
 <template>
-  <div class="flex items-center mb-4 space-x-4">
+  <div class="flex items-center mb-4 gap-x-4 gap-y-2">
     <div class="flex items-center">
       <FontAwesomeIcon :icon="faCube" class="w-6 h-6 dark:text-white" />
     </div>

@@ -1,16 +1,16 @@
 <template>
-  <Header/>
+  <Header />
   <div class="flex overflow-hidden">
-    <Sidebar/>
+    <Sidebar />
     <div
       :class="{ 'lg:ml-64': hideSidebar }"
-      class="relative w-full mt-16 h-full min-h-[calc(100vh-4rem)] overflow-y-auto"
+      class="relative w-full mt-16 h-[calc(100vh-4rem)] overflow-y-auto"
     >
-      <BreadCrumb/>
-      <router-view/>
+      <BreadCrumb />
+      <router-view />
     </div>
   </div>
-  <Toasts/>
+  <Toasts />
 </template>
 <script lang="ts" setup>
 import Header from '@velero-ui-app/layouts/default/components/Header.vue';

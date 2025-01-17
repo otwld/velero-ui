@@ -1,18 +1,15 @@
 <template>
   <div
-    aria-labelledby="modal-confirm"
-    aria-modal="true"
     class="relative z-10"
-    role="dialog"
   >
     <div
 
       class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
     ></div>
 
-    <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+    <div class="fixed h-full w-full inset-0 z-10">
       <div
-        class="flex min-h-full items-end justify-center p-4 sm:items-center sm:p-0"
+        class="flex h-full items-center justify-center p-4"
       >
         <div class="relative p-4 w-full max-w-4xl max-h-full">
           <div class="relative bg-white rounded-lg shadow dark:bg-gray-800">

@@ -7,12 +7,12 @@
       'lg:hidden': !hideSidebar,
     }"
     aria-label="Sidebar"
-    class="fixed z-10 top-0 left-0 flex flex-col flex-shrink-0 w-64 min-h-[calc(100vh-4rem)] mt-16 font-normal duration-75 transition-width"
+    class="fixed z-10 top-0 left-0 flex flex-col flex-shrink-0 w-64 mt-16 h-[calc(100vh-4rem)] font-normal duration-75 transition-width"
   >
     <div
-      class="relative flex flex-col flex-1 min-h-0 pt-0 bg-white border-r border-gray-200 dark:bg-gray-800 dark:border-gray-700"
+      class="relative overflow-y-auto flex flex-col flex-1 min-h-0 pt-0 bg-white border-r border-gray-200 dark:bg-gray-800 dark:border-gray-700"
     >
-      <div class="flex flex-col flex-1 pt-5 pb-4 overflow-y-auto">
+      <div class="flex flex-col flex-1 pt-5 pb-4">
         <div
           class="flex-1 px-3 space-y-1 bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700"
         >
@@ -122,9 +122,7 @@
                   :icon="faCubes"
                   class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
                 />
-                <span class="flex-1 text-left ml-3">{{
-                  t('podVolumes.title')
-                }}</span>
+                <span class="flex-1 text-left ml-3">Pod Volumes</span>
                 <FontAwesomeIcon
                   v-if="hiddenDropdownPodVolumes"
                   :icon="faAngleDown"
@@ -151,7 +149,7 @@
                       :icon="faCube"
                       class="w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
                     />
-                    <span class="ml-3">{{ t('podVolumeBackups.title')}}</span>
+                    <span class="ml-3">Pod Volume Backups</span>
                   </router-link>
                 </li>
                 <li>
@@ -164,7 +162,7 @@
                       :icon="faCube"
                       class="w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
                     />
-                    <span class="ml-3">{{ t('podVolumeRestores.title')}}</span>
+                    <span class="ml-3">Pod Volume Restores</span>
                   </router-link>
                 </li>
               </ul>
@@ -181,9 +179,7 @@
                   :icon="faFileLines"
                   class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
                 />
-                <span class="flex-1 text-left ml-3">{{
-                  t('requests.title')
-                }}</span>
+                <span class="flex-1 text-left ml-3">{{ t('requests.title') }}</span>
                 <FontAwesomeIcon
                   v-if="hiddenDropdown"
                   :icon="faAngleDown"
@@ -210,9 +206,7 @@
                       :icon="faFileExcel"
                       class="w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
                     />
-                    <span class="ml-3">{{
-                      t('deleteBackupRequests.title')
-                    }}</span>
+                    <span class="ml-3">{{ t('deleteBackupRequests.title') }}</span>
                   </router-link>
                 </li>
                 <li>
@@ -238,9 +232,7 @@
                       :icon="faFileWaveform"
                       class="w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
                     />
-                    <span class="ml-3">{{
-                      t('serverStatusRequest.title')
-                    }}</span>
+                    <span class="ml-3">{{ t('serverStatusRequest.title') }}</span>
                   </router-link>
                 </li>
               </ul>
@@ -262,7 +254,7 @@
         </div>
       </div>
       <div
-        class="absolute bottom-0 left-0 justify-center hidden w-full p-4 space-x-4 bg-white lg:flex dark:bg-gray-800"
+        class="relative bottom-0 left-0 justify-center w-full p-4 space-x-4 bg-white lg:flex dark:bg-gray-800"
       >
         <div class="flex flex-col">
           <div class="flex justify-center">
@@ -299,9 +291,7 @@ import {
   faAngleUp,
   faChartPie,
   faClock,
-  faClockRotateLeft,
-  faCube,
-  faCubes,
+  faClockRotateLeft, faCube, faCubes,
   faDatabase,
   faFileArrowDown,
   faFileExcel,
@@ -322,14 +312,15 @@ import { useI18n } from 'vue-i18n';
 const { t } = useI18n();
 
 const appStore = useAppStore();
-const { hideSidebar } = storeToRefs(appStore);
+const { hideSidebar, authType } = storeToRefs(appStore);
 
 const hiddenDropdown = ref(true);
 const hiddenDropdownPodVolumes = ref(true);
 
+
 const toggleDropdown = () => (hiddenDropdown.value = !hiddenDropdown.value);
-const toggleDropdownPodVolumes = () =>
-  (hiddenDropdownPodVolumes.value = !hiddenDropdownPodVolumes.value);
+const toggleDropdownPodVolumes = () => (hiddenDropdownPodVolumes.value = !hiddenDropdownPodVolumes.value);
+
 
 const version = import.meta.env.APP_VERSION;
 </script>

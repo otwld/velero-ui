@@ -13,7 +13,7 @@
             {{ t('dashboard.stats.backups.description') }}
           </h3>
         </div>
-        <div class="flex mt-4 w-full self-center items-center justify-center">
+        <div class="flex mt-4 w-full  self-center items-center justify-center">
           <apexchart
             v-if="data"
             :options="{
@@ -21,12 +21,25 @@
               labels: labels,
               noData: { text: t('global.noData') },
               chart: {
+                width: 500,
                 events: {},
               },
+              legend: {
+                position: 'bottom',
+              },
+              responsive: [
+                {
+                  breakpoint: 1000,
+                  options: {
+                    chart: {
+                      width: 300,
+                    }
+                  },
+                },
+              ],
             }"
             :series="data.series"
             type="donut"
-            width="500"
           />
         </div>
       </div>

@@ -31,7 +31,7 @@
           v-if="!location"
           class="h-1.5 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-48 mb-4"
         ></div>
-        <div v-if="location" class="flex items-center space-x-4">
+        <div v-if="location" class="flex items-center gap-x-4 gap-y-2">
           <button
             :class="{ 'cursor-not-allowed': isEditing || !location }"
             :disabled="isEditing || !location"
@@ -89,7 +89,7 @@
   <VModal
     v-if="showModalEdit"
     :id="`modal-edit-${location?.metadata?.name}`"
-    width="w-6/12"
+    width="lg:w-6/12"
     @onClose="showModalEdit = false"
   >
     <template v-slot:header>

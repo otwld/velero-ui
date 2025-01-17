@@ -24,7 +24,7 @@
   <VModal
     v-if="showModalAdd"
     id="modal-add"
-    width="w-6/12"
+    width="lg:w-6/12"
     @onClose="showModalAdd = false"
   >
     <template v-slot:header>

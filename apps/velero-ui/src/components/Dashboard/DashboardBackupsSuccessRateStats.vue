@@ -20,13 +20,23 @@
               labels: [t('dashboard.stats.label.success')],
               noData: { text: t('global.noData') },
               chart: {
+                width: 500,
                 events: {},
               },
               colors: ['#28A745'],
+              responsive: [
+                {
+                  breakpoint: 1000,
+                  options: {
+                    chart: {
+                      width: 300,
+                    }
+                  },
+                },
+              ],
             }"
             :series="data.series"
-            type="donut"
-            width="500"
+            type="radialBar"
           />
         </div>
       </div>

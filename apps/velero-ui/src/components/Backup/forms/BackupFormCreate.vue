@@ -47,7 +47,7 @@ import {
   CreateBackupTypeEnum,
   type CreateFormBody,
 } from '@velero-ui/shared-types';
-import { shallowRef, watch } from 'vue';
+import { onBeforeUnmount, shallowRef, watch } from 'vue';
 import { useKubernetesCreateObject } from '@velero-ui-app/composables/useKubernetesCreateObject';
 import { Resources, type V1BackupSpec } from '@velero-ui/velero';
 import BackupCreateTemplate from '@velero-ui-app/components/Backup/forms/BackupFormSchedule.vue';
@@ -63,6 +63,8 @@ const { t } = useI18n();
 
 const formStore = useFormStore();
 const { formContent } = storeToRefs(formStore);
+
+onBeforeUnmount(() => formStore.reset());
 
 const emit = defineEmits(['onConfirm', 'onCancel', 'onClose']);
 

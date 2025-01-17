@@ -33,7 +33,7 @@
 import Form from '@velero-ui-app/components/Form.vue';
 import { useFormStore } from '@velero-ui-app/stores/form.store';
 import { storeToRefs } from 'pinia';
-import { shallowRef, watch } from 'vue';
+import { onBeforeUnmount, shallowRef, watch } from 'vue';
 import { useKubernetesCreateObject } from '@velero-ui-app/composables/useKubernetesCreateObject';
 import {
   Resources,
@@ -54,6 +54,8 @@ const { t } = useI18n();
 
 const formStore = useFormStore();
 const { formContent } = storeToRefs(formStore);
+
+onBeforeUnmount(() => formStore.reset());
 
 const emit = defineEmits(['onConfirm', 'onCancel', 'onClose']);
 

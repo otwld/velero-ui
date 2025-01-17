@@ -131,7 +131,7 @@
   <VModal
     v-if="showModalEdit"
     :id="`modal-edit-${data?.metadata?.name}`"
-    width="w-6/12"
+    width="lg:w-6/12"
     @onClose="showModalEdit = false"
   >
     <template v-slot:header>
