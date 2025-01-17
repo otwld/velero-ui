@@ -137,10 +137,32 @@ export class SettingsService {
   }
 
   public getVeleroUi(): Observable<VeleroUiSettings> {
-    return of({
-      version: version,
-      mode: this.configService.get('k8s.configPath') ? 'Standalone' : 'In cluster',
-    });
+    if (this.configService.get('k8s.configPath')) {
+      return of({
+        version: version,
+        mode: 'Standalone',
+      });
+    } else {
+      return this.veleroService
+        .checkVeleroUI()
+        .pipe(concatMap(() => this.veleroService.getVeleroUI()))
+        .pipe(
+          map(
+            (pod: V1Pod): VeleroUiSettings => ({
+              version: version,
+              mode: 'In Cluster',
+              name: pod.metadata.name,
+            }),
+          ),
+          catchError(
+            (): Observable<VeleroUiSettings> =>
+              of({
+                version: version,
+                mode: 'Standalone',
+              }),
+          ),
+        );
+    }
   }
 
   public getPlugins(): Observable<V1PluginInfo[]> {
@@ -164,7 +186,10 @@ export class SettingsService {
       name = veleroServer.name;
       containerName = 'velero';
     } else if (type === 'ui') {
-      name = '';
+      const veleroUI: VeleroUiSettings = await lastValueFrom(
+        this.getVeleroUi(),
+      );
+      name = veleroUI.name;
       containerName = 'velero-ui';
     } else {
       name = nodeName;

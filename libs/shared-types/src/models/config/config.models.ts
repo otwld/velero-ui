@@ -19,6 +19,7 @@ export interface AppConfig {
   logLevel: string;
   secret?: string;
   sessionDuration?: string;
+  namespace?: string;
 }
 
 export interface LDAPConfig {

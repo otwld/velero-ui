@@ -29,4 +29,5 @@ export interface VeleroAgentSettings {
 export interface VeleroUiSettings {
   version: string;
   mode: string;
+  name?: string;
 }
