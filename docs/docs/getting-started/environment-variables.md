@@ -63,6 +63,13 @@ configuration.
   - **Kubernetes Default**: Provided by Cluster Role Binding
 - **Description**: Specifies the path to the Kubernetes configuration file. This file is needed to connect to the Kubernetes cluster.
 
+#### `VELERO_UI_NAMESPACE`
+
+- **Type**: `string`
+- **Default**: `velero-ui`
+- **Description**: Specify the namespace where the Velero UI is running.
+
+
 #### `KUBE_CONTEXT`
 
 - **Type**: `string`
