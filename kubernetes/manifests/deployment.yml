@@ -31,4 +31,6 @@ spec:
         env:
           - name: BASIC_AUTH_PASSWORD
             value: admin
+          - name: VELERO_UI_NAMESPACE
+            value: velero-ui
 

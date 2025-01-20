@@ -8,5 +8,5 @@ subjects:
     name: velero-ui
 roleRef:
   kind: ClusterRole
-  name: cluster-admin
+  name: velero-ui
   apiGroup: rbac.authorization.k8s.io
