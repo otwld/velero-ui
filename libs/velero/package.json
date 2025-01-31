@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "dependencies": {
     "tslib": "^2.3.0",
-    "@kubernetes/client-node": "^0.22.0"
+    "@kubernetes/client-node": "^1.0.0"
   },
   "type": "commonjs",
   "main": "./src/index.js",
