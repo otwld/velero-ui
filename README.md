@@ -7,7 +7,7 @@
 ![Docker Image Version (latest semver)](https://img.shields.io/docker/v/otwld/velero-ui?label=docker%20image)
 ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/otwld/velero-ui/latest)
 
-### ℹ️ **ALPHA 0.3.0** ℹ️
+### ℹ️ **ALPHA 0.4.x** ℹ️
 
 A fully realtime lightweight dashboard interface to interact with [Velero (vmware-tanzu)](https://github.com/vmware-tanzu/velero/issues).
 

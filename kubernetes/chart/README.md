@@ -6,9 +6,11 @@
 [![Discord](https://img.shields.io/badge/Discord-OTWLD-blue?logo=discord&logoColor=white)](https://discord.gg/U24mpqTynB)
 
 
-A fully lightweight dashboard interface to interact with [Velero (vmware-tanzu)](https://github.com/vmware-tanzu/velero/issues).
+A fully realtime lightweight dashboard interface to interact with [Velero (vmware-tanzu)](https://github.com/vmware-tanzu/velero/issues).
 
-This Chart is for deploying [Velero UI](https://github.com/otwld/velero-ui). 
+This Chart is for deploying [Velero UI](https://github.com/otwld/velero-ui), please [read the documentation](https://velero-ui.docs.otwld.com/). 
+
+
 
 ## Requirements
 
