@@ -8,6 +8,7 @@ on:
      - apps/**
      - libs/**
      - package.json
+  workflow_dispatch:
 
 
 permissions:
