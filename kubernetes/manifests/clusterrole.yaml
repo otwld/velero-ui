@@ -3,6 +3,13 @@ kind: ClusterRole
 metadata:
   name: velero-ui
 rules:
+  - verbs:
+      - get
+    nonResourceURLs:
+      - '/readyz'
+      - '/healthz'
+      - '/livez'
+      - '/version'
   - apiGroups: [ "" ]
     resources:
       - namespaces

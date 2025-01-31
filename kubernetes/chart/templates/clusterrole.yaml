@@ -6,6 +6,13 @@ metadata:
   labels:
     {{- include "velero-ui.labels" . | nindent 4 }}
 rules:
+  - verbs:
+      - get
+    nonResourceURLs:
+      - '/readyz'
+      - '/healthz'
+      - '/livez'
+      - '/version'
   - apiGroups: [ "" ]
     resources:
       - namespaces
