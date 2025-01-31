@@ -1,16 +1,15 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { K8S_CONNECTION } from '../k8s/k8s.constants';
 import {
   CoreV1Api,
   KubeConfig,
   V1Pod,
+  V1PodList,
   V1PodStatus,
 } from '@kubernetes/client-node';
 import { catchError, from, map, Observable, tap } from 'rxjs';
-import http from 'http';
 import { VELERO } from './velero.constants';
-import { V1PodList } from '@kubernetes/client-node/dist/gen/model/v1PodList';
 import { ConfigService } from '@nestjs/config';
+import { K8S_CONNECTION } from '@velero-ui-api/shared/utils/k8s.utils';
 
 @Injectable()
 export class VeleroService {
@@ -20,7 +19,7 @@ export class VeleroService {
 
   constructor(
     @Inject(K8S_CONNECTION) private readonly k8s: KubeConfig,
-    private configService: ConfigService
+    private configService: ConfigService,
   ) {
     this.k8sCoreV1Api = this.k8s.makeApiClient(CoreV1Api);
 
@@ -41,86 +40,72 @@ export class VeleroService {
 
   public getServerStatus(): Observable<V1PodStatus> {
     return from(
-      this.k8sCoreV1Api.readNamespacedPodStatus(
-        this.podServerName,
-        this.configService.get('velero.namespace')
-      )
-    ).pipe(
-      map((r: { response: http.IncomingMessage; body: V1Pod }) => r.body.status)
-    );
+      this.k8sCoreV1Api.readNamespacedPodStatus({
+        name: this.podServerName,
+        namespace: this.configService.get('velero.namespace'),
+      }),
+    ).pipe(map((r: V1Pod) => r.status));
   }
 
   public getVeleroUIStatus(): Observable<V1PodStatus> {
     return from(
-      this.k8sCoreV1Api.readNamespacedPodStatus(
-        this.podVeleroUIName,
-        this.configService.get('app.namespace')
-      )
-    ).pipe(
-      map((r: { response: http.IncomingMessage; body: V1Pod }) => r.body.status)
-    );
+      this.k8sCoreV1Api.readNamespacedPodStatus({
+        name: this.podVeleroUIName,
+        namespace: this.configService.get('app.namespace'),
+      }),
+    ).pipe(map((r: V1Pod) => r.status));
   }
 
   public getVeleroUI(): Observable<V1Pod> {
     return from(
-      this.k8sCoreV1Api.readNamespacedPod(
-        this.podVeleroUIName,
-        this.configService.get('velero.namespace')
-      )
-    ).pipe(map((r: { response: http.IncomingMessage; body: V1Pod }) => r.body));
+      this.k8sCoreV1Api.readNamespacedPod({
+        name: this.podVeleroUIName,
+        namespace: this.configService.get('velero.namespace'),
+      }),
+    );
   }
 
   public getServer(): Observable<V1Pod> {
     return from(
-      this.k8sCoreV1Api.readNamespacedPod(
-        this.podServerName,
-        this.configService.get('velero.namespace')
-      )
-    ).pipe(map((r: { response: http.IncomingMessage; body: V1Pod }) => r.body));
+      this.k8sCoreV1Api.readNamespacedPod({
+        name: this.podServerName,
+        namespace: this.configService.get('velero.namespace'),
+      }),
+    );
   }
 
   public getAgents(): Observable<V1Pod[]> {
     return from(
-      this.k8sCoreV1Api.listNamespacedPod(
-        this.configService.get('velero.namespace')
-      )
+      this.k8sCoreV1Api.listNamespacedPod({
+        namespace: this.configService.get('velero.namespace'),
+      }),
     )
-      .pipe(
-        map(
-          (r: { response: http.IncomingMessage; body: V1PodList }) =>
-            r.body.items
-        )
-      )
+      .pipe(map((r: V1PodList) => r.items))
       .pipe(
         map((pods: V1Pod[]) =>
           pods.filter(
             (pod: V1Pod) =>
               pod.metadata.name.startsWith('restic') ||
-              pod.metadata.name.startsWith('node-agent')
-          )
-        )
+              pod.metadata.name.startsWith('node-agent'),
+          ),
+        ),
       );
   }
 
   private findServer(): Observable<V1Pod> {
     return from(
-      this.k8sCoreV1Api.listNamespacedPod(
-        this.configService.get('velero.namespace')
-      )
+      this.k8sCoreV1Api.listNamespacedPod({
+        namespace: this.configService.get('velero.namespace'),
+      }),
     )
-      .pipe(
-        map(
-          (r: { response: http.IncomingMessage; body: V1PodList }) =>
-            r.body.items
-        )
-      )
+      .pipe(map((r: V1PodList) => r.items))
       .pipe(
         map(
           (pods: V1Pod[]): V1Pod =>
             pods.find((pod: V1Pod) =>
-              pod?.metadata?.name.startsWith(VELERO.SERVER_PREFIX)
-            )
-        )
+              pod?.metadata?.name.startsWith(VELERO.SERVER_PREFIX),
+            ),
+        ),
       )
       .pipe(
         tap((pod: V1Pod): void => {
@@ -129,29 +114,24 @@ export class VeleroService {
           } else {
             throw new Error('Cannot find Velero server!');
           }
-        })
+        }),
       );
   }
 
   private findVeleroUI(): Observable<V1Pod> {
     return from(
-      this.k8sCoreV1Api.listNamespacedPod(
-        this.configService.get('app.namespace')
-      )
+      this.k8sCoreV1Api.listNamespacedPod({
+        namespace: this.configService.get('app.namespace'),
+      }),
     )
-      .pipe(
-        map(
-          (r: { response: http.IncomingMessage; body: V1PodList }) =>
-            r.body.items
-        )
-      )
+      .pipe(map((r: V1PodList) => r.items))
       .pipe(
         map(
           (pods: V1Pod[]): V1Pod =>
             pods.find((pod: V1Pod) =>
-              pod?.metadata?.name.startsWith(VELERO.UI_PREFIX)
-            )
-        )
+              pod?.metadata?.name.startsWith(VELERO.UI_PREFIX),
+            ),
+        ),
       )
       .pipe(
         tap((pod: V1Pod): void => {
@@ -160,7 +140,7 @@ export class VeleroService {
           } else {
             throw new Error('Cannot find Velero UI!');
           }
-        })
+        }),
       );
   }
 }

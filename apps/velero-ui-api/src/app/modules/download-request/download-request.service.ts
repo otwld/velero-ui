@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { K8S_CONNECTION } from '@velero-ui-api/shared/modules/k8s/k8s.constants';
+import { K8S_CONNECTION } from '@velero-ui-api/shared/utils/k8s.utils';
 import { CustomObjectsApi, KubeConfig } from '@kubernetes/client-node';
 import {
   Resources,
@@ -18,7 +18,6 @@ import {
   throwError,
 } from 'rxjs';
 import { CreateDownloadRequestDto } from '@velero-ui-api/shared/dto/download-request.dto';
-import http from 'http';
 import { VELERO } from '@velero-ui-api/shared/modules/velero/velero.constants';
 import { createDownloadRequest } from '@velero-ui-api/modules/download-request/download-request.utils';
 
@@ -43,19 +42,13 @@ export class DownloadRequestService {
     )
       .pipe(
         concatMap((request: V1DownloadRequest) =>
-          this.k8sCustomObjectApi.createNamespacedCustomObject(
-            VELERO.GROUP,
-            VELERO.VERSION,
-            this.configService.get('velero.namespace'),
-            Resources.DOWNLOAD_REQUEST.plural,
-            request,
-          ),
-        ),
-      )
-      .pipe(
-        map(
-          (r: { response: http.IncomingMessage; body: V1DownloadRequest }) =>
-            r.body,
+          this.k8sCustomObjectApi.createNamespacedCustomObject({
+            group: VELERO.GROUP,
+            version: VELERO.VERSION,
+            namespace: this.configService.get('velero.namespace'),
+            plural: Resources.DOWNLOAD_REQUEST.plural,
+            body: request,
+          }),
         ),
       )
       .pipe(
@@ -69,38 +62,29 @@ export class DownloadRequestService {
     request: V1DownloadRequest,
   ): Observable<V1DownloadRequest> {
     return from(
-      this.k8sCustomObjectApi.getNamespacedCustomObject(
-        VELERO.GROUP,
-        VELERO.VERSION,
-        this.configService.get('velero.namespace'),
-        Resources.DOWNLOAD_REQUEST.plural,
-        request.metadata.name,
-      ),
-    )
-      .pipe(
-        map(
-          (r: { response: http.IncomingMessage; body: V1DownloadRequest }) =>
-            r.body,
-        ),
-      )
-      .pipe(
-        map((requestStatus: V1DownloadRequest): V1DownloadRequest => {
-          if (
-            requestStatus?.status?.phase !== V1DownloadRequestPhase.Processed
-          ) {
-            throw new Error('Download request is not ready!');
-          }
-          return requestStatus;
-        }),
-        retry({
-          count: 5,
-          delay: 4000,
-        }),
-        catchError(() => {
-          return throwError(
-            () => new Error('Download request is not ready after 5 retries!'),
-          );
-        }),
-      );
+      this.k8sCustomObjectApi.getNamespacedCustomObject({
+        group: VELERO.GROUP,
+        version: VELERO.VERSION,
+        namespace: this.configService.get('velero.namespace'),
+        plural: Resources.DOWNLOAD_REQUEST.plural,
+        name: request.metadata.name,
+      }),
+    ).pipe(
+      map((requestStatus: V1DownloadRequest): V1DownloadRequest => {
+        if (requestStatus?.status?.phase !== V1DownloadRequestPhase.Processed) {
+          throw new Error('Download request is not ready!');
+        }
+        return requestStatus;
+      }),
+      retry({
+        count: 5,
+        delay: 4000,
+      }),
+      catchError(() => {
+        return throwError(
+          () => new Error('Download request is not ready after 5 retries!'),
+        );
+      }),
+    );
   }
 }

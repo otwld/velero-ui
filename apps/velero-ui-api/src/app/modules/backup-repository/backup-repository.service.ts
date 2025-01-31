@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { K8S_CONNECTION } from '@velero-ui-api/shared/modules/k8s/k8s.constants';
+import { K8S_CONNECTION } from '@velero-ui-api/shared/utils/k8s.utils';
 import { CustomObjectsApi, KubeConfig } from '@kubernetes/client-node';
 import { ConfigService } from '@nestjs/config';
 

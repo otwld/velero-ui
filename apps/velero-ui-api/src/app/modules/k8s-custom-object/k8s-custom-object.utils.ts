@@ -9,7 +9,7 @@ import {
 } from '@velero-ui/velero';
 import { getApiVersion } from '@velero-ui-api/shared/utils/velero.utils';
 import { generateDateName } from '@velero-ui-api/shared/utils/uuid.utils';
-import { KubernetesObjectWithSpec } from '@kubernetes/client-node/dist/types';
+import { KubernetesObject } from '@kubernetes/client-node';
 
 export const createK8sCustomObject = (
   name: string,
@@ -22,7 +22,7 @@ export const createK8sCustomObject = (
     | V1RestoreSpec
     | V1BackupStorageLocationSpec
     | V1VolumeSnapshotLocationSpec,
-): KubernetesObjectWithSpec => ({
+): KubernetesObject & { spec: object} => ({
   apiVersion: getApiVersion(),
   kind: resource.kind,
   metadata: {

@@ -6,7 +6,6 @@ export class CreateDownloadRequestDto {
   @IsNotEmpty()
   name: string;
 
-  // @IsEnum(V1DownloadTargetKind) //TODO
   @IsNotEmpty()
   kind: V1DownloadTargetKind;
 }

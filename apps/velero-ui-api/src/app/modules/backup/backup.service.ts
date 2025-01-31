@@ -1,6 +1,6 @@
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
-import { K8S_CONNECTION } from '../../shared/modules/k8s/k8s.constants';
-import { CustomObjectsApi, KubeConfig } from '@kubernetes/client-node';
+import { K8S_CONNECTION } from '@velero-ui-api/shared/utils/k8s.utils';
+import {CustomObjectsApi, KubeConfig, KubernetesObject} from '@kubernetes/client-node';
 import { concatMap, from, map, Observable, of } from 'rxjs';
 import {
   Resources,
@@ -23,7 +23,6 @@ import { ConfigService } from '@nestjs/config';
 import { CreateBackupTypeEnum } from '@velero-ui/shared-types';
 import { AppLogger } from '@velero-ui-api/shared/modules/logger/logger.service';
 import { createK8sCustomObject } from '@velero-ui-api/modules/k8s-custom-object/k8s-custom-object.utils';
-import { KubernetesObjectWithSpec } from '@kubernetes/client-node/dist/types';
 
 @Injectable()
 export class BackupService {
@@ -78,7 +77,7 @@ export class BackupService {
           data.spec,
         ),
       ).pipe(
-        concatMap((body: KubernetesObjectWithSpec) =>
+        concatMap((body: KubernetesObject) =>
           this.k8sCustomObjectService.create(Resources.BACKUP.plural, body),
         ),
       );

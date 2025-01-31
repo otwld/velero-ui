@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { APP_FILTER, APP_GUARD } from '@nestjs/core';
-import { K8sModule } from './shared/modules/k8s/k8s.module';
 import { BackupModule } from './modules/backup/backup.module';
 import { ScheduleModule } from './modules/schedule/schedule.module';
 import { StorageLocationModule } from './modules/storage-location/storage-location.module';
@@ -34,9 +33,10 @@ import microsoft from '../config/microsoft.config';
 import oauth from '../config/oauth.config';
 import { FormModule } from '@velero-ui-api/modules/form/form.module';
 import { HttpExceptionFilter } from '@velero-ui-api/shared/exceptions/filters/http.exception-filter';
-import { WsJwtAuthGuard } from '@velero-ui-api/shared/guards/ws-jwt-auth.guard';
-import {PodVolumeBackupModule} from "@velero-ui-api/modules/pod-volume-backup/pod-volume-backup.module";
-import {PodVolumeRestoreModule} from "@velero-ui-api/modules/pod-volume-restore/pod-volume-restore.module";
+import { PodVolumeBackupModule } from '@velero-ui-api/modules/pod-volume-backup/pod-volume-backup.module';
+import { PodVolumeRestoreModule } from '@velero-ui-api/modules/pod-volume-restore/pod-volume-restore.module';
+import { KubernetesModule, LoadFrom } from '@otwld/nestjs-kubernetes';
+import { K8S_CONNECTION } from '@velero-ui-api/shared/utils/k8s.utils';
 
 @Module({
   imports: [
@@ -59,17 +59,29 @@ import {PodVolumeRestoreModule} from "@velero-ui-api/modules/pod-volume-restore/
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, 'static'),
     }),
-    K8sModule.forRootAsync({
-      useFactory: (configService: ConfigService) => ({
-        configPath: configService.get('k8s.configPath'),
-        context: configService.get('k8s.context'),
-      }),
-      inject: [ConfigService],
+    KubernetesModule.registerAsync({
+      servers: [
+        {
+          name: K8S_CONNECTION,
+          useFactory: (configService: ConfigService) =>
+            configService.get('k8s.configPath')
+              ? {
+                  loadFrom: LoadFrom.FILE,
+                  opts: {
+                    file: configService.get('k8s.configPath'),
+                    context: configService.get('k8s.context'),
+                  },
+                }
+              : { loadFrom: LoadFrom.CLUSTER },
+          inject: [ConfigService],
+        },
+      ],
+      isGlobal: true,
     }),
     ThrottlerModule.forRoot([
       {
         ttl: 60000,
-        limit: 1000, // TODO: Change
+        limit: 1000,
       },
     ]),
     HttpModule,

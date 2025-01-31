@@ -1,25 +1,31 @@
 import { Inject, Injectable } from '@nestjs/common';
 import {
+  Configuration,
+  createConfiguration,
   CustomObjectsApi,
   KubeConfig,
-  PatchUtils,
+  KubernetesObject,
+  RequestContext,
+  ResponseContext,
+  ServerConfiguration,
 } from '@kubernetes/client-node';
-import { K8S_CONNECTION } from '../../shared/modules/k8s/k8s.constants';
-import { concatMap, map, Observable, of, tap } from 'rxjs';
-import { VELERO } from '../../shared/modules/velero/velero.constants';
-import http from 'http';
+import { K8S_CONNECTION } from '@velero-ui-api/shared/utils/k8s.utils';
+import { concatMap, Observable, of, tap } from 'rxjs';
 import { Resources, V1Schedule } from '@velero-ui/velero';
 import { ConfigService } from '@nestjs/config';
 import { patchPauseSchedule } from './schedule.utils';
 import { AppLogger } from '@velero-ui-api/shared/modules/logger/logger.service';
-import {CreateScheduleDto, EditScheduleDto} from '@velero-ui-api/shared/dto/schedule.dto';
+import {
+  CreateScheduleDto,
+  EditScheduleDto,
+} from '@velero-ui-api/shared/dto/schedule.dto';
 import { K8sCustomObjectService } from '@velero-ui-api/modules/k8s-custom-object/k8s-custom-object.service';
 import {
   createK8sCustomObject,
-  patchK8sCustomObjectSpec
+  patchK8sCustomObjectSpec,
 } from '@velero-ui-api/modules/k8s-custom-object/k8s-custom-object.utils';
-import { KubernetesObjectWithSpec } from '@kubernetes/client-node/dist/types';
-import {EditStorageLocationDto} from "@velero-ui-api/shared/dto/storage-location.dto";
+import { VELERO } from '@velero-ui-api/shared/modules/velero/velero.constants';
+import { PromiseMiddlewareWrapper } from '@kubernetes/client-node/dist/gen/middleware';
 
 @Injectable()
 export class ScheduleService {
@@ -34,7 +40,7 @@ export class ScheduleService {
     this.k8sCustomObjectApi = this.k8s.makeApiClient(CustomObjectsApi);
   }
 
-  public create(data: CreateScheduleDto) {
+  public create(data: CreateScheduleDto): Observable<V1Schedule> {
     return of(
       createK8sCustomObject(
         data.name,
@@ -44,28 +50,42 @@ export class ScheduleService {
         data.spec,
       ),
     ).pipe(
-      concatMap((body: KubernetesObjectWithSpec) =>
+      concatMap((body: KubernetesObject) =>
         this.k8sCustomObjectService.create(Resources.SCHEDULE.plural, body),
       ),
     );
   }
 
-  public edit(name: string, data: EditScheduleDto) {
+  public edit(name: string, data: EditScheduleDto): Observable<V1Schedule> {
     return of(patchK8sCustomObjectSpec(data.spec)).pipe(
       concatMap((body) =>
-        this.k8sCustomObjectService.edit(
-          Resources.SCHEDULE.plural,
-          name,
-          body,
-        ),
+        this.k8sCustomObjectService.edit(Resources.SCHEDULE.plural, name, body),
       ),
     );
   }
 
   public togglePause(name: string, paused: boolean): Observable<V1Schedule> {
-    const options = {
-      headers: { 'Content-type': PatchUtils.PATCH_FORMAT_JSON_PATCH },
-    };
+    const headerPatchMiddleware: PromiseMiddlewareWrapper =
+      new PromiseMiddlewareWrapper({
+        pre: async (requestContext: RequestContext) => {
+          requestContext.setHeaderParam(
+            'Content-type',
+            'application/json-patch+json',
+          );
+          return requestContext;
+        },
+        post: async (responseContext: ResponseContext) => responseContext,
+      });
+
+    const baseServerConfig: ServerConfiguration<{
+      [key: string]: string;
+    }> = new ServerConfiguration<{
+      [key: string]: string;
+    }>(this.k8s.getCurrentCluster().server, {});
+    const configuration: Configuration = createConfiguration({
+      middleware: [headerPatchMiddleware],
+      baseServer: baseServerConfig,
+    });
 
     this.logger.debug(
       `Toggle ${paused ? 'paused' : 'resumed'} for ${name}...`,
@@ -76,23 +96,19 @@ export class ScheduleService {
       .pipe(
         concatMap((body) =>
           this.k8sCustomObjectApi.patchNamespacedCustomObject(
-            VELERO.GROUP,
-            VELERO.VERSION,
-            this.configService.get('velero.namespace'),
-            Resources.SCHEDULE.plural,
-            name,
-            body,
-            undefined,
-            undefined,
-            undefined,
-            options,
+            {
+              group: VELERO.GROUP,
+              version: VELERO.VERSION,
+              namespace: this.configService.get('velero.namespace'),
+              plural: Resources.SCHEDULE.plural,
+              name,
+              body,
+            },
+            configuration,
           ),
         ),
       )
       .pipe(
-        map(
-          (r: { response: http.IncomingMessage; body: V1Schedule }) => r.body,
-        ),
         tap(() =>
           this.logger.debug(
             `Toggle ${paused ? 'paused' : 'resumed'} for ${name}... SUCCESS`,

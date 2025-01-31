@@ -1,49 +1,26 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { HealthIndicator, HealthIndicatorResult } from '@nestjs/terminus';
-import { K8S_CONNECTION } from '@velero-ui-api/shared/modules/k8s/k8s.constants';
-import { KubeConfig } from '@kubernetes/client-node';
-import { HttpService } from '@nestjs/axios';
-import { concatMap, from, map, Observable } from 'rxjs';
-import { AxiosResponse } from 'axios';
+import { K8S_CONNECTION } from '@velero-ui-api/shared/utils/k8s.utils';
+import { Health, KubeConfig } from '@kubernetes/client-node';
+import {from, map, Observable} from 'rxjs';
 import https from 'https';
-import { OptionsWithUri } from 'request';
 
 @Injectable()
 export class K8sHealthIndicator extends HealthIndicator {
-  constructor(
-    @Inject(K8S_CONNECTION) private readonly k8s: KubeConfig,
-    private readonly httpService: HttpService
-  ) {
+  private health: Health;
+
+  constructor(@Inject(K8S_CONNECTION) private readonly k8s: KubeConfig) {
     super();
+    this.health = new Health(k8s);
   }
 
   public isHealthy(): Observable<HealthIndicatorResult> {
-    const opts: OptionsWithUri = { uri: undefined };
-
-    return from(this.k8s.applyToRequest(opts))
-      .pipe(
-        map(
-          () =>
-            new https.Agent({
-              rejectUnauthorized: false,
-              ...opts,
-            })
-        )
-      )
-      .pipe(
-        concatMap((agent) =>
-          this.httpService.get(
-            `${this.k8s.getCurrentCluster().server}/readyz`,
-            {
-              httpsAgent: agent,
-            }
-          )
-        )
-      )
-      .pipe(
-        map((result: AxiosResponse) =>
-          this.getStatus('k8s', result.status === 200, result.data)
-        )
-      );
+    return from(
+      this.health.readyz({
+        agent: new https.Agent({
+          rejectUnauthorized: false,
+        }),
+      }),
+    ).pipe(map((alive: boolean) => this.getStatus('k8s', alive)));
   }
 }

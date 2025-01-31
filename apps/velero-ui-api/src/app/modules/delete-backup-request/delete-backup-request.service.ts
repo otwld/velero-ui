@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { CustomObjectsApi, KubeConfig } from '@kubernetes/client-node';
-import { K8S_CONNECTION } from '@velero-ui-api/shared/modules/k8s/k8s.constants';
+import { K8S_CONNECTION } from '@velero-ui-api/shared/utils/k8s.utils';
 import { concatMap, map, Observable, of } from 'rxjs';
 import { VELERO } from '@velero-ui-api/shared/modules/velero/velero.constants';
 import { CreateDeleteBackupRequestDto } from '@velero-ui-api/shared/dto/delete-backup-request.dto';
@@ -31,12 +31,13 @@ export class DeleteBackupRequestService {
     )
       .pipe(
         concatMap((request: V1DeleteBackupRequest) =>
-          this.k8sCustomObjectApi.createNamespacedCustomObject(
-            VELERO.GROUP,
-            VELERO.VERSION,
-            this.configService.get('velero.namespace'),
-            Resources.DELETE_BACKUP_REQUEST.plural,
-            request,
+          this.k8sCustomObjectApi.createNamespacedCustomObject({
+              group: VELERO.GROUP,
+              version: VELERO.VERSION,
+              namespace: this.configService.get('velero.namespace'),
+              plural: Resources.DELETE_BACKUP_REQUEST.plural,
+              body: request,
+            }
           ),
         ),
       )

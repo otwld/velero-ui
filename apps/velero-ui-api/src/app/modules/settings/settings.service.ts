@@ -21,17 +21,16 @@ import {
   Log,
   V1Container,
   V1Node,
+  V1NodeList,
   V1Pod,
 } from '@kubernetes/client-node';
 import { version } from '../../../../../../package.json';
-import http from 'http';
-import { V1NodeList } from '@kubernetes/client-node/dist/gen/model/v1NodeList';
 import { AddVeleroPluginDTO } from '@velero-ui-api/shared/dto/settings.dto';
 import { Socket } from 'socket.io';
 import { ConfigService } from '@nestjs/config';
 import { Writable } from 'stream';
 import { VELERO } from '@velero-ui-api/shared/modules/velero/velero.constants';
-import { K8S_CONNECTION } from '@velero-ui-api/shared/modules/k8s/k8s.constants';
+import { K8S_CONNECTION } from '@velero-ui-api/shared/utils/k8s.utils';
 import { VeleroService } from '@velero-ui-api/shared/modules/velero/velero.service';
 import { ServerStatusRequestService } from '@velero-ui-api/modules/server-status-request/server-status-request.service';
 import { V1PluginInfo, V1ServerStatusRequest } from '@velero-ui/velero';
@@ -57,12 +56,7 @@ export class SettingsService {
 
   public getCluster(): Observable<ClusterSettings> {
     return from(this.k8sCoreV1Api.listNode())
-      .pipe(
-        map(
-          (r: { response: http.IncomingMessage; body: V1NodeList }) =>
-            r.body.items,
-        ),
-      )
+      .pipe(map((r: V1NodeList) => r.items))
       .pipe(
         map(
           (nodes: V1Node[]): ClusterSettings => ({

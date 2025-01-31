@@ -5,13 +5,12 @@ import {
   KubernetesListObject,
   V1ConfigMapList,
   V1Namespace,
+  V1NamespaceList,
   V1Secret,
   V1SecretList,
 } from '@kubernetes/client-node';
-import { K8S_CONNECTION } from '@velero-ui-api/shared/modules/k8s/k8s.constants';
+import { K8S_CONNECTION } from '@velero-ui-api/shared/utils/k8s.utils';
 import { from, map, Observable } from 'rxjs';
-import http from 'http';
-import { V1NamespaceList } from '@kubernetes/client-node/dist/gen/model/v1NamespaceList';
 import { K8sCustomObjectService } from '@velero-ui-api/modules/k8s-custom-object/k8s-custom-object.service';
 import {
   Resources,
@@ -41,21 +40,14 @@ export class FormService {
   }
 
   public getNamespaces(): Observable<FormList<string>> {
-    return from(this.k8sCoreApi.listNamespace())
-      .pipe(
-        map(
-          (r: { response: http.IncomingMessage; body: V1NamespaceList }) =>
-            r.body,
-        ),
-      )
-      .pipe(
-        map(
-          (r: V1NamespaceList): FormList<string> => ({
-            total: r.items.length,
-            items: r.items.map((n: V1Namespace): string => n.metadata.name),
-          }),
-        ),
-      );
+    return from(this.k8sCoreApi.listNamespace()).pipe(
+      map(
+        (r: V1NamespaceList): FormList<string> => ({
+          total: r.items.length,
+          items: r.items.map((n: V1Namespace): string => n.metadata.name),
+        }),
+      ),
+    );
   }
 
   public getSchedules(): Observable<FormList<string>> {
@@ -142,44 +134,31 @@ export class FormService {
 
   public getSecrets(): Observable<FormList<string>> {
     return from(
-      this.k8sCoreApi.listNamespacedSecret(
-        this.configService.get('velero.namespace'),
+      this.k8sCoreApi.listNamespacedSecret({
+        namespace: this.configService.get('velero.namespace'),
+      }),
+    ).pipe(
+      map(
+        (r: V1SecretList): FormList<string> => ({
+          total: r.items.length,
+          items: r.items.map((n: V1Secret): string => n.metadata.name),
+        }),
       ),
-    )
-      .pipe(
-        map(
-          (r: { response: http.IncomingMessage; body: V1SecretList }) => r.body,
-        ),
-      )
-      .pipe(
-        map(
-          (r: V1SecretList): FormList<string> => ({
-            total: r.items.length,
-            items: r.items.map((n: V1Secret): string => n.metadata.name),
-          }),
-        ),
-      );
+    );
   }
 
   public getConfigMaps(): Observable<FormList<string>> {
     return from(
-      this.k8sCoreApi.listNamespacedConfigMap(
-        this.configService.get('velero.namespace'),
+      this.k8sCoreApi.listNamespacedConfigMap({
+        namespace: this.configService.get('velero.namespace'),
+      }),
+    ).pipe(
+      map(
+        (r: V1ConfigMapList): FormList<string> => ({
+          total: r.items.length,
+          items: r.items.map((n: V1Secret): string => n.metadata.name),
+        }),
       ),
-    )
-      .pipe(
-        map(
-          (r: { response: http.IncomingMessage; body: V1ConfigMapList }) =>
-            r.body,
-        ),
-      )
-      .pipe(
-        map(
-          (r: V1ConfigMapList): FormList<string> => ({
-            total: r.items.length,
-            items: r.items.map((n: V1Secret): string => n.metadata.name),
-          }),
-        ),
-      );
+    );
   }
 }

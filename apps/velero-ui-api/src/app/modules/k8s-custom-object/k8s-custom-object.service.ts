@@ -1,14 +1,17 @@
 import { Inject, Injectable } from '@nestjs/common';
 import {
+  Configuration,
+  createConfiguration,
   CustomObjectsApi,
   KubeConfig,
-  KubernetesEventType,
   KubernetesListObject,
   KubernetesObject,
-  PatchUtils,
+  RequestContext,
+  ResponseContext,
+  ServerConfiguration,
   Watch,
 } from '@kubernetes/client-node';
-import { K8S_CONNECTION } from '@velero-ui-api/shared/modules/k8s/k8s.constants';
+import { K8S_CONNECTION } from '@velero-ui-api/shared/utils/k8s.utils';
 import { VeleroService } from '@velero-ui-api/shared/modules/velero/velero.service';
 import { ConfigService } from '@nestjs/config';
 import {
@@ -22,11 +25,10 @@ import {
   throwError,
 } from 'rxjs';
 import { VELERO } from '@velero-ui-api/shared/modules/velero/velero.constants';
-import { IncomingMessage } from 'http';
 import { sortObjects } from '@velero-ui-api/shared/utils/sorts.utils';
 import { AppLogger } from '@velero-ui-api/shared/modules/logger/logger.service';
 import { Socket } from 'socket.io';
-import { KubernetesObjectWithSpec } from '@kubernetes/client-node/dist/types';
+import { PromiseMiddlewareWrapper } from '@kubernetes/client-node/dist/gen/middleware';
 
 @Injectable()
 export class K8sCustomObjectService {
@@ -61,14 +63,13 @@ export class K8sCustomObjectService {
       K8sCustomObjectService.name,
     );
     return from(
-      this.k8sCustomObjectApi.listNamespacedCustomObject(
-        VELERO.GROUP,
-        VELERO.VERSION,
-        this.configService.get('velero.namespace'),
+      this.k8sCustomObjectApi.listNamespacedCustomObject({
+        group: VELERO.GROUP,
+        version: VELERO.VERSION,
+        namespace: this.configService.get('velero.namespace'),
         plural,
-      ),
+      }),
     )
-      .pipe(map((r: { response: IncomingMessage; body: T }): T => r.body))
       .pipe(
         map(
           (r: T): T => ({
@@ -116,14 +117,14 @@ export class K8sCustomObjectService {
     );
 
     return from(
-      this.k8sCustomObjectApi.getNamespacedCustomObject(
-        VELERO.GROUP,
-        VELERO.VERSION,
-        this.configService.get('velero.namespace'),
+      this.k8sCustomObjectApi.getNamespacedCustomObject({
+        group: VELERO.GROUP,
+        version: VELERO.VERSION,
+        namespace: this.configService.get('velero.namespace'),
         plural,
         name,
-      ),
-    ).pipe(map((r: { response: IncomingMessage; body: T }): T => r.body));
+      }),
+    );
   }
 
   public count(plural: string): Observable<number> {
@@ -132,47 +133,39 @@ export class K8sCustomObjectService {
       K8sCustomObjectService.name,
     );
     return from(
-      this.k8sCustomObjectApi.listNamespacedCustomObject(
-        VELERO.GROUP,
-        VELERO.VERSION,
-        this.configService.get('velero.namespace'),
+      this.k8sCustomObjectApi.listNamespacedCustomObject({
+        group: VELERO.GROUP,
+        version: VELERO.VERSION,
+        namespace: this.configService.get('velero.namespace'),
         plural,
-      ),
+      }),
     ).pipe(
       map(
-        (r: { response: IncomingMessage; body: { items: [] } }): number =>
-          r.body.items.length,
+        (r: KubernetesListObject<KubernetesObject>): number => r.items.length,
       ),
       catchError(() => of(0)),
     );
   }
 
-  public create(
-    plural: string,
-    body: object,
-  ): Observable<KubernetesObjectWithSpec> {
+  public create(plural: string, body: object): Observable<KubernetesObject> {
     this.logger.debug(
       `Creating resource in "${plural}": ${body}`,
       K8sCustomObjectService.name,
     );
     return from(
-      this.k8sCustomObjectApi.createNamespacedCustomObject(
-        VELERO.GROUP,
-        VELERO.VERSION,
-        this.configService.get('velero.namespace'),
+      this.k8sCustomObjectApi.createNamespacedCustomObject({
+        group: VELERO.GROUP,
+        version: VELERO.VERSION,
+        namespace: this.configService.get('velero.namespace'),
         plural,
         body,
-      ),
+      }),
     ).pipe(
-      map(
-        (r: { response: IncomingMessage; body: KubernetesObjectWithSpec }) =>
-          r.body,
-      ),
       catchError((e: Error) => {
         this.logger.error(e.message, K8sCustomObjectService.name);
         return throwError(() => e);
       }),
-      tap((body: KubernetesObjectWithSpec) =>
+      tap((body: KubernetesObject) =>
         this.logger.debug(
           `Creating resource ${body?.metadata?.name} in "${plural}"... SUCCESS`,
           K8sCustomObjectService.name,
@@ -185,34 +178,47 @@ export class K8sCustomObjectService {
     plural: string,
     name: string,
     body: object,
-  ): Observable<KubernetesObjectWithSpec> {
+  ): Observable<KubernetesObject> {
     this.logger.debug(
       `Editing resource  ${name} in ${plural} ...`,
       K8sCustomObjectService.name,
     );
 
-    const options = {
-      headers: { 'Content-type': PatchUtils.PATCH_FORMAT_JSON_PATCH },
-    };
+    const headerPatchMiddleware: PromiseMiddlewareWrapper =
+      new PromiseMiddlewareWrapper({
+        pre: async (requestContext: RequestContext) => {
+          requestContext.setHeaderParam(
+            'Content-type',
+            'application/json-patch+json',
+          );
+          return requestContext;
+        },
+        post: async (responseContext: ResponseContext) => responseContext,
+      });
+
+    const baseServerConfig: ServerConfiguration<{
+      [key: string]: string;
+    }> = new ServerConfiguration<{
+      [key: string]: string;
+    }>(this.k8s.getCurrentCluster().server, {});
+    const configuration: Configuration = createConfiguration({
+      middleware: [headerPatchMiddleware],
+      baseServer: baseServerConfig,
+    });
 
     return from(
       this.k8sCustomObjectApi.patchNamespacedCustomObject(
-        VELERO.GROUP,
-        VELERO.VERSION,
-        this.configService.get('velero.namespace'),
-        plural,
-        name,
-        body,
-        undefined,
-        undefined,
-        undefined,
-        options,
+        {
+          group: VELERO.GROUP,
+          version: VELERO.VERSION,
+          namespace: this.configService.get('velero.namespace'),
+          plural,
+          name,
+          body,
+        },
+        configuration,
       ),
     ).pipe(
-      map(
-        (r: { response: IncomingMessage; body: KubernetesObjectWithSpec }) =>
-          r.body,
-      ),
       catchError((e: Error) => {
         this.logger.error(e.message, K8sCustomObjectService.name);
         return throwError(() => e);
@@ -235,13 +241,13 @@ export class K8sCustomObjectService {
     return from(names)
       .pipe(
         concatMap((name: string) =>
-          this.k8sCustomObjectApi.deleteNamespacedCustomObject(
-            VELERO.GROUP,
-            VELERO.VERSION,
-            this.configService.get('velero.namespace'),
+          this.k8sCustomObjectApi.deleteNamespacedCustomObject({
+            group: VELERO.GROUP,
+            version: VELERO.VERSION,
+            namespace: this.configService.get('velero.namespace'),
             plural,
             name,
-          ),
+          }),
         ),
       )
       .pipe(
@@ -266,13 +272,13 @@ export class K8sCustomObjectService {
     );
 
     return from(
-      this.k8sCustomObjectApi.deleteNamespacedCustomObject(
-        VELERO.GROUP,
-        VELERO.VERSION,
-        this.configService.get('velero.namespace'),
+      this.k8sCustomObjectApi.deleteNamespacedCustomObject({
+        group: VELERO.GROUP,
+        version: VELERO.VERSION,
+        namespace: this.configService.get('velero.namespace'),
         plural,
         name,
-      ),
+      }),
     ).pipe(
       catchError((e: Error) => {
         this.logger.error(e.message, K8sCustomObjectService.name);
@@ -303,35 +309,29 @@ export class K8sCustomObjectService {
       K8sCustomObjectService.name,
     );
 
-    const controller: AbortController = new AbortController();
-    this.activeWatchers.set(client.id, {
-      name,
-      controller,
-    });
-
     try {
       const fieldSelector: string = name ? `metadata.name=${name}` : undefined;
       const resourceVersion: string = version ? version : undefined;
 
-      await this.k8sWatcher.watch(
+      const controller: AbortController = await this.k8sWatcher.watch(
         `/apis/${VELERO.GROUP}/${VELERO.VERSION}/namespaces/${this.configService.get('velero.namespace')}/${plural}`,
-        { signal: controller.signal, fieldSelector, resourceVersion },
-        (phase: KubernetesEventType, obj: KubernetesObject) => {
+        { fieldSelector, resourceVersion },
+        (phase: string, obj: KubernetesObject) => {
           this.logger.debug(
             `watch:${plural}${obj.metadata.name}:${phase}`,
             K8sCustomObjectService.name,
           );
           client.emit(`watch:${plural}${name ? `:${name}` : ''}:${phase}`, obj);
         },
-        (err) => {
-          if (!controller.signal.aborted) {
-            console.error('Watch error:', err);
-          }
-        },
+        () => void 0,
       );
+
+      this.activeWatchers.set(client.id, {
+        name,
+        controller,
+      });
     } catch (error) {
       console.error('Error watch streaming:', error);
-      controller.abort();
       this.activeWatchers.delete(client.id);
     }
   }
@@ -340,7 +340,7 @@ export class K8sCustomObjectService {
     for (const [key, { name: resourceName, controller }] of this
       .activeWatchers) {
       if (key === client.id && resourceName === name) {
-        controller.abort();
+        controller?.abort();
         this.activeWatchers.delete(key);
       }
     }

@@ -1,12 +1,12 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { KubeConfig } from '@kubernetes/client-node';
-import { K8S_CONNECTION } from '../../shared/modules/k8s/k8s.constants';
+import { Injectable } from '@nestjs/common';
+import { KubernetesObject } from '@kubernetes/client-node';
 import { ConfigService } from '@nestjs/config';
 import { concatMap, from, map, Observable, of } from 'rxjs';
 import {
   Resources,
   V1DownloadRequest,
   V1DownloadTargetKind,
+  V1Restore,
 } from '@velero-ui/velero';
 import { AxiosResponse } from 'axios';
 import { unzipSync } from 'zlib';
@@ -14,14 +14,12 @@ import { AppLogger } from '@velero-ui-api/shared/modules/logger/logger.service';
 import { DownloadRequestService } from '@velero-ui-api/modules/download-request/download-request.service';
 import { HttpService } from '@nestjs/axios';
 import { createK8sCustomObject } from '@velero-ui-api/modules/k8s-custom-object/k8s-custom-object.utils';
-import { KubernetesObjectWithSpec } from '@kubernetes/client-node/dist/types';
 import { CreateRestoreDto } from '@velero-ui-api/shared/dto/restore.dto';
 import { K8sCustomObjectService } from '@velero-ui-api/modules/k8s-custom-object/k8s-custom-object.service';
 
 @Injectable()
 export class RestoreService {
   constructor(
-    @Inject(K8S_CONNECTION) private readonly k8s: KubeConfig,
     private readonly logger: AppLogger,
     private readonly downloadRequestService: DownloadRequestService,
     private readonly httpService: HttpService,
@@ -29,7 +27,7 @@ export class RestoreService {
     private readonly configService: ConfigService,
   ) {}
 
-  public create(data: CreateRestoreDto) {
+  public create(data: CreateRestoreDto): Observable<V1Restore> {
     return of(
       createK8sCustomObject(
         data.name,
@@ -39,7 +37,7 @@ export class RestoreService {
         data.spec,
       ),
     ).pipe(
-      concatMap((body: KubernetesObjectWithSpec) =>
+      concatMap((body: KubernetesObject) =>
         this.k8sCustomObjectService.create(Resources.RESTORE.plural, body),
       ),
     );
