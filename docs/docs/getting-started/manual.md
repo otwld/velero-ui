@@ -83,3 +83,19 @@ nx build velero-ui-api
 ```bash
 nx build velero-ui
 ```
+
+### 📦 Build Docker Image
+
+Please make sure you have Docker installed on your machine.
+
+At the root of the project, run the following command:
+
+1. Build Velero UI
+```bash
+nx build velero-ui
+```
+
+2. Build Docker Image
+```bash 
+docker build -t velero-ui .
+```
