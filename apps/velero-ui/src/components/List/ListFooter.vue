@@ -3,18 +3,32 @@
     class="sticky bottom-0 right-0 items-center w-full p-4 bg-white border-t border-gray-200 sm:flex sm:justify-between dark:bg-gray-800 dark:border-gray-700"
   >
     <div class="flex items-center mb-4 sm:mb-0 divide-x divide-gray-200">
-      <span class="text-sm font-normal text-gray-500 dark:text-gray-400"
-        >{{ t('list.text.showing') }}
-        <span class="font-semibold text-gray-900 dark:text-white"
+      <div
+        class="flex items-center text-sm font-normal text-gray-500 dark:text-gray-400"
+      >
+        <p>{{ t('list.text.showing') }}</p>
+        <div
+          v-if="isFetching"
+          class="h-2.5 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-4 ml-1.5"
+        />
+        <span
+          v-if="!isFetching"
+          class="ml-1.5 font-semibold text-gray-900 dark:text-white"
           >{{ offset }}-{{
             offset + limit > total ? total : offset + limit
           }}</span
         >
-        {{ t('list.text.of') }}
-        <span class="font-semibold text-gray-900 dark:text-white">{{
-          total
-        }}</span></span
-      >
+        <p class="ml-1.5">{{ t('list.text.of') }}</p>
+        <div
+          v-if="isFetching"
+          class="h-2.5 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-4 ml-1.5"
+        />
+        <span
+          v-if="!isFetching"
+          class="ml-1.5 font-semibold text-gray-900 dark:text-white"
+          >{{ total }}</span
+        >
+      </div>
       <div
         class="ml-3 pl-3 text-sm font-normal text-gray-500 dark:text-gray-400"
       >

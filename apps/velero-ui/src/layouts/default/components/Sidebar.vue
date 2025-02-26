@@ -312,7 +312,7 @@ import { useI18n } from 'vue-i18n';
 const { t } = useI18n();
 
 const appStore = useAppStore();
-const { hideSidebar, authType } = storeToRefs(appStore);
+const { hideSidebar } = storeToRefs(appStore);
 
 const hiddenDropdown = ref(true);
 const hiddenDropdownPodVolumes = ref(true);

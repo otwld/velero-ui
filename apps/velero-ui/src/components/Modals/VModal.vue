@@ -14,7 +14,7 @@
             <h3
               class="inline-flex items-center text-lg font-semibold text-gray-900 dark:text-white"
             >
-              <slot name="header"></slot>
+              <slot name="header"/>
             </h3>
             <button
               class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-700 dark:hover:text-white"
@@ -33,7 +33,7 @@
             v-if="footer"
             class="flex items-center justify-end p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600"
           >
-            <slot name="footer"></slot>
+            <slot name="footer"/>
           </div>
         </div>
       </div>

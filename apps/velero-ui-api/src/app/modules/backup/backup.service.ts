@@ -1,6 +1,6 @@
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { K8S_CONNECTION } from '@velero-ui-api/shared/utils/k8s.utils';
-import {CustomObjectsApi, KubeConfig, KubernetesObject} from '@kubernetes/client-node';
+import { KubeConfig, KubernetesObject } from '@kubernetes/client-node';
 import { concatMap, from, map, Observable, of } from 'rxjs';
 import {
   Resources,
@@ -26,8 +26,6 @@ import { createK8sCustomObject } from '@velero-ui-api/modules/k8s-custom-object/
 
 @Injectable()
 export class BackupService {
-  private k8sCustomObjectApi: CustomObjectsApi;
-
   constructor(
     @Inject(K8S_CONNECTION) private readonly k8s: KubeConfig,
     private logger: AppLogger,
@@ -35,9 +33,7 @@ export class BackupService {
     private readonly httpService: HttpService,
     private readonly k8sCustomObjectService: K8sCustomObjectService,
     private configService: ConfigService,
-  ) {
-    this.k8sCustomObjectApi = this.k8s.makeApiClient(CustomObjectsApi);
-  }
+  ) {}
 
   public logs(name: string): Observable<string[]> {
     this.logger.debug(`Getting logs for ${name}...`, BackupService.name);

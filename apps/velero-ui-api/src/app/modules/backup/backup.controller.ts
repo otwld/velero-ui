@@ -10,7 +10,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { BackupService } from './backup.service';
-import { concatMap, from, Observable } from 'rxjs';
+import { forkJoin, Observable } from 'rxjs';
 import {
   Resources,
   V1Backup,
@@ -19,7 +19,6 @@ import {
   V1DownloadRequest,
   V1DownloadTargetKind,
 } from '@velero-ui/velero';
-import { CreateDeleteBackupRequestDto } from '../../shared/dto/delete-backup-request.dto';
 import { DeleteBackupRequestService } from '@velero-ui-api/modules/delete-backup-request/delete-backup-request.service';
 import { DownloadRequestService } from '@velero-ui-api/modules/download-request/download-request.service';
 import { K8sCustomObjectService } from '@velero-ui-api/modules/k8s-custom-object/k8s-custom-object.service';
@@ -53,29 +52,27 @@ export class BackupController {
     );
   }
 
-  @Post('/restore')
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public restore(@Body() names: string[]) {
-    return {};
-  }
-
   @Post('/download')
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public download(@Body() names: string[]) {
-    return {};
-  }
-
-  @Delete()
-  public delete(@Body() backups: CreateDeleteBackupRequestDto[]) {
-    return from(backups).pipe(
-      concatMap((backup: CreateDeleteBackupRequestDto) =>
-        this.deleteBackupRequestService.create(backup),
+    return forkJoin(
+      names.map((name) =>
+        this.downloadRequestService.create({
+          name,
+          kind: V1DownloadTargetKind.BackupContents,
+        }),
       ),
     );
   }
 
+  @Delete()
+  public delete(@Body() names: string[]) {
+    return forkJoin(
+      names.map((name) => this.deleteBackupRequestService.create({ name })),
+    );
+  }
+
   @Post()
-  public create(@Body() data: CreateBackupDto)  {
+  public create(@Body() data: CreateBackupDto) {
     return this.backupService.create(data);
   }
 
@@ -100,12 +97,6 @@ export class BackupController {
       name,
       kind: V1DownloadTargetKind.BackupLog,
     });
-  }
-
-  @Post('/:name/restore')
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public restoreByName(@Param('name') name: string) {
-    return {};
   }
 
   @Post('/:name/download')

@@ -77,6 +77,7 @@ let timeout: NodeJS.Timeout;
 watch(searchInput, () => {
   timeout = setTimeout(() => {
     listStore.applyNameFilter(searchInput.value);
+    listStore.setOffset(0);
   }, 1500);
   onWatcherCleanup(() => {
     clearTimeout(timeout);

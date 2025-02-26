@@ -13,14 +13,16 @@
             <div
               v-if="isFetching && !data"
               class="h-2.5 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-16 animate-pulse mb-4"
-            ></div>
+            />
             <h3
               v-if="data"
               class="mb-1 text-2xl font-bold text-gray-900 dark:text-white"
             >
               {{ data?.totalBackups.toString() || t('global.na') }}
             </h3>
-            <div class="text-gray-500 dark:text-gray-400">{{ t('global.backup', data?.totalBackups) }}</div>
+            <div class="text-gray-500 dark:text-gray-400">
+              {{ t('global.backup', data?.totalBackups) }}
+            </div>
           </div>
         </div>
         <div class="flex self-center">
@@ -48,14 +50,16 @@
             <div
               v-if="isFetching && !data"
               class="h-2.5 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-16 animate-pulse mb-4"
-            ></div>
+            />
             <h3
               v-if="data"
               class="mb-1 text-2xl font-bold text-gray-900 dark:text-white"
             >
               {{ data?.totalSchedules.toString() || t('global.na') }}
             </h3>
-            <div class="text-gray-500 dark:text-gray-400">{{ t('global.schedule', data?.totalSchedules) }}</div>
+            <div class="text-gray-500 dark:text-gray-400">
+              {{ t('global.schedule', data?.totalSchedules) }}
+            </div>
           </div>
         </div>
         <div class="flex self-center">
@@ -83,14 +87,16 @@
             <div
               v-if="isFetching && !data"
               class="h-2.5 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-16 animate-pulse mb-4"
-            ></div>
+            />
             <h3
               v-if="data"
               class="mb-1 text-2xl font-bold text-gray-900 dark:text-white"
             >
               {{ data?.totalRestores.toString() || t('global.na') }}
             </h3>
-            <div class="text-gray-500 dark:text-gray-400">{{ t('global.restore', data?.totalRestores) }}</div>
+            <div class="text-gray-500 dark:text-gray-400">
+              {{ t('global.restore', data?.totalRestores) }}
+            </div>
           </div>
         </div>
         <div class="flex self-center">
@@ -118,7 +124,7 @@
             <div
               v-if="isFetching && !data"
               class="h-2.5 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-16 animate-pulse mb-4"
-            ></div>
+            />
             <h3
               v-if="data"
               class="mb-1 text-2xl font-bold text-gray-900 dark:text-white"

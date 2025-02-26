@@ -76,9 +76,7 @@
       {{ data.status?.expiration ? expireTime : '' }}
     </td>
     <td class="p-4">
-      <BackupStatusPhaseBadge
-        :status="data?.status?.phase"
-      />
+      <BackupStatusPhaseBadge :status="data?.status?.phase" />
     </td>
     <td class="p-4 space-x-2 whitespace-nowrap">
       <div class="inline-flex rounded-md shadow-sm" role="group">
@@ -114,9 +112,9 @@
           />
         </button>
         <button
-          :class="{ 'cursor-not-allowed': isDisabled }"
+          :class="{ 'cursor-not-allowed': isDeleteDisabled }"
           :data-tooltip-target="`tooltip-button-delete-${data?.metadata?.uid}`"
-          :disabled="isDisabled"
+          :disabled="isDeleteDisabled"
           :title="t('global.button.delete.title')"
           class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-red-600 rounded-r-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"
           type="button"
@@ -165,11 +163,20 @@
   <ModalConfirmation
     v-if="showModalDelete"
     :icon="faExclamationCircle"
-    :name="data?.metadata?.name"
     :text="t('modal.text.confirmation.delete')"
     @onClose="showModalDelete = false"
     @onConfirm="remove(data?.metadata?.name)"
-  />
+  >
+    <template v-slot:content>
+      <div class="flex justify-center">
+        <p
+          class="mt-2 px-1 mb-6 text-sm rounded bg-gray-200 text-gray-600 dark:bg-gray-600 dark:text-gray-200"
+        >
+          {{ data?.metadata?.name }}
+        </p>
+      </div>
+    </template>
+  </ModalConfirmation>
   <VModal
     v-if="showModalRestore"
     :id="`modal-restore-${data?.metadata?.name}`"
@@ -183,10 +190,7 @@
       </h3>
     </template>
     <template v-slot:content>
-      <BackupFormRestore
-        :backup="data"
-        @onClose="showModalRestore = false"
-      />
+      <BackupFormRestore :backup="data" @onClose="showModalRestore = false" />
     </template>
   </VModal>
 </template>
@@ -222,9 +226,8 @@ import ModalConfirmation from '@velero-ui-app/components/Modals/ModalConfirmatio
 import { truncate } from '../../utils/string.utils';
 import { useDeleteKubernetesObject } from '@velero-ui-app/composables/useDeleteKubernetesObject';
 import { useI18n } from 'vue-i18n';
-import SnapshotLocationFormEdit from "@velero-ui-app/components/SnapshotLocation/forms/SnapshotLocationFormEdit.vue";
-import VModal from "@velero-ui-app/components/Modals/VModal.vue";
-import BackupFormRestore from "@velero-ui-app/components/Backup/forms/BackupFormRestore.vue";
+import VModal from '@velero-ui-app/components/Modals/VModal.vue';
+import BackupFormRestore from '@velero-ui-app/components/Backup/forms/BackupFormRestore.vue';
 
 const { t } = useI18n();
 const props = defineProps({
@@ -245,7 +248,10 @@ const { download, downloadLoading } = useBackupDownloadContent(
 );
 
 const interval = setInterval(
-  () => (expireTime.value = getRemainingTime(props.data?.status?.expiration || '0')),
+  () =>
+    (expireTime.value = getRemainingTime(
+      props.data?.status?.expiration || '0',
+    )),
 );
 
 onUnmounted(() => clearInterval(interval));
@@ -262,9 +268,15 @@ const isDisabled = computed(
     ),
 );
 
+const isDeleteDisabled = computed(
+  () =>
+    isLoading.value ||
+    [V1BackupPhase.New, V1BackupPhase.Finalizing, V1BackupPhase.InProgress, V1BackupPhase.FinalizingPartiallyFailed].includes(
+      props.data?.status?.phase,
+    ),
+);
+
 const isDeleting = computed(
   () => isLoading.value || props.data?.status?.phase === V1BackupPhase.Deleting,
 );
-
-const restore = () => {};
 </script>

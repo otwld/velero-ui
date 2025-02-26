@@ -10,6 +10,7 @@ import { ConfigService } from '@nestjs/config';
 import {
   catchError,
   concatMap,
+  defer,
   from,
   map,
   Observable,
@@ -61,24 +62,26 @@ export class DownloadRequestService {
   private waitAndGetDownloadRequest(
     request: V1DownloadRequest,
   ): Observable<V1DownloadRequest> {
-    return from(
-      this.k8sCustomObjectApi.getNamespacedCustomObject({
-        group: VELERO.GROUP,
-        version: VELERO.VERSION,
-        namespace: this.configService.get('velero.namespace'),
-        plural: Resources.DOWNLOAD_REQUEST.plural,
-        name: request.metadata.name,
-      }),
+    return defer(() =>
+      from(
+        this.k8sCustomObjectApi.getNamespacedCustomObject({
+          group: VELERO.GROUP,
+          version: VELERO.VERSION,
+          namespace: this.configService.get('velero.namespace'),
+          plural: Resources.DOWNLOAD_REQUEST.plural,
+          name: request.metadata.name,
+        }),
+      ),
     ).pipe(
+      retry({
+        count: 5,
+        delay: 4000,
+      }),
       map((requestStatus: V1DownloadRequest): V1DownloadRequest => {
         if (requestStatus?.status?.phase !== V1DownloadRequestPhase.Processed) {
           throw new Error('Download request is not ready!');
         }
         return requestStatus;
-      }),
-      retry({
-        count: 5,
-        delay: 4000,
       }),
       catchError(() => {
         return throwError(

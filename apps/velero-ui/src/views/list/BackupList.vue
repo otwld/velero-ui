@@ -2,16 +2,50 @@
   <ListHeader>
     <template v-slot:bulk-buttons>
       <button
-        class="inline-flex justify-center p-1 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+        :class="{
+          'cursor-not-allowed':
+            childListRef?.getCheckedItems().length === 0 || downloadLoading,
+        }"
+        :disabled="
+          childListRef?.getCheckedItems().length === 0 || downloadLoading
+        "
+        class="inline-flex justify-center p-1 text-gray-500 rounded hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
         type="button"
+        @click="showModalBulkDownload = !showModalBulkDownload"
       >
-        <FontAwesomeIcon :icon="faDownload" class="w-5 h-5" />
+        <FontAwesomeIcon
+          v-if="!downloadLoading"
+          :icon="faDownload"
+          class="w-5 h-5"
+        />
+        <FontAwesomeIcon
+          v-if="downloadLoading"
+          :icon="faCircleNotch"
+          class="w-5 h-5 animate-spin"
+        />
       </button>
       <button
-        class="inline-flex justify-center p-1 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+        :class="{
+          'cursor-not-allowed':
+            childListRef?.getCheckedItems().length === 0 || isLoadingDeleting,
+        }"
+        :disabled="
+          childListRef?.getCheckedItems().length === 0 || isLoadingDeleting
+        "
+        class="inline-flex justify-center p-1 text-gray-500 rounded hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
         type="button"
+        @click="showModalBulkRemove = !showModalBulkRemove"
       >
-        <FontAwesomeIcon :icon="faTrashCan" class="w-5 h-5" />
+        <FontAwesomeIcon
+          v-if="!isLoadingDeleting"
+          :icon="faTrashCan"
+          class="w-5 h-5"
+        />
+        <FontAwesomeIcon
+          v-if="isLoadingDeleting"
+          :icon="faCircleNotch"
+          class="w-5 h-5 animate-spin"
+        />
       </button>
     </template>
     <template v-slot:buttons>
@@ -21,28 +55,78 @@
         @click="showModalAdd = !showModalAdd"
       >
         <FontAwesomeIcon :icon="faPlus" class="w-4 h-4 mr-2" />
-        {{ t('global.button.new.title')}}
+        {{ t('global.button.new.title') }}
       </button>
     </template>
   </ListHeader>
-  <ListContent :component="BackupLine"/>
-  <ListFooter/>
-  <VModal v-if="showModalAdd" id="modal-add" width="lg:w-6/12" @onClose="showModalAdd = false">
+  <ListContent ref="childListRef" :component="BackupLine" />
+  <ListFooter />
+  <VModal
+    v-if="showModalAdd"
+    id="modal-add"
+    width="lg:w-6/12"
+    @onClose="showModalAdd = false"
+  >
     <template v-slot:header>
       <h3 class="text-lg text-gray-500 dark:text-gray-400">
         {{ t('modal.text.title.createNewBackup') }}
       </h3>
     </template>
     <template v-slot:content>
-      <BackupCreate @onClose="showModalAdd = false"/>
+      <BackupCreate @onClose="showModalAdd = false" />
     </template>
   </VModal>
+  <ModalConfirmation
+    v-if="showModalBulkRemove"
+    :icon="faExclamationCircle"
+    :text="
+      t('modal.text.confirmation.deleteMany', {
+        items: childListRef?.getCheckedItems().length,
+      })
+    "
+    @onClose="showModalBulkRemove = false"
+    @onConfirm="bulkRemove()"
+  >
+    <template v-slot:content>
+      <div class="flex flex-col justify-center mb-6">
+        <span
+          v-for="(item, index) in childListRef?.getCheckedItems()"
+          :key="index"
+          class="mt-2 px-1 text-sm rounded bg-gray-200 text-gray-600 dark:bg-gray-600 dark:text-gray-200"
+          >{{ item }}</span
+        >
+      </div>
+    </template>
+  </ModalConfirmation>
+  <ModalConfirmation
+    v-if="showModalBulkDownload"
+    :icon="faDownload"
+    :text="
+      t('modal.text.confirmation.downloadMany', {
+        items: childListRef?.getCheckedItems().length,
+      })
+    "
+    @onClose="showModalBulkDownload = false"
+    @onConfirm="bulkDownload()"
+  >
+    <template v-slot:content>
+      <div class="flex flex-col justify-center mb-6">
+        <span
+          v-for="(item, index) in childListRef?.getCheckedItems()"
+          :key="index"
+          class="mt-2 px-1 text-sm rounded bg-gray-200 text-gray-600 dark:bg-gray-600 dark:text-gray-200"
+          >{{ item }}</span
+        >
+      </div>
+    </template>
+  </ModalConfirmation>
 </template>
 <script lang="ts" setup>
 import BackupLine from '@velero-ui-app/components/Backup/BackupLine.vue';
 import {
-  faClockRotateLeft,
+  faCircleNotch,
   faDownload,
+  faExclamationCircle,
   faPlus,
   faTrashCan,
 } from '@fortawesome/free-solid-svg-icons';
@@ -55,10 +139,20 @@ import ListContent from '@velero-ui-app/components/List/ListContent.vue';
 import ListHeader from '@velero-ui-app/components/List/ListHeader.vue';
 import { onBeforeMount, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
+import ModalConfirmation from '@velero-ui-app/components/Modals/ModalConfirmation.vue';
+import { Resources } from '@velero-ui/velero';
+import { useDeleteManyKubernetesObjects } from '@velero-ui-app/composables/useDeleteManyKubernetesObjects';
+import { useBackupManyDownloadContent } from '@velero-ui-app/composables/backup/useBackupManyDownloadContent';
 
 const { t } = useI18n();
-
 const listStore = useListStore();
+
+const { mutate: remove, isPending: isLoadingDeleting } =
+  useDeleteManyKubernetesObjects(Resources.BACKUP);
+
+const { download, downloadLoading } = useBackupManyDownloadContent();
+
+const childListRef = ref(null);
 
 onBeforeMount(() =>
   listStore.setHeaders([
@@ -107,4 +201,16 @@ onBeforeMount(() =>
 );
 
 const showModalAdd = ref(false);
+const showModalBulkRemove = ref(false);
+const showModalBulkDownload = ref(false);
+
+const bulkDownload = () => {
+  download(childListRef?.value.getCheckedItems());
+  childListRef?.value.resetCheckedItems();
+};
+
+const bulkRemove = () => {
+  remove(childListRef?.value.getCheckedItems());
+  childListRef?.value.resetCheckedItems();
+};
 </script>

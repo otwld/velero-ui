@@ -126,11 +126,20 @@
   <ModalConfirmation
     v-if="showModalDelete"
     :icon="faExclamationCircle"
-    :name="data?.metadata?.name"
     :text="t('modal.text.confirmation.delete')"
     @onClose="showModalDelete = false"
     @onConfirm="remove(data?.metadata?.name)"
-  />
+  >
+    <template v-slot:content>
+      <div class="flex justify-center">
+        <p
+          class="mt-2 px-1 mb-6 text-sm rounded bg-gray-200 text-gray-600 dark:bg-gray-600 dark:text-gray-200"
+        >
+          {{ data?.metadata?.name }}
+        </p>
+      </div>
+    </template>
+  </ModalConfirmation>
 </template>
 
 <script lang="ts" setup>

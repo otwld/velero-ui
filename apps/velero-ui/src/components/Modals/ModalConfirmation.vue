@@ -1,7 +1,5 @@
 <template>
-  <div
-    class="relative z-10"
-  >
+  <div class="relative z-10">
     <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
 
     <div class="fixed h-full w-full inset-0 z-10">
@@ -24,12 +22,8 @@
             <h3 class="mt-5 text-lg text-gray-500 dark:text-gray-400">
               {{ text }}
             </h3>
-            <div class="flex justify-center">
-              <p
-                class="mt-2 px-1 mb-6 text-sm rounded bg-gray-200 text-gray-600 dark:bg-gray-600 dark:text-gray-200"
-              >
-                {{ name }}
-              </p>
+            <div class="overflow-y-auto max-h-96 my-2">
+              <slot name="content" />
             </div>
             <button
               class="text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-base inline-flex items-center px-3 py-2.5 text-center mr-2 dark:focus:ring-blue-800"
@@ -67,7 +61,6 @@ import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
 defineProps({
-  name: String,
   icon: Object as PropType<IconDefinition>,
   text: String,
 });

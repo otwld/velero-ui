@@ -68,8 +68,8 @@
             }}
           </button>
           <button
-            :class="{ 'cursor-not-allowed': isDisabled || !backup }"
-            :disabled="isDisabled || !backup"
+            :class="{ 'cursor-not-allowed': isDeleteDisabled || !backup }"
+            :disabled="isDeleteDisabled || !backup"
             class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"
             type="button"
             @click="showModalDelete = !showModalDelete"
@@ -97,11 +97,20 @@
   <ModalConfirmation
     v-if="showModalDelete"
     :icon="faExclamationCircle"
-    :name="backup?.metadata?.name"
     :text="t('modal.text.confirmation.delete')"
     @onClose="showModalDelete = false"
     @onConfirm="remove(backup.metadata.name)"
-  />
+  >
+    <template v-slot:content>
+      <div class="flex justify-center">
+        <p
+          class="mt-2 px-1 mb-6 text-sm rounded bg-gray-200 text-gray-600 dark:bg-gray-600 dark:text-gray-200"
+        >
+          {{ backup?.metadata?.name }}
+        </p>
+      </div>
+    </template>
+  </ModalConfirmation>
   <VModal
     v-if="showModalRestore"
     :id="`modal-restore-${backup?.metadata?.name}`"
@@ -111,14 +120,13 @@
     <template v-slot:header>
       <h3 class="text-lg text-gray-500 dark:text-gray-400">
         {{ t('modal.text.title.restoreFromBackup') }}
-        <span class="font-normal text-sm ml-2">{{ backup?.metadata?.name }}</span>
+        <span class="font-normal text-sm ml-2">{{
+          backup?.metadata?.name
+        }}</span>
       </h3>
     </template>
     <template v-slot:content>
-      <BackupFormRestore
-        :backup="backup"
-        @onClose="showModalRestore = false"
-      />
+      <BackupFormRestore :backup="backup" @onClose="showModalRestore = false" />
     </template>
   </VModal>
 </template>
@@ -139,8 +147,8 @@ import { useBackupDownloadContent } from '@velero-ui-app/composables/backup/useB
 import ModalConfirmation from '@velero-ui-app/components/Modals/ModalConfirmation.vue';
 import { useDeleteKubernetesObject } from '@velero-ui-app/composables/useDeleteKubernetesObject';
 import { useI18n } from 'vue-i18n';
-import VModal from "@velero-ui-app/components/Modals/VModal.vue";
-import BackupFormRestore from "@velero-ui-app/components/Backup/forms/BackupFormRestore.vue";
+import VModal from '@velero-ui-app/components/Modals/VModal.vue';
+import BackupFormRestore from '@velero-ui-app/components/Backup/forms/BackupFormRestore.vue';
 
 const { t } = useI18n();
 
@@ -168,7 +176,16 @@ const isDisabled = computed(() => {
   );
 });
 
+const isDeleteDisabled = computed(
+  () =>
+    isPending.value ||
+    [V1BackupPhase.New, V1BackupPhase.Finalizing, V1BackupPhase.InProgress, V1BackupPhase.FinalizingPartiallyFailed].includes(
+      props.backup?.status?.phase,
+    ),
+);
+
 const isDeleting = computed(
-  () => isPending.value || props.backup?.status?.phase === V1BackupPhase.Deleting,
+  () =>
+    isPending.value || props.backup?.status?.phase === V1BackupPhase.Deleting,
 );
 </script>

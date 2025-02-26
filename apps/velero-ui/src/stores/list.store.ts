@@ -56,6 +56,9 @@ export const useListStore = defineStore({
     setTotal(total: number): void {
       this.total = total;
     },
+    setOffset(offset: number): void {
+      this.offset = offset;
+    },
     setLimit(limit: number): void {
       this.limit = limit;
       localStorage.setItem('list.limit', limit.toString());

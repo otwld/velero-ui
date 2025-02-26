@@ -5,6 +5,7 @@ import { ConfigService } from '@nestjs/config';
 import {
   catchError,
   concatMap,
+  defer,
   from,
   map,
   Observable,
@@ -56,15 +57,21 @@ export class ServerStatusRequestService {
   private waitAndGetServerStatusRequest(
     request: V1ServerStatusRequest,
   ): Observable<V1ServerStatusRequest> {
-    return from(
-      this.k8sCustomObjectApi.getNamespacedCustomObject({
-        group: VELERO.GROUP,
-        version: VELERO.VERSION,
-        namespace: this.configService.get('velero.namespace'),
-        plural: Resources.SERVER_STATUS_REQUEST.plural,
-        name: request.metadata.name,
-      }),
+    return defer(() =>
+      from(
+        this.k8sCustomObjectApi.getNamespacedCustomObject({
+          group: VELERO.GROUP,
+          version: VELERO.VERSION,
+          namespace: this.configService.get('velero.namespace'),
+          plural: Resources.SERVER_STATUS_REQUEST.plural,
+          name: request.metadata.name,
+        }),
+      ),
     ).pipe(
+      retry({
+        count: 5,
+        delay: 4000,
+      }),
       map((requestStatus: V1ServerStatusRequest): V1ServerStatusRequest => {
         if (
           requestStatus?.status?.phase !== V1ServerStatusRequestPhase.Processed
@@ -72,10 +79,6 @@ export class ServerStatusRequestService {
           throw new Error('Server status request is not ready!');
         }
         return requestStatus;
-      }),
-      retry({
-        count: 5,
-        delay: 4000,
       }),
       catchError((e) => {
         return throwError(

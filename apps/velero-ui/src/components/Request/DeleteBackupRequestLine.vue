@@ -69,18 +69,19 @@
             data?.status?.errors.length > 0
           "
           class="h-2.5 w-2.5 rounded-full bg-orange-400 mr-2"
-        >
-          <div
-            v-if="!data?.status?.phase"
-            class="h-2.5 w-2.5 rounded-full bg-gray-500 mr-2"
-          />
+        />
+        <div
+          v-if="!data?.status?.phase"
+          class="h-2.5 w-2.5 rounded-full bg-gray-500 mr-2"
+        />
+        <p>
           {{
             data?.status?.phase
               ? t(`resource.phase.${data?.status?.phase}`)
               : t('global.unknown')
           }}
           {{ data?.status?.errors.length ? 'with errors' : '' }}
-        </div>
+        </p>
       </div>
     </td>
     <td class="p-4 space-x-2 whitespace-nowrap">
@@ -137,11 +138,20 @@
   <ModalConfirmation
     v-if="showModalDelete"
     :icon="faExclamationCircle"
-    :name="data?.metadata?.name"
     :text="t('modal.text.confirmation.delete')"
     @onClose="showModalDelete = false"
     @onConfirm="remove(data?.metadata?.name)"
-  />
+  >
+    <template v-slot:content>
+      <div class="flex justify-center">
+        <p
+          class="mt-2 px-1 mb-6 text-sm rounded bg-gray-200 text-gray-600 dark:bg-gray-600 dark:text-gray-200"
+        >
+          {{ data?.metadata?.name }}
+        </p>
+      </div>
+    </template>
+  </ModalConfirmation>
   <ModalDescribe
     v-if="showModalDescribe"
     :data="data"

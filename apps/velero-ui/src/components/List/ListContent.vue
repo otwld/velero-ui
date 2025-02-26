@@ -99,7 +99,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onBeforeMount, onBeforeUnmount, ref } from 'vue';
+import { onBeforeMount, onBeforeUnmount, ref, watch } from 'vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import {
   faCircleNotch,
@@ -131,13 +131,18 @@ onBeforeUnmount(() => off());
 const checkedItems = ref({});
 const checked = ref('false');
 
-const resetCheckedItems = () =>
+const initCheckedItems = () =>
   Object.keys(checkedItems.value).length === 0
     ? data.value.forEach((e, index) => (checkedItems.value[`${index}`] = false))
     : null;
 
+const resetCheckedItems = () => {
+  checkedItems.value = {};
+  checked.value = 'false';
+};
+
 const globalCheck = ($event) => {
-  resetCheckedItems();
+  initCheckedItems();
   if (checked.value === 'true') {
     checkedItems.value = {};
     checked.value = 'false';
@@ -146,10 +151,15 @@ const globalCheck = ($event) => {
     checked.value = 'true';
   }
   $event.preventDefault();
+  $event.stopPropagation();
 };
 
+watch(checked, () => {
+  console.log(checked);
+});
+
 const setCheckedItem = (index: number) => {
-  resetCheckedItems();
+  initCheckedItems();
   checkedItems.value[`${index}`] = !checkedItems.value[`${index}`];
   const totalChecked = Object.values(checkedItems.value).filter(
     (i) => i,
@@ -162,4 +172,19 @@ const setCheckedItem = (index: number) => {
     checked.value = 'partial';
   }
 };
+
+const getCheckedItems = () => {
+  const checkedItemsArray: string[] = [];
+  Object.keys(checkedItems.value).forEach((key) => {
+    if (checkedItems.value[key]) {
+      checkedItemsArray.push(data.value[key].metadata.name);
+    }
+  });
+  return checkedItemsArray;
+};
+
+defineExpose({
+  getCheckedItems,
+  resetCheckedItems,
+});
 </script>
