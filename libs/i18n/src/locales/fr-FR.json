@@ -1,6 +1,7 @@
 {
   "global": {
     "powered": "v{version} - Propulsé par",
+    "nowAvailable": " est disponible !",
     "backup": "aucune sauvegarde | sauvegarde | sauvegardes",
     "schedule": "aucun planning | planning | plannings",
     "restore": "aucune restauration | restauration | restaurations",
