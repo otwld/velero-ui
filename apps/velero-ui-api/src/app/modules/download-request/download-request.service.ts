@@ -73,15 +73,15 @@ export class DownloadRequestService {
         }),
       ),
     ).pipe(
-      retry({
-        count: 5,
-        delay: 4000,
-      }),
       map((requestStatus: V1DownloadRequest): V1DownloadRequest => {
         if (requestStatus?.status?.phase !== V1DownloadRequestPhase.Processed) {
           throw new Error('Download request is not ready!');
         }
         return requestStatus;
+      }),
+      retry({
+        count: 5,
+        delay: 4000,
       }),
       catchError(() => {
         return throwError(

@@ -68,10 +68,6 @@ export class ServerStatusRequestService {
         }),
       ),
     ).pipe(
-      retry({
-        count: 5,
-        delay: 4000,
-      }),
       map((requestStatus: V1ServerStatusRequest): V1ServerStatusRequest => {
         if (
           requestStatus?.status?.phase !== V1ServerStatusRequestPhase.Processed
@@ -79,6 +75,10 @@ export class ServerStatusRequestService {
           throw new Error('Server status request is not ready!');
         }
         return requestStatus;
+      }),
+      retry({
+        count: 5,
+        delay: 4000,
       }),
       catchError((e) => {
         return throwError(
