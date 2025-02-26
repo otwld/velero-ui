@@ -60,7 +60,7 @@ export class VeleroService {
     return from(
       this.k8sCoreV1Api.readNamespacedPod({
         name: this.podVeleroUIName,
-        namespace: this.configService.get('velero.namespace'),
+        namespace: this.configService.get('app.namespace'),
       }),
     );
   }
