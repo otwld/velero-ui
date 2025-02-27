@@ -5,9 +5,9 @@
 ![Build Status](https://github.com/otwld/velero-ui/actions/workflows/apps-cd.yml/badge.svg)
 [![Discord](https://img.shields.io/badge/Discord-OTWLD-blue?logo=discord&logoColor=white)](https://discord.gg/U24mpqTynB)
 ![Docker Image Version (latest semver)](https://img.shields.io/docker/v/otwld/velero-ui?label=docker%20image)
-![Docker Image Size (tag)](https://img.shields.io/docker/image-size/otwld/velero-ui/latest)
+![Docker Image Size (tag)](https://img.shields.io/docker/image-size/otwld/velero-ui)
 
-### ℹ️ **ALPHA 0.4.x** ℹ️
+### ℹ️ **ALPHA 0.5.x** ℹ️
 
 A fully realtime lightweight dashboard interface to interact with [Velero (vmware-tanzu)](https://github.com/vmware-tanzu/velero/issues).
 
