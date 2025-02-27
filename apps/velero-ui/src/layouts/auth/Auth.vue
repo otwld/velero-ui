@@ -169,6 +169,7 @@ watch(
   async () => {
     if (route.query?.state === 'error') {
       error.value = t(`auth.message.error.${route.query?.reason}`);
+      success.value = '';
     } else if (route.query?.state === 'success') {
       success.value = t(`auth.message.success.${route.query?.reason}`);
       error.value = '';

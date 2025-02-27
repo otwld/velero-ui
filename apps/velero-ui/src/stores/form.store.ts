@@ -43,7 +43,6 @@ export const useFormStore = defineStore({
       }
 
       if (this.currentStep + 1 === this.totalSteps) {
-        console.log(this.formContent[0]);
         // end
       } else {
         this.currentStep += 1;

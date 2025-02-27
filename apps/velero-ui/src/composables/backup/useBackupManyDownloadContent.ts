@@ -24,7 +24,6 @@ export const useBackupManyDownloadContent = () => {
         data: names,
       });
 
-      console.log(data?.value);
       if (data?.value?.length > 0) {
         toastsStore.push(
           t('global.message.success.downloadsStarted'),

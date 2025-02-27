@@ -154,10 +154,6 @@ const globalCheck = ($event) => {
   $event.stopPropagation();
 };
 
-watch(checked, () => {
-  console.log(checked);
-});
-
 const setCheckedItem = (index: number) => {
   initCheckedItems();
   checkedItems.value[`${index}`] = !checkedItems.value[`${index}`];

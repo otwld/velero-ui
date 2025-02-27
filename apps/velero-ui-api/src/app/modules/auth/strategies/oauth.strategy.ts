@@ -19,6 +19,7 @@ export class OauthStrategy extends PassportStrategy(Strategy, 'oauth') {
       authorizationURL: configService.get('oauth.authorizationUrl') || ' ',
       tokenURL: configService.get('oauth.tokenUrl') || ' ',
     });
+    this._oauth2.useAuthorizationHeaderforGET(true);
   }
 
   public async validate(accessToken: string) {
@@ -39,6 +40,7 @@ export class OauthStrategy extends PassportStrategy(Strategy, 'oauth') {
         email: emails[0].value,
       };
     } catch (e) {
+      this.logger.error(e, OauthStrategy.name);
       throw new AuthenticationException('Invalid User', {
         cause: OauthStrategy.name,
       });
@@ -53,6 +55,7 @@ export class OauthStrategy extends PassportStrategy(Strategy, 'oauth') {
         function (err, body: string) {
           if (err) {
             reject(new InternalOAuthError('Failed to fetch user profile', err));
+            return;
           }
 
           try {
