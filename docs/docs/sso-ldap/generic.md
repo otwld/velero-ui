@@ -2,7 +2,6 @@
 sidebar_position: 1
 title: Generic Oauth2
 ---
-
 # Generic OAuth Authentication
 
 Velero UI supports authentication via a custom OAuth provider. This section explains how to configure and enable OAuth authentication using environment variables.
@@ -12,7 +11,7 @@ Velero UI supports authentication via a custom OAuth provider. This section expl
 | Variable | Description |
 |----------|-------------|
 | `OAUTH_AUTH_ENABLED` | Set to `true` to enable OAuth authentication. Default is `false`. |
-| `OAUTH_NAME` | The display name of the OAuth provider (e.g., "Authentik"). |
+| `OAUTH_NAME` | The display name of the OAuth provider. |
 | `OAUTH_AUTHORIZATION_URL` | The authorization endpoint URL for OAuth authentication. |
 | `OAUTH_USER_INFO_URL` | The user information endpoint to fetch authenticated user details. |
 | `OAUTH_TOKEN_URL` | The token endpoint URL to exchange authorization codes for access tokens. |
@@ -31,20 +30,16 @@ Velero UI supports authentication via a custom OAuth provider. This section expl
 
 2. **Obtain OAuth Endpoints**
    - Locate the authorization, token, and user info URLs from your OAuth provider’s documentation.
-   - Example for Authentik:
-     - Authorization URL: `https://auth.otwld.com/application/o/authorize/`
-     - Token URL: `https://auth.otwld.com/application/o/token/`
-     - User Info URL: `https://auth.otwld.com/application/o/userinfo/`
 
 3. **Set Environment Variables**
    - Update your environment variables with the values from your OAuth provider.
    - Example:
      ```bash
      OAUTH_AUTH_ENABLED=true
-     OAUTH_NAME="Authentik"
-     OAUTH_AUTHORIZATION_URL=https://auth.otwld.com/application/o/authorize/
-     OAUTH_USER_INFO_URL=https://auth.otwld.com/application/o/userinfo/
-     OAUTH_TOKEN_URL=https://auth.otwld.com/application/o/token/
+     OAUTH_NAME="Your OAuth Provider"
+     OAUTH_AUTHORIZATION_URL="https://your-provider.com/oauth/authorize"
+     OAUTH_USER_INFO_URL="https://your-provider.com/oauth/userinfo"
+     OAUTH_TOKEN_URL="https://your-provider.com/oauth/token"
      OAUTH_CLIENT_ID=your-client-id
      OAUTH_CLIENT_SECRET=your-client-secret
      OAUTH_OAUTH_SCOPE="openid profile email"
