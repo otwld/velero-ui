@@ -1,0 +1,8 @@
+{
+  "label": "\uD83D\uDD11 Federated Authentication",
+  "position": 2,
+  "link": {
+    "type": "generated-index",
+    "description": "Select which authentication that you want to start with:"
+  }
+}
