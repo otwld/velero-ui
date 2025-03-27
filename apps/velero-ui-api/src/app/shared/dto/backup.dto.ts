@@ -97,19 +97,20 @@ export class CreateBackupScratchDto implements V1BackupSpec {
 
   @IsOptional()
   @IsBoolean()
-  includeClusterResources?: boolean = true;
+  includeClusterResources?: boolean;
 
   @IsNotEmpty()
   @IsString()
   storageLocation: string;
 
+  @IsOptional()
   @IsArray()
   @IsString({ each: true })
   volumeSnapshotLocations: string[];
 
   @IsOptional()
   @IsBoolean()
-  defaultVolumesToFsBackup? = true;
+  defaultVolumesToFsBackup?: boolean;
 
   @IsOptional()
   @IsArray()
@@ -126,7 +127,7 @@ export class CreateBackupScratchDto implements V1BackupSpec {
 
   @IsOptional()
   @IsBoolean()
-  snapshotMoveData?: boolean = true;
+  snapshotMoveData?: boolean;
 
   @IsOptional()
   @IsString()
