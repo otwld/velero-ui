@@ -1,6 +1,13 @@
 name: Lint, test and build
 
 on:
+  push:
+    branches:
+      - main
+    paths:
+      - apps/**
+      - libs/**
+      - package.json
   pull_request:
     types:
       - opened
@@ -9,6 +16,7 @@ on:
     paths:
       - apps/**
       - libs/**
+      - package.json
 
 permissions:
   actions: read
@@ -31,7 +39,7 @@ jobs:
           node-version: 20
           cache: 'npm'
 
-      - run: npm run ci
+      - run: npm ci
 
       - uses: nrwl/nx-set-shas@v4
 
