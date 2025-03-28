@@ -510,7 +510,7 @@ const { currentStep, formContent } = storeToRefs(formStore);
 const { data, isError } = useFormConfigMaps();
 
 const currentForm = ref({
-  includeClusterResources: true,
+  includeClusterResources: false,
   resourcePolicy: '',
   includedResources: ['*'],
   excludedResources: [],

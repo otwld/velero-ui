@@ -179,7 +179,7 @@
           <dt
             class="mb-2 font-semibold leading-none text-gray-900 dark:text-white"
           >
-            {{ t('resource.spec.volumeSnapshotLocations') }} *
+            {{ t('resource.spec.volumeSnapshotLocations') }}
           </dt>
           <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">
             <ul
@@ -194,6 +194,7 @@
                 {{ volume }}
               </li>
             </ul>
+            <p v-else>-</p>
           </dd>
           <dt
             class="mb-2 font-semibold leading-none text-gray-900 dark:text-white"

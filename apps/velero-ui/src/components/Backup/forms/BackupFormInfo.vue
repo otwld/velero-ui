@@ -133,7 +133,7 @@
           <label
             class="flex mb-2 text-sm font-medium text-gray-900 dark:text-white items-center"
             for="snapshot-location"
-            >{{ t('resource.spec.volumeSnapshotLocations') }} *
+            >{{ t('resource.spec.volumeSnapshotLocations') }}
             <FontAwesomeIcon
               :icon="faQuestionCircle"
               class="pl-1 w-3 h-3 hover:text-gray-700 hover:cursor-help"
@@ -508,9 +508,9 @@ const currentForm = ref({
   excludedNamespaces: [],
   volumeSnapshotLocations: [],
   storageLocation: '',
-  snapshotVolumes: true,
+  snapshotVolumes: false,
   snapshotMoveData: false,
-  defaultVolumesToFsBackup: true,
+  defaultVolumesToFsBackup: false,
   itemOperationTimeout: '4',
   itemOperationTimeoutUnit: 'h',
   csiSnapshotTimeout: '10',
@@ -532,7 +532,6 @@ const validate = () =>
   !!(
     (notApplicableFields.value?.backupName ? true : currentForm.value?.name) &&
     currentForm.value?.ttl &&
-    currentForm.value?.volumeSnapshotLocations.length > 0 &&
     currentForm.value?.storageLocation
   );
 

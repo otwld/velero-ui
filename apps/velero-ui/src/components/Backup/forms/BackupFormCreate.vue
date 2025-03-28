@@ -85,7 +85,6 @@ const onSubmit = () => {
       type: CreateBackupTypeEnum.FROM_SCRATCH,
       spec: {
         ttl: formContent.value[1].ttl + formContent.value[1].ttlUnit,
-        volumeSnapshotLocations: formContent.value[1].volumeSnapshotLocations,
         storageLocation: formContent.value[1].storageLocation,
         snapshotVolumes: formContent.value[1].snapshotVolumes,
         snapshotMoveData: formContent.value[1].snapshotMoveData,
@@ -99,6 +98,10 @@ const onSubmit = () => {
         includeClusterResources: formContent.value[2].includeClusterResources,
       },
     };
+
+    if (formContent.value[1].volumeSnapshotLocations.length > 0) {
+      form.spec.volumeSnapshotLocations = formContent.value[1].volumeSnapshotLocations;
+    }
 
     if (formContent.value[1].includedNamespaces.length > 0) {
       form.spec.includedNamespaces = formContent.value[1].includedNamespaces;

@@ -72,7 +72,6 @@ const onSubmit = () => {
     spec: {
       template: {
         ttl: formContent.value[1].ttl + formContent.value[1].ttlUnit,
-        volumeSnapshotLocations: formContent.value[1].volumeSnapshotLocations,
         storageLocation: formContent.value[1].storageLocation,
         snapshotVolumes: formContent.value[1].snapshotVolumes,
         snapshotMoveData: formContent.value[1].snapshotMoveData,
@@ -92,6 +91,11 @@ const onSubmit = () => {
       schedule: formContent.value[0].schedule,
     },
   };
+
+  if (formContent.value[1].volumeSnapshotLocations.length > 0) {
+    form.spec.template.volumeSnapshotLocations =
+      formContent.value[1].volumeSnapshotLocations;
+  }
 
   if (formContent.value[1].includedNamespaces.length > 0) {
     form.spec.template.includedNamespaces =
