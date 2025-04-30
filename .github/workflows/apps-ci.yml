@@ -44,4 +44,4 @@ jobs:
       - uses: nrwl/nx-set-shas@v4
 
       - run: git branch --track main origin/main
-      - run: npx affected -t lint build
+      - run: npx nx run-many -t lint build
