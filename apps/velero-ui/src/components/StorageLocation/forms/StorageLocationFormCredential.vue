@@ -7,7 +7,7 @@
       >
         <FontAwesomeIcon
           :icon="faInfoCircle"
-          class="flex-shrink-0 inline w-4 h-4 me-3 mt-[2px]"
+          class="flex-shrink-0 inline !w-4 !h-4 me-3 mt-[2px]"
         />
         <span class="sr-only">Info</span>
         <div>
@@ -50,7 +50,7 @@
             >{{ t('resource.spec.credentialName') }}
             <FontAwesomeIcon
               :icon="faQuestionCircle"
-              class="pl-1 w-3 h-3 hover:text-gray-700 hover:cursor-help"
+              class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
               data-tooltip-style="light"
               data-tooltip-target="tooltip-credential-name"
             />
@@ -82,7 +82,7 @@
             >{{ t('resource.spec.credentialKey') }}
             <FontAwesomeIcon
               :icon="faQuestionCircle"
-              class="pl-1 w-3 h-3 hover:text-gray-700 hover:cursor-help"
+              class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
               data-tooltip-style="light"
               data-tooltip-target="tooltip-credential-key"
             />

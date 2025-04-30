@@ -5,8 +5,7 @@ export interface AppStore {
   language: string;
 }
 
-export const useAppStore = defineStore({
-  id: 'app',
+export const useAppStore = defineStore('app',{
   state: () =>
     ({
       hideSidebar: true,

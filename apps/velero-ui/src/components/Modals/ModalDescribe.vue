@@ -3,9 +3,8 @@
     class="relative z-10"
   >
     <div
-
-      class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
-    ></div>
+      class="fixed inset-0 bg-gray-500/75 transition-opacity"
+    />
 
     <div class="fixed h-full w-full inset-0 z-10">
       <div
@@ -27,10 +26,9 @@
                 class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-700 dark:hover:text-white"
                 type="button"
               >
-                <FontAwesomeIcon :icon="faXmark" class="w-5 h-5" />
+                <FontAwesomeIcon :icon="faXmark" class="!w-5 !h-5" />
               </button>
             </div>
-            <!-- Modal body -->
             <div class="p-4 md:p-5">
               <div
                 class="p-4 text-sm w-full bg-gray-50 border border-gray-300 text-gray-900 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white h-[600px] overflow-auto"

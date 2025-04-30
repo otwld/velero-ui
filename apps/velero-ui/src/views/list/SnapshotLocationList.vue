@@ -1,6 +1,6 @@
 <template>
   <ListHeader>
-    <template v-slot:bulk-buttons>
+    <template #bulk-buttons>
       <button
         :class="{
           'cursor-not-allowed':
@@ -16,22 +16,22 @@
         <FontAwesomeIcon
           v-if="!isLoadingDeleting"
           :icon="faTrashCan"
-          class="w-5 h-5"
+          class="!w-5 !h-5"
         />
         <FontAwesomeIcon
           v-if="isLoadingDeleting"
           :icon="faCircleNotch"
-          class="w-5 h-5 animate-spin"
+          class="!w-5 !h-5 animate-spin"
         />
       </button>
     </template>
-    <template v-slot:buttons>
+    <template #buttons>
       <button
         class="inline-flex items-center justify-center w-1/2 px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 sm:w-auto dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
         type="button"
         @click="showModalAdd = !showModalAdd"
       >
-        <FontAwesomeIcon :icon="faPlus" class="w-4 h-4 mr-2" />
+        <FontAwesomeIcon :icon="faPlus" class="!w-4 !h-4 mr-2" />
         {{ t('global.button.new.title') }}
       </button>
     </template>
@@ -43,15 +43,15 @@
     v-if="showModalAdd"
     id="modal-add"
     width="sm:lg:w-6/12"
-    @onClose="showModalAdd = false"
+    @on-close="showModalAdd = false"
   >
-    <template v-slot:header>
+    <template #header>
       <h3 class="text-lg text-gray-500 dark:text-gray-400">
         {{ t('modal.text.title.createNewVolumeSnapshotLocation') }}
       </h3>
     </template>
-    <template v-slot:content>
-      <SnapshotLocationFormCreate @onClose="showModalAdd = false" />
+    <template #content>
+      <SnapshotLocationFormCreate @on-close="showModalAdd = false" />
     </template>
   </VModal>
   <ModalConfirmation
@@ -62,10 +62,10 @@
         items: childListRef?.getCheckedItems().length,
       })
     "
-    @onClose="showModalBulkRemove = false"
-    @onConfirm="bulkRemove()"
+    @on-close="showModalBulkRemove = false"
+    @on-confirm="bulkRemove()"
   >
-    <template v-slot:content>
+    <template #content>
       <div class="flex flex-col justify-center mb-6">
         <span
           v-for="(item, index) in childListRef?.getCheckedItems()"

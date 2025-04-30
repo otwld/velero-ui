@@ -7,8 +7,7 @@ export interface FormStore {
   notApplicableFields: any;
 }
 
-export const useFormStore = defineStore({
-  id: 'form',
+export const useFormStore = defineStore('form', {
   state: () =>
     ({
       totalSteps: 0,

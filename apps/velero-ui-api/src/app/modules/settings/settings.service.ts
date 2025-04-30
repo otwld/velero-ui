@@ -172,6 +172,7 @@ export class SettingsService {
   ): Promise<void> {
     let name: string;
     let containerName: string;
+    let namespace: string;
 
     if (type === 'server') {
       const veleroServer: VeleroServerSettings = await lastValueFrom(
@@ -179,15 +180,18 @@ export class SettingsService {
       );
       name = veleroServer.name;
       containerName = 'velero';
+      namespace = this.configService.get('velero.namespace');
     } else if (type === 'ui') {
       const veleroUI: VeleroUiSettings = await lastValueFrom(
         this.getVeleroUi(),
       );
       name = veleroUI.name;
       containerName = 'velero-ui';
+      namespace = this.configService.get('app.namespace');
     } else {
       name = nodeName;
       containerName = 'node-agent';
+      namespace = this.configService.get('velero.namespace');
     }
 
     if (this.activeServerLogStreams.has(client.id)) {
@@ -205,7 +209,7 @@ export class SettingsService {
 
     try {
       await this.k8sLog.log(
-        this.configService.get('velero.namespace'),
+        namespace,
         name,
         containerName,
         stream,

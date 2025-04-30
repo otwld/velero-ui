@@ -24,8 +24,7 @@ export interface ToastsStore {
   toasts: Toast[];
 }
 
-export const useToastsStore = defineStore({
-  id: 'toasts',
+export const useToastsStore = defineStore('toasts', {
   state: () =>
     ({
       toasts: [],

@@ -8,7 +8,7 @@
         :icon="toast?.icon"
         :message="toast.message"
         :type="toast.type"
-        @onDismiss="dismiss(index)"
+        @on-dismiss="dismiss(index)"
       />
     </div>
   </div>

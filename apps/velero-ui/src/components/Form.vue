@@ -11,7 +11,7 @@
           'text-blue-600': index < currentStep,
           'dark:text-blue-500': index < currentStep,
         }"
-        class="flex md:w-full items-center sm:after:content-[''] after:w-full after:h-1 after:border-b after:border-gray-200 after:border-1 after:hidden sm:after:inline-block after:mx-4 xl:after:mx-6 dark:after:border-gray-700"
+        class="flex md:w-full items-center sm:after:content-[''] after:w-full after:h-1 after:border-b after:border-gray-200 after:hidden sm:after:inline-block after:mx-4 xl:after:mx-6 dark:after:border-gray-700"
       >
         <div
           class="flex items-center flex-col sm:after:hidden after:mx-2 after:text-gray-200 dark:after:text-gray-500"
@@ -20,7 +20,7 @@
             <FontAwesomeIcon
               v-if="index < currentStep"
               :icon="faCheckCircle"
-              class="w-5 h-5 pr-2"
+              class="!w-5 !h-5 pr-2"
             />
             {{ step.name }}
           </span>
@@ -42,7 +42,7 @@
       >
         <FontAwesomeIcon
           :icon="faInfoCircle"
-          class="flex-shrink-0 inline w-4 h-4 me-3 mt-[2px]"
+          class="flex-shrink-0 inline !w-4 !h-4 me-3 mt-[2px]"
         />
         <div>
           <span class="font-medium">{{ t('global.error') }}</span>
@@ -56,7 +56,7 @@
           type="button"
           @click="emit('dismissError')"
         >
-          <FontAwesomeIcon :icon="faXmark" class="w-3 h-3" />
+          <FontAwesomeIcon :icon="faXmark" class="!w-3 !h-3" />
         </button>
       </div>
     </div>
@@ -101,7 +101,7 @@
       <FontAwesomeIcon
         v-if="isLoading"
         :icon="faCircleNotch"
-        class="w-4 h-4 animate-spin mr-2"
+        class="!w-4 !h-4 animate-spin mr-2"
       />
       {{ t('global.button.confirm.title') }}
     </button>

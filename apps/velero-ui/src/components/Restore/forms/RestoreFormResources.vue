@@ -6,7 +6,7 @@
     >
       <FontAwesomeIcon
         :icon="faInfoCircle"
-        class="flex-shrink-0 inline w-4 h-4 me-3 mt-[2px]"
+        class="flex-shrink-0 inline !w-4 !h-4 me-3 mt-[2px]"
       />
       <span class="sr-only">Info</span>
       <div>
@@ -45,7 +45,7 @@
             >{{ t('resource.spec.resourceModifier') }}
             <FontAwesomeIcon
               :icon="faQuestionCircle"
-              class="pl-1 w-3 h-3 hover:text-gray-700 hover:cursor-help"
+              class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
               data-tooltip-style="light"
               data-tooltip-target="tooltip-resource-modifier-configmap"
             />
@@ -77,7 +77,7 @@
             >{{ t('resource.spec.includedResources') }} *
             <FontAwesomeIcon
               :icon="faQuestionCircle"
-              class="pl-1 w-3 h-3 hover:text-gray-700 hover:cursor-help"
+              class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
               data-tooltip-style="light"
               data-tooltip-target="tooltip-included-resources"
             />
@@ -99,7 +99,7 @@
               :title="t('global.button.add.title')"
               @click="add('includedResources')"
             >
-              <FontAwesomeIcon :icon="faPlus" class="w-4 h-4" />
+              <FontAwesomeIcon :icon="faPlus" class="!w-4 !h-4" />
             </button>
           </div>
           <span
@@ -115,7 +115,7 @@
               :title="t('global.button.delete.title')"
               @click="remove('includedResources', resource)"
             >
-              <FontAwesomeIcon :icon="faXmark" class="w-2 h-2" />
+              <FontAwesomeIcon :icon="faXmark" class="!w-2 !h-2" />
               <span class="sr-only">Remove</span>
             </button>
           </span>
@@ -127,7 +127,7 @@
             >{{ t('resource.spec.excludedResources') }}
             <FontAwesomeIcon
               :icon="faQuestionCircle"
-              class="pl-1 w-3 h-3 hover:text-gray-700 hover:cursor-help"
+              class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
               data-tooltip-style="light"
               data-tooltip-target="tooltip-excluded-resources"
             />
@@ -149,7 +149,7 @@
               :title="t('global.button.add.title')"
               @click="add('excludedResources')"
             >
-              <FontAwesomeIcon :icon="faPlus" class="w-4 h-4" />
+              <FontAwesomeIcon :icon="faPlus" class="!w-4 !h-4" />
             </button>
           </div>
           <span
@@ -165,7 +165,7 @@
               :title="t('global.button.delete.title')"
               @click="remove('excludedResources', resource)"
             >
-              <FontAwesomeIcon :icon="faXmark" class="w-2 h-2" />
+              <FontAwesomeIcon :icon="faXmark" class="!w-2 !h-2" />
               <span class="sr-only">Remove</span>
             </button>
           </span>
@@ -177,7 +177,7 @@
             >{{ t('resource.spec.restoreStatusIncludedResources') }}
             <FontAwesomeIcon
               :icon="faQuestionCircle"
-              class="pl-1 w-3 h-3 hover:text-gray-700 hover:cursor-help"
+              class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
               data-tooltip-style="light"
               data-tooltip-target="tooltip-status-include-resources"
             />
@@ -199,7 +199,7 @@
               :title="t('global.button.add.title')"
               @click="add('statusIncludedResources')"
             >
-              <FontAwesomeIcon :icon="faPlus" class="w-4 h-4" />
+              <FontAwesomeIcon :icon="faPlus" class="!w-4 !h-4" />
             </button>
           </div>
           <span
@@ -215,7 +215,7 @@
               :title="t('global.button.delete.title')"
               @click="remove('statusIncludedResources', resource)"
             >
-              <FontAwesomeIcon :icon="faXmark" class="w-2 h-2" />
+              <FontAwesomeIcon :icon="faXmark" class="!w-2 !h-2" />
               <span class="sr-only">Remove</span>
             </button>
           </span>
@@ -227,7 +227,7 @@
             >{{ t('resource.spec.restoreStatusExcludedResources') }}
             <FontAwesomeIcon
               :icon="faQuestionCircle"
-              class="pl-1 w-3 h-3 hover:text-gray-700 hover:cursor-help"
+              class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
               data-tooltip-style="light"
               data-tooltip-target="tooltip-status-exclude-resources"
             />
@@ -249,7 +249,7 @@
               :title="t('global.button.add.title')"
               @click="add('statusExcludedResources')"
             >
-              <FontAwesomeIcon :icon="faPlus" class="w-4 h-4" />
+              <FontAwesomeIcon :icon="faPlus" class="!w-4 !h-4" />
             </button>
           </div>
           <span
@@ -265,7 +265,7 @@
               :title="t('global.button.delete.title')"
               @click="remove('statusExcludedResources', resource)"
             >
-              <FontAwesomeIcon :icon="faXmark" class="w-2 h-2" />
+              <FontAwesomeIcon :icon="faXmark" class="!w-2 !h-2" />
               <span class="sr-only">Remove</span>
             </button>
           </span>

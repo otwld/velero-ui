@@ -6,7 +6,7 @@
     >
       <FontAwesomeIcon
         :icon="faInfoCircle"
-        class="flex-shrink-0 inline w-4 h-4 me-3 mt-[2px]"
+        class="flex-shrink-0 inline !w-4 !h-4 me-3 mt-[2px]"
       />
       <span class="sr-only">Info</span>
       <div>
@@ -45,7 +45,7 @@
             >{{ t('resource.spec.resourcePolicy') }}
             <FontAwesomeIcon
               :icon="faQuestionCircle"
-              class="pl-1 w-3 h-3 hover:text-gray-700 hover:cursor-help"
+              class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
               data-tooltip-style="light"
               data-tooltip-target="tooltip-resource-policies-configmap"
             />
@@ -92,7 +92,7 @@
               >
               <FontAwesomeIcon
                 :icon="faQuestionCircle"
-                class="pl-1 w-3 h-3 hover:text-gray-700 hover:cursor-help dark:text-white dark:hover:text-gray-200"
+                class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help dark:text-white dark:hover:text-gray-200"
                 data-tooltip-style="light"
                 data-tooltip-target="tooltip-include-cluster-resources"
               />
@@ -111,7 +111,7 @@
             >{{ t('resource.spec.includedResources') }} *
             <FontAwesomeIcon
               :icon="faQuestionCircle"
-              class="pl-1 w-3 h-3 hover:text-gray-700 hover:cursor-help"
+              class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
               data-tooltip-style="light"
               data-tooltip-target="tooltip-included-resources"
             />
@@ -133,7 +133,7 @@
               :title="t('global.button.add.title')"
               @click="add('includedResources')"
             >
-              <FontAwesomeIcon :icon="faPlus" class="w-4 h-4" />
+              <FontAwesomeIcon :icon="faPlus" class="!w-4 !h-4" />
             </button>
           </div>
           <span
@@ -149,7 +149,7 @@
               :title="t('global.button.delete.title')"
               @click="remove('includedResources', resource)"
             >
-              <FontAwesomeIcon :icon="faXmark" class="w-2 h-2" />
+              <FontAwesomeIcon :icon="faXmark" class="!w-2 !h-2" />
               <span class="sr-only">Remove</span>
             </button>
           </span>
@@ -161,7 +161,7 @@
             >{{ t('resource.spec.excludedResources') }}
             <FontAwesomeIcon
               :icon="faQuestionCircle"
-              class="pl-1 w-3 h-3 hover:text-gray-700 hover:cursor-help"
+              class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
               data-tooltip-style="light"
               data-tooltip-target="tooltip-excluded-resources"
             />
@@ -183,7 +183,7 @@
               :title="t('global.button.add.title')"
               @click="add('excludedResources')"
             >
-              <FontAwesomeIcon :icon="faPlus" class="w-4 h-4" />
+              <FontAwesomeIcon :icon="faPlus" class="!w-4 !h-4" />
             </button>
           </div>
           <span
@@ -199,7 +199,7 @@
               :title="t('global.button.delete.title')"
               @click="remove('excludedResources', resource)"
             >
-              <FontAwesomeIcon :icon="faXmark" class="w-2 h-2" />
+              <FontAwesomeIcon :icon="faXmark" class="!w-2 !h-2" />
               <span class="sr-only">Remove</span>
             </button>
           </span>
@@ -216,7 +216,7 @@
             >{{ t('resource.spec.includedClusterScopedResources') }}
             <FontAwesomeIcon
               :icon="faQuestionCircle"
-              class="pl-1 w-3 h-3 hover:text-gray-700 hover:cursor-help"
+              class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
               data-tooltip-style="light"
               data-tooltip-target="tooltip-include-cluster-scoped-resources"
             />
@@ -238,7 +238,7 @@
               :title="t('global.button.add.title')"
               @click="add('includedClusterScopedResources')"
             >
-              <FontAwesomeIcon :icon="faPlus" class="w-4 h-4" />
+              <FontAwesomeIcon :icon="faPlus" class="!w-4 !h-4" />
             </button>
           </div>
           <span
@@ -256,7 +256,7 @@
               :title="t('global.button.delete.title')"
               @click="remove('includedClusterScopedResources', resource)"
             >
-              <FontAwesomeIcon :icon="faXmark" class="w-2 h-2" />
+              <FontAwesomeIcon :icon="faXmark" class="!w-2 !h-2" />
               <span class="sr-only">Remove</span>
             </button>
           </span>
@@ -268,7 +268,7 @@
             >{{ t('resource.spec.excludedClusterScopedResources') }}
             <FontAwesomeIcon
               :icon="faQuestionCircle"
-              class="pl-1 w-3 h-3 hover:text-gray-700 hover:cursor-help"
+              class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
               data-tooltip-style="light"
               data-tooltip-target="tooltip-exclude-cluster-scoped-resources"
             />
@@ -290,7 +290,7 @@
               :title="t('global.button.add.title')"
               @click="add('excludedClusterScopedResources')"
             >
-              <FontAwesomeIcon :icon="faPlus" class="w-4 h-4" />
+              <FontAwesomeIcon :icon="faPlus" class="!w-4 !h-4" />
             </button>
           </div>
           <span
@@ -308,7 +308,7 @@
               :title="t('global.button.delete.title')"
               @click="remove('excludedClusterScopedResources', resource)"
             >
-              <FontAwesomeIcon :icon="faXmark" class="w-2 h-2" />
+              <FontAwesomeIcon :icon="faXmark" class="!w-2 !h-2" />
               <span class="sr-only">Remove</span>
             </button>
           </span>
@@ -320,7 +320,7 @@
             >{{ t('resource.spec.includedNamespaceScopedResources') }}
             <FontAwesomeIcon
               :icon="faQuestionCircle"
-              class="pl-1 w-3 h-3 hover:text-gray-700 hover:cursor-help"
+              class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
               data-tooltip-style="light"
               data-tooltip-target="tooltip-include-namespace-scoped-resources"
             />
@@ -342,7 +342,7 @@
               :title="t('global.button.add.title')"
               @click="add('includedNamespaceScopedResources')"
             >
-              <FontAwesomeIcon :icon="faPlus" class="w-4 h-4" />
+              <FontAwesomeIcon :icon="faPlus" class="!w-4 !h-4" />
             </button>
           </div>
           <span
@@ -360,7 +360,7 @@
               :title="t('global.button.delete.title')"
               @click="remove('includedNamespaceScopedResources', resource)"
             >
-              <FontAwesomeIcon :icon="faXmark" class="w-2 h-2" />
+              <FontAwesomeIcon :icon="faXmark" class="!w-2 !h-2" />
               <span class="sr-only">Remove</span>
             </button>
           </span>
@@ -372,7 +372,7 @@
             >{{ t('resource.spec.excludedNamespaceScopedResources') }}
             <FontAwesomeIcon
               :icon="faQuestionCircle"
-              class="pl-1 w-3 h-3 hover:text-gray-700 hover:cursor-help"
+              class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
               data-tooltip-style="light"
               data-tooltip-target="tooltip-exclude-namespace-scoped-resources"
             />
@@ -394,7 +394,7 @@
               :title="t('global.button.add.title')"
               @click="add('excludedNamespaceScopedResources')"
             >
-              <FontAwesomeIcon :icon="faPlus" class="w-4 h-4" />
+              <FontAwesomeIcon :icon="faPlus" class="!w-4 !h-4" />
             </button>
           </div>
           <span
@@ -412,7 +412,7 @@
               :title="t('global.button.delete.title')"
               @click="remove('excludedNamespaceScopedResources', resource)"
             >
-              <FontAwesomeIcon :icon="faXmark" class="w-2 h-2" />
+              <FontAwesomeIcon :icon="faXmark" class="!w-2 !h-2" />
               <span class="sr-only">Remove</span>
             </button>
           </span>

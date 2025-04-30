@@ -7,10 +7,10 @@
     >
       <FontAwesomeIcon
         :icon="faFolderTree"
-        class="w-16 h-16 mr-2 dark:text-white"
+        class="!w-16 !h-16 mr-2 dark:text-white"
       />
 
-      <div>
+      <div class="pl-3">
         <h3
           v-if="repository"
           class="mb-1 text-lg font-bold text-gray-900 dark:text-white"
@@ -18,9 +18,9 @@
           {{ repository?.metadata?.name }}
         </h3>
         <div
-          v-if="!repository"
+          v-else
           class="h-2.5 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-48 mb-4"
-        ></div>
+        />
         <div
           v-if="repository"
           class="mb-4 text-xs text-gray-500 dark:text-gray-400"
@@ -28,9 +28,9 @@
           {{ repository?.metadata?.uid }}
         </div>
         <div
-          v-if="!repository"
+          v-else
           class="h-1.5 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-48 mb-4"
-        ></div>
+        />
         <div v-if="repository" class="flex items-center gap-x-4 gap-y-2">
           <button
             :class="{ 'cursor-not-allowed': isDeleting || !repository }"
@@ -42,12 +42,12 @@
             <FontAwesomeIcon
               v-if="isDeleting"
               :icon="faCircleNotch"
-              class="w-4 h-4 animate-spin mr-2"
+              class="!w-4 !h-4 animate-spin mr-2"
             />
             <FontAwesomeIcon
-              v-if="!isDeleting"
+              v-else
               :icon="faTrashCan"
-              class="w-4 h-4 mr-2"
+              class="!w-4 !h-4 mr-2"
             />
             {{ isDeleting ? t('global.button.delete.loading') : t('global.button.delete.title')}}
           </button>

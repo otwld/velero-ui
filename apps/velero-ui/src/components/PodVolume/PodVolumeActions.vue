@@ -5,9 +5,9 @@
     <div
       class="items-center sm:flex xl:block 2xl:flex sm:space-x-4 xl:space-x-0 2xl:space-x-4"
     >
-      <FontAwesomeIcon :icon="faCube" class="w-16 h-16 mr-2 dark:text-white" />
+      <FontAwesomeIcon :icon="faCube" class="!w-16 !h-16 mr-2 dark:text-white" />
 
-      <div>
+      <div class="pl-3">
         <h3
           v-if="podVolume"
           class="mb-1 text-lg font-bold text-gray-900 dark:text-white"
@@ -19,7 +19,7 @@
           class="h-2.5 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-48 mb-4"
         />
         <div
-          v-if="podVolume"
+          v-else
           class="mb-4 text-xs text-gray-500 dark:text-gray-400"
         >
           {{ podVolume?.metadata?.uid }}
@@ -32,19 +32,19 @@
           <button
             :class="{ 'cursor-not-allowed': isDeleting || !podVolume }"
             :disabled="isDeleting || !podVolume"
-            class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-red-600 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"
+            class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-red-600 hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"
             type="button"
             @click="showModalDelete = !showModalDelete"
           >
             <FontAwesomeIcon
               v-if="isDeleting"
               :icon="faCircleNotch"
-              class="w-4 h-4 animate-spin mr-2"
+              class="!w-4 !h-4 animate-spin mr-2"
             />
             <FontAwesomeIcon
               v-if="!isDeleting"
               :icon="faTrashCan"
-              class="w-4 h-4 mr-2"
+              class="!w-4 !h-4 mr-2"
             />
             {{
               isDeleting
@@ -61,10 +61,10 @@
     v-if="showModalDelete"
     :icon="faExclamationCircle"
     :text="t('modal.text.confirmation.delete')"
-    @onClose="showModalDelete = false"
-    @onConfirm="remove(podVolume.metadata.name)"
+    @on-close="showModalDelete = false"
+    @on-confirm="remove(podVolume.metadata.name)"
   >
-    <template v-slot:content>
+    <template #content>
       <div class="flex justify-center">
         <p
           class="mt-2 px-1 mb-6 text-sm rounded bg-gray-200 text-gray-600 dark:bg-gray-600 dark:text-gray-200"

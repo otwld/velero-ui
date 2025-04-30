@@ -38,11 +38,11 @@
         }"
         class="bg-blue-100 hover:bg-blue-200 text-blue-800 text-xs font-medium inline-flex items-center me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:hover:bg-blue-800 dark:text-blue-300"
       >
-        <FontAwesomeIcon :icon="faServer" class="w-3 h-3 mr-1.5" />
+        <FontAwesomeIcon :icon="faServer" class="!w-3 !h-3 mr-1.5" />
         {{ spec.backupStorageLocation }}
         <FontAwesomeIcon
           :icon="faArrowUpRightFromSquare"
-          class="w-2 h-2 ml-1.5"
+          class="!w-2 !h-2 ml-1.5"
         />
       </router-link>
     </div>
@@ -68,11 +68,11 @@
           }"
           class="inline-flex items-center bg-gray-100 hover:bg-gray-200 text-gray-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-300"
         >
-          <FontAwesomeIcon :icon="faFloppyDisk" class="w-3 h-3 mr-1.5" />
+          <FontAwesomeIcon :icon="faFloppyDisk" class="!w-3 !h-3 mr-1.5" />
           {{ spec.tags.backup }}
           <FontAwesomeIcon
             :icon="faArrowUpRightFromSquare"
-            class="w-2 h-2 ml-1.5"
+            class="!w-2 !h-2 ml-1.5"
           />
         </router-link>
       </div>

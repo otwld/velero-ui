@@ -8,7 +8,7 @@
       </p>
     </div>
     <div v-if="data?.length === 0" class="inline-flex items-center">
-      <FontAwesomeIcon :icon="faInfoCircle" class="w-4 h-4" />
+      <FontAwesomeIcon :icon="faInfoCircle" class="!w-4 !h-4" />
       <p class="ml-2">{{ t('log.text.noResult') }}</p>
     </div>
   </div>

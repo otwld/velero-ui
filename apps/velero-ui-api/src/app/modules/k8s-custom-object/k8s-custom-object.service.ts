@@ -1,18 +1,14 @@
 import { Inject, Injectable } from '@nestjs/common';
 import {
-  Configuration,
-  createConfiguration,
   CustomObjectsApi,
   KubeConfig,
   KubernetesListObject,
   KubernetesObject,
-  RequestContext,
-  ResponseContext,
-  ServerConfiguration,
+  PatchStrategy,
+  setHeaderOptions,
   Watch,
 } from '@kubernetes/client-node';
 import { K8S_CONNECTION } from '@velero-ui-api/shared/utils/k8s.utils';
-import { VeleroService } from '@velero-ui-api/shared/modules/velero/velero.service';
 import { ConfigService } from '@nestjs/config';
 import {
   catchError,
@@ -28,7 +24,6 @@ import { VELERO } from '@velero-ui-api/shared/modules/velero/velero.constants';
 import { sortObjects } from '@velero-ui-api/shared/utils/sorts.utils';
 import { AppLogger } from '@velero-ui-api/shared/modules/logger/logger.service';
 import { Socket } from 'socket.io';
-import { PromiseMiddlewareWrapper } from '@kubernetes/client-node/dist/gen/middleware';
 
 @Injectable()
 export class K8sCustomObjectService {
@@ -43,7 +38,6 @@ export class K8sCustomObjectService {
   constructor(
     @Inject(K8S_CONNECTION) private readonly k8s: KubeConfig,
     private logger: AppLogger,
-    private readonly veleroService: VeleroService,
     private configService: ConfigService,
   ) {
     this.k8sCustomObjectApi = this.k8s.makeApiClient(CustomObjectsApi);
@@ -184,28 +178,6 @@ export class K8sCustomObjectService {
       K8sCustomObjectService.name,
     );
 
-    const headerPatchMiddleware: PromiseMiddlewareWrapper =
-      new PromiseMiddlewareWrapper({
-        pre: async (requestContext: RequestContext) => {
-          requestContext.setHeaderParam(
-            'Content-type',
-            'application/json-patch+json',
-          );
-          return requestContext;
-        },
-        post: async (responseContext: ResponseContext) => responseContext,
-      });
-
-    const baseServerConfig: ServerConfiguration<{
-      [key: string]: string;
-    }> = new ServerConfiguration<{
-      [key: string]: string;
-    }>(this.k8s.getCurrentCluster().server, {});
-    const configuration: Configuration = createConfiguration({
-      middleware: [headerPatchMiddleware],
-      baseServer: baseServerConfig,
-    });
-
     return from(
       this.k8sCustomObjectApi.patchNamespacedCustomObject(
         {
@@ -216,7 +188,7 @@ export class K8sCustomObjectService {
           name,
           body,
         },
-        configuration,
+        setHeaderOptions('Content-Type', PatchStrategy.JsonPatch),
       ),
     ).pipe(
       catchError((e: Error) => {

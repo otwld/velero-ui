@@ -2,12 +2,12 @@
   <div v-if="!error" class="h-full bg-gray-50 dark:bg-gray-900">
     <div class="grid grid-cols-1 px-4 xl:grid-cols-3 xl:gap-4">
       <div class="col-span-full xl:col-auto">
-        <ScheduleActions :schedule="data"/>
-        <ScheduleStatus :schedule="data"/>
-        <BackupDetails :spec="data?.spec.template"/>
+        <ScheduleActions :schedule="data" />
+        <ScheduleStatus :schedule="data" />
+        <BackupDetails :spec="data?.spec.template" />
       </div>
       <div class="col-span-2">
-        <Describe :data="data"/>
+        <Describe :data="data" />
       </div>
     </div>
     <ScheduleBackupList />

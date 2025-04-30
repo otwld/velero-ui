@@ -8,28 +8,28 @@
       v-if="type === ToastType.SUCCESS"
       class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-green-500 bg-green-100 rounded-lg dark:bg-green-800 dark:text-green-200"
     >
-      <FontAwesomeIcon :icon="icon || faCheckCircle" class="w-5 h-5" />
+      <FontAwesomeIcon :icon="icon || faCheckCircle" class="!w-5 !h-5" />
     </div>
 
     <div
       v-if="type === ToastType.ERROR"
       class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-red-500 bg-red-100 rounded-lg dark:bg-red-800 dark:text-red-200"
     >
-      <FontAwesomeIcon :icon="icon || faXmarkCircle" class="w-5 h-5" />
+      <FontAwesomeIcon :icon="icon || faXmarkCircle" class="!w-5 !h-5" />
     </div>
 
     <div
       v-if="type === ToastType.WARNING"
       class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-orange-500 bg-orange-100 rounded-lg dark:bg-orange-800 dark:text-orange-200"
     >
-      <FontAwesomeIcon :icon="icon || faExclamationCircle" class="w-5 h-5" />
+      <FontAwesomeIcon :icon="icon || faExclamationCircle" class="!w-5 !h-5" />
     </div>
 
     <div
       v-if="type === ToastType.INFO"
       class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-blue-500 bg-blue-100 rounded-lg dark:bg-blue-800 dark:text-blue-200"
     >
-      <FontAwesomeIcon :icon="icon || faCircleInfo" class="w-5 h-5" />
+      <FontAwesomeIcon :icon="icon || faCircleInfo" class="!w-5 !h-5" />
     </div>
 
     <div class="ml-3 text-sm font-normal">{{ message }}</div>
@@ -40,7 +40,7 @@
       aria-label="Close"
     >
       <span class="sr-only">Close</span>
-      <FontAwesomeIcon :icon="faXmark" class="w-3 h-3" />
+      <FontAwesomeIcon :icon="faXmark" class="!w-3 !h-3" />
     </button>
   </div>
 </template>

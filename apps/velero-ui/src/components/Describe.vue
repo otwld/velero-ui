@@ -21,7 +21,7 @@
         <div v-if="!data" class="inline-flex items-center">
           <svg
 
-            class="w-4 h-4 animate-spin"
+            class="!w-4 !h-4 animate-spin"
             fill="currentColor"
             role="status"
             viewBox="0 0 100 101"

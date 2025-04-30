@@ -9,6 +9,7 @@ module.exports = {
     join(__dirname, 'src/**/*!(*.stories|*.spec).{vue,ts,tsx,js,jsx}'),
     ...createGlobPatternsForDependencies(__dirname),
   ],
+  purge: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
   darkMode: 'media',
   theme: {
     extend: {
@@ -29,8 +30,6 @@ module.exports = {
     },
   },
   plugins: [
-    require('flowbite/plugin')({
-      charts: true,
-    }),
+    require('flowbite/plugin')
   ],
 };

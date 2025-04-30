@@ -25,7 +25,7 @@
               >
                 <FontAwesomeIcon
                   :icon="faChartPie"
-                  class="w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
+                  class="!w-5 !h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
                 />
                 <span class="ml-3">{{ t('dashboard.title') }}</span>
               </router-link>
@@ -38,7 +38,7 @@
               >
                 <FontAwesomeIcon
                   :icon="faFloppyDisk"
-                  class="w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
+                  class="!w-5 !h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
                 />
                 <span class="ml-3">{{ t('backups.title') }}</span>
               </router-link>
@@ -51,7 +51,7 @@
               >
                 <FontAwesomeIcon
                   :icon="faClock"
-                  class="w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
+                  class="!w-5 !h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
                 />
                 <span class="ml-3">{{ t('schedules.title') }}</span>
               </router-link>
@@ -65,7 +65,7 @@
                 <FontAwesomeIcon
                   :icon="faClockRotateLeft"
                   active-class="bg-gray-100 dark:bg-gray-700"
-                  class="w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
+                  class="!w-5 !h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
                 />
 
                 <span class="ml-3">{{ t('restores.title') }}</span>
@@ -79,7 +79,7 @@
               >
                 <FontAwesomeIcon
                   :icon="faFolderTree"
-                  class="w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
+                  class="!w-5 !h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
                 />
                 <span class="ml-3">{{ t('backupRepositories.title') }}</span>
               </router-link>
@@ -92,7 +92,7 @@
               >
                 <FontAwesomeIcon
                   :icon="faServer"
-                  class="w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
+                  class="!w-5 !h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
                 />
                 <span class="ml-3">{{ t('storageLocations.title') }}</span>
               </router-link>
@@ -105,7 +105,7 @@
               >
                 <FontAwesomeIcon
                   :icon="faDatabase"
-                  class="w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
+                  class="!w-5 !h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
                 />
                 <span class="ml-3">{{ t('snapshotLocations.title') }}</span>
               </router-link>
@@ -120,18 +120,18 @@
               >
                 <FontAwesomeIcon
                   :icon="faCubes"
-                  class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
+                  class="flex-shrink-0 !w-5 !h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
                 />
                 <span class="flex-1 text-left ml-3">Pod Volumes</span>
                 <FontAwesomeIcon
                   v-if="hiddenDropdownPodVolumes"
                   :icon="faAngleDown"
-                  class="w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
+                  class="!w-5 !h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
                 />
                 <FontAwesomeIcon
                   v-if="!hiddenDropdownPodVolumes"
                   :icon="faAngleUp"
-                  class="w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
+                  class="!w-5 !h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
                 />
               </button>
               <ul
@@ -147,7 +147,7 @@
                   >
                     <FontAwesomeIcon
                       :icon="faCube"
-                      class="w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
+                      class="!w-5 !h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
                     />
                     <span class="ml-3">Pod Volume Backups</span>
                   </router-link>
@@ -160,7 +160,7 @@
                   >
                     <FontAwesomeIcon
                       :icon="faCube"
-                      class="w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
+                      class="!w-5 !h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
                     />
                     <span class="ml-3">Pod Volume Restores</span>
                   </router-link>
@@ -177,18 +177,20 @@
               >
                 <FontAwesomeIcon
                   :icon="faFileLines"
-                  class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
+                  class="flex-shrink-0 !w-5 !h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
                 />
-                <span class="flex-1 text-left ml-3">{{ t('requests.title') }}</span>
+                <span class="flex-1 text-left ml-3">{{
+                  t('requests.title')
+                }}</span>
                 <FontAwesomeIcon
                   v-if="hiddenDropdown"
                   :icon="faAngleDown"
-                  class="w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
+                  class="!w-5 !h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
                 />
                 <FontAwesomeIcon
                   v-if="!hiddenDropdown"
                   :icon="faAngleUp"
-                  class="w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
+                  class="!w-5 !h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
                 />
               </button>
               <ul
@@ -204,9 +206,11 @@
                   >
                     <FontAwesomeIcon
                       :icon="faFileExcel"
-                      class="w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
+                      class="!w-5 !h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
                     />
-                    <span class="ml-3">{{ t('deleteBackupRequests.title') }}</span>
+                    <span class="ml-3">{{
+                      t('deleteBackupRequests.title')
+                    }}</span>
                   </router-link>
                 </li>
                 <li>
@@ -217,7 +221,7 @@
                   >
                     <FontAwesomeIcon
                       :icon="faFileArrowDown"
-                      class="w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
+                      class="!w-5 !h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
                     />
                     <span class="ml-3">{{ t('downloadRequests.title') }}</span>
                   </router-link>
@@ -230,9 +234,11 @@
                   >
                     <FontAwesomeIcon
                       :icon="faFileWaveform"
-                      class="w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
+                      class="!w-5 !h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
                     />
-                    <span class="ml-3">{{ t('serverStatusRequest.title') }}</span>
+                    <span class="ml-3">{{
+                      t('serverStatusRequest.title')
+                    }}</span>
                   </router-link>
                 </li>
               </ul>
@@ -246,7 +252,7 @@
             >
               <FontAwesomeIcon
                 :icon="faGear"
-                class="w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
+                class="!w-5 !h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
               />
               <span class="ml-3">{{ t('settings.title') }}</span>
             </router-link>
@@ -265,7 +271,7 @@
             >
               <FontAwesomeIcon
                 :icon="faGithub"
-                class="w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
+                class="!w-5 !h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
               />
             </a>
           </div>
@@ -291,7 +297,9 @@ import {
   faAngleUp,
   faChartPie,
   faClock,
-  faClockRotateLeft, faCube, faCubes,
+  faClockRotateLeft,
+  faCube,
+  faCubes,
   faDatabase,
   faFileArrowDown,
   faFileExcel,
@@ -317,10 +325,9 @@ const { hideSidebar } = storeToRefs(appStore);
 const hiddenDropdown = ref(true);
 const hiddenDropdownPodVolumes = ref(true);
 
-
 const toggleDropdown = () => (hiddenDropdown.value = !hiddenDropdown.value);
-const toggleDropdownPodVolumes = () => (hiddenDropdownPodVolumes.value = !hiddenDropdownPodVolumes.value);
-
+const toggleDropdownPodVolumes = () =>
+  (hiddenDropdownPodVolumes.value = !hiddenDropdownPodVolumes.value);
 
 const version = import.meta.env.APP_VERSION;
 </script>

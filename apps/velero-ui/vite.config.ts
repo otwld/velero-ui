@@ -3,6 +3,7 @@ import { fileURLToPath, URL } from 'url';
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
+import * as path from "node:path";
 
 export default defineConfig({
   root: __dirname,
@@ -20,7 +21,7 @@ export default defineConfig({
 
   resolve: {
     alias: [
-      {
+     {
         find: '@velero-ui-app',
         replacement: fileURLToPath(new URL('./src', import.meta.url)),
       },

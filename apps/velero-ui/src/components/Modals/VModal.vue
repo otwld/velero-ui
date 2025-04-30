@@ -1,6 +1,6 @@
 <template>
   <div class="relative z-10" tabindex="-1">
-    <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+    <div class="fixed inset-0 bg-gray-500/75 transition-opacity" />
 
     <div class="fixed h-full w-full inset-0 z-10">
       <div class="flex h-full items-center justify-center p-2 sm:p-4 sm:items-center">
@@ -14,7 +14,7 @@
             <h3
               class="inline-flex items-center text-lg font-semibold text-gray-900 dark:text-white"
             >
-              <slot name="header"/>
+              <slot name="header" />
             </h3>
             <button
               class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-700 dark:hover:text-white"
@@ -22,11 +22,11 @@
               type="button"
               @click="emit('onClose')"
             >
-              <FontAwesomeIcon :icon="faXmark" class="w-5 h-5" />
+              <FontAwesomeIcon :icon="faXmark" class="!w-5 !h-5" />
             </button>
           </div>
           <div class="p-4 md:p-5 h-[calc(100vh-6rem)] lg:h-full overflow-y-auto">
-            <slot name="content" @onClose="emit('onClose')"></slot>
+            <slot name="content" @on-close="emit('onClose')" />
           </div>
 
           <div

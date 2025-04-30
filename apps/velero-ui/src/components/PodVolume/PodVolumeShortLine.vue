@@ -1,7 +1,7 @@
 <template>
   <div class="flex items-center mb-4 gap-x-4 gap-y-2">
     <div class="flex items-center">
-      <FontAwesomeIcon :icon="faCube" class="w-6 h-6 dark:text-white" />
+      <FontAwesomeIcon :icon="faCube" class="!w-6 !h-6 dark:text-white" />
     </div>
     <div class="flex-1 min-w-0">
       <div
@@ -44,7 +44,7 @@
         }"
         class="inline-flex items-center px-3 py-2 text-sm font-medium rounded-lg text-center text-gray-900 focus:outline-none bg-white border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
       >
-        <FontAwesomeIcon :icon="faArrowUpRightFromSquare" class="w-4 h-4" />
+        <FontAwesomeIcon :icon="faArrowUpRightFromSquare" class="!w-4 !h-4" />
       </router-link>
     </div>
   </div>

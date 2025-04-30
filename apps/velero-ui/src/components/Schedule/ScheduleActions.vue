@@ -5,9 +5,9 @@
     <div
       class="items-center sm:flex xl:block 2xl:flex sm:space-x-4 xl:space-x-0 2xl:space-x-4"
     >
-      <FontAwesomeIcon :icon="faClock" class="w-16 h-16 mr-2 dark:text-white" />
+      <FontAwesomeIcon :icon="faClock" class="!w-16 !h-16 mr-2 dark:text-white" />
 
-      <div>
+      <div class="pl-3">
         <h3
           v-if="schedule"
           class="mb-1 text-lg font-bold text-gray-900 dark:text-white"
@@ -15,7 +15,7 @@
           {{ schedule?.metadata?.name }}
         </h3>
         <div
-          v-if="!schedule"
+          v-else
           class="h-2.5 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-48 mb-4"
         />
         <div
@@ -25,7 +25,7 @@
           {{ schedule?.metadata?.uid }}
         </div>
         <div
-          v-if="!schedule"
+          v-else
           class="h-1.5 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-48 mb-4"
         />
         <div v-if="schedule" class="flex items-center gap-x-4 gap-y-2">
@@ -33,7 +33,7 @@
             class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:ring-teal-300 dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
             type="button"
           >
-            <FontAwesomeIcon :icon="faPen" class="w-4 h-4 mr-2" />
+            <FontAwesomeIcon :icon="faPen" class="!w-4 !h-4 mr-2" />
             {{ t('global.button.edit.title')}}
           </button>
           <button
@@ -49,12 +49,12 @@
             <FontAwesomeIcon
               v-if="!togglePauseLoading"
               :icon="faPlay"
-              class="w-4 h-4 mr-2"
+              class="!w-4 !h-4 mr-2"
             />
             <FontAwesomeIcon
               v-if="togglePauseLoading"
               :icon="faCircleNotch"
-              class="w-4 h-4 animate-spin mr-2"
+              class="!w-4 !h-4 animate-spin mr-2"
             />
             {{ t('global.button.enable.title')}}
           </button>
@@ -71,12 +71,12 @@
             <FontAwesomeIcon
               v-if="!togglePauseLoading"
               :icon="faPause"
-              class="w-4 h-4 mr-2"
+              class="!w-4 !h-4 mr-2"
             />
             <FontAwesomeIcon
               v-if="togglePauseLoading"
               :icon="faCircleNotch"
-              class="w-4 h-4 animate-spin mr-2"
+              class="!w-4 !h-4 animate-spin mr-2"
             />
             {{ t('global.button.pause.title')}}
           </button>
@@ -90,12 +90,12 @@
             <FontAwesomeIcon
               v-if="isDeleting"
               :icon="faCircleNotch"
-              class="w-4 h-4 animate-spin mr-2"
+              class="!w-4 !h-4 animate-spin mr-2"
             />
             <FontAwesomeIcon
               v-if="!isDeleting"
               :icon="faTrashCan"
-              class="w-4 h-4 mr-2"
+              class="!w-4 !h-4 mr-2"
             />
             {{
               isDeleting

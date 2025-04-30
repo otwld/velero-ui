@@ -4,7 +4,7 @@
       <div class="flex items-center">
         <input
           :checked="checked"
-          class="w-4 h-4 border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600"
+          class="!w-4 !h-4 border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600"
           type="checkbox"
           @click="emit('onChecked')"
         />
@@ -50,11 +50,11 @@
         }"
         class="inline-flex items-center bg-gray-100 hover:bg-gray-200 text-gray-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-300"
       >
-        <FontAwesomeIcon :icon="faFloppyDisk" class="w-3 h-3 mr-1.5" />
+        <FontAwesomeIcon :icon="faFloppyDisk" class="!w-3 !h-3 mr-1.5" />
         {{ data.spec?.backupName }}
         <FontAwesomeIcon
           :icon="faArrowUpRightFromSquare"
-          class="w-2 h-2 ml-1.5"
+          class="!w-2 !h-2 ml-1.5"
         />
       </router-link>
     </td>
@@ -71,11 +71,11 @@
         }"
         class="inline-flex items-center bg-gray-100 hover:bg-gray-200 text-gray-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-300"
       >
-        <FontAwesomeIcon :icon="faClock" class="w-3 h-3 mr-1.5" />
+        <FontAwesomeIcon :icon="faClock" class="!w-3 !h-3 mr-1.5" />
         {{ data.spec?.scheduleName }}
         <FontAwesomeIcon
           :icon="faArrowUpRightFromSquare"
-          class="w-2 h-2 ml-1.5"
+          class="!w-2 !h-2 ml-1.5"
         />
       </router-link>
     </td>
@@ -103,12 +103,12 @@
           <FontAwesomeIcon
             v-if="isDeleting"
             :icon="faCircleNotch"
-            class="w-4 h-4 animate-spin"
+            class="!w-4 !h-4 animate-spin"
           />
           <FontAwesomeIcon
-            v-if="!isDeleting"
+            v-else
             :icon="faTrashCan"
-            class="w-4 h-4"
+            class="!w-4 !h-4"
           />
         </button>
       </div>
@@ -127,10 +127,10 @@
     v-if="showModalDelete"
     :icon="faExclamationCircle"
     :text="t('modal.text.confirmation.delete')"
-    @onClose="showModalDelete = false"
-    @onConfirm="remove(data?.metadata?.name)"
+    @on-close="showModalDelete = false"
+    @on-confirm="remove(data?.metadata?.name)"
   >
-    <template v-slot:content>
+    <template #content>
       <div class="flex justify-center">
         <p
           class="mt-2 px-1 mb-6 text-sm rounded bg-gray-200 text-gray-600 dark:bg-gray-600 dark:text-gray-200"

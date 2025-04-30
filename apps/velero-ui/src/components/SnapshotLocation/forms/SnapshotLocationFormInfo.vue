@@ -36,7 +36,7 @@
             >{{ t('resource.spec.provider') }} *
             <FontAwesomeIcon
               :icon="faQuestionCircle"
-              class="pl-1 w-3 h-3 hover:text-gray-700 hover:cursor-help"
+              class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
               data-tooltip-style="light"
               data-tooltip-target="tooltip-provider"
             />

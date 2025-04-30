@@ -1,6 +1,6 @@
 <template>
   <div class="relative z-10">
-    <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+    <div class="fixed inset-0 bg-gray-500/75 transition-opacity" />
 
     <div class="fixed h-full w-full inset-0 z-10">
       <div class="flex h-full items-center justify-center p-4">
@@ -11,13 +11,13 @@
               type="button"
               @click="emit('onClose')"
             >
-              <FontAwesomeIcon :icon="faXmark" class="w-5 h-5" />
+              <FontAwesomeIcon :icon="faXmark" class="!w-5 !h-5" />
             </button>
           </div>
           <div class="p-6 pt-0 text-center">
             <FontAwesomeIcon
               :icon="icon"
-              class="w-16 h-16 mx-auto text-gray-400 dark:text-gray-200"
+              class="!w-16 !h-16 mx-auto text-gray-400 dark:text-gray-200"
             />
             <h3 class="mt-5 text-lg text-gray-500 dark:text-gray-400">
               {{ text }}

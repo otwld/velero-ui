@@ -9,7 +9,7 @@
             :to="Pages.HOME.path"
             class="inline-flex items-center text-gray-700 hover:text-blue-600 dark:text-gray-300 dark:hover:text-white"
           >
-            <FontAwesomeIcon :icon="faHouse" class="w-5 h-5" />
+            <FontAwesomeIcon :icon="faHouse" class="!w-5 !h-5" />
           </router-link>
         </li>
         <li
@@ -20,7 +20,7 @@
           <FontAwesomeIcon
             v-if="index > 0 && route.name"
             :icon="faChevronRight"
-            class="w-4 h-4 text-gray-400 mr-2.5"
+            class="!w-4 !h-4 text-gray-400 mr-2.5"
           />
           <router-link
             v-if="index > 0 && index < matchedRoutes.length - 1 && route.name"
@@ -48,7 +48,7 @@
       >
         <FontAwesomeIcon
           :icon="faArrowUpRightFromSquare"
-          class="pr-2 w-4 h-4"
+          class="pr-2 !w-4 !h-4"
         />
         {{ t('global.docs') }}
       </a>

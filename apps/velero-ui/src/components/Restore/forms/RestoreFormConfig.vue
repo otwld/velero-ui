@@ -6,7 +6,7 @@
     >
       <FontAwesomeIcon
         :icon="faInfoCircle"
-        class="flex-shrink-0 inline w-4 h-4 me-3 mt-[2px]"
+        class="flex-shrink-0 inline !w-4 !h-4 me-3 mt-[2px]"
       />
       <span class="sr-only">Info</span>
       <div>
@@ -41,7 +41,7 @@
         >{{ t('resource.spec.namespaceMapping') }}
         <FontAwesomeIcon
           :icon="faQuestionCircle"
-          class="pl-1 w-3 h-3 hover:text-gray-700 hover:cursor-help"
+          class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
           data-tooltip-style="light"
           data-tooltip-target="tooltip-namespace-mappings"
         />
@@ -72,7 +72,7 @@
             type="button"
             @click="addNewMapping()"
           >
-            <FontAwesomeIcon :icon="faPlus" class="w-4 h-4" />
+            <FontAwesomeIcon :icon="faPlus" class="!w-4 !h-4" />
           </button>
         </div>
         <p class="pt-2 text-sm text-red-600 dark:text-red-500">
@@ -119,7 +119,7 @@
                   type="button"
                   @click="removeMapping(c[0])"
                 >
-                  <FontAwesomeIcon :icon="faTrashCan" class="w-3 h-3" />
+                  <FontAwesomeIcon :icon="faTrashCan" class="!w-3 !h-3" />
                 </button>
               </td>
             </tr>
@@ -156,7 +156,7 @@
         >{{ t('resource.spec.labelSelector') }}
         <FontAwesomeIcon
           :icon="faQuestionCircle"
-          class="pl-1 w-3 h-3 hover:text-gray-700 hover:cursor-help"
+          class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
           data-tooltip-style="light"
           data-tooltip-target="tooltip-selector"
         />
@@ -187,7 +187,7 @@
             type="button"
             @click="addNewLabelSelector()"
           >
-            <FontAwesomeIcon :icon="faPlus" class="w-4 h-4" />
+            <FontAwesomeIcon :icon="faPlus" class="!w-4 !h-4" />
           </button>
         </div>
         <p class="pt-2 text-sm text-red-600 dark:text-red-500">
@@ -232,7 +232,7 @@
                   type="button"
                   @click="removeLabelSelector(c[0])"
                 >
-                  <FontAwesomeIcon :icon="faTrashCan" class="w-3 h-3" />
+                  <FontAwesomeIcon :icon="faTrashCan" class="!w-3 !h-3" />
                 </button>
               </td>
             </tr>
@@ -250,7 +250,7 @@
       >
         <FontAwesomeIcon
           :icon="faInfoCircle"
-          class="flex-shrink-0 inline w-4 h-4 me-3 mt-[2px]"
+          class="flex-shrink-0 inline !w-4 !h-4 me-3 mt-[2px]"
         />
         <span class="sr-only">Info</span>
         <p>{{ t('form.message.error.orLabelSelectors') }}</p>
@@ -263,7 +263,7 @@
         >{{ t('resource.metadata.labels') }}
         <FontAwesomeIcon
           :icon="faQuestionCircle"
-          class="pl-1 w-3 h-3 hover:text-gray-700 hover:cursor-help"
+          class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
           data-tooltip-style="light"
           data-tooltip-target="tooltip-labels"
         />
@@ -294,7 +294,7 @@
             type="button"
             @click="addNewLabel()"
           >
-            <FontAwesomeIcon :icon="faPlus" class="w-4 h-4" />
+            <FontAwesomeIcon :icon="faPlus" class="!w-4 !h-4" />
           </button>
         </div>
         <p class="pt-2 text-sm text-red-600 dark:text-red-500">
@@ -339,7 +339,7 @@
                   type="button"
                   @click="removeLabel(c[0])"
                 >
-                  <FontAwesomeIcon :icon="faTrashCan" class="w-3 h-3" />
+                  <FontAwesomeIcon :icon="faTrashCan" class="!w-3 !h-3" />
                 </button>
               </td>
             </tr>

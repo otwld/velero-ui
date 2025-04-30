@@ -11,7 +11,7 @@ export class AppLogger implements LoggerService {
 
   constructor(private readonly configService: ConfigService) {
     this.logger = createLogger({
-      level: this.configService.get('app.logLevel', { infer: true }),
+      level: this.configService.get<string>('app.logLevel', { infer: true }),
       transports: [
         new transports.Console({
           format: format.combine(...this.getFormat()),
@@ -59,7 +59,7 @@ export class AppLogger implements LoggerService {
   }
 
   private getFormat() {
-    const env: Environment = this.configService.get('app.environment', {
+    const env = this.configService.get<Environment>('app.environment', {
       infer: true,
     });
 

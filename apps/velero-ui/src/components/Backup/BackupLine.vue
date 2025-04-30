@@ -5,7 +5,7 @@
         <input
           :checked="checked"
           :value="data?.metadata?.name"
-          class="w-4 h-4 border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600"
+          class="!w-4 !h-4 border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600"
           type="checkbox"
           @click="emit('onChecked')"
         />
@@ -52,7 +52,7 @@
         }"
         class="inline-flex items-center bg-gray-100 hover:bg-gray-200 text-gray-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-300"
       >
-        <FontAwesomeIcon :icon="faClockRotateLeft" class="w-3 h-3 mr-1.5" />
+        <FontAwesomeIcon :icon="faClockRotateLeft" class="!w-3 !h-3 mr-1.5" />
         {{
           truncate(
             data?.metadata?.labels?.['velero.io/schedule-name'] || '',
@@ -61,7 +61,7 @@
         }}
         <FontAwesomeIcon
           :icon="faArrowUpRightFromSquare"
-          class="w-2 h-2 ml-1.5"
+          class="!w-2 !h-2 ml-1.5"
         />
       </router-link>
     </td>
@@ -89,7 +89,7 @@
           type="button"
           @click="showModalRestore = !showModalRestore"
         >
-          <FontAwesomeIcon :icon="faClockRotateLeft" class="w-4 h-4" />
+          <FontAwesomeIcon :icon="faClockRotateLeft" class="!w-4 !h-4" />
         </button>
         <button
           :class="{ 'cursor-not-allowed': isDisabled || downloadLoading }"
@@ -103,12 +103,12 @@
           <FontAwesomeIcon
             v-if="!downloadLoading"
             :icon="faDownload"
-            class="w-4 h-4"
+            class="!w-4 !h-4"
           />
           <FontAwesomeIcon
-            v-if="downloadLoading"
+            v-else
             :icon="faCircleNotch"
-            class="w-4 h-4 animate-spin"
+            class="!w-4 !h-4 animate-spin"
           />
         </button>
         <button
@@ -123,12 +123,12 @@
           <FontAwesomeIcon
             v-if="isDeleting"
             :icon="faCircleNotch"
-            class="w-4 h-4 animate-spin"
+            class="!w-4 !h-4 animate-spin"
           />
           <FontAwesomeIcon
-            v-if="!isDeleting"
+            v-else
             :icon="faTrashCan"
-            class="w-4 h-4"
+            class="!w-4 !h-4"
           />
         </button>
       </div>
@@ -141,7 +141,7 @@
     role="tooltip"
   >
     {{ t('global.button.restore.title') }}
-    <div class="tooltip-arrow" data-popper-arrow></div>
+    <div class="tooltip-arrow" data-popper-arrow/>
   </div>
   <div
     :id="`tooltip-button-download-${data?.metadata?.uid}`"
@@ -149,7 +149,7 @@
     role="tooltip"
   >
     {{ t('global.button.download.title') }}
-    <div class="tooltip-arrow" data-popper-arrow></div>
+    <div class="tooltip-arrow" data-popper-arrow/>
   </div>
   <div
     :id="`tooltip-button-delete-${data?.metadata?.uid}`"
@@ -157,15 +157,15 @@
     role="tooltip"
   >
     {{ t('global.button.delete.title') }}
-    <div class="tooltip-arrow" data-popper-arrow></div>
+    <div class="tooltip-arrow" data-popper-arrow/>
   </div>
 
   <ModalConfirmation
     v-if="showModalDelete"
     :icon="faExclamationCircle"
     :text="t('modal.text.confirmation.delete')"
-    @onClose="showModalDelete = false"
-    @onConfirm="remove(data?.metadata?.name)"
+    @on-close="showModalDelete = false"
+    @on-confirm="remove(data?.metadata?.name)"
   >
     <template v-slot:content>
       <div class="flex justify-center">
@@ -181,7 +181,7 @@
     v-if="showModalRestore"
     :id="`modal-restore-${data?.metadata?.name}`"
     width="lg:w-6/12"
-    @onClose="showModalRestore = false"
+    @on-close="showModalRestore = false"
   >
     <template v-slot:header>
       <h3 class="text-lg text-gray-500 dark:text-gray-400">

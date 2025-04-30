@@ -103,7 +103,7 @@ export class VeleroService {
         map(
           (pods: V1Pod[]): V1Pod =>
             pods.find((pod: V1Pod) =>
-              pod?.metadata?.name.startsWith(VELERO.SERVER_PREFIX),
+              pod?.metadata?.name.startsWith(VELERO.SERVER_PREFIX) && !pod?.metadata?.name.startsWith(VELERO.UI_PREFIX),
             ),
         ),
       )

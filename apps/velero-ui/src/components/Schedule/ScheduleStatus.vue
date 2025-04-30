@@ -19,14 +19,14 @@
         v-if="schedule?.spec?.paused"
         class="bg-yellow-100 text-yellow-800 text-xs font-medium inline-flex items-center me-2 px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300"
       >
-        <FontAwesomeIcon :icon="faPause" class="w-3 h-3 mr-1.5" />
+        <FontAwesomeIcon :icon="faPause" class="!w-3 !h-3 mr-1.5" />
         {{ t('global.paused') }}
       </span>
       <span
         v-if="schedule?.spec.schedule"
         class="bg-blue-100 text-blue-800 text-xs font-medium inline-flex items-center me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300"
       >
-        <FontAwesomeIcon :icon="faCalendar" class="w-3 h-3 mr-1.5" />
+        <FontAwesomeIcon :icon="faCalendar" class="!w-3 !h-3 mr-1.5" />
         {{ schedule.spec.schedule }}
       </span>
     </div>

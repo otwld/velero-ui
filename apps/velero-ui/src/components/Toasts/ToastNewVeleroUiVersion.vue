@@ -8,7 +8,7 @@
     <div
       class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-blue-500 bg-blue-100 rounded-lg dark:bg-blue-800 dark:text-blue-200"
     >
-      <FontAwesomeIcon :icon="faArrowUp" class="w-5 h-5" />
+      <FontAwesomeIcon :icon="faArrowUp" class="!w-5 !h-5" />
     </div>
 
     <div class="ml-3 text-sm font-normal">
@@ -25,7 +25,7 @@
       @click="show = false"
     >
       <span class="sr-only">Close</span>
-      <FontAwesomeIcon :icon="faXmark" class="w-3 h-3" />
+      <FontAwesomeIcon :icon="faXmark" class="!w-3 !h-3" />
     </button>
   </div>
 </template>

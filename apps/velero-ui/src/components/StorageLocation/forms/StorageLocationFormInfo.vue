@@ -36,7 +36,7 @@
             >{{ t('resource.spec.accessMode') }} *
             <FontAwesomeIcon
               :icon="faQuestionCircle"
-              class="pl-1 w-3 h-3 hover:text-gray-700 hover:cursor-help"
+              class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
               data-tooltip-style="light"
               data-tooltip-target="tooltip-access-mode"
             />
@@ -61,7 +61,7 @@
             >{{ t('resource.spec.bucket') }} *
             <FontAwesomeIcon
               :icon="faQuestionCircle"
-              class="pl-1 w-3 h-3 hover:text-gray-700 hover:cursor-help"
+              class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
               data-tooltip-style="light"
               data-tooltip-target="tooltip-bucket-name"
             />
@@ -83,7 +83,7 @@
             >{{ t('resource.spec.prefix') }}
             <FontAwesomeIcon
               :icon="faQuestionCircle"
-              class="pl-1 w-3 h-3 hover:text-gray-700 hover:cursor-help"
+              class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
               data-tooltip-style="light"
               data-tooltip-target="tooltip-prefix"
             />
@@ -104,7 +104,7 @@
             >{{ t('resource.spec.provider') }} *
             <FontAwesomeIcon
               :icon="faQuestionCircle"
-              class="pl-1 w-3 h-3 hover:text-gray-700 hover:cursor-help"
+              class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
               data-tooltip-style="light"
               data-tooltip-target="tooltip-provider"
             />
@@ -125,7 +125,7 @@
             >{{ t('resource.spec.backupSyncPeriod') }}
             <FontAwesomeIcon
               :icon="faQuestionCircle"
-              class="pl-1 w-3 h-3 hover:text-gray-700 hover:cursor-help"
+              class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
               data-tooltip-style="light"
               data-tooltip-target="tooltip-backup-sync-period"
             />
@@ -134,7 +134,7 @@
             <input
               id="backup-sync-period"
               v-model="currentForm.backupSyncPeriod"
-              class="w-2/6 text-sm flex-shrink-0 rounded-none rounded-s-lg bg-gray-50 border text-gray-900 leading-none focus:ring-blue-500 focus:border-blue-500 block border-gray-300 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              class="p-2.5 w-2/6 flex-shrink-0 rounded-none text-sm rounded-s-lg bg-gray-50 border text-gray-900 leading-none focus:ring-blue-500 focus:border-blue-500 block border-gray-300 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               min="0"
               required
               type="number"
@@ -143,7 +143,7 @@
             <select
               id="backup-sync-period-unit"
               v-model="currentForm.backupSyncPeriodUnit"
-              class="w-4/6 bg-gray-50 border border-s-0 border-gray-300 text-gray-900 rounded-e-lg focus:ring-blue-500 focus:border-blue-500 block dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              class="p-2.5 w-4/6 text-sm bg-gray-50 border border-s-0 border-gray-300 text-gray-900 rounded-e-lg focus:ring-blue-500 focus:border-blue-500 block dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               name="backup-sync-period-unit"
               required
             >
@@ -160,7 +160,7 @@
             >{{ t('resource.spec.certificate') }}
             <FontAwesomeIcon
               :icon="faQuestionCircle"
-              class="pl-1 w-3 h-3 hover:text-gray-700 hover:cursor-help"
+              class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
               data-tooltip-style="light"
               data-tooltip-target="tooltip-certificate"
             />
@@ -169,7 +169,7 @@
             id="certificate"
             accept=".pem,.crt,.cer,.key"
             aria-describedby="certificate-help"
-            class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
             size="4194304"
             type="file"
             @change="onFileChanged($event)"
@@ -188,7 +188,7 @@
             >{{ t('resource.spec.validationFrequency') }}
             <FontAwesomeIcon
               :icon="faQuestionCircle"
-              class="pl-1 w-3 h-3 hover:text-gray-700 hover:cursor-help"
+              class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
               data-tooltip-style="light"
               data-tooltip-target="tooltip-validation-frequency"
             />
@@ -197,7 +197,7 @@
             <input
               id="validation-frequency"
               v-model="currentForm.validationFrequency"
-              class="p-2 w-2/6 flex-shrink-0 rounded-none text-sm rounded-s-lg bg-gray-50 border text-gray-900 leading-none focus:ring-blue-500 focus:border-blue-500 block border-gray-300 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              class="p-2.5 w-2/6 flex-shrink-0 rounded-none text-sm rounded-s-lg bg-gray-50 border text-gray-900 leading-none focus:ring-blue-500 focus:border-blue-500 block border-gray-300 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               min="0"
               required
               type="number"
@@ -206,7 +206,7 @@
             <select
               id="validation-frequency-unit"
               v-model="currentForm.validationFrequencyUnit"
-              class="p-2 w-4/6 bg-gray-50 border border-s-0 border-gray-300 text-gray-900 rounded-e-lg focus:ring-blue-500 focus:border-blue-500 block dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              class="p-2.5 w-4/6 text-sm bg-gray-50 border border-s-0 border-gray-300 text-gray-900 rounded-e-lg focus:ring-blue-500 focus:border-blue-500 block dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               name="backup-sync-period-unit"
               required
             >
@@ -240,7 +240,7 @@
               </span>
               <FontAwesomeIcon
                 :icon="faQuestionCircle"
-                class="pl-1 w-3 h-3 hover:text-gray-700 hover:cursor-help dark:text-white dark:hover:text-gray-200"
+                class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help dark:text-white dark:hover:text-gray-200"
                 data-tooltip-style="light"
                 data-tooltip-target="tooltip-set-default"
               />
@@ -356,10 +356,18 @@ onMounted(() => {
   currentForm.value.caCert = null;
 });
 
-const onFileChanged = ($event) => {
-  if ($event.target.files[0] !== null) {
-    currentForm.value.caCert = $event.target.files[0];
-  }
+const onFileChanged = (event) => {
+  console.log(currentForm.value.caCert)
+
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    currentForm.value.caCert = e.target.result;
+  };
+  reader.readAsText(file);
+  console.log(file);
 };
 
 const validate = () =>

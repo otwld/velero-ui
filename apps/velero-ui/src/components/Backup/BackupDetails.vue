@@ -24,28 +24,28 @@
         }"
         class="bg-blue-100 hover:bg-blue-200 text-blue-800 text-xs font-medium inline-flex items-center me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:hover:bg-blue-800 dark:text-blue-300"
       >
-        <FontAwesomeIcon :icon="faServer" class="w-3 h-3 mr-1.5" />
+        <FontAwesomeIcon :icon="faServer" class="!w-3 !h-3 mr-1.5" />
         {{ spec?.storageLocation }}
         <FontAwesomeIcon
           :icon="faArrowUpRightFromSquare"
-          class="w-2 h-2 ml-1.5"
+          class="!w-2 !h-2 ml-1.5"
         />
       </router-link>
       <span
         v-if="spec?.ttl"
         class="bg-blue-100 text-blue-800 text-xs font-medium inline-flex items-center me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300"
       >
-        <FontAwesomeIcon :icon="faClock" class="w-3 h-3 mr-1.5" />
+        <FontAwesomeIcon :icon="faClock" class="!w-3 !h-3 mr-1.5" />
         {{ spec.ttl }}</span
       >
     </div>
     <div v-if="!spec">
       <div
         class="mt-4 h-2.5 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-24"
-      ></div>
+      />
       <div
         class="mt-2 h-2 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-48"
-      ></div>
+      />
     </div>
     <div v-if="spec?.volumeSnapshotLocations" class="mt-4 flex flex-col">
       <span class="text-base font-medium text-gray-900 dark:text-white">{{
@@ -63,11 +63,11 @@
           }"
           class="inline-flex items-center bg-gray-100 hover:bg-gray-200 text-gray-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-300"
         >
-          <FontAwesomeIcon :icon="faDatabase" class="w-3 h-3 mr-1.5" />
+          <FontAwesomeIcon :icon="faDatabase" class="!w-3 !h-3 mr-1.5" />
           {{ location }}
           <FontAwesomeIcon
             :icon="faArrowUpRightFromSquare"
-            class="w-2 h-2 ml-1.5"
+            class="!w-2 !h-2 ml-1.5"
           />
         </router-link>
       </div>

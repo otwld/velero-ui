@@ -9,11 +9,11 @@
       <div
         v-if="!repository"
         class="ml-4 h-2 bg-gray-200 rounded-full animate-pulsedark:bg-gray-700 w-24"
-      ></div>
+      />
       <div
         v-if="!repository"
         class="ml-4 h-2 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-24"
-      ></div>
+      />
       <span
         v-if="repository?.status?.phase === V1BackupRepositoryPhase.Ready"
         class="ml-4 bg-green-100 text-green-800 text-xs font-medium inline-flex items-center me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300"

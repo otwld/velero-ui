@@ -7,10 +7,10 @@
     >
       <FontAwesomeIcon
         :icon="faFloppyDisk"
-        class="w-16 h-16 mr-2 dark:text-white"
+        class="!w-16 !h-16 mr-2 dark:text-white"
       />
 
-      <div>
+      <div class="pl-3">
         <h3
           v-if="backup"
           class="mb-1 text-lg font-bold text-gray-900 dark:text-white"
@@ -18,9 +18,9 @@
           {{ backup?.metadata?.name }}
         </h3>
         <div
-          v-if="!backup"
+          v-else
           class="h-2.5 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-48 mb-4"
-        ></div>
+        />
         <div
           v-if="backup"
           class="mb-4 text-xs text-gray-500 dark:text-gray-400"
@@ -28,9 +28,9 @@
           {{ backup?.metadata?.uid }}
         </div>
         <div
-          v-if="!backup"
+         v-else
           class="bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-48 mb-4"
-        ></div>
+        />
         <div class="flex items-center gap-x-4 gap-y-2 flex-wrap">
           <button
             :class="{ 'cursor-not-allowed': isDisabled || !backup }"
@@ -39,7 +39,7 @@
             type="button"
             @click="showModalRestore = !showModalRestore"
           >
-            <FontAwesomeIcon :icon="faClockRotateLeft" class="w-4 h-4 mr-2" />
+            <FontAwesomeIcon :icon="faClockRotateLeft" class="!w-4 !h-4 mr-2" />
             {{ t('global.button.restore.title') }}
           </button>
           <button
@@ -54,12 +54,12 @@
             <FontAwesomeIcon
               v-if="!downloadLoading"
               :icon="faDownload"
-              class="w-4 h-4 mr-2"
+              class="!w-4 !h-4 mr-2"
             />
             <FontAwesomeIcon
-              v-if="downloadLoading"
+              v-else
               :icon="faCircleNotch"
-              class="w-4 h-4 animate-spin mr-2"
+              class="!w-4 !h-4 animate-spin mr-2"
             />
             {{
               downloadLoading
@@ -77,12 +77,12 @@
             <FontAwesomeIcon
               v-if="isDeleting"
               :icon="faCircleNotch"
-              class="w-4 h-4 animate-spin mr-2"
+              class="!w-4 !h-4 animate-spin mr-2"
             />
             <FontAwesomeIcon
-              v-if="!isDeleting"
+              v-else
               :icon="faTrashCan"
-              class="w-4 h-4 mr-2"
+              class="!w-4 !h-4 mr-2"
             />
             {{
               isDeleting
@@ -98,8 +98,8 @@
     v-if="showModalDelete"
     :icon="faExclamationCircle"
     :text="t('modal.text.confirmation.delete')"
-    @onClose="showModalDelete = false"
-    @onConfirm="remove(backup.metadata.name)"
+    @on-close="showModalDelete = false"
+    @on-confirm="remove(backup.metadata.name)"
   >
     <template v-slot:content>
       <div class="flex justify-center">

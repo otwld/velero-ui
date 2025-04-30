@@ -15,16 +15,16 @@
                         id="checkbox-all"
                         :checked="checked === 'true' || checked === 'partial'"
                         aria-describedby="checkbox-1"
-                        class="peer w-4 h-4 border-gray-300 rounded bg-gray-50 focus:ring-3 appearance-none focus:ring-blue-300 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600"
+                        class="peer w-4 h-4 border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600"
                         type="checkbox"
                         @click="globalCheck($event)"
                       />
 
                       <span
                         v-if="checked === 'partial'"
-                        class="absolute text-white opacity-0 peer-checked:opacity-100 top-[30%] left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                        class="absolute text-white opacity-0 peer-checked:opacity-100 top-[40%] left-1/2 transform -translate-x-1/2 -translate-y-1/2"
                       >
-                        <FontAwesomeIcon :icon="faSquare" class="w-2.5 h-2.5" />
+                        <FontAwesomeIcon :icon="faSquare" class="!w-3 !h-3" />
                       </span>
                     </label>
                   </div>
@@ -46,12 +46,12 @@
                     <FontAwesomeIcon
                       v-if="header.sort.selected && header.sort?.ascending"
                       :icon="faSortDown"
-                      class="w-4 h-4 pb-2 pl-2"
+                      class="!w-4 !h-4 pb-2 pl-2"
                     />
                     <FontAwesomeIcon
                       v-if="header.sort.selected && !header.sort?.ascending"
                       :icon="faSortUp"
-                      class="w-4 h-4 pt-2 pl-2"
+                      class="!w-4 !h-4 pt-2 pl-2"
                     />
                   </button>
                   <span v-if="!header.sort.enabled">{{ t(header.name) }}</span>
@@ -71,7 +71,7 @@
                 :key="`list-item-${index}`"
                 :checked="checkedItems[`${index}`]"
                 :data="item"
-                @onChecked="setCheckedItem(index)"
+                @on-checked="setCheckedItem(index)"
               />
             </tbody>
           </table>
@@ -79,7 +79,7 @@
             v-if="data?.length === 0 && !isFetching"
             class="w-full flex flex-col items-center py-10 text-gray-400 dark:text-gray-300 dark:bg-gray-800"
           >
-            <FontAwesomeIcon :icon="faInfoCircle" class="w-16 h-16 mb-5" />
+            <FontAwesomeIcon :icon="faInfoCircle" class="!w-16 !h-16 mb-5" />
             {{ t('list.text.noEntries') }}
           </div>
           <div
@@ -88,7 +88,7 @@
           >
             <FontAwesomeIcon
               :icon="faCircleNotch"
-              class="w-16 h-16 mb-5 animate-spin"
+              class="!w-16 !h-16 mb-5 animate-spin"
             />
             {{ t('list.text.fetchingEntries') }}
           </div>

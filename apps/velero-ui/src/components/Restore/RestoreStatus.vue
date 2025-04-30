@@ -19,14 +19,14 @@
         v-if="restore?.status?.errors"
         class="bg-red-100 text-red-800 text-xs font-medium inline-flex items-center me-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300"
       >
-        <FontAwesomeIcon :icon="faCircleExclamation" class="w-3 h-3 mr-1.5" />
+        <FontAwesomeIcon :icon="faCircleExclamation" class="!w-3 !h-3 mr-1.5" />
         {{ restore.status.errors }}</span
       >
       <span
         v-if="restore?.status?.warnings"
         class="bg-orange-100 text-orange-800 text-xs font-medium inline-flex items-center me-2 px-2.5 py-0.5 rounded dark:bg-orange-900 dark:text-orange-300"
       >
-        <FontAwesomeIcon :icon="faTriangleExclamation" class="w-3 h-3 mr-1.5" />
+        <FontAwesomeIcon :icon="faTriangleExclamation" class="!w-3 !h-3 mr-1.5" />
 
         {{ restore.status.warnings }}</span
       >

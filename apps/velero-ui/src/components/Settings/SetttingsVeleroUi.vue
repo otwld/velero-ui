@@ -5,7 +5,7 @@
     <div
       class="items-center sm:flex xl:block 2xl:flex sm:space-x-4 xl:space-x-0 2xl:space-x-4"
     >
-      <FontAwesomeIcon :icon="faHardDrive" class="w-16 h-16 dark:text-white" />
+      <FontAwesomeIcon :icon="faHardDrive" class="!w-16 !h-16 dark:text-white" />
       <div class="flex-1 min-w-0">
         <div>
           <h3
@@ -41,14 +41,14 @@
       </div>
       <div class="inline-flex items-center">
         <button
-          :class="{'cursor-not-allowed': isStandalone()}"
+          :class="{ 'cursor-not-allowed': isStandalone() }"
+          :disabled="isStandalone()"
           class="inline-flex items-center px-3 py-2 text-sm font-medium rounded-lg text-center text-gray-900 focus:outline-none bg-white border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
           data-tooltip-target="tooltip-button-logs-ui"
           type="button"
-          :disabled="isStandalone()"
           @click="showModal = !showModal"
         >
-          <FontAwesomeIcon :icon="faEye" class="w-4 h-4" />
+          <FontAwesomeIcon :icon="faEye" class="!w-4 !h-4" />
         </button>
       </div>
     </div>
@@ -57,15 +57,15 @@
     v-if="showModal"
     id="modal-logs-server"
     width="w-10/12"
-    @onClose="showModal = false"
+    @on-close="showModal = false"
   >
-    <template v-slot:header>
+    <template #header>
       <h3 class="text-lg text-gray-500 dark:text-gray-400">
         {{ t('settings.ui.modal.logs.title') }}
       </h3>
     </template>
-    <template v-slot:content>
-      <SettingsLogs type="ui"/>
+    <template #content>
+      <SettingsLogs type="ui" />
     </template>
   </VModal>
   <div
@@ -73,8 +73,12 @@
     class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
     role="tooltip"
   >
-    {{ isStandalone() ? t('settings.ui.tooltip.standalone.title') : t('settings.ui.tooltip.logs.title') }}
-    <div class="tooltip-arrow" data-popper-arrow></div>
+    {{
+      isStandalone()
+        ? t('settings.ui.tooltip.standalone.title')
+        : t('settings.ui.tooltip.logs.title')
+    }}
+    <div class="tooltip-arrow" data-popper-arrow />
   </div>
 </template>
 

@@ -12,7 +12,7 @@
             <div class="flex items-center space-x-4">
               <div class="flex-shrink-0">
                 <svg
-                  class="w-6 h-6 dark:text-white"
+                  class="!w-6 !h-6 dark:text-white"
                   fill="currentColor"
                   viewBox="0 0 24 24"
                   xmlns="http://www.w3.org/2000/svg"
@@ -28,18 +28,18 @@
               <div class="flex-1 min-w-0">
                 <div
                   class="h-2.5 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-48 mb-4"
-                ></div>
+                />
                 <div
                   class="h-2 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-72 mb-2"
-                ></div>
+                />
                 <div
                   class="h-1.5 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-24 mb-2"
-                ></div>
+                />
               </div>
               <div class="inline-flex items-center">
                 <p
                   class="h-2 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-32 mb-4"
-                ></p>
+                />
               </div>
             </div>
           </li>
@@ -48,7 +48,7 @@
             :key="`agent-${index}`"
             class="py-4"
           >
-            <SettingsVeleroAgentLine :data="agent"></SettingsVeleroAgentLine>
+            <SettingsVeleroAgentLine :data="agent"/>
           </li>
         </ul>
       </div>

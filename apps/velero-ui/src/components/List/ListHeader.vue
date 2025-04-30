@@ -8,7 +8,7 @@
           v-if="router.currentRoute.value.name !== Pages.SCHEDULE.name"
           class="items-center mb-3 sm:flex sm:divide-x sm:divide-gray-100 sm:mb-0 dark:divide-gray-700"
         >
-          <div class="lg:pr-3" >
+          <div class="lg:pr-3">
             <label class="sr-only" for="backups-search">{{
               t('list.search.label')
             }}</label>
@@ -24,11 +24,11 @@
             </div>
           </div>
           <div class="flex pl-0 mt-3 space-x-1 sm:pl-2 sm:mt-0">
-            <slot name="bulk-buttons"></slot>
+            <slot name="bulk-buttons" />
           </div>
         </div>
         <div class="flex items-center ml-auto space-x-2 sm:space-x-3">
-          <slot name="buttons"></slot>
+          <slot name="buttons" />
           <button
             :class="{ 'cursor-not-allowed': isFetching }"
             :disabled="isFetching"
@@ -41,7 +41,7 @@
                 'animate-spin': isFetching,
               }"
               :icon="faArrowsRotate"
-              class="w-4 h-4 mr-2"
+              class="!w-4 !h-4 mr-2"
             />
             {{ t('global.button.refresh.title') }}
           </button>

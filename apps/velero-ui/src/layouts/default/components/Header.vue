@@ -11,7 +11,7 @@
             class="flex p-2 text-gray-600 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 focus:bg-gray-100 dark:focus:bg-gray-700 focus:ring-2 focus:ring-gray-100 dark:focus:ring-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
             @click="appStore.toggleSidebar()"
           >
-            <FontAwesomeIcon :icon="faBars" class="w-5 h-5" />
+            <FontAwesomeIcon :icon="faBars" class="!w-5 !h-5" />
           </button>
           <router-link class="flex ml-2 md:mr-24" to="/">
             <img
@@ -22,13 +22,13 @@
           </router-link>
         </div>
         <div class="flex items-center">
-          <div v-click-out="clickOutsideLanguageDropdown" class="">
+          <div v-click-out="clickOutsideLanguageDropdown">
             <button
               class="flex ml-3 text-gray-600 rounded dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 text-sm p-2"
               type="button"
               @click="toggleLanguageDropdown()"
             >
-              <FontAwesomeIcon :icon="faLanguage" class="w-5 h-5" />
+              <FontAwesomeIcon :icon="faLanguage" class="!w-5 !h-5" />
             </button>
             <div
               id="dropdown-3"
@@ -59,8 +59,8 @@
             class="flex ml-3 text-gray-600 rounded dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 text-sm p-2"
             type="button"
           >
-            <FontAwesomeIcon :icon="faSun" class="w-5 h-5" />
-            <FontAwesomeIcon :icon="faMoon" class="hidden w-5 h-5" />
+            <FontAwesomeIcon :icon="faSun" class="!w-5 !h-5" />
+            <FontAwesomeIcon :icon="faMoon" class="hidden !w-5 !h-5" />
           </button> -->
           <div v-click-out="clickOutside" class="flex flex-col items-center">
             <div class="flex items-center ml-3">
@@ -131,8 +131,6 @@ import {
   faAngleDown,
   faBars,
   faLanguage,
-  faMoon,
-  faSun,
   faUserCircle,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';

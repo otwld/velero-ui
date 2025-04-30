@@ -1,6 +1,6 @@
 <template>
   <ListHeader>
-    <template v-slot:bulk-buttons>
+    <template #bulk-buttons>
       <button
         :class="{
           'cursor-not-allowed':
@@ -16,12 +16,12 @@
         <FontAwesomeIcon
           v-if="!isLoadingDeleting"
           :icon="faTrashCan"
-          class="w-5 h-5"
+          class="!w-5 !h-5"
         />
         <FontAwesomeIcon
           v-if="isLoadingDeleting"
           :icon="faCircleNotch"
-          class="w-5 h-5 animate-spin"
+          class="!w-5 !h-5 animate-spin"
         />
       </button>
     </template>
@@ -36,10 +36,10 @@
         items: childListRef?.getCheckedItems().length,
       })
     "
-    @onClose="showModalBulkRemove = false"
-    @onConfirm="bulkRemove()"
+    @on-close="showModalBulkRemove = false"
+    @on-confirm="bulkRemove()"
   >
-    <template v-slot:content>
+    <template #content>
       <div class="flex flex-col justify-center mb-6">
         <span
           v-for="(item, index) in childListRef?.getCheckedItems()"

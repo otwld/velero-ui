@@ -44,7 +44,7 @@
                 >
                   <FontAwesomeIcon
                     :icon="faInfoCircle"
-                    class="w-16 h-16 mb-5"
+                    class="!w-16 !h-16 mb-5"
                   />
                   {{ t('list.text.noEntries') }}
                 </div>
@@ -54,7 +54,7 @@
                 >
                   <FontAwesomeIcon
                     :icon="faCircleNotch"
-                    class="w-16 h-16 mb-5 animate-spin"
+                    class="!w-16 !h-16 mb-5 animate-spin"
                   />
                   {{ t('list.text.fetchingEntries') }}
                 </div>

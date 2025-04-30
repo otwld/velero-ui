@@ -24,18 +24,18 @@
         }"
         class="bg-blue-100 hover:bg-blue-200 text-blue-800 text-xs font-medium inline-flex items-center me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:hover:bg-blue-800 dark:text-blue-300"
       >
-        <FontAwesomeIcon :icon="faFloppyDisk" class="w-3 h-3 mr-1.5" />
+        <FontAwesomeIcon :icon="faFloppyDisk" class="!w-3 !h-3 mr-1.5" />
         {{ spec?.backupName }}
         <FontAwesomeIcon
           :icon="faArrowUpRightFromSquare"
-          class="w-2 h-2 ml-1.5"
+          class="!w-2 !h-2 ml-1.5"
         />
       </router-link>
       <span
         v-if="spec?.itemOperationTimeout"
         class="bg-blue-100 text-blue-800 text-xs font-medium inline-flex items-center me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300"
       >
-        <FontAwesomeIcon :icon="faClock" class="w-3 h-3 mr-1.5" />
+        <FontAwesomeIcon :icon="faClock" class="!w-3 !h-3 mr-1.5" />
         {{ spec?.itemOperationTimeout }}</span
       >
     </div>

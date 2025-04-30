@@ -19,14 +19,14 @@
         v-if="backup?.status?.errors"
         class="bg-red-100 text-red-800 text-xs font-medium inline-flex items-center me-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300"
       >
-        <FontAwesomeIcon :icon="faCircleExclamation" class="w-3 h-3 mr-1.5" />
+        <FontAwesomeIcon :icon="faCircleExclamation" class="!w-3 !h-3 mr-1.5" />
         {{ backup.status.errors }}</span
       >
       <span
         v-if="backup?.status?.warnings"
         class="bg-orange-100 text-orange-800 text-xs font-medium inline-flex items-center me-2 px-2.5 py-0.5 rounded dark:bg-orange-900 dark:text-orange-300"
       >
-        <FontAwesomeIcon :icon="faTriangleExclamation" class="w-3 h-3 mr-1.5" />
+        <FontAwesomeIcon :icon="faTriangleExclamation" class="!w-3 !h-3 mr-1.5" />
 
         {{ backup.status.warnings }}</span
       >
@@ -34,7 +34,7 @@
         v-if="backup?.status?.expiration"
         class=" bg-blue-100 text-blue-800 text-xs font-medium inline-flex items-center me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300"
       >
-        <FontAwesomeIcon :icon="faHourglass" class="w-3 h-3 mr-1.5" />
+        <FontAwesomeIcon :icon="faHourglass" class="!w-3 !h-3 mr-1.5" />
         {{ getRemainingTime(backup.status.expiration) }}</span
       >
     </div>
@@ -46,24 +46,24 @@
         <div
           v-if="!backup"
           class="ml-4 h-2 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-24"
-        ></div>
+        />
         <span class="text-xs font-medium text-gray-900 dark:text-white"
           >{{ backup.status.progress.itemsBackedUp || '0' }} /
           {{ backup.status.progress.totalItems }}</span
         >
       </div>
       <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-        <div :style="getPercent()" class="bg-blue-600 h-2.5 rounded-full"></div>
+        <div :style="getPercent()" class="bg-blue-600 h-2.5 rounded-full"/>
       </div>
     </div>
     <div v-if="!backup" class="mt-4">
       <div class="flex items-center justify-between mb-1">
         <div
           class="h-2 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-24"
-        ></div>
+        />
         <div
           class="h-2 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-24"
-        ></div>
+        />
       </div>
       <div
         class="w-full bg-gray-200 rounded-full animate-pulse h-2.5 dark:bg-gray-700"

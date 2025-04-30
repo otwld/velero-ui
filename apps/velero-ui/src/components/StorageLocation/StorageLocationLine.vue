@@ -4,7 +4,7 @@
       <div class="flex items-center">
         <input
           :checked="checked"
-          class="w-4 h-4 border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600"
+          class="!w-4 !h-4 border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600"
           type="checkbox"
           @click="emit('onChecked')"
         />
@@ -53,26 +53,30 @@
         <div
           v-if="data?.status?.phase === V1BackupStorageLocationPhase.Available"
           class="h-2.5 w-2.5 rounded-full bg-green-400 mr-2"
-        ></div>
+        />
         <div
           v-if="
             data?.status?.phase === V1BackupStorageLocationPhase.Unavailable
           "
           class="h-2.5 w-2.5 rounded-full bg-red-500 mr-2"
-        ></div>
+        />
         <div
           v-if="!data?.status?.phase"
           class="h-2.5 w-2.5 rounded-full bg-gray-500 mr-2"
-        ></div>
-        {{ data?.status?.phase ? t(`resource.phase.${data?.status?.phase}`) : t('global.unknown') }}
+        />
+        {{
+          data?.status?.phase
+            ? t(`resource.phase.${data?.status?.phase}`)
+            : t('global.unknown')
+        }}
       </div>
     </td>
     <td class="p-4 space-x-2 whitespace-nowrap">
       <div class="inline-flex rounded-md shadow-sm" role="group">
         <button
           :class="{ 'cursor-not-allowed': isEditing }"
-          :disabled="isEditing"
           :data-tooltip-target="`tooltip-button-edit-${data?.metadata?.uid}`"
+          :disabled="isEditing"
           :title="t('global.button.edit.title')"
           class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-teal-700 hover:bg-teal-800 rounded-l-lg focus:ring-4 focus:ring-teal-300 dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
           type="button"
@@ -81,9 +85,9 @@
           <FontAwesomeIcon
             v-if="isEditing"
             :icon="faCircleNotch"
-            class="w-4 h-4 animate-spin"
+            class="!w-4 !h-4 animate-spin"
           />
-          <FontAwesomeIcon v-if="!isEditing" :icon="faPen" class="w-4 h-4" />
+          <FontAwesomeIcon v-if="!isEditing" :icon="faPen" class="!w-4 !h-4" />
         </button>
         <button
           :class="{ 'cursor-not-allowed': isDeleting }"
@@ -97,13 +101,9 @@
           <FontAwesomeIcon
             v-if="isDeleting"
             :icon="faCircleNotch"
-            class="w-4 h-4 animate-spin"
+            class="!w-4 !h-4 animate-spin"
           />
-          <FontAwesomeIcon
-            v-if="!isDeleting"
-            :icon="faTrashCan"
-            class="w-4 h-4"
-          />
+          <FontAwesomeIcon v-else :icon="faTrashCan" class="!w-4 !h-4" />
         </button>
       </div>
     </td>
@@ -114,7 +114,7 @@
     role="tooltip"
   >
     {{ t('global.button.edit.title') }}
-    <div class="tooltip-arrow" data-popper-arrow></div>
+    <div class="tooltip-arrow" data-popper-arrow />
   </div>
   <div
     :id="`tooltip-button-delete-${data?.metadata?.uid}`"
@@ -122,17 +122,17 @@
     role="tooltip"
   >
     {{ t('global.button.delete.title') }}
-    <div class="tooltip-arrow" data-popper-arrow></div>
+    <div class="tooltip-arrow" data-popper-arrow />
   </div>
   <ModalConfirmation
     v-if="showModalDelete"
     :icon="faExclamationCircle"
     :name="data?.metadata?.name"
     :text="t('modal.text.confirmation.delete')"
-    @onClose="showModalDelete = false"
-    @onConfirm="remove(data.metadata.name)"
+    @on-close="showModalDelete = false"
+    @on-confirm="remove(data.metadata.name)"
   >
-    <template v-slot:content>
+    <template #content>
       <div class="flex justify-center">
         <p
           class="mt-2 px-1 mb-6 text-sm rounded bg-gray-200 text-gray-600 dark:bg-gray-600 dark:text-gray-200"
@@ -146,16 +146,19 @@
     v-if="showModalEdit"
     :id="`modal-edit-${data?.metadata?.name}`"
     width="lg:w-6/12"
-    @onClose="showModalEdit = false"
+    @on-close="showModalEdit = false"
   >
-    <template v-slot:header>
+    <template #header>
       <h3 class="text-lg text-gray-500 dark:text-gray-400">
         {{ t('modal.text.title.editBackupStorageLocation') }}
         <span class="font-normal text-sm ml-2">{{ data?.metadata?.name }}</span>
       </h3>
     </template>
-    <template v-slot:content>
-      <StorageLocationFormEdit @onClose="showModalEdit = false" :storage-location="data" />
+    <template #content>
+      <StorageLocationFormEdit
+        :storage-location="data"
+        @on-close="showModalEdit = false"
+      />
     </template>
   </VModal>
 </template>
@@ -183,7 +186,7 @@ import { useI18n } from 'vue-i18n';
 import { initTooltips } from 'flowbite';
 import VModal from '@velero-ui-app/components/Modals/VModal.vue';
 import StorageLocationFormEdit from '@velero-ui-app/components/StorageLocation/forms/StorageLocationFormEdit.vue';
-import {useKubernetesEditObject} from "@velero-ui-app/composables/useKubernetesEditObject";
+import { useKubernetesEditObject } from '@velero-ui-app/composables/useKubernetesEditObject';
 
 const { t } = useI18n();
 const props = defineProps({

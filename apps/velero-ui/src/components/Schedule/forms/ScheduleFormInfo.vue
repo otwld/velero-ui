@@ -34,7 +34,7 @@
             >{{ t('resource.spec.schedule') }} *
             <FontAwesomeIcon
               :icon="faQuestionCircle"
-              class="pl-1 w-3 h-3 hover:text-gray-700 hover:cursor-help"
+              class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
               data-tooltip-style="light"
               data-tooltip-target="tooltip-schedule"
             />
@@ -72,7 +72,7 @@
               </span>
               <FontAwesomeIcon
                 :icon="faQuestionCircle"
-                class="pl-1 w-3 h-3 hover:text-gray-700 hover:cursor-help dark:text-white dark:hover:text-gray-200"
+                class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help dark:text-white dark:hover:text-gray-200"
                 data-tooltip-style="light"
                 data-tooltip-target="tooltip-use-owner-references-in-backup"
               />
@@ -93,7 +93,7 @@
               </span>
               <FontAwesomeIcon
                 :icon="faQuestionCircle"
-                class="pl-1 w-3 h-3 hover:text-gray-700 hover:cursor-help dark:text-white dark:hover:text-gray-200"
+                class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help dark:text-white dark:hover:text-gray-200"
                 data-tooltip-style="light"
                 data-tooltip-target="tooltip-skip-immediately"
               />
@@ -114,7 +114,7 @@
               >
               <FontAwesomeIcon
                 :icon="faQuestionCircle"
-                class="pl-1 w-3 h-3 hover:text-gray-700 hover:cursor-help dark:text-white dark:hover:text-gray-200"
+                class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help dark:text-white dark:hover:text-gray-200"
                 data-tooltip-style="light"
                 data-tooltip-target="tooltip-paused"
               />

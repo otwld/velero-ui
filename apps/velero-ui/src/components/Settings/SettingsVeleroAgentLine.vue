@@ -1,7 +1,7 @@
 <template>
   <div class="flex items-center space-x-4">
     <div class="flex items-center">
-      <FontAwesomeIcon :icon="faMicrochip" class="w-6 h-6 dark:text-white" />
+      <FontAwesomeIcon :icon="faMicrochip" class="!w-6 !h-6 dark:text-white" />
     </div>
     <div class="flex-1 min-w-0">
       <div
@@ -10,14 +10,14 @@
         {{ data.name }}
         <div
           v-if="data.connected && socket.connected"
-          class="h-2.5 w-2.5 rounded-full bg-green-400 ml-2"
           :title="t('global.online')"
-        ></div>
+          class="h-2.5 w-2.5 rounded-full bg-green-400 ml-2"
+        />
         <div
           v-if="!data.connected || !socket.connected"
-          class="h-2.5 w-2.5 rounded-full bg-red-500 ml-2"
           :title="t('global.offline')"
-        ></div>
+          class="h-2.5 w-2.5 rounded-full bg-red-500 ml-2"
+        />
       </div>
       <p class="text-sm font-normal text-gray-500 truncate dark:text-gray-400">
         {{ data.node }}
@@ -36,7 +36,7 @@
         type="button"
         @click="showModal = !showModal"
       >
-        <FontAwesomeIcon :icon="faEye" class="w-4 h-4" />
+        <FontAwesomeIcon :icon="faEye" class="!w-4 !h-4" />
       </button>
     </div>
   </div>
@@ -44,16 +44,16 @@
     v-if="showModal"
     id="modal-logs-server"
     width="w-10/12"
-    @onClose="showModal = false"
+    @on-close="showModal = false"
   >
-    <template v-slot:header>
+    <template #header>
       <h3 class="text-lg text-gray-500 dark:text-gray-400">
         {{ t('settings.agents.modal.logs.title') }}
         <span class="font-normal text-sm ml-2">{{ data.name }}</span>
       </h3>
     </template>
-    <template v-slot:content>
-      <SettingsLogs :name="data.name" :type="data.name"></SettingsLogs>
+    <template #content>
+      <SettingsLogs :name="data.name" :type="data.name" />
     </template>
   </VModal>
   <div
@@ -62,20 +62,20 @@
     role="tooltip"
   >
     {{ t('settings.agents.tooltip.logs.title') }}
-    <div class="tooltip-arrow" data-popper-arrow></div>
+    <div class="tooltip-arrow" data-popper-arrow />
   </div>
 </template>
 
 <script lang="ts" setup>
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { faEye, faMicrochip } from '@fortawesome/free-solid-svg-icons';
-import {inject, onMounted, type PropType, ref} from 'vue';
+import { inject, onMounted, type PropType, ref } from 'vue';
 import { initTooltips } from 'flowbite';
 import type { VeleroAgentSettings } from '@velero-ui/shared-types';
 import VModal from '@velero-ui-app/components/Modals/VModal.vue';
 import SettingsLogs from '@velero-ui-app/components/Settings/SettingsLogs.vue';
 import { useI18n } from 'vue-i18n';
-import type {SocketIO} from "@velero-ui-app/plugins/socket.plugin";
+import type { SocketIO } from '@velero-ui-app/plugins/socket.plugin';
 
 defineProps({
   data: Object as PropType<VeleroAgentSettings>,

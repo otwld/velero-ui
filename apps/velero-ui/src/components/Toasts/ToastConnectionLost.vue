@@ -7,7 +7,7 @@
     <div
       class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-orange-500 bg-orange-100 rounded-lg dark:bg-orange-800 dark:text-orange-200"
     >
-      <FontAwesomeIcon :icon="faGlobe" class="w-5 h-5 animate-pulse" />
+      <FontAwesomeIcon :icon="faGlobe" class="!w-5 !h-5 animate-pulse" />
     </div>
 
     <div class="ml-3 text-sm font-normal">{{ t('global.connectionLost') }}</div>

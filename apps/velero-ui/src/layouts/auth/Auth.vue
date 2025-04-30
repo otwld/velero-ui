@@ -21,16 +21,8 @@
           >
             {{ t('auth.signIn') }}
           </h1>
-          <Alert
-            :icon="faCircleExclamation"
-            :message="error"
-            color="red"
-          ></Alert>
-          <Alert
-            :icon="faCircleExclamation"
-            :message="success"
-            color="green"
-          ></Alert>
+          <Alert :icon="faCircleExclamation" :message="error" color="red" />
+          <Alert :icon="faCircleExclamation" :message="success" color="green" />
           <div class="space-y-4 md:space-y-6">
             <form v-if="basicAuth?.enabled" @submit="classicLogin($event)">
               <div class="mb-6">
@@ -77,7 +69,7 @@
                 <FontAwesomeIcon
                   v-if="basicLoading"
                   :icon="faCircleNotch"
-                  class="w-4 h-4 animate-spin mr-2"
+                  class="!w-4 !h-4 animate-spin mr-2"
                 />
                 {{ t('auth.form.button.title') }}
               </button>

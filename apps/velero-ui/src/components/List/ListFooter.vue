@@ -12,25 +12,25 @@
           class="h-2.5 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-4 ml-1.5"
         />
         <span
-          v-if="!isFetching"
+          v-else
           class="ml-1.5 font-semibold text-gray-900 dark:text-white"
           >{{ offset }}-{{
             offset + limit > total ? total : offset + limit
           }}</span
         >
-        <p class="ml-1.5">{{ t('list.text.of') }}</p>
+        <p class="ml-1.5 ">{{ t('list.text.of') }}</p>
         <div
           v-if="isFetching"
-          class="h-2.5 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-4 ml-1.5"
+          class="h-2.5 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-4 mx-1.5"
         />
         <span
-          v-if="!isFetching"
-          class="ml-1.5 font-semibold text-gray-900 dark:text-white"
+          v-else
+          class="mx-1.5 font-semibold text-gray-900 dark:text-white"
           >{{ total }}</span
         >
       </div>
       <div
-        class="ml-3 pl-3 text-sm font-normal text-gray-500 dark:text-gray-400"
+        class="ml-3 text-sm font-normal text-gray-500 dark:text-gray-400"
       >
         <div class="max-w-sm mx-auto inline-flex items-center">
           <label class="pr-1" for="underline_select">{{
@@ -39,7 +39,7 @@
           <select
             id="underline_select"
             v-model="limit"
-            class="text-xs text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer"
+            class="text-xs text-center text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer"
             @change="listStore.setLimit(parseInt($event.target.value))"
           >
             <option value="20">20</option>
@@ -58,7 +58,7 @@
         type="button"
         @click="listStore.previous()"
       >
-        <FontAwesomeIcon :icon="faChevronLeft" class="w-3 h-3 mr-1" />
+        <FontAwesomeIcon :icon="faChevronLeft" class="!w-3 !h-3 mr-1" />
         {{ t('global.button.previous.title') }}
       </button>
       <button
@@ -69,7 +69,7 @@
         @click="listStore.next()"
       >
         {{ t('global.button.next.title') }}
-        <FontAwesomeIcon :icon="faChevronRight" class="w-3 h-3 ml-1" />
+        <FontAwesomeIcon :icon="faChevronRight" class="!w-3 !h-3 ml-1" />
       </button>
     </div>
   </div>

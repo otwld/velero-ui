@@ -5,7 +5,7 @@
     <div
       class="items-center sm:flex xl:block 2xl:flex sm:space-x-4 xl:space-x-0 2xl:space-x-4"
     >
-      <FontAwesomeIcon :icon="faHardDrive" class="w-16 h-16 dark:text-white" />
+      <FontAwesomeIcon :icon="faHardDrive" class="!w-16 !h-16 dark:text-white" />
 
       <div class="flex-1 min-w-0">
         <h3
@@ -28,14 +28,14 @@
           <div
             v-if="!data"
             class="h-2.5 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-48 mb-4"
-          ></div>
+          />
         </div>
         <div class="mb-1 text-xs text-gray-500 dark:text-gray-400">
           {{ data?.version }}
           <div
             v-if="!data"
             class="h-2 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-72 mb-4"
-          ></div>
+          />
         </div>
       </div>
       <div class="inline-flex items-center">
@@ -45,7 +45,7 @@
           type="button"
           @click="showModal = !showModal"
         >
-          <FontAwesomeIcon :icon="faEye" class="w-4 h-4" />
+          <FontAwesomeIcon :icon="faEye" class="!w-4 !h-4" />
         </button>
       </div>
     </div>
@@ -54,15 +54,15 @@
     v-if="showModal"
     id="modal-logs-server"
     width="w-10/12"
-    @onClose="showModal = false"
+    @on-close="showModal = false"
   >
-    <template v-slot:header>
+    <template #header>
       <h3 class="text-lg text-gray-500 dark:text-gray-400">
         {{ t('settings.server.modal.logs.title') }}
       </h3>
     </template>
-    <template v-slot:content>
-      <SettingsLogs type="server"></SettingsLogs>
+    <template #content>
+      <SettingsLogs type="server" />
     </template>
   </VModal>
   <div
@@ -71,7 +71,7 @@
     role="tooltip"
   >
     {{ t('settings.server.tooltip.logs.title') }}
-    <div class="tooltip-arrow" data-popper-arrow></div>
+    <div class="tooltip-arrow" data-popper-arrow />
   </div>
 </template>
 

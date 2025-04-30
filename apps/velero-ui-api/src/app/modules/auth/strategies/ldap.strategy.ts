@@ -10,18 +10,18 @@ export class LdapStrategy extends PassportStrategy(Strategy, 'ldap') {
     private logger: AppLogger,
     private readonly configService: ConfigService,
   ) {
+
     super({
       passReqToCallback: true,
       server: {
         url: configService.get('ldap.url'),
         bindDN: configService.get('ldap.bindDn'),
-        usernameField: 'username',
-        passwordField: 'password',
         bindCredentials: configService.get('ldap.bindCredentials'),
         searchBase: configService.get('ldap.searchBase'),
         searchFilter: configService.get('ldap.searchFilter'),
         searchAttributes: configService.get('ldap.searchAttributes'),
       },
+      // @ts-ignore
       credentialsLookup: (req: Request) => {
         return req.body;
       },

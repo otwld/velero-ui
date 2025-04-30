@@ -6,12 +6,12 @@
     type="button"
     @click="redirect()"
   >
-    <FontAwesomeIcon :icon="faKey" class="w-4 h-4 mr-2" />
-    <p>{{ t('auth.federated.button.title', { strategy: oauth.name }) }}</p>
+    <FontAwesomeIcon :icon="faKey" class="!w-4 !h-4 mr-2" />
+    {{ t('auth.federated.button.title', { strategy: oauth.name }) }}
     <FontAwesomeIcon
       v-if="loading"
       :icon="faCircleNotch"
-      class="w-4 h-4 animate-spin ml-2"
+      class="!w-4 !h-4 animate-spin ml-2"
     />
   </button>
 </template>

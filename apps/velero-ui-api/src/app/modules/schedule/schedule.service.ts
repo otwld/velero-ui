@@ -1,13 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
 import {
-  Configuration,
-  createConfiguration,
   CustomObjectsApi,
   KubeConfig,
   KubernetesObject,
-  RequestContext,
-  ResponseContext,
-  ServerConfiguration,
 } from '@kubernetes/client-node';
 import { K8S_CONNECTION } from '@velero-ui-api/shared/utils/k8s.utils';
 import { concatMap, Observable, of, tap } from 'rxjs';
@@ -25,7 +20,7 @@ import {
   patchK8sCustomObjectSpec,
 } from '@velero-ui-api/modules/k8s-custom-object/k8s-custom-object.utils';
 import { VELERO } from '@velero-ui-api/shared/modules/velero/velero.constants';
-import { PromiseMiddlewareWrapper } from '@kubernetes/client-node/dist/gen/middleware';
+import {PatchStrategy, setHeaderOptions} from "@kubernetes/client-node"
 
 @Injectable()
 export class ScheduleService {
@@ -65,28 +60,6 @@ export class ScheduleService {
   }
 
   public togglePause(name: string, paused: boolean): Observable<V1Schedule> {
-    const headerPatchMiddleware: PromiseMiddlewareWrapper =
-      new PromiseMiddlewareWrapper({
-        pre: async (requestContext: RequestContext) => {
-          requestContext.setHeaderParam(
-            'Content-type',
-            'application/json-patch+json',
-          );
-          return requestContext;
-        },
-        post: async (responseContext: ResponseContext) => responseContext,
-      });
-
-    const baseServerConfig: ServerConfiguration<{
-      [key: string]: string;
-    }> = new ServerConfiguration<{
-      [key: string]: string;
-    }>(this.k8s.getCurrentCluster().server, {});
-    const configuration: Configuration = createConfiguration({
-      middleware: [headerPatchMiddleware],
-      baseServer: baseServerConfig,
-    });
-
     this.logger.debug(
       `Toggle ${paused ? 'paused' : 'resumed'} for ${name}...`,
       ScheduleService.name,
@@ -104,7 +77,7 @@ export class ScheduleService {
               name,
               body,
             },
-            configuration,
+            setHeaderOptions('Content-Type', PatchStrategy.JsonPatch),
           ),
         ),
       )

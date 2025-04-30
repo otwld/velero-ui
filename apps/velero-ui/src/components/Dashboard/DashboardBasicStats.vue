@@ -7,12 +7,12 @@
         <div class="items-center flex sm:space-x-4 xl:space-x-0 2xl:space-x-4">
           <FontAwesomeIcon
             :icon="faFloppyDisk"
-            class="w-16 h-16 mr-2 dark:text-white"
+            class="!w-16 !h-16 mr-2 dark:text-white"
           />
-          <div class="flex-col">
+          <div class="flex-col pl-2">
             <div
               v-if="isFetching && !data"
-              class="h-2.5 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-16 animate-pulse mb-4"
+              class="h-2.5 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-16 mb-4"
             />
             <h3
               v-if="data"
@@ -32,7 +32,7 @@
             title="See"
             type="button"
           >
-            <FontAwesomeIcon :icon="faChevronRight" class="w-5 h-5" />
+            <FontAwesomeIcon :icon="faChevronRight" class="!w-5 !h-5" />
           </router-link>
         </div>
       </div>
@@ -44,12 +44,12 @@
         <div class="items-center flex sm:space-x-4 xl:space-x-0 2xl:space-x-4">
           <FontAwesomeIcon
             :icon="faClock"
-            class="w-16 h-16 mr-2 dark:text-white"
+            class="!w-16 !h-16 mr-2 dark:text-white"
           />
-          <div class="flex-col">
+          <div class="flex-col pl-2">
             <div
               v-if="isFetching && !data"
-              class="h-2.5 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-16 animate-pulse mb-4"
+              class="h-2.5 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-16 mb-4"
             />
             <h3
               v-if="data"
@@ -69,7 +69,7 @@
             title="See"
             type="button"
           >
-            <FontAwesomeIcon :icon="faChevronRight" class="w-5 h-5" />
+            <FontAwesomeIcon :icon="faChevronRight" class="!w-5 !h-5" />
           </router-link>
         </div>
       </div>
@@ -81,12 +81,12 @@
         <div class="items-center flex sm:space-x-4 xl:space-x-0 2xl:space-x-4">
           <FontAwesomeIcon
             :icon="faClockRotateLeft"
-            class="w-16 h-16 mr-2 dark:text-white"
+            class="!w-16 !h-16 mr-2 dark:text-white"
           />
-          <div class="flex-col">
+          <div class="flex-col pl-2">
             <div
               v-if="isFetching && !data"
-              class="h-2.5 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-16 animate-pulse mb-4"
+              class="h-2.5 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-16 mb-4"
             />
             <h3
               v-if="data"
@@ -106,7 +106,7 @@
             title="See"
             type="button"
           >
-            <FontAwesomeIcon :icon="faChevronRight" class="w-5 h-5" />
+            <FontAwesomeIcon :icon="faChevronRight" class="!w-5 !h-5" />
           </router-link>
         </div>
       </div>
@@ -118,12 +118,12 @@
         <div class="items-center flex sm:space-x-4 xl:space-x-0 2xl:space-x-4">
           <FontAwesomeIcon
             :icon="faServer"
-            class="w-16 h-16 mr-2 dark:text-white"
+            class="!w-16 !h-16 mr-2 dark:text-white"
           />
-          <div class="flex-col">
+          <div class="flex-col pl-2">
             <div
               v-if="isFetching && !data"
-              class="h-2.5 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-16 animate-pulse mb-4"
+              class="h-2.5 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-16 mb-4"
             />
             <h3
               v-if="data"
@@ -143,7 +143,7 @@
             title="See"
             type="button"
           >
-            <FontAwesomeIcon :icon="faChevronRight" class="w-5 h-5" />
+            <FontAwesomeIcon :icon="faChevronRight" class="!w-5 !h-5" />
           </router-link>
         </div>
       </div>

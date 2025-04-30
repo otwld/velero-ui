@@ -16,8 +16,7 @@ export interface ListStore {
   objectType: Resource;
 }
 
-export const useListStore = defineStore({
-  id: 'list',
+export const useListStore = defineStore('list', {
   state: () =>
     ({
       total: 0,

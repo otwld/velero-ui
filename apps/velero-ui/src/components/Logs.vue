@@ -16,12 +16,12 @@
           <FontAwesomeIcon
             v-if="!isLoading"
             :icon="faFileArrowDown"
-            class="w-4 h-4 mr-2"
+            class="!w-4 !h-4 mr-2"
           />
           <FontAwesomeIcon
-            v-if="isLoading"
+            v-else
             :icon="faCircleNotch"
-            class="w-4 h-4 animate-spin mr-2"
+            class="!w-4 !h-4 animate-spin mr-2"
           />
           {{ t('global.button.download.title') }}
         </button>
@@ -38,11 +38,11 @@
           v-if="data?.length === 0 && !loading"
           class="inline-flex items-center"
         >
-          <FontAwesomeIcon :icon="faInfoCircle" class="w-4 h-4" />
+          <FontAwesomeIcon :icon="faInfoCircle" class="!w-4 !h-4" />
           <p class="ml-2">{{ t('log.text.noResult') }}</p>
         </div>
         <div v-if="loading" class="inline-flex items-center">
-          <FontAwesomeIcon :icon="faCircleNotch" class="w-4 h-4 animate-spin" />
+          <FontAwesomeIcon :icon="faCircleNotch" class="!w-4 !h-4 animate-spin" />
           <i class="ml-2">{{ t('log.text.loading') }}</i>
         </div>
       </div>

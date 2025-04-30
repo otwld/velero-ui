@@ -4,7 +4,7 @@
       <div class="flex items-center">
         <input
           :checked="checked"
-          class="w-4 h-4 border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600"
+          class="!w-4 !h-4 border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600"
           type="checkbox"
           @click="emit('onChecked')"
         />
@@ -49,17 +49,17 @@
         <div
           v-if="data?.status?.phase === V1VolumeSnapshotLocationPhase.Available"
           class="h-2.5 w-2.5 rounded-full bg-green-400 mr-2"
-        ></div>
+        />
         <div
           v-if="
             data?.status?.phase === V1VolumeSnapshotLocationPhase.Unavailable
           "
           class="h-2.5 w-2.5 rounded-full bg-red-500 mr-2"
-        ></div>
+        />
         <div
           v-if="!data?.status?.phase"
           class="h-2.5 w-2.5 rounded-full bg-gray-500 mr-2"
-        ></div>
+        />
         {{ data?.status?.phase ? t(`resource.phase.${data?.status?.phase}`) : t('global.unknown') }}
       </div>
     </td>
@@ -77,9 +77,9 @@
           <FontAwesomeIcon
             v-if="isEditing"
             :icon="faCircleNotch"
-            class="w-4 h-4 animate-spin"
+            class="!w-4 !h-4 animate-spin"
           />
-          <FontAwesomeIcon v-if="!isEditing" :icon="faPen" class="w-4 h-4" />
+          <FontAwesomeIcon v-else :icon="faPen" class="!w-4 !h-4" />
         </button>
         <button
           :class="{ 'cursor-not-allowed': isDeleting }"
@@ -93,12 +93,12 @@
           <FontAwesomeIcon
             v-if="isDeleting"
             :icon="faCircleNotch"
-            class="w-4 h-4 animate-spin"
+            class="!w-4 !h-4 animate-spin"
           />
           <FontAwesomeIcon
-            v-if="!isDeleting"
+            v-else
             :icon="faTrashCan"
-            class="w-4 h-4"
+            class="!w-4 !h-4"
           />
         </button>
       </div>
@@ -110,7 +110,7 @@
     role="tooltip"
   >
     {{ t('global.button.edit.title') }}
-    <div class="tooltip-arrow" data-popper-arrow></div>
+    <div class="tooltip-arrow" data-popper-arrow />
   </div>
   <div
     :id="`tooltip-button-delete-${data?.metadata?.uid}`"
@@ -118,32 +118,32 @@
     role="tooltip"
   >
     {{ t('global.button.delete.title') }}
-    <div class="tooltip-arrow" data-popper-arrow></div>
+    <div class="tooltip-arrow" data-popper-arrow />
   </div>
   <ModalConfirmation
     v-if="showModalDelete"
     :icon="faExclamationCircle"
     :name="data?.metadata?.name"
     :text="t('modal.text.confirmation.delete')"
-    @onClose="showModalDelete = false"
-    @onConfirm="remove(data.metadata.name)"
+    @on-close="showModalDelete = false"
+    @on-confirm="remove(data.metadata.name)"
   />
   <VModal
     v-if="showModalEdit"
     :id="`modal-edit-${data?.metadata?.name}`"
     width="lg:w-6/12"
-    @onClose="showModalEdit = false"
+    @on-close="showModalEdit = false"
   >
-    <template v-slot:header>
+    <template #header>
       <h3 class="text-lg text-gray-500 dark:text-gray-400">
         {{ t('modal.text.title.editVolumeSnapshotLocation') }}
         <span class="font-normal text-sm ml-2">{{ data?.metadata?.name }}</span>
       </h3>
     </template>
-    <template v-slot:content>
+    <template #content>
       <SnapshotLocationFormEdit
         :volume-location="data"
-        @onClose="showModalEdit = false"
+        @on-close="showModalEdit = false"
       />
     </template>
   </VModal>
