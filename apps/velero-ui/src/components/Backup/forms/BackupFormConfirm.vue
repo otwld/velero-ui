@@ -100,7 +100,7 @@
             </dd>
           </div>
         </div>
-        <div class="grid gap-4 mb-4 grid-cols-2">
+        <div v-if="formContent[2]?.includeClusterResources" class="grid gap-4 mb-4 grid-cols-2">
           <div class="col-span-2 sm:col-span-1">
             <dt
               class="mb-2 font-semibold leading-none text-gray-900 dark:text-white"
@@ -139,6 +139,102 @@
               >
                 <li
                   v-for="(resource, index) of formContent[2]?.excludedResources"
+                  :key="index"
+                >
+                  {{ resource }}
+                </li>
+              </ul>
+            </dd>
+          </div>
+        </div>
+        <div v-if="!formContent[2]?.includeClusterResources && !formContent[2]?.includeNamespaceClusterResources" class="grid gap-4 mb-4 grid-cols-2">
+          <div class="col-span-2 sm:col-span-1">
+            <dt
+              class="mb-2 font-semibold leading-none text-gray-900 dark:text-white"
+            >
+              {{ t('resource.spec.includedClusterScopedResources') }}
+            </dt>
+            <dd
+              class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400"
+            >
+              <p v-if="formContent[2]?.includedClusterScopedResources.length === 0">-</p>
+              <ul
+                v-if="formContent[2]?.includedClusterScopedResources"
+                class="max-w-md space-y-1 list-disc list-inside dark:text-gray-400"
+              >
+                <li
+                  v-for="(resource, index) of formContent[2]?.includedClusterScopedResources"
+                  :key="index"
+                >
+                  {{ resource }}
+                </li>
+              </ul>
+            </dd>
+          </div>
+          <div class="col-span-2 sm:col-span-1">
+            <dt
+              class="mb-2 font-semibold leading-none text-gray-900 dark:text-white"
+            >
+              {{ t('resource.spec.excludedClusterScopedResources') }}
+            </dt>
+            <dd
+              class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400"
+            >
+              <p v-if="formContent[2]?.excludedClusterScopedResources.length === 0">-</p>
+              <ul
+                v-if="formContent[2]?.excludedClusterScopedResources"
+                class="max-w-md space-y-1 list-disc list-inside dark:text-gray-400"
+              >
+                <li
+                  v-for="(resource, index) of formContent[2]?.excludedClusterScopedResources"
+                  :key="index"
+                >
+                  {{ resource }}
+                </li>
+              </ul>
+            </dd>
+          </div>
+        </div>
+        <div v-if="!formContent[2]?.includeClusterResources && formContent[2]?.includeNamespaceClusterResources" class="grid gap-4 mb-4 grid-cols-2">
+          <div class="col-span-2 sm:col-span-1">
+            <dt
+              class="mb-2 font-semibold leading-none text-gray-900 dark:text-white"
+            >
+              {{ t('resource.spec.includedNamespaceScopedResources') }}
+            </dt>
+            <dd
+              class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400"
+            >
+              <p v-if="formContent[2]?.includedNamespaceScopedResources.length === 0">-</p>
+              <ul
+                v-if="formContent[2]?.includedNamespaceScopedResources"
+                class="max-w-md space-y-1 list-disc list-inside dark:text-gray-400"
+              >
+                <li
+                  v-for="(resource, index) of formContent[2]?.includedNamespaceScopedResources"
+                  :key="index"
+                >
+                  {{ resource }}
+                </li>
+              </ul>
+            </dd>
+          </div>
+          <div class="col-span-2 sm:col-span-1">
+            <dt
+              class="mb-2 font-semibold leading-none text-gray-900 dark:text-white"
+            >
+              {{ t('resource.spec.excludedNamespaceScopedResources') }}
+            </dt>
+            <dd
+              class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400"
+            >
+              <p v-if="formContent[2]?.excludedNamespaceScopedResources.length === 0">-</p>
+              <ul
+                v-if="formContent[2]?.excludedNamespaceScopedResources"
+                class="max-w-md space-y-1 list-disc list-inside dark:text-gray-400"
+              >
+                <li
+                  v-for="(resource, index) of formContent[2]?.excludedNamespaceScopedResources"
                   :key="index"
                 >
                   {{ resource }}
