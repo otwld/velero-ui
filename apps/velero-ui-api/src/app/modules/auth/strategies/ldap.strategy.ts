@@ -3,6 +3,7 @@ import { PassportStrategy } from '@nestjs/passport';
 import Strategy from 'passport-ldapauth';
 import { ConfigService } from '@nestjs/config';
 import { AppLogger } from '@velero-ui-api/shared/modules/logger/logger.service';
+import { IncomingMessage } from 'http';
 
 @Injectable()
 export class LdapStrategy extends PassportStrategy(Strategy, 'ldap') {
@@ -21,9 +22,8 @@ export class LdapStrategy extends PassportStrategy(Strategy, 'ldap') {
         searchFilter: configService.get('ldap.searchFilter'),
         searchAttributes: configService.get('ldap.searchAttributes'),
       },
-      // @ts-ignore
-      credentialsLookup: (req: Request) => {
-        return req.body;
+      credentialsLookup: (req: IncomingMessage) => {
+        return (req as any).body;
       },
     });
   }
