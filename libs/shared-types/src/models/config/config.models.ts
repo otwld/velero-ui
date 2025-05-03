@@ -4,6 +4,7 @@ export enum Environment {
 }
 
 export interface AppPublicConfig extends AppConfig {
+  noAuthRequired: boolean;
   basicAuth: Partial<BasicAuthConfig>;
   google: Partial<GoogleConfig>;
   github: Partial<GithubConfig>;
