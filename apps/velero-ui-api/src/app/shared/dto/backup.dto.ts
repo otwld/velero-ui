@@ -45,10 +45,11 @@ export class CreateBackupScratchDto implements V1BackupSpec {
   @IsString({ each: true })
   excludedNamespaces?: string[];
 
+  @IsOptional()
   @IsArray()
   @ArrayMinSize(0)
   @IsString({ each: true })
-  includedResources: string[];
+  includedResources?: string[];
 
   @IsOptional()
   @IsArray()

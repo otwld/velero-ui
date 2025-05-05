@@ -31,7 +31,7 @@
               :icon="faArrowUpRightFromSquare"
               class="me-2 h-3 w-3"
             />
-            {{ t('global.button.learnMore.title')}}
+            {{ t('global.button.learnMore.title') }}
           </button>
         </a>
       </div>
@@ -56,7 +56,9 @@
             :disabled="!data || isError"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
           >
-            <option selected value="">{{ t('form.placeholder.resourcePolicy') }}</option>
+            <option selected value="">
+              {{ t('form.placeholder.resourcePolicy') }}
+            </option>
             <template v-if="data?.items">
               <option
                 v-for="(cm, index) of data?.items"
@@ -73,7 +75,7 @@
             <p
               class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
             >
-              {{ t('global.options')}}
+              {{ t('global.options') }}
             </p>
             <label class="inline-flex items-center mb-5 cursor-pointer">
               <input
@@ -95,6 +97,34 @@
                 class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help dark:text-white dark:hover:text-gray-200"
                 data-tooltip-style="light"
                 data-tooltip-target="tooltip-include-cluster-resources"
+              />
+            </label>
+            <label
+              :class="{
+                hidden: currentForm.includeClusterResources,
+                'inline-flex': !currentForm.includeClusterResources,
+              }"
+              class="items-center mb-5 cursor-pointer"
+            >
+              <input
+                v-model="currentForm.includeNamespaceClusterResources"
+                checked
+                class="sr-only peer"
+                type="checkbox"
+                value=""
+              />
+              <div
+                class="relative w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"
+              ></div>
+              <span
+                class="ms-3 text-sm font-medium text-gray-400 dark:text-gray-500"
+                >{{ t('resource.spec.includeNamespaceClusterResources') }}</span
+              >
+              <FontAwesomeIcon
+                :icon="faQuestionCircle"
+                class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help dark:text-white dark:hover:text-gray-200"
+                data-tooltip-style="light"
+                data-tooltip-target="tooltip-include-namespace-cluster-resources"
               />
             </label>
           </div>
@@ -120,17 +150,17 @@
             <input
               id="included-resources"
               v-model="form.includedResources"
+              :placeholder="t('form.placeholder.resource')"
               class="bg-gray-50 mb-2 border border-gray-300 text-gray-900 text-sm rounded-s-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
               name="included-resources"
-              :placeholder="t('form.placeholder.resource')"
               required
               type="text"
               v-on:keyup.enter="add('includedResources')"
             />
             <button
+              :title="t('global.button.add.title')"
               class="top-0 end-0 p-2.5 h-full text-sm font-medium text-white bg-blue-700 rounded-e-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
               type="button"
-              :title="t('global.button.add.title')"
               @click="add('includedResources')"
             >
               <FontAwesomeIcon :icon="faPlus" class="!w-4 !h-4" />
@@ -143,10 +173,10 @@
           >
             {{ resource }}
             <button
+              :title="t('global.button.delete.title')"
               aria-label="Remove"
               class="inline-flex items-center p-1 ms-2 text-sm text-blue-400 bg-transparent rounded-sm hover:bg-blue-200 hover:text-blue-900 dark:hover:bg-blue-800 dark:hover:text-blue-300"
               type="button"
-              :title="t('global.button.delete.title')"
               @click="remove('includedResources', resource)"
             >
               <FontAwesomeIcon :icon="faXmark" class="!w-2 !h-2" />
@@ -170,17 +200,17 @@
             <input
               id="excluded-resources"
               v-model="form.excludedResources"
+              :placeholder="t('form.placeholder.resource')"
               class="bg-gray-50 mb-2 border border-gray-300 text-gray-900 text-sm rounded-s-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
               name="excluded-resources"
-              :placeholder="t('form.placeholder.resource')"
               required
               type="text"
               v-on:keyup.enter="add('excludedResources')"
             />
             <button
+              :title="t('global.button.add.title')"
               class="top-0 end-0 p-2.5 h-full text-sm font-medium text-white bg-blue-700 rounded-e-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
               type="button"
-              :title="t('global.button.add.title')"
               @click="add('excludedResources')"
             >
               <FontAwesomeIcon :icon="faPlus" class="!w-4 !h-4" />
@@ -193,10 +223,10 @@
           >
             {{ resource }}
             <button
+              :title="t('global.button.delete.title')"
               aria-label="Remove"
               class="inline-flex items-center p-1 ms-2 text-sm text-blue-400 bg-transparent rounded-sm hover:bg-blue-200 hover:text-blue-900 dark:hover:bg-blue-800 dark:hover:text-blue-300"
               type="button"
-              :title="t('global.button.delete.title')"
               @click="remove('excludedResources', resource)"
             >
               <FontAwesomeIcon :icon="faXmark" class="!w-2 !h-2" />
@@ -206,7 +236,11 @@
         </div>
       </div>
       <div
-        :class="{ hidden: currentForm.includeClusterResources }"
+        :class="{
+          hidden:
+            currentForm.includeClusterResources ||
+            currentForm.includeNamespaceClusterResources,
+        }"
         class="grid gap-4 mb-4 grid-cols-1"
       >
         <div class="col-span-1 sm:col-span-1">
@@ -225,17 +259,17 @@
             <input
               id="include-cluster-scoped-resources"
               v-model="form.includedClusterScopedResources"
+              :placeholder="t('form.placeholder.resource')"
               class="bg-gray-50 mb-2 border border-gray-300 text-gray-900 text-sm rounded-s-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
               name="include-cluster-scoped-resources"
-              :placeholder="t('form.placeholder.resource')"
               required
               type="text"
               v-on:keyup.enter="add('includedClusterScopedResources')"
             />
             <button
+              :title="t('global.button.add.title')"
               class="top-0 end-0 p-2.5 h-full text-sm font-medium text-white bg-blue-700 rounded-e-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
               type="button"
-              :title="t('global.button.add.title')"
               @click="add('includedClusterScopedResources')"
             >
               <FontAwesomeIcon :icon="faPlus" class="!w-4 !h-4" />
@@ -250,10 +284,10 @@
           >
             {{ resource }}
             <button
+              :title="t('global.button.delete.title')"
               aria-label="Remove"
               class="inline-flex items-center p-1 ms-2 text-sm text-blue-400 bg-transparent rounded-sm hover:bg-blue-200 hover:text-blue-900 dark:hover:bg-blue-800 dark:hover:text-blue-300"
               type="button"
-              :title="t('global.button.delete.title')"
               @click="remove('includedClusterScopedResources', resource)"
             >
               <FontAwesomeIcon :icon="faXmark" class="!w-2 !h-2" />
@@ -277,17 +311,17 @@
             <input
               id="exclude-cluster-scoped-resources"
               v-model="form.excludedClusterScopedResources"
+              :placeholder="t('form.placeholder.resource')"
               class="bg-gray-50 mb-2 border border-gray-300 text-gray-900 text-sm rounded-s-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
               name="exclude-cluster-scoped-resources"
-              :placeholder="t('form.placeholder.resource')"
               required
               type="text"
               v-on:keyup.enter="add('excludedClusterScopedResources')"
             />
             <button
+              :title="t('global.button.add.title')"
               class="top-0 end-0 p-2.5 h-full text-sm font-medium text-white bg-blue-700 rounded-e-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
               type="button"
-              :title="t('global.button.add.title')"
               @click="add('excludedClusterScopedResources')"
             >
               <FontAwesomeIcon :icon="faPlus" class="!w-4 !h-4" />
@@ -302,10 +336,10 @@
           >
             {{ resource }}
             <button
+              :title="t('global.button.delete.title')"
               aria-label="Remove"
               class="inline-flex items-center p-1 ms-2 text-sm text-blue-400 bg-transparent rounded-sm hover:bg-blue-200 hover:text-blue-900 dark:hover:bg-blue-800 dark:hover:text-blue-300"
               type="button"
-              :title="t('global.button.delete.title')"
               @click="remove('excludedClusterScopedResources', resource)"
             >
               <FontAwesomeIcon :icon="faXmark" class="!w-2 !h-2" />
@@ -313,6 +347,15 @@
             </button>
           </span>
         </div>
+      </div>
+      <div
+        :class="{
+          hidden:
+            currentForm.includeClusterResources ||
+            !currentForm.includeNamespaceClusterResources,
+        }"
+        class="grid gap-4 mb-4 grid-cols-1"
+      >
         <div class="col-span-1 sm:col-span-1">
           <label
             class="flex mb-2 text-sm font-medium text-gray-900 dark:text-white items-center"
@@ -329,17 +372,17 @@
             <input
               id="include-namespace-scoped-resources"
               v-model="form.includedNamespaceScopedResources"
+              :placeholder="t('form.placeholder.resource')"
               class="bg-gray-50 mb-2 border border-gray-300 text-gray-900 text-sm rounded-s-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
               name="include-namespace-scoped-resources"
-              :placeholder="t('form.placeholder.resource')"
               required
               type="text"
               v-on:keyup.enter="add('includedNamespaceScopedResources')"
             />
             <button
+              :title="t('global.button.add.title')"
               class="top-0 end-0 p-2.5 h-full text-sm font-medium text-white bg-blue-700 rounded-e-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
               type="button"
-              :title="t('global.button.add.title')"
               @click="add('includedNamespaceScopedResources')"
             >
               <FontAwesomeIcon :icon="faPlus" class="!w-4 !h-4" />
@@ -354,10 +397,10 @@
           >
             {{ resource }}
             <button
+              :title="t('global.button.delete.title')"
               aria-label="Remove"
               class="inline-flex items-center p-1 ms-2 text-sm text-blue-400 bg-transparent rounded-sm hover:bg-blue-200 hover:text-blue-900 dark:hover:bg-blue-800 dark:hover:text-blue-300"
               type="button"
-              :title="t('global.button.delete.title')"
               @click="remove('includedNamespaceScopedResources', resource)"
             >
               <FontAwesomeIcon :icon="faXmark" class="!w-2 !h-2" />
@@ -381,17 +424,17 @@
             <input
               id="exclude-namespace-scoped-resources"
               v-model="form.excludedNamespaceScopedResources"
+              :placeholder="t('form.placeholder.resource')"
               class="bg-gray-50 mb-2 border border-gray-300 text-gray-900 text-sm rounded-s-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
               name="exclude-namespace-scoped-resources"
-              :placeholder="t('form.placeholder.resource')"
               required
               type="text"
               v-on:keyup.enter="add('excludedNamespaceScopedResources')"
             />
             <button
+              :title="t('global.button.add.title')"
               class="top-0 end-0 p-2.5 h-full text-sm font-medium text-white bg-blue-700 rounded-e-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
               type="button"
-              :title="t('global.button.add.title')"
               @click="add('excludedNamespaceScopedResources')"
             >
               <FontAwesomeIcon :icon="faPlus" class="!w-4 !h-4" />
@@ -406,10 +449,10 @@
           >
             {{ resource }}
             <button
+              :title="t('global.button.delete.title')"
               aria-label="Remove"
               class="inline-flex items-center p-1 ms-2 text-sm text-blue-400 bg-transparent rounded-sm hover:bg-blue-200 hover:text-blue-900 dark:hover:bg-blue-800 dark:hover:text-blue-300"
               type="button"
-              :title="t('global.button.delete.title')"
               @click="remove('excludedNamespaceScopedResources', resource)"
             >
               <FontAwesomeIcon :icon="faXmark" class="!w-2 !h-2" />
@@ -425,7 +468,21 @@
     class="absolute z-10 invisible inline-block px-3 py-2 text-xs text-gray-900 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 tooltip"
     role="tooltip"
   >
-    {{ t('form.tooltip.includeClusterResources',  {type: t('global.backup', 1)}) }}
+    {{
+      t('form.tooltip.includeClusterResources', { type: t('global.backup', 1) })
+    }}
+    <div class="tooltip-arrow" data-popper-arrow></div>
+  </div>
+  <div
+    id="tooltip-include-namespace-cluster-resources"
+    class="absolute z-10 invisible inline-block px-3 py-2 text-xs text-gray-900 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 tooltip"
+    role="tooltip"
+  >
+    {{
+      t('form.tooltip.includeNamespaceClusterResources', {
+        type: t('global.backup', 1),
+      })
+    }}
     <div class="tooltip-arrow" data-popper-arrow></div>
   </div>
   <div
@@ -441,7 +498,7 @@
     class="absolute z-10 invisible inline-block px-3 py-2 text-xs text-gray-900 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 tooltip"
     role="tooltip"
   >
-    {{ t('form.tooltip.includedResources', {type: t('global.backup', 1)}) }}
+    {{ t('form.tooltip.includedResources', { type: t('global.backup', 1) }) }}
     <div class="tooltip-arrow" data-popper-arrow></div>
   </div>
   <div
@@ -449,7 +506,7 @@
     class="absolute z-10 invisible inline-block px-3 py-2 text-xs text-gray-900 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 tooltip"
     role="tooltip"
   >
-    {{ t('form.tooltip.excludedResources', {type: t('global.backup', 1)}) }}
+    {{ t('form.tooltip.excludedResources', { type: t('global.backup', 1) }) }}
     <div class="tooltip-arrow" data-popper-arrow></div>
   </div>
   <div
@@ -457,7 +514,11 @@
     class="absolute z-10 invisible inline-block px-3 py-2 text-xs text-gray-900 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 tooltip"
     role="tooltip"
   >
-    {{ t('form.tooltip.excludedClusterScopedResources', {type: t('global.backup', 1)}) }}
+    {{
+      t('form.tooltip.excludedClusterScopedResources', {
+        type: t('global.backup', 1),
+      })
+    }}
     <div class="tooltip-arrow" data-popper-arrow></div>
   </div>
   <div
@@ -465,7 +526,11 @@
     class="absolute z-10 invisible inline-block px-3 py-2 text-xs text-gray-900 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 tooltip"
     role="tooltip"
   >
-    {{ t('form.tooltip.includedClusterScopedResources', {type: t('global.backup', 1)}) }}
+    {{
+      t('form.tooltip.includedClusterScopedResources', {
+        type: t('global.backup', 1),
+      })
+    }}
     <div class="tooltip-arrow" data-popper-arrow></div>
   </div>
   <div
@@ -473,7 +538,11 @@
     class="absolute z-10 invisible inline-block px-3 py-2 text-xs text-gray-900 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 tooltip"
     role="tooltip"
   >
-    {{ t('form.tooltip.includedNamespaceScopedResources', {type: t('global.backup', 1)}) }}
+    {{
+      t('form.tooltip.includedNamespaceScopedResources', {
+        type: t('global.backup', 1),
+      })
+    }}
     <div class="tooltip-arrow" data-popper-arrow></div>
   </div>
   <div
@@ -481,7 +550,11 @@
     class="absolute z-10 invisible inline-block px-3 py-2 text-xs text-gray-900 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 tooltip"
     role="tooltip"
   >
-    {{ t('form.tooltip.excludedNamespaceScopedResources', {type: t('global.backup', 1)}) }}
+    {{
+      t('form.tooltip.excludedNamespaceScopedResources', {
+        type: t('global.backup', 1),
+      })
+    }}
     <div class="tooltip-arrow" data-popper-arrow></div>
   </div>
 </template>
@@ -510,7 +583,8 @@ const { currentStep, formContent } = storeToRefs(formStore);
 const { data, isError } = useFormConfigMaps();
 
 const currentForm = ref({
-  includeClusterResources: false,
+  includeClusterResources: true,
+  includeNamespaceClusterResources: false,
   resourcePolicy: '',
   includedResources: ['*'],
   excludedResources: [],

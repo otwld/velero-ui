@@ -7,7 +7,7 @@
 ![Docker Image Version (latest semver)](https://img.shields.io/docker/v/otwld/velero-ui?label=docker%20image)
 ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/otwld/velero-ui)
 
-### ℹ️ **ALPHA 0.5.x** ℹ️
+### ℹ️ **ALPHA 0.6.x** ℹ️
 
 A fully realtime lightweight dashboard interface to interact with [Velero (vmware-tanzu)](https://github.com/vmware-tanzu/velero/issues).
 
@@ -54,7 +54,7 @@ This dashboard implement the same functionalities as the velero CLI.
 
 - **Velero server >= 1.13.0**
 
-> ⚠️ This dashboard has only been tested on version **1.13.x**, **1.14.x** and **1.15.x**, using an older version may cause bugs with an outdated or
+> ⚠️ This dashboard has only been tested on version **1.13.x**, **1.14.x**, **1.15.x** and **1.16.x**, using an older version may cause bugs with an outdated or
 > unmanaged API
 
 ## 📚 Documentation

@@ -95,12 +95,12 @@ const onSubmit = () => {
         csiSnapshotTimeout:
           formContent.value[1].csiSnapshotTimeout +
           formContent.value[1].csiSnapshotTimeoutUnit,
-        includeClusterResources: formContent.value[2].includeClusterResources,
       },
     };
 
     if (formContent.value[1].volumeSnapshotLocations.length > 0) {
-      form.spec.volumeSnapshotLocations = formContent.value[1].volumeSnapshotLocations;
+      form.spec.volumeSnapshotLocations =
+        formContent.value[1].volumeSnapshotLocations;
     }
 
     if (formContent.value[1].includedNamespaces.length > 0) {
@@ -128,6 +128,7 @@ const onSubmit = () => {
       };
     }
     if (formContent.value[2].includeClusterResources) {
+      form.spec.includeClusterResources = true;
       if (formContent.value[2].includedResources.length > 0) {
         form.spec.includedResources = formContent.value[2].includedResources;
       }
@@ -137,21 +138,24 @@ const onSubmit = () => {
     }
 
     if (!formContent.value[2].includeClusterResources) {
-      if (formContent.value[2].includedClusterScopedResources.length > 0) {
-        form.spec.includedClusterScopedResources =
-          formContent.value[2].includedClusterScopedResources;
-      }
-      if (formContent.value[2].excludedClusterScopedResources.length > 0) {
-        form.spec.excludedClusterScopedResources =
-          formContent.value[2].excludedClusterScopedResources;
-      }
-      if (formContent.value[2].includedNamespaceScopedResources.length > 0) {
-        form.spec.includedNamespaceScopedResources =
-          formContent.value[2].includedNamespaceScopedResources;
-      }
-      if (formContent.value[2].excludedNamespaceScopedResources.length > 0) {
-        form.spec.excludedNamespaceScopedResources =
-          formContent.value[2].excludedNamespaceScopedResources;
+      if (!formContent.value[2].includeNamespaceClusterResources) {
+        if (formContent.value[2].includedClusterScopedResources.length > 0) {
+          form.spec.includedClusterScopedResources =
+            formContent.value[2].includedClusterScopedResources;
+        }
+        if (formContent.value[2].excludedClusterScopedResources.length > 0) {
+          form.spec.excludedClusterScopedResources =
+            formContent.value[2].excludedClusterScopedResources;
+        }
+      } else {
+        if (formContent.value[2].includedNamespaceScopedResources.length > 0) {
+          form.spec.includedNamespaceScopedResources =
+            formContent.value[2].includedNamespaceScopedResources;
+        }
+        if (formContent.value[2].excludedNamespaceScopedResources.length > 0) {
+          form.spec.excludedNamespaceScopedResources =
+            formContent.value[2].excludedNamespaceScopedResources;
+        }
       }
     }
 
@@ -160,6 +164,9 @@ const onSubmit = () => {
         matchLabels: formContent.value[3].labelsSelector,
       };
     }
+
+    console.log(form);
+
     mutate(form);
   }
 };
