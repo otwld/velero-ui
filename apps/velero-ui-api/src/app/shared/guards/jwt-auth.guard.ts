@@ -2,10 +2,14 @@ import { ExecutionContext, Injectable } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Reflector } from '@nestjs/core';
 import { IS_PUBLIC_KEY } from '@velero-ui-api/shared/decorators/public.decorator';
+import { AuthService } from '@velero-ui-api/modules/auth/auth.service';
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard(['jwt']) {
-  constructor(private reflector: Reflector) {
+  constructor(
+    private readonly reflector: Reflector,
+    private readonly authService: AuthService,
+  ) {
     super();
   }
 
@@ -14,7 +18,7 @@ export class JwtAuthGuard extends AuthGuard(['jwt']) {
       context.getHandler(),
       context.getClass(),
     ]);
-    if (isPublic) {
+    if (isPublic || this.authService.noAuthRequired()) {
       return true;
     }
     return super.canActivate(context);

@@ -62,7 +62,7 @@
             <FontAwesomeIcon :icon="faSun" class="!w-5 !h-5" />
             <FontAwesomeIcon :icon="faMoon" class="hidden !w-5 !h-5" />
           </button> -->
-          <div v-click-out="clickOutside" class="flex flex-col items-center">
+          <div v-click-out="clickOutside" v-if="!noAuthRequired" class="flex flex-col items-center">
             <div class="flex items-center ml-3">
               <button
                 id="user-menu-button-2"
@@ -137,7 +137,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import type { Router } from 'vue-router';
 import { useRouter } from 'vue-router';
 import { getUser } from '@velero-ui-app/utils/jwt.utils';
-import type { JwtPayload } from '@velero-ui/shared-types';
+import type { AppPublicConfig, JwtPayload } from '@velero-ui/shared-types';
 import { useAppStore } from '@velero-ui-app/stores/app.store';
 import { useI18n } from 'vue-i18n';
 import { getLanguages } from '@velero-ui/i18n';
@@ -145,6 +145,8 @@ import type { SocketIO } from '@velero-ui-app/plugins/socket.plugin';
 
 const { t, locale } = useI18n();
 const socket: SocketIO = inject('socketIo');
+
+const { noAuthRequired } = inject('config') as AppPublicConfig;
 
 const router: Router = useRouter();
 const appStore = useAppStore();

@@ -8,11 +8,15 @@ import type {
 } from '@velero-ui/shared-types';
 import { ConfigService } from '@nestjs/config';
 import { Public } from '@velero-ui-api/shared/decorators/public.decorator';
+import { AuthService } from '@velero-ui-api/modules/auth/auth.service';
 
 @Public()
 @Controller('config')
 export class AppConfigController {
-  constructor(private readonly configService: ConfigService) {}
+  constructor(
+    private readonly configService: ConfigService,
+    private readonly authService: AuthService,
+  ) {}
 
   @Get()
   public getAppConfig(): Observable<Partial<AppPublicConfig>> {
@@ -27,6 +31,7 @@ export class AppConfigController {
     const config = {
       baseUrl,
       grafanaUrl,
+      noAuthRequired: this.authService.noAuthRequired(),
       basicAuth: {
         enabled: basicAuthEnabled || LDAPAuthEnabled,
       },

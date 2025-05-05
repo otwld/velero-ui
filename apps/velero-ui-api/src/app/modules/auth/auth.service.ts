@@ -10,6 +10,16 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
+  public noAuthRequired(): boolean {
+    return !this.configService.get<boolean>('basicAuth.enabled', {infer: true}) &&
+      !this.configService.get<boolean>('github.enabled', {infer: true}) &&
+      !this.configService.get<boolean>('gitlab.enabled', {infer: true}) &&
+      !this.configService.get<boolean>('google.enabled', {infer: true}) &&
+      !this.configService.get<boolean>('microsoft.enabled', {infer: true}) &&
+      !this.configService.get<boolean>('oauth.enabled', {infer: true}) &&
+      !this.configService.get<boolean>('ldap.enabled', {infer: true});
+  }
+
   public validateBasicUser(username: string, password: string): boolean {
     const {
       enabled,
