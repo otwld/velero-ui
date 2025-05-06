@@ -277,43 +277,70 @@
       </div>
       <div class="grid gap-4 mb-4 grid-cols-2">
         <div class="col-span-2 sm:col-span-1">
-          <dt
-            class="mb-2 font-semibold leading-none text-gray-900 dark:text-white"
+          <template
+            v-if="
+              formContent[1]?.itemOperationTimeout?.value ||
+              formContent[2]?.itemOperationTimeout?.value
+            "
           >
-            {{ t('resource.spec.itemOperationTimeout') }}
-          </dt>
-          <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">
-            {{
-              formContent[1]?.itemOperationTimeout ||
-              formContent[2]?.itemOperationTimeout
-            }}
-            {{
-              formContent[1]?.itemOperationTimeoutUnit ||
-              formContent[2]?.itemOperationTimeoutUnit
-            }}
-          </dd>
-          <dt
-            class="mb-2 font-semibold leading-none text-gray-900 dark:text-white"
-          >
-            {{ t('resource.spec.parallelFilesDownload') }}
-          </dt>
-          <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">
-            {{
+            <dt
+              class="mb-2 font-semibold leading-none text-gray-900 dark:text-white"
+            >
+              {{ t('resource.spec.itemOperationTimeout') }}
+            </dt>
+            <dd
+              class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400"
+            >
+              {{
+                formContent[1]?.itemOperationTimeout?.value ||
+                formContent[2]?.itemOperationTimeout?.value
+              }}
+              {{
+                formContent[1]?.itemOperationTimeout?.unit ||
+                formContent[2]?.itemOperationTimeout?.unit
+              }}
+            </dd>
+          </template>
+          <template
+            v-if="
               formContent[1]?.parallelFilesDownload ||
               formContent[2]?.parallelFilesDownload
-            }}
-          </dd>
-          <dt
-            class="mb-2 font-semibold leading-none text-gray-900 dark:text-white"
+            "
           >
-            {{ t('resource.spec.existingResourcePolicy') }}
-          </dt>
-          <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">
-            {{
+            <dt
+              class="mb-2 font-semibold leading-none text-gray-900 dark:text-white"
+            >
+              {{ t('resource.spec.parallelFilesDownload') }}
+            </dt>
+            <dd
+              class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400"
+            >
+              {{
+                formContent[1]?.parallelFilesDownload ||
+                formContent[2]?.parallelFilesDownload
+              }}
+            </dd>
+          </template>
+          <template
+            v-if="
               formContent[1]?.existingResourcePolicy ||
               formContent[2]?.existingResourcePolicy
-            }}
-          </dd>
+            "
+          >
+            <dt
+              class="mb-2 font-semibold leading-none text-gray-900 dark:text-white"
+            >
+              {{ t('resource.spec.existingResourcePolicy') }}
+            </dt>
+            <dd
+              class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400"
+            >
+              {{
+                formContent[1]?.existingResourcePolicy ||
+                formContent[2]?.existingResourcePolicy
+              }}
+            </dd>
+          </template>
         </div>
         <div class="col-span-2 sm:col-span-1">
           <dt

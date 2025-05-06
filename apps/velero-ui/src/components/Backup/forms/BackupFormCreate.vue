@@ -84,19 +84,32 @@ const onSubmit = () => {
       labels: formContent.value[3].labels,
       type: CreateBackupTypeEnum.FROM_SCRATCH,
       spec: {
-        ttl: formContent.value[1].ttl + formContent.value[1].ttlUnit,
+        ttl: formContent.value[1].ttl.value + formContent.value[1].ttl.unit,
         storageLocation: formContent.value[1].storageLocation,
-        snapshotVolumes: formContent.value[1].snapshotVolumes,
-        snapshotMoveData: formContent.value[1].snapshotMoveData,
-        defaultVolumesToFsBackup: formContent.value[1].defaultVolumesToFsBackup,
-        itemOperationTimeout:
-          formContent.value[1].itemOperationTimeout +
-          formContent.value[1].itemOperationTimeoutUnit,
-        csiSnapshotTimeout:
-          formContent.value[1].csiSnapshotTimeout +
-          formContent.value[1].csiSnapshotTimeoutUnit,
       },
     };
+
+    if (formContent.value[1].itemOperationTimeout?.value) {
+      form.spec.itemOperationTimeout = formContent.value[1].itemOperationTimeout.value +
+          formContent.value[1].itemOperationTimeout.unit;
+    }
+
+    if (formContent.value[1].csiSnapshotTimeout?.value) {
+      form.spec.csiSnapshotTimeout = formContent.value[1].csiSnapshotTimeout.value +
+          formContent.value[1].csiSnapshotTimeout.unit;
+    }
+
+    if (formContent.value[1].snapshotMoveData) {
+      form.spec.snapshotMoveData = formContent.value[1].snapshotMoveData;
+    }
+
+    if (formContent.value[1].snapshotVolumes) {
+      form.spec.snapshotVolumes = formContent.value[1].snapshotVolumes;
+    }
+
+    if (formContent.value[1].defaultVolumesToFsBackup) {
+      form.spec.defaultVolumesToFsBackup = formContent.value[1].defaultVolumesToFsBackup;
+    }
 
     if (formContent.value[1].volumeSnapshotLocations.length > 0) {
       form.spec.volumeSnapshotLocations =
@@ -118,7 +131,7 @@ const onSubmit = () => {
     if (formContent.value[1].parallelFilesUpload) {
       form.spec.uploaderConfig = {};
       form.spec.uploaderConfig.parallelFilesUpload =
-        formContent.value[1].parallelFilesUpload;
+        parseInt(formContent.value[1].parallelFilesUpload);
     }
 
     if (formContent.value[2].resourcePolicy) {
@@ -164,8 +177,6 @@ const onSubmit = () => {
         matchLabels: formContent.value[3].labelsSelector,
       };
     }
-
-    console.log(form);
 
     mutate(form);
   }

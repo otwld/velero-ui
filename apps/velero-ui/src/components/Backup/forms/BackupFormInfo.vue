@@ -1,191 +1,173 @@
 <template>
-  <div>
+  <FormKit
+    id="backup-form-info"
+    v-model="currentForm"
+    :actions="false"
+    type="form"
+  >
     <div class="space-y-4 mb-4">
       <div class="grid gap-4 mb-4 grid-cols-2">
         <div class="col-span-2 sm:col-span-1">
-          <label
-            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            for="name"
-            >{{ t('form.field.backupName') }} *</label
-          >
           <FormKit
-            id="name"
-            v-model="currentForm.name"
             :disabled="notApplicableFields?.backupName"
+            name="name"
             :placeholder="
               notApplicableFields?.backupName
                 ? t('form.placeholder.notApplicable')
                 : t('form.placeholder.backupName')
             "
-            :validation="[
-              ['required'],
-              ['matches', /[a-zA-Z0-9.-]+/g],
-              ['length', 5],
-            ]"
-            :validation-messages="{
-              matches: 'Name can only include A-z, 0-9, and -.',
-              length: 'Min length is 5 characters.',
-            }"
-            input-class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-            messages-class="mt-1 text-sm text-red-600 dark:text-red-500"
-            name="Name"
+            :validation="
+              notApplicableFields?.backupName
+                ? []
+                : [['required'], ['k8s_name'], ['length', 4]]
+            "
             type="text"
-          />
+          >
+            <template #label="context">
+              <label
+                class="flex mb-2 text-sm font-medium text-gray-900 dark:text-white items-center"
+                >{{ t('form.field.backupName') }} *
+              </label>
+            </template>
+          </FormKit>
         </div>
         <div class="col-span-2 sm:col-span-1">
-          <label
-            class="flex mb-2 text-sm font-medium text-gray-900 dark:text-white items-center"
-            for="ttl"
-            >{{ t('resource.spec.ttl') }} *
-            <span class="pl-1 text-xs">{{ t('form.hint.ttl') }}</span>
-            <FontAwesomeIcon
-              :icon="faQuestionCircle"
-              class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
-              data-tooltip-style="light"
-              data-tooltip-target="tooltip-ttl"
-            />
-          </label>
-          <div class="flex w-full">
-            <input
-              id="ttl"
-              v-model="currentForm.ttl"
-              class="p-2.5 w-2/6 flex-shrink-0 rounded-none text-sm rounded-s-lg bg-gray-50 border text-gray-900 leading-none focus:ring-blue-500 focus:border-blue-500 block border-gray-300 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              min="0"
-              required
-              type="number"
-              value="0"
-            />
-            <select
-              id="ttl-unit"
-              v-model="currentForm.ttlUnit"
-              class="p-2.5 w-4/6 text-sm bg-gray-50 border border-s-0 border-gray-300 text-gray-900 rounded-e-lg focus:ring-blue-500 focus:border-blue-500 block dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              name="backup-sync-period-unit"
-              required
-            >
-              <option selected value="s">{{ t('global.seconds') }}</option>
-              <option value="m">{{ t('global.minutes') }}</option>
-              <option value="h">{{ t('global.hours') }}</option>
-            </select>
-          </div>
+          <FormKit name="ttl" type="group">
+            <label
+              class="flex mb-2 text-sm font-medium text-gray-900 dark:text-white items-center"
+              >{{ t('resource.spec.ttl') }} *
+              <span class="pl-1 text-xs">{{ t('form.hint.ttl') }}</span>
+              <FontAwesomeIcon
+                :icon="faQuestionCircle"
+                class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
+                data-tooltip-style="light"
+                data-tooltip-target="tooltip-ttl"
+              />
+            </label>
+            <div class="flex w-full">
+              <FormKit
+                :placeholder="t('form.placeholder.ttl')"
+                :validation="[['required'], ['number'], ['min', 1]]"
+                input-class="rounded-none rounded-s-lg"
+                name="value"
+                outer-class="w-2/6 flex-shrink-0"
+                type="number"
+                value="1"
+              />
+              <FormKit
+                :options="[
+                  {
+                    value: 's',
+                    label: t('global.seconds'),
+                  },
+                  {
+                    value: 'm',
+                    label: t('global.minutes'),
+                  },
+                  {
+                    value: 'h',
+                    label: t('global.hours'),
+                  },
+                ]"
+                :validation="[['required']]"
+                input-class="border-s-0 rounded-s-none rounded-e-lg"
+                name="unit"
+                outer-class="w-4/6"
+                type="select"
+              />
+            </div>
+          </FormKit>
         </div>
 
         <div class="col-span-2 sm:col-span-1">
-          <label
-            class="flex mb-2 text-sm font-medium text-gray-900 dark:text-white items-center"
-            for="included-namespace"
-            >{{ t('resource.spec.includedNamespaces') }}
-            <FontAwesomeIcon
-              :icon="faQuestionCircle"
-              class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
-              data-tooltip-style="light"
-              data-tooltip-target="tooltip-included-namespace"
-            />
-          </label>
-          <select
-            id="included-namespace"
-            v-model="currentForm.includedNamespaces"
+          <FormKit
             :disabled="!dataNamespaces || errorNamespaces"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+            :options="dataNamespaces?.items"
             multiple
+            name="includedNamespaces"
+            type="select"
           >
-            <template v-if="dataNamespaces?.items">
-              <option
-                v-for="(namespace, index) of dataNamespaces?.items"
-                :key="index"
-                :value="namespace"
-              >
-                {{ namespace }}
-              </option>
+            <template #label="context">
+              <label
+                class="flex mb-2 text-sm font-medium text-gray-900 dark:text-white items-center"
+                >{{ t('resource.spec.includedNamespaces') }}
+                <FontAwesomeIcon
+                  :icon="faQuestionCircle"
+                  class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
+                  data-tooltip-style="light"
+                  data-tooltip-target="tooltip-included-namespace"
+                />
+              </label>
             </template>
-          </select>
+          </FormKit>
         </div>
         <div class="col-span-2 sm:col-span-1">
-          <label
-            class="flex mb-2 text-sm font-medium text-gray-900 dark:text-white items-center"
-            for="excluded-namespace"
-            >{{ t('resource.spec.excludedNamespaces') }}
-            <FontAwesomeIcon
-              :icon="faQuestionCircle"
-              class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
-              data-tooltip-style="light"
-              data-tooltip-target="tooltip-excluded-namespace"
-            />
-          </label>
-          <select
-            id="excluded-namespace"
-            v-model="currentForm.excludedNamespaces"
+          <FormKit
             :disabled="!dataNamespaces || errorNamespaces"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+            :options="dataNamespaces?.items"
             multiple
+            name="excludedNamespaces"
+            type="select"
           >
-            <template v-if="dataNamespaces?.items">
-              <option
-                v-for="(namespace, index) of dataNamespaces?.items"
-                :key="index"
-                :value="namespace"
-              >
-                {{ namespace }}
-              </option>
+            <template #label="context">
+              <label
+                class="flex mb-2 text-sm font-medium text-gray-900 dark:text-white items-center"
+                >{{ t('resource.spec.excludedNamespaces') }}
+                <FontAwesomeIcon
+                  :icon="faQuestionCircle"
+                  class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
+                  data-tooltip-style="light"
+                  data-tooltip-target="tooltip-excluded-namespace"
+                />
+              </label>
             </template>
-          </select>
+          </FormKit>
         </div>
         <div class="col-span-2 sm:col-span-1">
-          <label
-            class="flex mb-2 text-sm font-medium text-gray-900 dark:text-white items-center"
-            for="snapshot-location"
-            >{{ t('resource.spec.volumeSnapshotLocations') }}
-            <FontAwesomeIcon
-              :icon="faQuestionCircle"
-              class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
-              data-tooltip-style="light"
-              data-tooltip-target="tooltip-snapshot-location"
-            />
-          </label>
-          <select
-            id="snapshot-location"
-            v-model="currentForm.volumeSnapshotLocations"
+          <FormKit
             :disabled="!dataSnapshotLocations || errorSnapshotLocations"
-            class="bg-gray-50 mb-2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+            :label="t('resource.spec.volumeSnapshotLocations')"
+            :options="dataStorageLocations?.items"
             multiple
+            name="volumeSnapshotLocations"
+            outer-class="mb-2"
+            type="select"
           >
-            <template v-if="dataStorageLocations?.items">
-              <option
-                v-for="(location, index) of dataSnapshotLocations?.items"
-                :key="index"
-                :value="location"
-              >
-                {{ location }}
-              </option>
+            <template #label="context">
+              <label
+                class="flex mb-2 text-sm font-medium text-gray-900 dark:text-white items-center"
+                >{{ t('resource.spec.volumeSnapshotLocations') }}
+                <FontAwesomeIcon
+                  :icon="faQuestionCircle"
+                  class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
+                  data-tooltip-style="light"
+                  data-tooltip-target="tooltip-snapshot-location"
+                />
+              </label>
             </template>
-          </select>
-          <label
-            class="flex mb-2 text-sm font-medium text-gray-900 dark:text-white items-center"
-            for="storage-location"
-            >{{ t('resource.spec.storageLocation') }} *
-            <FontAwesomeIcon
-              :icon="faQuestionCircle"
-              class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
-              data-tooltip-style="light"
-              data-tooltip-target="tooltip-storage-location"
-            />
-          </label>
-          <select
-            id="storage-location"
-            v-model="currentForm.storageLocation"
+          </FormKit>
+          <FormKit
             :disabled="!dataStorageLocations || errorStorageLocations"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+            :options="dataStorageLocations?.items"
+            :placeholder="t('form.placeholder.storageLocation')"
+            :validation="[['required']]"
+            name="storageLocation"
+            outer-class="mb-2"
+            type="select"
           >
-            <option selected value="">{{ t('form.placeholder.storageLocation') }}</option>
-            <template v-if="dataStorageLocations?.items">
-              <option
-                v-for="(location, index) of dataStorageLocations?.items"
-                :key="index"
-                :value="location"
-              >
-                {{ location }}
-              </option>
+            <template #label="context">
+              <label
+                class="flex mb-2 text-sm font-medium text-gray-900 dark:text-white items-center"
+                >{{ t('resource.spec.storageLocation') }} *
+                <FontAwesomeIcon
+                  :icon="faQuestionCircle"
+                  class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
+                  data-tooltip-style="light"
+                  data-tooltip-target="tooltip-storage-location"
+                />
+              </label>
             </template>
-          </select>
+          </FormKit>
         </div>
         <div class="col-span-2 sm:col-span-1">
           <div class="flex flex-col">
@@ -194,19 +176,29 @@
             >
               {{ t('global.options') }}
             </p>
-            <label class="inline-flex items-center mb-5 cursor-pointer">
-              <input
-                v-model="currentForm.snapshotVolumes"
-                checked
-                class="sr-only peer"
+            <label class="inline-flex items-center mb-5">
+              <FormKit
+                name="snapshotVolumes"
                 type="checkbox"
-                value=""
-              />
+                input-class="sr-only peer"
+                label-class="ml-2"
+                wrapper-class="relative w-11 h-6 bg-gray-200 dark:bg-gray-700 rounded-full cursor-pointer"
+                outer-class="flex items-center"
+              >
+                 <template #decorator>
+                  <span
+                    class="peer
+                      peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full
+                      peer-checked:after:border-white after:content-['']
+                      after:absolute after:top-0.5 after:start-[2px]
+                      after:bg-white after:border-gray-300 after:border after:rounded-full
+                      after:h-5 after:w-5 after:transition-all dark:border-gray-600
+                      peer-checked:bg-blue-600"
+                  />
+                </template>
+              </FormKit>
               <span
-                class="relative w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"
-              />
-              <span
-                class="ms-3 text-sm font-medium text-gray-400 dark:text-gray-500"
+                class="ms-3 text-sm font-medium text-gray-400 dark:text-white"
                 >{{ t('resource.spec.snapshotVolumes') }}
               </span>
               <FontAwesomeIcon
@@ -216,18 +208,29 @@
                 data-tooltip-target="tooltip-snapshot-volumes"
               />
             </label>
-            <label class="inline-flex items-center mb-5 cursor-pointer">
-              <input
-                v-model="currentForm.snapshotMoveData"
-                class="sr-only peer"
+            <label class="inline-flex items-center mb-5">
+              <FormKit
+                name="snapshotMoveData"
                 type="checkbox"
-                value=""
-              />
+                input-class="sr-only peer"
+                label-class="ml-2"
+                wrapper-class="relative w-11 h-6 bg-gray-200 dark:bg-gray-700 rounded-full cursor-pointer"
+                outer-class="flex items-center"
+              >
+                 <template #decorator>
+                  <span
+                    class="peer
+                      peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full
+                      peer-checked:after:border-white after:content-['']
+                      after:absolute after:top-0.5 after:start-[2px]
+                      after:bg-white after:border-gray-300 after:border after:rounded-full
+                      after:h-5 after:w-5 after:transition-all dark:border-gray-600
+                      peer-checked:bg-blue-600"
+                  />
+                </template>
+              </FormKit>
               <span
-                class="relative w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"
-              />
-              <span
-                class="ms-3 text-sm font-medium text-gray-400 dark:text-gray-500"
+                class="ms-3 text-sm font-medium text-gray-400 dark:text-white"
                 >{{ t('resource.spec.snapshotMoveData') }}</span
               >
               <FontAwesomeIcon
@@ -237,19 +240,29 @@
                 data-tooltip-target="tooltip-snapshot-move-data"
               />
             </label>
-            <label class="inline-flex items-center mb-5 cursor-pointer">
-              <input
-                v-model="currentForm.defaultVolumesToFsBackup"
-                checked
-                class="sr-only peer"
+            <label class="inline-flex items-center mb-5">
+              <FormKit
+                name="defaultVolumesToFsBackup"
                 type="checkbox"
-                value=""
-              />
-              <div
-                class="relative w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"
-              ></div>
+                input-class="sr-only peer"
+                label-class="ml-2"
+                wrapper-class="relative w-11 h-6 bg-gray-200 dark:bg-gray-700 rounded-full cursor-pointer"
+                outer-class="flex items-center"
+              >
+                 <template #decorator>
+                  <span
+                    class="peer
+                      peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full
+                      peer-checked:after:border-white after:content-['']
+                      after:absolute after:top-0.5 after:start-[2px]
+                      after:bg-white after:border-gray-300 after:border after:rounded-full
+                      after:h-5 after:w-5 after:transition-all dark:border-gray-600
+                      peer-checked:bg-blue-600"
+                  />
+                </template>
+              </FormKit>
               <span
-                class="ms-3 text-sm font-medium text-gray-400 dark:text-gray-500"
+                class="ms-3 text-sm font-medium text-gray-400 dark:text-white"
                 >{{ t('resource.spec.defaultVolumesToFsBackup') }}</span
               >
               <FontAwesomeIcon
@@ -262,126 +275,149 @@
           </div>
         </div>
         <div class="col-span-2 sm:col-span-1">
-          <label
-            class="flex mb-2 text-sm font-medium text-gray-900 dark:text-white items-center"
-            for="csi-snapshot-timeout"
-            >{{ t('resource.spec.csiSnapshotTimeout') }}
-            <FontAwesomeIcon
-              :icon="faQuestionCircle"
-              class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
-              data-tooltip-style="light"
-              data-tooltip-target="tooltip-csi-snapshot-timeout"
-            />
-          </label>
-          <div class="flex w-full">
-            <input
-              id="csi-snapshot-timeout"
-              v-model="currentForm.csiSnapshotTimeout"
-              class="p-2.5 w-2/6 flex-shrink-0 rounded-none text-sm rounded-s-lg bg-gray-50 border text-gray-900 leading-none focus:ring-blue-500 focus:border-blue-500 block border-gray-300 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              min="0"
-              required
-              type="number"
-              value="0"
-            />
-            <select
-              id="csi-snapshot-timeout-unit"
-              v-model="currentForm.csiSnapshotTimeoutUnit"
-              class="p-2.5 w-4/6 text-sm bg-gray-50 border border-s-0 border-gray-300 text-gray-900 rounded-e-lg focus:ring-blue-500 focus:border-blue-500 block dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              name="csi-snapshot-timeout-unit"
-              required
-            >
-              <option selected value="s">{{ t('global.seconds') }}</option>
-              <option value="m">{{ t('global.minutes') }}</option>
-              <option value="h">{{ t('global.hours') }}</option>
-            </select>
-          </div>
+          <FormKit name="csiSnapshotTimeout" type="group">
+            <label
+              class="flex mb-2 text-sm font-medium text-gray-900 dark:text-white items-center"
+              >{{ t('resource.spec.csiSnapshotTimeout') }}
+              <FontAwesomeIcon
+                :icon="faQuestionCircle"
+                class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
+                data-tooltip-style="light"
+                data-tooltip-target="tooltip-csi-snapshot-timeout"
+              />
+            </label>
+            <div class="flex w-full">
+              <FormKit
+                :placeholder="t('form.placeholder.csiSnapshotTimeout')"
+                :validation="[['number'], ['min', 0]]"
+                input-class="rounded-none rounded-s-lg"
+                name="value"
+                outer-class="w-2/6 flex-shrink-0"
+                type="number"
+                value="0"
+              />
+              <FormKit
+                :options="[
+                  {
+                    value: 's',
+                    label: t('global.seconds'),
+                  },
+                  {
+                    value: 'm',
+                    label: t('global.minutes'),
+                  },
+                  {
+                    value: 'h',
+                    label: t('global.hours'),
+                  },
+                ]"
+                :validation="[['required']]"
+                input-class="border-s-0 rounded-s-none rounded-e-lg"
+                name="unit"
+                outer-class="w-4/6"
+                type="select"
+              />
+            </div>
+          </FormKit>
         </div>
         <div class="col-span-2 sm:col-span-1">
-          <label
-            class="flex mb-2 text-sm font-medium text-gray-900 dark:text-white items-center"
-            for="item-operation-timeout"
-            >{{ t('resource.spec.itemOperationTimeout') }}
-            <FontAwesomeIcon
-              :icon="faQuestionCircle"
-              class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
-              data-tooltip-style="light"
-              data-tooltip-target="tooltip-item-operation-timeout"
-            />
-          </label>
-          <div class="flex w-full">
-            <input
-              id="item-operation-timeout"
-              v-model="currentForm.itemOperationTimeout"
-              class="p-2.5 w-2/6 flex-shrink-0 rounded-none text-sm rounded-s-lg bg-gray-50 border text-gray-900 leading-none focus:ring-blue-500 focus:border-blue-500 block border-gray-300 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              min="0"
-              required
-              type="number"
-              value="0"
-            />
-            <select
-              id="item-operation-timeout-unit"
-              v-model="currentForm.itemOperationTimeoutUnit"
-              class="p-2.5 w-4/6 text-sm bg-gray-50 border border-s-0 border-gray-300 text-gray-900 rounded-e-lg focus:ring-blue-500 focus:border-blue-500 block dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              name="item-operation-timeout-unit"
-              required
-            >
-              <option selected value="s">{{ t('global.seconds') }}</option>
-              <option value="m">{{ t('global.minutes') }}</option>
-              <option value="h">{{ t('global.hours') }}</option>
-            </select>
-          </div>
+          <FormKit name="itemOperationTimeout" type="group">
+            <label
+              class="flex mb-2 text-sm font-medium text-gray-900 dark:text-white items-center"
+              >{{ t('resource.spec.itemOperationTimeout') }}
+              <FontAwesomeIcon
+                :icon="faQuestionCircle"
+                class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
+                data-tooltip-style="light"
+                data-tooltip-target="tooltip-item-operation-timeout"
+              />
+            </label>
+            <div class="flex w-full">
+              <FormKit
+                :placeholder="t('form.placeholder.itemOperationTimeout')"
+                :validation="[['number'], ['min', 0]]"
+                input-class="rounded-none rounded-s-lg"
+                name="value"
+                outer-class="w-2/6 flex-shrink-0"
+                type="number"
+                value="0"
+              />
+              <FormKit
+                :options="[
+                  {
+                    value: 's',
+                    label: t('global.seconds'),
+                  },
+                  {
+                    value: 'm',
+                    label: t('global.minutes'),
+                  },
+                  {
+                    value: 'h',
+                    label: t('global.hours'),
+                  },
+                ]"
+                :validation="[['required']]"
+                input-class="border-s-0 rounded-s-none rounded-e-lg"
+                name="unit"
+                outer-class="w-4/6"
+                type="select"
+              />
+            </div>
+          </FormKit>
         </div>
         <div class="col-span-2 sm:col-span-1">
-          <label
-            class="flex mb-2 text-sm font-medium text-gray-900 dark:text-white items-center"
-            for="data-mover"
-            >{{ t('resource.spec.datamover') }}
-            <FontAwesomeIcon
-              :icon="faQuestionCircle"
-              class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
-              data-tooltip-style="light"
-              data-tooltip-target="tooltip-data-mover"
-            />
-          </label>
-          <input
-            id="data-mover"
-            v-model="currentForm.datamover"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-            name="prefix"
+          <FormKit
             :placeholder="t('form.placeholder.datamover')"
+            :validation="[['k8s_name']]"
+            name="datamover"
             type="text"
-          />
+          >
+            <template #label="context">
+              <label
+                class="flex mb-2 text-sm font-medium text-gray-900 dark:text-white items-center"
+                >{{ t('resource.spec.datamover') }}
+                <FontAwesomeIcon
+                  :icon="faQuestionCircle"
+                  class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
+                  data-tooltip-style="light"
+                  data-tooltip-target="tooltip-data-mover"
+                />
+              </label>
+            </template>
+          </FormKit>
         </div>
         <div class="col-span-2 sm:col-span-1">
-          <label
-            class="flex mb-2 text-sm font-medium text-gray-900 dark:text-white items-center"
-            for="parallel-files-upload"
-            >{{ t('resource.spec.parallelFilesUpload') }}
-            <FontAwesomeIcon
-              :icon="faQuestionCircle"
-              class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
-              data-tooltip-style="light"
-              data-tooltip-target="tooltip-parallel-files-upload"
-            />
-          </label>
-          <input
-            id="parallel-files-upload"
-            v-model="currentForm.parallelFilesUpload"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-            name="prefix"
+          <FormKit
+            :placeholder="t('form.placeholder.parallelFilesUpload')"
+            :validation="[['number'], ['min', 0]]"
+            name="parallelFilesUpload"
             type="number"
-          />
+          >
+            <template #label="context">
+              <label
+                class="flex mb-2 text-sm font-medium text-gray-900 dark:text-white items-center"
+                >{{ t('resource.spec.parallelFilesUpload') }}
+                <FontAwesomeIcon
+                  :icon="faQuestionCircle"
+                  class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
+                  data-tooltip-style="light"
+                  data-tooltip-target="tooltip-parallel-files-upload"
+                />
+              </label>
+            </template>
+          </FormKit>
         </div>
       </div>
     </div>
-  </div>
+  </FormKit>
 
   <div
     id="tooltip-ttl"
     class="absolute z-10 invisible inline-block px-3 py-2 text-xs text-gray-900 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 tooltip"
     role="tooltip"
   >
-    {{ t('form.tooltip.ttl')}}
+    {{ t('form.tooltip.ttl') }}
     <div class="tooltip-arrow" data-popper-arrow></div>
   </div>
   <div
@@ -389,7 +425,7 @@
     class="absolute z-10 invisible inline-block px-3 py-2 text-xs text-gray-900 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 tooltip"
     role="tooltip"
   >
-    {{ t('form.tooltip.includedNamespaces', {type: t('global.backup', 1)})}}
+    {{ t('form.tooltip.includedNamespaces', { type: t('global.backup', 1) }) }}
     <div class="tooltip-arrow" data-popper-arrow></div>
   </div>
   <div
@@ -397,7 +433,7 @@
     class="absolute z-10 invisible inline-block px-3 py-2 text-xs text-gray-900 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 tooltip"
     role="tooltip"
   >
-    {{ t('form.tooltip.excludedNamespaces', {type: t('global.backup', 1)})}}
+    {{ t('form.tooltip.excludedNamespaces', { type: t('global.backup', 1) }) }}
     <div class="tooltip-arrow" data-popper-arrow></div>
   </div>
   <div
@@ -405,7 +441,7 @@
     class="absolute z-10 invisible inline-block px-3 py-2 text-xs text-gray-900 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 tooltip"
     role="tooltip"
   >
-    {{ t('form.tooltip.volumeSnapshotLocations')}}
+    {{ t('form.tooltip.volumeSnapshotLocations') }}
     <div class="tooltip-arrow" data-popper-arrow></div>
   </div>
   <div
@@ -413,7 +449,7 @@
     class="absolute z-10 invisible inline-block px-3 py-2 text-xs text-gray-900 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 tooltip"
     role="tooltip"
   >
-    {{ t('form.tooltip.storageLocation')}}
+    {{ t('form.tooltip.storageLocation') }}
     <div class="tooltip-arrow" data-popper-arrow></div>
   </div>
   <div
@@ -421,7 +457,7 @@
     class="absolute z-10 invisible inline-block px-3 py-2 text-xs text-gray-900 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 tooltip"
     role="tooltip"
   >
-    {{ t('form.tooltip.snapshotVolumes')}}
+    {{ t('form.tooltip.snapshotVolumes') }}
     <div class="tooltip-arrow" data-popper-arrow></div>
   </div>
   <div
@@ -429,7 +465,7 @@
     class="absolute z-10 invisible inline-block px-3 py-2 text-xs text-gray-900 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 tooltip"
     role="tooltip"
   >
-    {{ t('form.tooltip.snapshotMoveData')}}
+    {{ t('form.tooltip.snapshotMoveData') }}
     <div class="tooltip-arrow" data-popper-arrow></div>
   </div>
   <div
@@ -437,7 +473,7 @@
     class="absolute z-10 invisible inline-block px-3 py-2 text-xs text-gray-900 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 tooltip"
     role="tooltip"
   >
-    {{ t('form.tooltip.defaultVolumesToFsBackup')}}
+    {{ t('form.tooltip.defaultVolumesToFsBackup') }}
     <div class="tooltip-arrow" data-popper-arrow></div>
   </div>
   <div
@@ -445,7 +481,7 @@
     class="absolute z-10 invisible inline-block px-3 py-2 text-xs text-gray-900 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 tooltip"
     role="tooltip"
   >
-    {{ t('form.tooltip.csiSnapshotTimeout')}}
+    {{ t('form.tooltip.csiSnapshotTimeout') }}
     <div class="tooltip-arrow" data-popper-arrow></div>
   </div>
   <div
@@ -453,7 +489,7 @@
     class="absolute z-10 invisible inline-block px-3 py-2 text-xs text-gray-900 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 tooltip"
     role="tooltip"
   >
-    {{ t('form.tooltip.itemOperationTimeout')}}
+    {{ t('form.tooltip.itemOperationTimeout') }}
     <div class="tooltip-arrow" data-popper-arrow></div>
   </div>
   <div
@@ -461,7 +497,7 @@
     class="absolute z-10 invisible inline-block px-3 py-2 text-xs text-gray-900 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 tooltip"
     role="tooltip"
   >
-    {{ t('form.tooltip.parallelFilesUpload')}}
+    {{ t('form.tooltip.parallelFilesUpload') }}
     <div class="tooltip-arrow" data-popper-arrow></div>
   </div>
   <div
@@ -469,7 +505,7 @@
     class="absolute z-10 invisible inline-block px-3 py-2 text-xs text-gray-900 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 tooltip"
     role="tooltip"
   >
-    {{ t('form.tooltip.datamover')}}
+    {{ t('form.tooltip.datamover') }}
     <div class="tooltip-arrow" data-popper-arrow></div>
   </div>
 </template>
@@ -485,6 +521,7 @@ import { useFormNamespaces } from '@velero-ui-app/composables/form/useFormNamesp
 import { useFormStorageLocations } from '@velero-ui-app/composables/form/useFormStorageLocations';
 import { useFormSnapshotLocations } from '@velero-ui-app/composables/form/useFormSnapshotLocations';
 import { useI18n } from 'vue-i18n';
+import { useFormKitContextById } from '@formkit/vue';
 
 const { t } = useI18n();
 
@@ -500,10 +537,23 @@ const { data: dataStorageLocations, isError: errorStorageLocations } =
 const { data: dataSnapshotLocations, isError: errorSnapshotLocations } =
   useFormSnapshotLocations();
 
+const formContext = useFormKitContextById('backup-form-info');
+
+
 const currentForm = ref({
   name: '',
-  ttl: '72',
-  ttlUnit: 'h',
+  ttl: {
+    value: '',
+    unit: 'h',
+  },
+  csiSnapshotTimeout: {
+    value: '',
+    unit: 'm',
+  },
+  itemOperationTimeout: {
+    value: '',
+    unit: 'h',
+  },
   includedNamespaces: [],
   excludedNamespaces: [],
   volumeSnapshotLocations: [],
@@ -511,12 +561,8 @@ const currentForm = ref({
   snapshotVolumes: false,
   snapshotMoveData: false,
   defaultVolumesToFsBackup: false,
-  itemOperationTimeout: '4',
-  itemOperationTimeoutUnit: 'h',
-  csiSnapshotTimeout: '10',
-  csiSnapshotTimeoutUnit: 'm',
   datamover: '',
-  parallelFilesUpload: 10,
+  parallelFilesUpload: '',
 });
 
 onMounted(() => initTooltips());
@@ -528,14 +574,9 @@ onMounted(() => {
   };
 });
 
-const validate = () =>
-  !!(
-    (notApplicableFields.value?.backupName ? true : currentForm.value?.name) &&
-    currentForm.value?.ttl &&
-    currentForm.value?.storageLocation
-  );
+const validate = () => formContext.value.state.valid;
 
-const getForm = () => currentForm.value;
+const getForm = () => formContext.value.value;
 
 defineExpose({
   validate,

@@ -133,7 +133,8 @@
       "of": "de"
     },
     "search": {
-      "label": "Rechercher",
+      "name": "Recherche",
+      "label": "Recherche",
       "placeholder": "Rechercher..."
     },
     "header": {

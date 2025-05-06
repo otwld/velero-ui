@@ -56,7 +56,7 @@
             {{ formContent[0]?.provider }}
           </dd>
         </div>
-        <div class="col-span-2 sm:col-span-1">
+        <div v-if="formContent[0]?.backupSyncPeriod.value" class="col-span-2 sm:col-span-1">
           <div class="col-span-2 sm:col-span-1">
             <dt
               class="mb-2 font-semibold leading-none text-gray-900 dark:text-white"
@@ -66,8 +66,8 @@
             <dd
               class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400"
             >
-              {{ formContent[0]?.backupSyncPeriod }}
-              {{ formContent[0]?.backupSyncPeriodUnit }}
+              {{ formContent[0]?.backupSyncPeriod.value }}
+              {{ formContent[0]?.backupSyncPeriod.unit }}
             </dd>
           </div>
         </div>
@@ -83,15 +83,15 @@
             {{ formContent[0]?.caCert?.name || '-' }}
           </dd>
         </div>
-        <div class="col-span-2 sm:col-span-1">
+        <div v-if="formContent[0]?.validationFrequency.value" class="col-span-2 sm:col-span-1">
           <dt
             class="mb-2 font-semibold leading-none text-gray-900 dark:text-white"
           >
             {{ t('resource.spec.validationFrequency') }}
           </dt>
           <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">
-            {{ formContent[0]?.validationFrequency }}
-            {{ formContent[0]?.validationFrequencyUnit }}
+            {{ formContent[0]?.validationFrequency.value }}
+            {{ formContent[0]?.validationFrequency.unit }}
           </dd>
         </div>
       </div>

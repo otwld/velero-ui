@@ -5,7 +5,7 @@
       :step-components="[
         {
           name: t('global.type'),
-          component: shallowRef(RestoreFormCreateType),
+          component: shallowRef(RestoreFormType),
         },
         {
           name: t('resource.spec.schedule'),
@@ -52,9 +52,9 @@ import {
 import { onBeforeUnmount, shallowRef, watch } from 'vue';
 import { useKubernetesCreateObject } from '@velero-ui-app/composables/useKubernetesCreateObject';
 import { Resources, type V1RestoreSpec } from '@velero-ui/velero';
-import RestoreFormCreateType from '@velero-ui-app/components/Restore/forms/RestoreFormType.vue';
 import RestoreFormCreateFromSchedule from '@velero-ui-app/components/Restore/forms/RestoreFormFromSchedule.vue';
 import RestoreFormCreateFromBackup from '@velero-ui-app/components/Restore/forms/RestoreFormFromBackup.vue';
+import RestoreFormType from '@velero-ui-app/components/Restore/forms/RestoreFormType.vue';
 import RestoreFormCreateInfo from '@velero-ui-app/components/Restore/forms/RestoreFormInfo.vue';
 import RestoreFormCreateResources from '@velero-ui-app/components/Restore/forms/RestoreFormResources.vue';
 import RestoreFormCreateConfig from '@velero-ui-app/components/Restore/forms/RestoreFormConfig.vue';
@@ -79,17 +79,7 @@ const onSubmit = () => {
     name: formContent.value[1].name,
     labels: formContent.value[4].labels,
     spec: {
-      uploaderConfig: {
-        writeSparseFiles: formContent.value[2].writeSparseFiles,
-        parallelFilesDownload: formContent.value[2].parallelFilesDownload,
-      },
-      includeClusterResources: formContent.value[2].includeClusterResources,
-      restorePVs: formContent.value[2].restorePVs,
-      preserveNodePorts: formContent.value[2].preserveNodePorts,
-      itemOperationTimeout:
-        formContent.value[2].itemOperationTimeout +
-        formContent.value[2].itemOperationTimeoutUnit,
-      existingResourcePolicy: formContent.value[2].existingResourcePolicy,
+      uploaderConfig: {},
     },
   };
 
@@ -99,6 +89,40 @@ const onSubmit = () => {
     formContent.value[0].type === CreateRestoreTypeEnum.FROM_SCHEDULE
   ) {
     form.spec.scheduleName = formContent.value[1].scheduleName;
+  }
+
+  if (formContent.value[2].writeSparseFiles) {
+    form.spec.uploaderConfig.writeSparseFiles =
+      formContent.value[2].writeSparseFiles;
+  }
+
+  if (formContent.value[2].parallelFilesDownload) {
+    form.spec.uploaderConfig.parallelFilesDownload =
+      parseInt(formContent.value[2].parallelFilesDownload);
+  }
+
+  if (formContent.value[2].preserveNodePorts) {
+    form.spec.preserveNodePorts = formContent.value[2].preserveNodePorts;
+  }
+
+  if (formContent.value[2].restorePVs) {
+    form.spec.restorePVs = formContent.value[2].restorePVs;
+  }
+
+  if (formContent.value[2].includeClusterResources) {
+    form.spec.includeClusterResources =
+      formContent.value[2].includeClusterResources;
+  }
+
+  if (formContent.value[2].itemOperationTimeout?.value) {
+    form.spec.itemOperationTimeout =
+      formContent.value[2].itemOperationTimeout.value +
+      formContent.value[2].itemOperationTimeout.unit;
+  }
+
+  if (formContent.value[2].existingResourcePolicy) {
+    form.spec.existingResourcePolicy =
+      formContent.value[2].existingResourcePolicy;
   }
 
   if (formContent.value[2].includedNamespaces.length > 0) {
@@ -147,6 +171,7 @@ const onSubmit = () => {
   if (Object.entries(formContent.value[4].namespaceMappings).length > 0) {
     form.spec.namespaceMapping = formContent.value[4].namespaceMappings;
   }
+
   mutate(form);
 };
 

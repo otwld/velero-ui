@@ -1,5 +1,10 @@
 <template>
-  <div>
+  <FormKit
+    id="restore-form-resources"
+    v-model="currentForm"
+    :actions="false"
+    type="form"
+  >
     <div
       class="flex p-4 mb-4 text-sm text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-700 dark:text-blue-400"
       role="alert"
@@ -31,7 +36,7 @@
               :icon="faArrowUpRightFromSquare"
               class="me-2 h-3 w-3"
             />
-            {{ t('global.button.learnMore.title')}}
+            {{ t('global.button.learnMore.title') }}
           </button>
         </a>
       </div>
@@ -39,38 +44,36 @@
     <div class="space-y-4 mb-4">
       <div class="grid gap-4 mb-4 grid-cols-1">
         <div class="col-span-1 sm:col-span-1">
-          <label
-            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            for="resource-modifier-configmap"
-            >{{ t('resource.spec.resourceModifier') }}
-            <FontAwesomeIcon
-              :icon="faQuestionCircle"
-              class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
-              data-tooltip-style="light"
-              data-tooltip-target="tooltip-resource-modifier-configmap"
-            />
-          </label>
-          <select
-            id="resource-modifier-configmap"
-            v-model="currentForm.resourceModifier"
+          <FormKit
             :disabled="!data || isError"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+            :options="
+              [
+                { label: t('form.placeholder.resourcePolicy'), value: '' },
+              ].concat(data?.items.map((i) => ({ label: i, value: i })))
+            "
+            :placeholder="t('form.placeholder.resourcePolicy')"
+            name="resourceModifier"
+            outer-class="mb-2"
+            type="select"
           >
-            <option selected value="">{{ t('form.placeholder.resourcePolicy') }}</option>
-            <template v-if="data?.items">
-              <option
-                v-for="(cm, index) of data?.items"
-                :key="index"
-                :value="cm"
-              >
-                {{ cm }}
-              </option>
+            <template #label="context">
+              <label
+                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >{{ t('resource.spec.resourceModifier') }}
+                <FontAwesomeIcon
+                  :icon="faQuestionCircle"
+                  class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
+                  data-tooltip-style="light"
+                  data-tooltip-target="tooltip-resource-modifier-configmap"
+                />
+              </label>
             </template>
-          </select>
+          </FormKit>
         </div>
       </div>
       <div class="grid gap-4 mb-4 grid-cols-1">
         <div class="col-span-1 sm:col-span-1">
+
           <label
             class="flex mb-2 text-sm font-medium text-gray-900 dark:text-white items-center"
             for="included-resources"
@@ -83,21 +86,21 @@
             />
           </label>
           <div class="inline-flex w-full">
-            <input
-              id="included-resources"
-              v-model="form.includedResources"
-              class="bg-gray-50 mb-2 border border-gray-300 text-gray-900 text-sm rounded-s-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-              name="included-resources"
+            <FormKit
               :placeholder="t('form.placeholder.resource')"
-              required
+              name="includedResource"
               type="text"
-              v-on:keyup.enter="add('includedResources')"
-            />
+              outer-class="w-full mb-2"
+              input-class="rounded-s-lg rounded-e-none"
+              :validation="[['k8s_resource']]"
+              @keyup.enter="add('includedResource')"
+              >
+            </FormKit>
             <button
+              :title="t('global.button.add.title')"
               class="top-0 end-0 p-2.5 h-full text-sm font-medium text-white bg-blue-700 rounded-e-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
               type="button"
-              :title="t('global.button.add.title')"
-              @click="add('includedResources')"
+              @click="add('includedResource')"
             >
               <FontAwesomeIcon :icon="faPlus" class="!w-4 !h-4" />
             </button>
@@ -109,10 +112,10 @@
           >
             {{ resource }}
             <button
+              :title="t('global.button.delete.title')"
               aria-label="Remove"
               class="inline-flex items-center p-1 ms-2 text-sm text-blue-400 bg-transparent rounded-sm hover:bg-blue-200 hover:text-blue-900 dark:hover:bg-blue-800 dark:hover:text-blue-300"
               type="button"
-              :title="t('global.button.delete.title')"
               @click="remove('includedResources', resource)"
             >
               <FontAwesomeIcon :icon="faXmark" class="!w-2 !h-2" />
@@ -133,21 +136,21 @@
             />
           </label>
           <div class="inline-flex w-full">
-            <input
-              id="excluded-resources"
-              v-model="form.excludedResources"
-              class="bg-gray-50 mb-2 border border-gray-300 text-gray-900 text-sm rounded-s-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-              name="excluded-resources"
+            <FormKit
               :placeholder="t('form.placeholder.resource')"
-              required
+              name="excludedResource"
               type="text"
-              v-on:keyup.enter="add('excludedResources')"
-            />
+              outer-class="w-full mb-2"
+              input-class="rounded-s-lg rounded-e-none"
+              :validation="[['k8s_resource']]"
+              @keyup.enter="add('excludedResource')"
+              >
+            </FormKit>
             <button
+              :title="t('global.button.add.title')"
               class="top-0 end-0 p-2.5 h-full text-sm font-medium text-white bg-blue-700 rounded-e-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
               type="button"
-              :title="t('global.button.add.title')"
-              @click="add('excludedResources')"
+              @click="add('excludedResource')"
             >
               <FontAwesomeIcon :icon="faPlus" class="!w-4 !h-4" />
             </button>
@@ -159,10 +162,10 @@
           >
             {{ resource }}
             <button
+              :title="t('global.button.delete.title')"
               aria-label="Remove"
               class="inline-flex items-center p-1 ms-2 text-sm text-blue-400 bg-transparent rounded-sm hover:bg-blue-200 hover:text-blue-900 dark:hover:bg-blue-800 dark:hover:text-blue-300"
               type="button"
-              :title="t('global.button.delete.title')"
               @click="remove('excludedResources', resource)"
             >
               <FontAwesomeIcon :icon="faXmark" class="!w-2 !h-2" />
@@ -183,21 +186,21 @@
             />
           </label>
           <div class="inline-flex w-full">
-            <input
-              id="status-include-resources"
-              v-model="form.statusIncludedResources"
-              class="bg-gray-50 mb-2 border border-gray-300 text-gray-900 text-sm rounded-s-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-              name="status-include-resources"
+            <FormKit
               :placeholder="t('form.placeholder.resource')"
-              required
+              name="statusIncludedResource"
               type="text"
-              v-on:keyup.enter="add('statusIncludedResources')"
-            />
+              outer-class="w-full mb-2"
+              input-class="rounded-s-lg rounded-e-none"
+              :validation="[['k8s_resource']]"
+              @keyup.enter="add('statusIncludedResource')"
+              >
+            </FormKit>
             <button
+              :title="t('global.button.add.title')"
               class="top-0 end-0 p-2.5 h-full text-sm font-medium text-white bg-blue-700 rounded-e-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
               type="button"
-              :title="t('global.button.add.title')"
-              @click="add('statusIncludedResources')"
+              @click="add('statusIncludedResource')"
             >
               <FontAwesomeIcon :icon="faPlus" class="!w-4 !h-4" />
             </button>
@@ -209,10 +212,10 @@
           >
             {{ resource }}
             <button
+              :title="t('global.button.delete.title')"
               aria-label="Remove"
               class="inline-flex items-center p-1 ms-2 text-sm text-blue-400 bg-transparent rounded-sm hover:bg-blue-200 hover:text-blue-900 dark:hover:bg-blue-800 dark:hover:text-blue-300"
               type="button"
-              :title="t('global.button.delete.title')"
               @click="remove('statusIncludedResources', resource)"
             >
               <FontAwesomeIcon :icon="faXmark" class="!w-2 !h-2" />
@@ -233,21 +236,21 @@
             />
           </label>
           <div class="inline-flex w-full">
-            <input
-              id="status-exclude-resources"
-              v-model="form.statusExcludedResources"
-              class="bg-gray-50 mb-2 border border-gray-300 text-gray-900 text-sm rounded-s-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-              name="status-exclude-resources"
+            <FormKit
               :placeholder="t('form.placeholder.resource')"
-              required
+              name="statusExcludedResource"
               type="text"
-              v-on:keyup.enter="add('statusExcludedResources')"
-            />
+              outer-class="w-full mb-2"
+              input-class="rounded-s-lg rounded-e-none"
+              :validation="[['k8s_resource']]"
+              @keyup.enter="add('statusExcludedResource')"
+              >
+            </FormKit>
             <button
+              :title="t('global.button.add.title')"
               class="top-0 end-0 p-2.5 h-full text-sm font-medium text-white bg-blue-700 rounded-e-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
               type="button"
-              :title="t('global.button.add.title')"
-              @click="add('statusExcludedResources')"
+              @click="add('statusExcludedResource')"
             >
               <FontAwesomeIcon :icon="faPlus" class="!w-4 !h-4" />
             </button>
@@ -259,10 +262,10 @@
           >
             {{ resource }}
             <button
+              :title="t('global.button.delete.title')"
               aria-label="Remove"
               class="inline-flex items-center p-1 ms-2 text-sm text-blue-400 bg-transparent rounded-sm hover:bg-blue-200 hover:text-blue-900 dark:hover:bg-blue-800 dark:hover:text-blue-300"
               type="button"
-              :title="t('global.button.delete.title')"
               @click="remove('statusExcludedResources', resource)"
             >
               <FontAwesomeIcon :icon="faXmark" class="!w-2 !h-2" />
@@ -272,7 +275,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </FormKit>
   <div
     id="tooltip-resource-modifier-configmap"
     class="absolute z-10 invisible inline-block px-3 py-2 text-xs text-gray-900 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 tooltip"
@@ -286,7 +289,7 @@
     class="absolute z-10 invisible inline-block px-3 py-2 text-xs text-gray-900 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 tooltip"
     role="tooltip"
   >
-    {{ t('form.tooltip.includedResources', {type: t('global.restore', 1)}) }}
+    {{ t('form.tooltip.includedResources', { type: t('global.restore', 1) }) }}
     <div class="tooltip-arrow" data-popper-arrow></div>
   </div>
   <div
@@ -294,7 +297,7 @@
     class="absolute z-10 invisible inline-block px-3 py-2 text-xs text-gray-900 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 tooltip"
     role="tooltip"
   >
-    {{ t('form.tooltip.excludedResources', {type: t('global.restore', 1)}) }}
+    {{ t('form.tooltip.excludedResources', { type: t('global.restore', 1) }) }}
     <div class="tooltip-arrow" data-popper-arrow></div>
   </div>
   <div
@@ -329,7 +332,8 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { initTooltips } from 'flowbite';
 import { useFormConfigMaps } from '@velero-ui-app/composables/form/useFormConfigMaps';
-import {useI18n} from "vue-i18n";
+import { useI18n } from 'vue-i18n';
+import { useFormKitContextById } from '@formkit/vue';
 
 const { t } = useI18n();
 
@@ -338,12 +342,19 @@ const { currentStep, formContent } = storeToRefs(formStore);
 
 const { data, isError } = useFormConfigMaps();
 
+const formContext = useFormKitContextById('restore-form-resources');
+
 const currentForm = ref({
   resourceModifier: '',
   includedResources: ['*'],
   excludedResources: [],
   statusIncludedResources: [],
   statusExcludedResources: [],
+
+  includedResource: '',
+  excludedResource: '',
+  statusIncludedResource: '',
+  statusExcludedResource: '',
 });
 
 const form = ref({
@@ -365,12 +376,13 @@ onMounted(() => {
 });
 
 const add = (type: string) => {
+  const plural = type.concat('s');
   if (
-    form.value[type] &&
-    !currentForm.value[type].find((r) => r === form.value[type])
+    formContext.value.node.at(type).context.state.valid &&
+    !currentForm.value[plural].find((r) => r === currentForm.value[type])
   ) {
-    currentForm.value[type].push(form.value[type]);
-    form.value[type] = '';
+    currentForm.value[plural].push(currentForm.value[type]);
+    currentForm.value[type] = '';
   }
 };
 
@@ -382,7 +394,7 @@ const remove = (type: string, resource: string) => {
 
 const validate = () => currentForm.value?.includedResources.length > 0;
 
-const getForm = () => currentForm.value;
+const getForm = () => formContext.value.value;
 
 defineExpose({
   validate,

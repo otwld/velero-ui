@@ -40,17 +40,17 @@
             @click="showModalDelete = !showModalDelete"
           >
             <FontAwesomeIcon
-              v-if="isDisabled"
+              v-if="isDeleting"
               :icon="faCircleNotch"
               class="!w-4 !h-4 animate-spin mr-2"
             />
             <FontAwesomeIcon
-              v-if="!isDisabled"
+              v-if="!isDeleting"
               :icon="faTrashCan"
               class="!w-4 !h-4 mr-2"
             />
             {{
-              isDisabled
+              isDeleting
                 ? t('global.button.delete.loading')
                 : t('global.button.delete.title')
             }}

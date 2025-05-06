@@ -41,7 +41,13 @@ import {
   type CreateFormBody,
   CreateRestoreTypeEnum,
 } from '@velero-ui/shared-types';
-import {onBeforeMount, onBeforeUnmount, type PropType, shallowRef, watch} from 'vue';
+import {
+  onBeforeMount,
+  onBeforeUnmount,
+  type PropType,
+  shallowRef,
+  watch,
+} from 'vue';
 import { useKubernetesCreateObject } from '@velero-ui-app/composables/useKubernetesCreateObject';
 import {
   Resources,
@@ -53,7 +59,7 @@ import RestoreFormInfo from '@velero-ui-app/components/Restore/forms/RestoreForm
 import RestoreFormResources from '@velero-ui-app/components/Restore/forms/RestoreFormResources.vue';
 import RestoreFormConfig from '@velero-ui-app/components/Restore/forms/RestoreFormConfig.vue';
 import RestoreFormConfirm from '@velero-ui-app/components/Restore/forms/RestoreFormConfirm.vue';
-import {useI18n} from "vue-i18n";
+import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
 
@@ -93,17 +99,7 @@ const onSubmit = () => {
     labels: formContent.value[3].labels,
     spec: {
       backupName: formContent.value[0].backupName,
-      uploaderConfig: {
-        writeSparseFiles: formContent.value[1].writeSparseFiles,
-        parallelFilesDownload: formContent.value[1].parallelFilesDownload,
-      },
-      includeClusterResources: formContent.value[1].includeClusterResources,
-      restorePVs: formContent.value[1].restorePVs,
-      preserveNodePorts: formContent.value[1].preserveNodePorts,
-      itemOperationTimeout:
-        formContent.value[1].itemOperationTimeout +
-        formContent.value[1].itemOperationTimeoutUnit,
-      existingResourcePolicy: formContent.value[1].existingResourcePolicy,
+      uploaderConfig: {},
     },
   };
 
@@ -113,6 +109,40 @@ const onSubmit = () => {
 
   if (formContent.value[1].excludedNamespaces.length > 0) {
     form.spec.excludedNamespaces = formContent.value[1].excludedNamespaces;
+  }
+
+  if (formContent.value[1].writeSparseFiles) {
+    form.spec.uploaderConfig.writeSparseFiles =
+      formContent.value[1].writeSparseFiles;
+  }
+
+  if (formContent.value[1].parallelFilesDownload) {
+    form.spec.uploaderConfig.parallelFilesDownload =
+      parseInt(formContent.value[1].parallelFilesDownload);
+  }
+
+  if (formContent.value[1].preserveNodePorts) {
+    form.spec.preserveNodePorts = formContent.value[1].preserveNodePorts;
+  }
+
+  if (formContent.value[1].restorePVs) {
+    form.spec.restorePVs = formContent.value[1].restorePVs;
+  }
+
+  if (formContent.value[1].includeClusterResources) {
+    form.spec.includeClusterResources =
+      formContent.value[1].includeClusterResources;
+  }
+
+  if (formContent.value[1].itemOperationTimeout?.value) {
+    form.spec.itemOperationTimeout =
+      formContent.value[1].itemOperationTimeout.value +
+      formContent.value[1].itemOperationTimeout.unit;
+  }
+
+  if (formContent.value[1].existingResourcePolicy) {
+    form.spec.existingResourcePolicy =
+      formContent.value[1].existingResourcePolicy;
   }
 
   if (formContent.value[2].resourceModifier) {

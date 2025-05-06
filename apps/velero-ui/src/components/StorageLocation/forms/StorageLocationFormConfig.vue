@@ -1,5 +1,10 @@
 <template>
-  <div>
+  <FormKit
+    id="storage-location-form-labels"
+    v-model="currentForm"
+    :actions="false"
+    type="form"
+  >
     <div
       class="flex p-4 mb-4 text-sm text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-700 dark:text-blue-400"
       role="alert"
@@ -48,22 +53,20 @@
       </label>
       <div>
         <div class="inline-flex w-full">
-          <input
-            id="config-keyConfig"
-            v-model="keyConfig"
+          <FormKit
             :placeholder="t('global.key')"
-            class="flex-shrink-0 p-2.5 w-1/2 text-sm text-gray-900 bg-gray-50 rounded-s-lg rounded-s-gray-100 rounded-s-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500"
-            minlength="5"
-            required
+            :validation="[['field'], ['length', 1]]"
+            input-class="rounded-s-lg rounded-s-2 rounded-e-none"
+            name="keyConfig"
+            outer-class="flex-shrink-0 w-1/2"
             type="text"
           />
-          <input
-            id="config-value"
-            v-model="valueConfig"
+          <FormKit
             :placeholder="t('global.value')"
-            class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-s-gray-100 rounded-s-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500"
-            minlength="5"
-            required
+            :validation="[['length', 1]]"
+            input-class="rounded-none"
+            name="valueConfig"
+            outer-class="w-full"
             type="text"
           />
           <button
@@ -139,22 +142,20 @@
       </label>
       <div>
         <div class="inline-flex w-full">
-          <input
-            id="config-keyConfig"
-            v-model="keyLabel"
+          <FormKit
             :placeholder="t('global.key')"
-            class="flex-shrink-0 p-2.5 w-1/2 text-sm text-gray-900 bg-gray-50 rounded-s-lg rounded-s-gray-100 rounded-s-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500"
-            minlength="5"
-            required
+            :validation="[['field'], ['length', 1]]"
+            input-class="rounded-s-lg rounded-s-2 rounded-e-none"
+            name="keyLabel"
+            outer-class="flex-shrink-0 w-1/2"
             type="text"
           />
-          <input
-            id="config-value"
-            v-model="valueLabel"
+          <FormKit
             :placeholder="t('global.value')"
-            class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-s-gray-100 rounded-s-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500"
-            minlength="5"
-            required
+            :validation="[['length', 1]]"
+            input-class="rounded-none"
+            name="valueLabel"
+            outer-class="w-full"
             type="text"
           />
           <button
@@ -216,7 +217,7 @@
         </table>
       </div>
     </div>
-  </div>
+  </FormKit>
   <div
     id="tooltip-config"
     class="absolute z-10 invisible inline-block px-3 py-2 text-xs text-gray-900 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 tooltip"
@@ -249,6 +250,7 @@ import {
   faTrashCan,
 } from '@fortawesome/free-solid-svg-icons';
 import { useI18n } from 'vue-i18n';
+import { useFormKitContextById } from '@formkit/vue';
 
 const { t } = useI18n();
 
@@ -256,17 +258,15 @@ const formStore = useFormStore();
 const { currentStep, formContent, notApplicableFields } =
   storeToRefs(formStore);
 
+const formContext = useFormKitContextById('storage-location-form-labels');
+
 const currentForm = ref({
   configuration: {},
   labels: {},
 });
 
-const keyConfig = ref('');
-const valueConfig = ref('');
-const errorConfig = ref('');
 
-const keyLabel = ref('');
-const valueLabel = ref('');
+const errorConfig = ref('');
 const errorLabel = ref('');
 
 onMounted(() => initTooltips());
@@ -281,17 +281,32 @@ onMounted(() => {
 const getForm = () => currentForm.value;
 
 const addNewConfig = () => {
-  if (keyConfig.value in currentForm.value.configuration) {
+  if (
+    formContext.value.node.at('keyConfig').context.value in
+    currentForm.value.configuration
+  ) {
     errorConfig.value = 'Key is already defined!';
     return;
   }
-  if (!keyConfig.value || !valueConfig.value) {
+  if (
+    !formContext.value.node.at('keyConfig').context.value ||
+    !formContext.value.node.at('valueConfig').context.value
+  ) {
     errorConfig.value = 'Key/value cannot be empty!';
     return;
   }
-  currentForm.value.configuration[keyConfig.value] = valueConfig.value;
-  keyConfig.value = '';
-  valueConfig.value = '';
+
+  if (
+    !formContext.value.node.at('keyConfig').context.state.valid &&
+    !formContext.value.node.at('valueConfig').context.state.valid
+  ) {
+    return;
+  }
+  currentForm.value.configuration[
+    formContext.value.node.at('keyConfig').context.value
+  ] = formContext.value.node.at('valueConfig').context.value;
+  formContext.value.node.at('keyConfig').input('');
+  formContext.value.node.at('valueConfig').input('');
   errorConfig.value = '';
 };
 
@@ -300,17 +315,32 @@ const removeConfig = (key: string) => {
 };
 
 const addNewLabel = () => {
-  if (keyLabel.value in currentForm.value.labels) {
+  if (
+    formContext.value.node.at('keyLabel').context.value in
+    currentForm.value.labels
+  ) {
     errorLabel.value = 'Key is already defined!';
     return;
   }
-  if (!keyLabel.value || !valueLabel.value) {
-    errorConfig.value = 'Key/value cannot be empty!';
+  if (
+    !formContext.value.node.at('keyLabel').context.value ||
+    !formContext.value.node.at('valueLabel').context.value
+  ) {
+    errorLabel.value = 'Key/value cannot be empty!';
     return;
   }
-  currentForm.value.labels[keyLabel.value] = valueLabel.value;
-  keyLabel.value = '';
-  valueLabel.value = '';
+
+  if (
+    !formContext.value.node.at('keyLabel').context.state.valid &&
+    !formContext.value.node.at('valueLabel').context.state.valid
+  ) {
+    return;
+  }
+  currentForm.value.labels[
+    formContext.value.node.at('keyLabel').context.value
+  ] = formContext.value.node.at('valueLabel').context.value;
+  formContext.value.node.at('keyLabel').input('');
+  formContext.value.node.at('valueLabel').input('');
   errorLabel.value = '';
 };
 

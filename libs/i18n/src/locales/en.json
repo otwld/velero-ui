@@ -13,6 +13,7 @@
     "downloadRequest": "no download request | download request | download requests",
     "serverStatusRequest": "no server status request | server status request | server status requests",
     "setting": "no setting | setting | settings",
+    "actions": "Actions",
     "button": {
       "edit": {
         "title": "Edit"
@@ -226,7 +227,8 @@
       "Enabled": "Enabled",
       "Available": "Available",
       "Unavailable": "Unavailable",
-      "null": "Unknown"
+      "null": "Unknown",
+      "undefined": "Unknown"
     }
   },
   "modal": {
@@ -283,6 +285,14 @@
       "fromBackup": "Create a restore from backup"
     },
     "placeholder": {
+      "ttl": "72",
+      "csiSnapshotTimeout": "10",
+      "itemOperationTimeout": "4",
+      "parallelFilesUpload": "10",
+      "parallelFilesDownload": "10",
+      "backupSyncPeriod": "1",
+      "validationFrequency": "1",
+      "existingResourcePolicy": "Select a existing Resource Policy Type",
       "backupName": "Type backup name",
       "restoreName": "Type restore name",
       "scheduleName": "Type schedule name",
@@ -367,6 +377,7 @@
       "of": "of"
     },
     "search": {
+      "name": "Search",
       "label": "Search",
       "placeholder": "Search..."
     },

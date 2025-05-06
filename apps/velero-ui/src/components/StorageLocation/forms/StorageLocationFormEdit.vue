@@ -89,18 +89,18 @@ onBeforeMount(() => {
       prefix: props.storageLocation.spec?.objectStorage?.prefix || '',
       provider: props.storageLocation.spec?.provider || '',
       default: props.storageLocation.spec?.default || false,
-      backupSyncPeriod:
-        parseTimeString(props.storageLocation.spec?.backupSyncPeriod)?.value ||
-        '1',
-      backupSyncPeriodUnit:
-        parseTimeString(props.storageLocation.spec?.backupSyncPeriod)?.unit ||
+      backupSyncPeriod: {
+        value: parseTimeString(props.storageLocation.spec?.backupSyncPeriod)?.value ||
+        '',
+        unit: parseTimeString(props.storageLocation.spec?.backupSyncPeriod)?.unit ||
         'm',
-      validationFrequency:
-        parseTimeString(props.storageLocation.spec?.validationFrequency)
-          ?.value || '1',
-      validationFrequencyUnit:
-        parseTimeString(props.storageLocation.spec?.validationFrequency)
-          ?.unit || 'm',
+      },
+      validationFrequency: {
+        value: parseTimeString(props.storageLocation.spec?.validationFrequency)?.value ||
+        '',
+        unit: parseTimeString(props.storageLocation.spec?.validationFrequency)?.unit ||
+        'm',
+      },
     },
     {
       credential: {
@@ -130,16 +130,22 @@ const onSubmit = () => {
         prefix: formContent.value[0].prefix,
       },
       provider: formContent.value[0].provider,
-      default: formContent.value[0].default,
-
-      backupSyncPeriod:
-        formContent.value[0].backupSyncPeriod +
-        formContent.value[0].backupSyncPeriodUnit,
-      validationFrequency:
-        formContent.value[0].validationFrequency +
-        formContent.value[0].validationFrequencyUnit,
     },
   };
+
+  if (formContent.value[0].backupSyncPeriod?.value) {
+    form.spec.backupSyncPeriod = formContent.value[0].backupSyncPeriod.value +
+        formContent.value[0].backupSyncPeriod.unit;
+  }
+
+  if (formContent.value[0].validationFrequency?.value) {
+    form.spec.validationFrequency = formContent.value[0].validationFrequency.value +
+        formContent.value[0].validationFrequency.unit;
+  }
+
+  if (formContent.value[0].default) {
+    form.spec.default = formContent.value[0].default;
+  }
 
   if (formContent.value[1].credential.name) {
     form.spec.credential = {

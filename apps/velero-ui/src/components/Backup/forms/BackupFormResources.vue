@@ -1,5 +1,10 @@
 <template>
-  <div>
+  <FormKit
+    id="backup-form-resources"
+    v-model="currentForm"
+    :actions="false"
+    type="form"
+  >
     <div
       class="flex p-4 mb-4 text-sm text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-700 dark:text-blue-400"
       role="alert"
@@ -39,36 +44,27 @@
     <div class="space-y-4 mb-4">
       <div class="grid gap-4 mb-4 grid-cols-2">
         <div class="col-span-2 sm:col-span-1">
-          <label
-            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            for="resource-policies-configmap"
-            >{{ t('resource.spec.resourcePolicy') }}
-            <FontAwesomeIcon
-              :icon="faQuestionCircle"
-              class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
-              data-tooltip-style="light"
-              data-tooltip-target="tooltip-resource-policies-configmap"
-            />
-          </label>
-          <select
-            id="resource-policies-configmap"
-            v-model="currentForm.resourcePolicy"
+          <FormKit
             :disabled="!data || isError"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+            :options="[{label: t('form.placeholder.resourcePolicy'), value: ''}].concat(data?.items.map((i) => ({label: i, value: i})))"
+            :placeholder="t('form.placeholder.resourcePolicy')"
+            name="resourcePolicy"
+            outer-class="mb-2"
+            type="select"
           >
-            <option selected value="">
-              {{ t('form.placeholder.resourcePolicy') }}
-            </option>
-            <template v-if="data?.items">
-              <option
-                v-for="(cm, index) of data?.items"
-                :key="index"
-                :value="cm"
-              >
-                {{ cm }}
-              </option>
+            <template #label="context">
+              <label
+                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >{{ t('resource.spec.resourcePolicy') }}
+                <FontAwesomeIcon
+                  :icon="faQuestionCircle"
+                  class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
+                  data-tooltip-style="light"
+                  data-tooltip-target="tooltip-resource-policies-configmap"
+                />
+              </label>
             </template>
-          </select>
+          </FormKit>
         </div>
         <div class="col-span-2 sm:col-span-1">
           <div class="flex flex-col">
@@ -77,19 +73,29 @@
             >
               {{ t('global.options') }}
             </p>
-            <label class="inline-flex items-center mb-5 cursor-pointer">
-              <input
-                v-model="currentForm.includeClusterResources"
-                checked
-                class="sr-only peer"
+            <label class="inline-flex items-center mb-5">
+              <FormKit
+                name="includeClusterResources"
                 type="checkbox"
-                value=""
-              />
-              <div
-                class="relative w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"
-              ></div>
+                input-class="sr-only peer"
+                label-class="ml-2"
+                wrapper-class="relative w-11 h-6 bg-gray-200 dark:bg-gray-700 rounded-full cursor-pointer"
+                outer-class="flex items-center"
+              >
+                 <template #decorator>
+                  <span
+                    class="peer
+                      peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full
+                      peer-checked:after:border-white after:content-['']
+                      after:absolute after:top-0.5 after:start-[2px]
+                      after:bg-white after:border-gray-300 after:border after:rounded-full
+                      after:h-5 after:w-5 after:transition-all dark:border-gray-600
+                      peer-checked:bg-blue-600"
+                  />
+                </template>
+              </FormKit>
               <span
-                class="ms-3 text-sm font-medium text-gray-400 dark:text-gray-500"
+                class="ms-3 text-sm font-medium text-gray-400 dark:text-white"
                 >{{ t('resource.spec.includeClusterResources') }}</span
               >
               <FontAwesomeIcon
@@ -104,20 +110,30 @@
                 hidden: currentForm.includeClusterResources,
                 'inline-flex': !currentForm.includeClusterResources,
               }"
-              class="items-center mb-5 cursor-pointer"
+              class="items-center mb-5"
             >
-              <input
-                v-model="currentForm.includeNamespaceClusterResources"
-                checked
-                class="sr-only peer"
+              <FormKit
+                name="includeNamespaceClusterResources"
                 type="checkbox"
-                value=""
-              />
-              <div
-                class="relative w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"
-              ></div>
+                input-class="sr-only peer"
+                label-class="ml-2"
+                wrapper-class="relative w-11 h-6 bg-gray-200 dark:bg-gray-700 rounded-full cursor-pointer"
+                outer-class="flex items-center"
+              >
+                 <template #decorator>
+                  <span
+                    class="peer
+                      peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full
+                      peer-checked:after:border-white after:content-['']
+                      after:absolute after:top-0.5 after:start-[2px]
+                      after:bg-white after:border-gray-300 after:border after:rounded-full
+                      after:h-5 after:w-5 after:transition-all dark:border-gray-600
+                      peer-checked:bg-blue-600"
+                  />
+                </template>
+              </FormKit>
               <span
-                class="ms-3 text-sm font-medium text-gray-400 dark:text-gray-500"
+                class="ms-3 text-sm font-medium text-gray-400 dark:text-white"
                 >{{ t('resource.spec.includeNamespaceClusterResources') }}</span
               >
               <FontAwesomeIcon
@@ -137,7 +153,6 @@
         <div class="col-span-1 sm:col-span-1">
           <label
             class="flex mb-2 text-sm font-medium text-gray-900 dark:text-white items-center"
-            for="included-resources"
             >{{ t('resource.spec.includedResources') }} *
             <FontAwesomeIcon
               :icon="faQuestionCircle"
@@ -147,21 +162,21 @@
             />
           </label>
           <div class="inline-flex w-full">
-            <input
-              id="included-resources"
-              v-model="form.includedResources"
+            <FormKit
               :placeholder="t('form.placeholder.resource')"
-              class="bg-gray-50 mb-2 border border-gray-300 text-gray-900 text-sm rounded-s-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-              name="included-resources"
-              required
+              name="includedResource"
               type="text"
-              v-on:keyup.enter="add('includedResources')"
-            />
+              outer-class="w-full mb-2"
+              input-class="rounded-s-lg rounded-e-none"
+              :validation="[['k8s_resource']]"
+              @keyup.enter="add('includedResource')"
+              >
+            </FormKit>
             <button
               :title="t('global.button.add.title')"
               class="top-0 end-0 p-2.5 h-full text-sm font-medium text-white bg-blue-700 rounded-e-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
               type="button"
-              @click="add('includedResources')"
+              @click="add('includedResource')"
             >
               <FontAwesomeIcon :icon="faPlus" class="!w-4 !h-4" />
             </button>
@@ -197,21 +212,21 @@
             />
           </label>
           <div class="inline-flex w-full">
-            <input
-              id="excluded-resources"
-              v-model="form.excludedResources"
+            <FormKit
               :placeholder="t('form.placeholder.resource')"
-              class="bg-gray-50 mb-2 border border-gray-300 text-gray-900 text-sm rounded-s-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-              name="excluded-resources"
-              required
+              name="excludedResource"
               type="text"
-              v-on:keyup.enter="add('excludedResources')"
-            />
+              outer-class="w-full mb-2"
+              input-class="rounded-s-lg rounded-e-none"
+              :validation="[['k8s_resource']]"
+              @keyup.enter="add('excludedResource')"
+              >
+            </FormKit>
             <button
               :title="t('global.button.add.title')"
               class="top-0 end-0 p-2.5 h-full text-sm font-medium text-white bg-blue-700 rounded-e-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
               type="button"
-              @click="add('excludedResources')"
+              @click="add('excludedResource')"
             >
               <FontAwesomeIcon :icon="faPlus" class="!w-4 !h-4" />
             </button>
@@ -256,21 +271,21 @@
             />
           </label>
           <div class="inline-flex w-full">
-            <input
-              id="include-cluster-scoped-resources"
-              v-model="form.includedClusterScopedResources"
+            <FormKit
               :placeholder="t('form.placeholder.resource')"
-              class="bg-gray-50 mb-2 border border-gray-300 text-gray-900 text-sm rounded-s-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-              name="include-cluster-scoped-resources"
-              required
+              name="includedClusterScopedResource"
               type="text"
-              v-on:keyup.enter="add('includedClusterScopedResources')"
-            />
+              outer-class="w-full mb-2"
+              input-class="rounded-s-lg rounded-e-none"
+              :validation="[['k8s_resource']]"
+              @keyup.enter="add('includedClusterScopedResource')"
+              >
+            </FormKit>
             <button
               :title="t('global.button.add.title')"
               class="top-0 end-0 p-2.5 h-full text-sm font-medium text-white bg-blue-700 rounded-e-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
               type="button"
-              @click="add('includedClusterScopedResources')"
+              @click="add('includedClusterScopedResource')"
             >
               <FontAwesomeIcon :icon="faPlus" class="!w-4 !h-4" />
             </button>
@@ -308,21 +323,21 @@
             />
           </label>
           <div class="inline-flex w-full">
-            <input
-              id="exclude-cluster-scoped-resources"
-              v-model="form.excludedClusterScopedResources"
+            <FormKit
               :placeholder="t('form.placeholder.resource')"
-              class="bg-gray-50 mb-2 border border-gray-300 text-gray-900 text-sm rounded-s-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-              name="exclude-cluster-scoped-resources"
-              required
+              name="excludedClusterScopedResource"
               type="text"
-              v-on:keyup.enter="add('excludedClusterScopedResources')"
-            />
+              outer-class="w-full mb-2"
+              input-class="rounded-s-lg rounded-e-none"
+              :validation="[['k8s_resource']]"
+              @keyup.enter="add('excludedClusterScopedResource')"
+              >
+            </FormKit>
             <button
               :title="t('global.button.add.title')"
               class="top-0 end-0 p-2.5 h-full text-sm font-medium text-white bg-blue-700 rounded-e-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
               type="button"
-              @click="add('excludedClusterScopedResources')"
+              @click="add('excludedClusterScopedResource')"
             >
               <FontAwesomeIcon :icon="faPlus" class="!w-4 !h-4" />
             </button>
@@ -369,21 +384,21 @@
             />
           </label>
           <div class="inline-flex w-full">
-            <input
-              id="include-namespace-scoped-resources"
-              v-model="form.includedNamespaceScopedResources"
+            <FormKit
               :placeholder="t('form.placeholder.resource')"
-              class="bg-gray-50 mb-2 border border-gray-300 text-gray-900 text-sm rounded-s-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-              name="include-namespace-scoped-resources"
-              required
+              name="includedNamespaceScopedResource"
               type="text"
-              v-on:keyup.enter="add('includedNamespaceScopedResources')"
-            />
+              outer-class="w-full mb-2"
+              input-class="rounded-s-lg rounded-e-none"
+              :validation="[['k8s_resource']]"
+              @keyup.enter="add('includedNamespaceScopedResource')"
+              >
+            </FormKit>
             <button
               :title="t('global.button.add.title')"
               class="top-0 end-0 p-2.5 h-full text-sm font-medium text-white bg-blue-700 rounded-e-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
               type="button"
-              @click="add('includedNamespaceScopedResources')"
+              @click="add('includedNamespaceScopedResource')"
             >
               <FontAwesomeIcon :icon="faPlus" class="!w-4 !h-4" />
             </button>
@@ -421,21 +436,21 @@
             />
           </label>
           <div class="inline-flex w-full">
-            <input
-              id="exclude-namespace-scoped-resources"
-              v-model="form.excludedNamespaceScopedResources"
+            <FormKit
               :placeholder="t('form.placeholder.resource')"
-              class="bg-gray-50 mb-2 border border-gray-300 text-gray-900 text-sm rounded-s-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-              name="exclude-namespace-scoped-resources"
-              required
+              name="excludedNamespaceScopedResource"
               type="text"
-              v-on:keyup.enter="add('excludedNamespaceScopedResources')"
-            />
+              outer-class="w-full mb-2"
+              input-class="rounded-s-lg rounded-e-none"
+              :validation="[['k8s_resource']]"
+              @keyup.enter="add('excludedNamespaceScopedResource')"
+              >
+            </FormKit>
             <button
               :title="t('global.button.add.title')"
               class="top-0 end-0 p-2.5 h-full text-sm font-medium text-white bg-blue-700 rounded-e-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
               type="button"
-              @click="add('excludedNamespaceScopedResources')"
+              @click="add('excludedNamespaceScopedResource')"
             >
               <FontAwesomeIcon :icon="faPlus" class="!w-4 !h-4" />
             </button>
@@ -462,7 +477,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </FormKit>
   <div
     id="tooltip-include-cluster-resources"
     class="absolute z-10 invisible inline-block px-3 py-2 text-xs text-gray-900 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 tooltip"
@@ -574,6 +589,7 @@ import {
 import { initTooltips } from 'flowbite';
 import { useFormConfigMaps } from '@velero-ui-app/composables/form/useFormConfigMaps';
 import { useI18n } from 'vue-i18n';
+import { useFormKitContextById } from '@formkit/vue';
 
 const { t } = useI18n();
 
@@ -581,6 +597,8 @@ const formStore = useFormStore();
 const { currentStep, formContent } = storeToRefs(formStore);
 
 const { data, isError } = useFormConfigMaps();
+
+const formContext = useFormKitContextById('backup-form-resources');
 
 const currentForm = ref({
   includeClusterResources: true,
@@ -592,15 +610,13 @@ const currentForm = ref({
   excludedClusterScopedResources: [],
   includedNamespaceScopedResources: [],
   excludedNamespaceScopedResources: [],
-});
 
-const form = ref({
-  includedResources: '',
-  excludedResources: '',
-  includedClusterScopedResources: '',
-  excludedClusterScopedResources: '',
-  includedNamespaceScopedResources: '',
-  excludedNamespaceScopedResources: '',
+  includedResource: '',
+  excludedResource: '',
+  includedClusterScopedResource: '',
+  excludedClusterScopedResource: '',
+  includedNamespaceScopedResource: '',
+  excludedNamespaceScopedResource: '',
 });
 
 onMounted(() => initTooltips());
@@ -615,12 +631,13 @@ onMounted(() => {
 });
 
 const add = (type: string) => {
+  const plural = type.concat('s');
   if (
-    form.value[type] &&
-    !currentForm.value[type].find((r) => r === form.value[type])
+    formContext.value.node.at(type).context.state.valid &&
+    !currentForm.value[plural].find((r) => r === currentForm.value[type])
   ) {
-    currentForm.value[type].push(form.value[type]);
-    form.value[type] = '';
+    currentForm.value[plural].push(currentForm.value[type]);
+    currentForm.value[type] = '';
   }
 };
 
@@ -635,7 +652,7 @@ const validate = () =>
     ? currentForm.value?.includedResources.length > 0
     : true;
 
-const getForm = () => currentForm.value;
+const getForm = () => formContext.value.value;
 
 defineExpose({
   validate,

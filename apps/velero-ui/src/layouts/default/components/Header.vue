@@ -142,6 +142,7 @@ import { useAppStore } from '@velero-ui-app/stores/app.store';
 import { useI18n } from 'vue-i18n';
 import { getLanguages } from '@velero-ui/i18n';
 import type { SocketIO } from '@velero-ui-app/plugins/socket.plugin';
+import { changeLocale } from '@formkit/vue'
 
 const { t, locale } = useI18n();
 const socket: SocketIO = inject('socketIo');
@@ -178,6 +179,7 @@ const logout = async () => {
 
 const switchLanguage = (code: string) => {
   localStorage.setItem('language', code);
+  changeLocale(code);
   locale.value = code;
 };
 

@@ -57,7 +57,7 @@ export class StatsService {
               );
               stats.series[index] += 1;
             } else {
-              stats.labels.push(backup.status.phase);
+              stats.labels.push(backup.status?.phase);
               stats.series.push(1);
             }
           }
@@ -109,7 +109,7 @@ export class StatsService {
               );
               stats.series[index] += 1;
             } else {
-              stats.labels.push(restore.status.phase);
+              stats.labels.push(restore.status?.phase);
               stats.series.push(1);
             }
           }
