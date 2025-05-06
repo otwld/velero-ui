@@ -190,7 +190,7 @@ import { useKubernetesEditObject } from '@velero-ui-app/composables/useKubernete
 
 const { t } = useI18n();
 const props = defineProps({
-  data: {type: Object as PropType<V1BackupStorageLocation>, required: true },
+  data: { type: Object as PropType<V1BackupStorageLocation>, required: true },
   checked: Boolean,
 });
 

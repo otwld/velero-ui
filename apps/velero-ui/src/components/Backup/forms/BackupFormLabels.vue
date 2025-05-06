@@ -142,7 +142,7 @@
         <p>{{ t('form.message.error.orLabelSelectors') }}</p>
       </div>
     </div>
-    <div class="space-y-4 my-4">
+    <div v-if="!notApplicableFields?.labels" class="space-y-4 my-4">
       <label
         class="block text-sm font-medium text-gray-900 dark:text-white"
         for="name"
@@ -275,7 +275,7 @@ import { useFormKitContextById } from '@formkit/vue';
 const { t } = useI18n();
 
 const formStore = useFormStore();
-const { currentStep, formContent } = storeToRefs(formStore);
+const { currentStep, formContent, notApplicableFields } = storeToRefs(formStore);
 
 const formContext = useFormKitContextById('backup-form-labels');
 

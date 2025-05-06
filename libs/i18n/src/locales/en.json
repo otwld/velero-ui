@@ -246,6 +246,7 @@
         "restoreFromBackup": "Restore from Backup:",
         "editBackupStorageLocation": "Edit Backup Storage Location:",
         "editVolumeSnapshotLocation": "Edit Volume Snapshot Location:",
+        "editSchedule": "Edit Schedule:",
         "createNewBackup": "Create a new Backup",
         "createNewRestore": "Create a new Restore",
         "createNewSchedule": "Create a new Schedule",

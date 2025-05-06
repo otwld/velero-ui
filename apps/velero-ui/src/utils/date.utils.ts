@@ -46,7 +46,7 @@ export const parseTimeString = (
     return null;
   }
 
-  const match: RegExpMatchArray = input.match(/^(\d+)([a-zA-Z]+)$/);
+  const match: RegExpMatchArray = input.match(/^(\d+)([a-zA-Z]+)/);
 
   if (!match) {
     return null;
