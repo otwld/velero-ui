@@ -11,12 +11,12 @@
         {
           name: t('global.credentials'),
           optional: true,
-          component: shallowRef(SnapshotLocationFormCreateCredential),
+          component: shallowRef(SnapshotLocationFormCredential),
         },
         {
           name: t('global.configurationAndLabels'),
           optional: true,
-          component: shallowRef(SnapshotLocationFormCreateConfig),
+          component: shallowRef(StorageLocationCreateConfig),
         },
         {
           name: t('global.confirmation'),
@@ -41,10 +41,11 @@ import {
 } from '@velero-ui/velero';
 import type { CreateFormBody } from '@velero-ui/shared-types';
 import SnapshotLocationFormCreateInfo from '@velero-ui-app/components/SnapshotLocation/forms/SnapshotLocationFormInfo.vue';
-import SnapshotLocationFormCreateCredential from '@velero-ui-app/components/SnapshotLocation/forms/SnapshotLocationFormCredential.vue';
-import SnapshotLocationFormCreateConfig from '@velero-ui-app/components/SnapshotLocation/forms/SnapshotLocationFormConfig.vue';
 import SnapshotLocationFormCreateConfirm from '@velero-ui-app/components/SnapshotLocation/forms/SnapshotLocationFormConfirm.vue';
 import { useI18n } from 'vue-i18n';
+import StorageLocationCreateConfig from '@velero-ui-app/components/StorageLocation/forms/StorageLocationFormConfig.vue';
+import SnapshotLocationFormCredential
+  from '@velero-ui-app/components/SnapshotLocation/forms/SnapshotLocationFormCredential.vue';
 
 const { mutate, isPending, isError, isSuccess } = useKubernetesCreateObject(
   Resources.VOLUME_SNAPSHOT_LOCATION,

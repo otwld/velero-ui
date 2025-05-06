@@ -24,7 +24,7 @@ export class CreateRestoreUploaderConfigDto
 {
   @IsOptional()
   @IsNumber()
-  parallelFilesUpload?: number;
+  parallelFilesDownload?: number;
 
   @IsOptional()
   @IsBoolean()

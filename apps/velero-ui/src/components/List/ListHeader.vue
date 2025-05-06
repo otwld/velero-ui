@@ -13,12 +13,12 @@
               t('list.search.label')
             }}</label>
             <div class="relative mt-1 lg:w-64 xl:w-96">
-              <input
-                id="backups-search"
-                v-model="searchInput"
+              <FormKit
+                id="search"
+                :name="t('list.search.name')"
                 :placeholder="t('list.search.placeholder')"
-                class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                name="backup"
+                :validation="[['k8s_name']]"
+                value=""
                 type="text"
               />
             </div>
@@ -59,8 +59,10 @@ import { useListStore } from '../../stores/list.store';
 import { storeToRefs } from 'pinia';
 import { useI18n } from 'vue-i18n';
 import { useKubernetesWatchListObject } from '@velero-ui-app/composables/useKubernetesWatchListObject';
-import {type Router, useRouter} from "vue-router";
-import {Pages} from "@velero-ui-app/utils/constants.utils";
+import { type Router, useRouter } from 'vue-router';
+import { Pages } from '@velero-ui-app/utils/constants.utils';
+import { useFormKitContextById } from '@formkit/vue';
+
 
 const router: Router = useRouter();
 
@@ -70,21 +72,22 @@ const { objectType } = storeToRefs(listStore);
 
 const { refetch, isFetching } = useKubernetesWatchListObject(objectType.value);
 
-const searchInput = ref('');
+const searchContext = useFormKitContextById('search');
 
 let timeout: NodeJS.Timeout;
 
-watch(searchInput, () => {
-  timeout = setTimeout(() => {
-    listStore.applyNameFilter(searchInput.value);
-    listStore.setOffset(0);
-  }, 1500);
+watch(() => searchContext?.value, () => {
+  if(searchContext.value.state.complete) {
+    timeout = setTimeout(() => {
+      listStore.applyNameFilter(searchContext.value.value);
+      listStore.setOffset(0);
+    }, 1500);
+  }
   onWatcherCleanup(() => {
     clearTimeout(timeout);
   });
-});
+}, {deep: true});
 
 onBeforeUnmount(() => clearTimeout(timeout));
 onBeforeUnmount(() => listStore.reset());
-
 </script>

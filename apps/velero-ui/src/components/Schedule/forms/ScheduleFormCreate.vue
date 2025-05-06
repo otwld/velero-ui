@@ -9,7 +9,7 @@
         {
           name: t('global.info'),
           optional: false,
-          component: shallowRef(ScheduleFormCreateInfo),
+          component: shallowRef(ScheduleFormInfo),
         },
         {
           name: t('global.backupInfo'),
@@ -45,8 +45,8 @@ import type { CreateFormBody } from '@velero-ui/shared-types';
 import { onBeforeUnmount, shallowRef, watch } from 'vue';
 import { useKubernetesCreateObject } from '@velero-ui-app/composables/useKubernetesCreateObject';
 import { Resources, type V1ScheduleSpec } from '@velero-ui/velero';
-import ScheduleFormCreateInfo from '@velero-ui-app/components/Schedule/forms/ScheduleFormInfo.vue';
 import ScheduleFormCreateConfirm from '@velero-ui-app/components/Schedule/forms/ScheduleFormConfirm.vue';
+import ScheduleFormInfo from '@velero-ui-app/components/Schedule/forms/ScheduleFormInfo.vue';
 import BackupCreateInfo from '@velero-ui-app/components/Backup/forms/BackupFormInfo.vue';
 import BackupCreateResources from '@velero-ui-app/components/Backup/forms/BackupFormResources.vue';
 import BackupCreateLabels from '@velero-ui-app/components/Backup/forms/BackupFormLabels.vue';
@@ -71,17 +71,8 @@ const onSubmit = () => {
     labels: formContent.value[3].labels,
     spec: {
       template: {
-        ttl: formContent.value[1].ttl + formContent.value[1].ttlUnit,
+        ttl: formContent.value[1].ttl.value + formContent.value[1].ttl.unit,
         storageLocation: formContent.value[1].storageLocation,
-        snapshotVolumes: formContent.value[1].snapshotVolumes,
-        snapshotMoveData: formContent.value[1].snapshotMoveData,
-        defaultVolumesToFsBackup: formContent.value[1].defaultVolumesToFsBackup,
-        itemOperationTimeout:
-          formContent.value[1].itemOperationTimeout +
-          formContent.value[1].itemOperationTimeoutUnit,
-        csiSnapshotTimeout:
-          formContent.value[1].csiSnapshotTimeout +
-          formContent.value[1].csiSnapshotTimeoutUnit,
         includeClusterResources: formContent.value[2].includeClusterResources,
       },
       useOwnerReferencesInBackup:
@@ -91,6 +82,31 @@ const onSubmit = () => {
       schedule: formContent.value[0].schedule,
     },
   };
+
+  if (formContent.value[1].itemOperationTimeout?.value) {
+    form.spec.template.itemOperationTimeout =
+      formContent.value[1].itemOperationTimeout.value +
+      formContent.value[1].itemOperationTimeout.unit;
+  }
+
+  if (formContent.value[1].csiSnapshotTimeout?.value) {
+    form.spec.template.csiSnapshotTimeout =
+      formContent.value[1].csiSnapshotTimeout.value +
+      formContent.value[1].csiSnapshotTimeout.unit;
+  }
+
+  if (formContent.value[1].snapshotMoveData) {
+    form.spec.template.snapshotMoveData = formContent.value[1].snapshotMoveData;
+  }
+
+  if (formContent.value[1].snapshotVolumes) {
+    form.spec.template.snapshotVolumes = formContent.value[1].snapshotVolumes;
+  }
+
+  if (formContent.value[1].defaultVolumesToFsBackup) {
+    form.spec.template.defaultVolumesToFsBackup =
+      formContent.value[1].defaultVolumesToFsBackup;
+  }
 
   if (formContent.value[1].volumeSnapshotLocations.length > 0) {
     form.spec.template.volumeSnapshotLocations =
@@ -124,6 +140,7 @@ const onSubmit = () => {
     };
   }
   if (formContent.value[2].includeClusterResources) {
+    form.spec.template.includeClusterResources = true;
     if (formContent.value[2].includedResources.length > 0) {
       form.spec.template.includedResources =
         formContent.value[2].includedResources;
@@ -135,21 +152,24 @@ const onSubmit = () => {
   }
 
   if (!formContent.value[2].includeClusterResources) {
-    if (formContent.value[2].includedClusterScopedResources.length > 0) {
-      form.spec.template.includedClusterScopedResources =
-        formContent.value[2].includedClusterScopedResources;
-    }
-    if (formContent.value[2].excludedClusterScopedResources.length > 0) {
-      form.spec.template.excludedClusterScopedResources =
-        formContent.value[2].excludedClusterScopedResources;
-    }
-    if (formContent.value[2].includedNamespaceScopedResources.length > 0) {
-      form.spec.template.includedNamespaceScopedResources =
-        formContent.value[2].includedNamespaceScopedResources;
-    }
-    if (formContent.value[2].excludedNamespaceScopedResources.length > 0) {
-      form.spec.template.excludedNamespaceScopedResources =
-        formContent.value[2].excludedNamespaceScopedResources;
+    if (!formContent.value[2].includeNamespaceClusterResources) {
+      if (formContent.value[2].includedClusterScopedResources.length > 0) {
+        form.spec.template.includedClusterScopedResources =
+          formContent.value[2].includedClusterScopedResources;
+      }
+      if (formContent.value[2].excludedClusterScopedResources.length > 0) {
+        form.spec.template.excludedClusterScopedResources =
+          formContent.value[2].excludedClusterScopedResources;
+      }
+    } else {
+      if (formContent.value[2].includedNamespaceScopedResources.length > 0) {
+        form.spec.template.includedNamespaceScopedResources =
+          formContent.value[2].includedNamespaceScopedResources;
+      }
+      if (formContent.value[2].excludedNamespaceScopedResources.length > 0) {
+        form.spec.template.excludedNamespaceScopedResources =
+          formContent.value[2].excludedNamespaceScopedResources;
+      }
     }
   }
   mutate(form);

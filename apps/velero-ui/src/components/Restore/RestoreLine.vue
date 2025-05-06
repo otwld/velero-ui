@@ -82,12 +82,12 @@
     <td
       class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white"
     >
-      {{ convertTimestampToDate(data.status.startTimestamp) }}
+      {{ convertTimestampToDate(data.status?.startTimestamp) }}
     </td>
     <td
       class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white"
     >
-      <RestoreStatusPhaseBadge :status="data?.status.phase" />
+      <RestoreStatusPhaseBadge :status="data?.status?.phase" />
     </td>
     <td class="p-4 space-x-2 whitespace-nowrap">
       <div class="inline-flex rounded-md shadow-sm" role="group">

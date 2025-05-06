@@ -1,19 +1,29 @@
 <template>
-  <div>
+  <FormKit
+    id="backup-form-labels"
+    v-model="currentForm"
+    :actions="false"
+    type="form"
+  >
     <div class="flex justify-center">
-      <label class="inline-flex items-center cursor-pointer">
+      <label class="inline-flex items-center">
         <span class="me-3 font-medium text-gray-900 dark:text-gray-300">{{
           t('resource.spec.labelSelector')
         }}</span>
-        <input
-          v-model="currentForm.isOrLabelSelector"
-          class="sr-only peer"
+        <FormKit
+          input-class="sr-only peer"
+          label-class="ml-2"
+          name="isOrLabelSelector"
+          outer-class="flex items-center"
           type="checkbox"
-          value=""
-        />
-        <div
-          class="relative w-14 h-7 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"
-        />
+          wrapper-class="relative w-14 h-7 bg-gray-200 dark:bg-gray-700 rounded-full cursor-pointer"
+        >
+          <template #decorator>
+            <span
+              class="peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"
+            />
+          </template>
+        </FormKit>
         <span class="ms-3 font-medium text-gray-900 dark:text-gray-300">{{
           t('resource.spec.orLabelSelectors')
         }}</span>
@@ -36,28 +46,26 @@
       </label>
       <div>
         <div class="inline-flex w-full">
-          <input
-            id="config-keyConfig"
-            v-model="keyLabelSelector"
-            class="flex-shrink-0 p-2.5 w-1/2 text-sm text-gray-900 bg-gray-50 rounded-s-lg rounded-s-gray-100 rounded-s-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500"
-            minlength="5"
+          <FormKit
             :placeholder="t('global.key')"
-            required
+            :validation="[['k8s_label']]"
+            input-class="rounded-s-lg rounded-s-2 rounded-e-none"
+            name="keyLabelSelector"
+            outer-class="flex-shrink-0 w-1/2"
             type="text"
           />
-          <input
-            id="config-value"
-            v-model="valueLabelSelector"
-            class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-s-gray-100 rounded-s-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500"
-            minlength="5"
+          <FormKit
             :placeholder="t('global.value')"
-            required
+            :validation="[['k8s_name']]"
+            input-class="rounded-none"
+            name="valueLabelSelector"
+            outer-class="w-full"
             type="text"
           />
           <button
+            :title="t('global.button.add.title')"
             class="top-0 end-0 p-2.5 h-full text-sm font-medium text-white bg-blue-700 rounded-e-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
             type="button"
-            :title="t('global.button.add.title')"
             @click="addNewLabelSelector()"
           >
             <FontAwesomeIcon :icon="faPlus" class="!w-4 !h-4" />
@@ -100,8 +108,8 @@
               </td>
               <td class="px-6 py-1.5">
                 <button
-                  class="inline-flex items-center px-2 py-1.5 text-xs font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"
                   :title="t('global.button.delete.title')"
+                  class="inline-flex items-center px-2 py-1.5 text-xs font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"
                   type="button"
                   @click="removeLabelSelector(c[0])"
                 >
@@ -125,7 +133,7 @@
           :icon="faInfoCircle"
           class="flex-shrink-0 inline !w-4 !h-4 me-3 mt-[2px]"
         />
-        <p>{{ t('form.message.error.orLabelSelectors')}}</p>
+        <p>{{ t('form.message.error.orLabelSelectors') }}</p>
       </div>
     </div>
     <div class="space-y-4 my-4">
@@ -142,28 +150,26 @@
       </label>
       <div>
         <div class="inline-flex w-full">
-          <input
-            id="config-keyConfig"
-            v-model="keyLabel"
-            class="flex-shrink-0 p-2.5 w-1/2 text-sm text-gray-900 bg-gray-50 rounded-s-lg rounded-s-gray-100 rounded-s-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500"
-            minlength="5"
+          <FormKit
             :placeholder="t('global.key')"
-            required
+            :validation="[['k8s_label']]"
+            input-class="rounded-s-lg rounded-s-2 rounded-e-none"
+            name="keyLabel"
+            outer-class="flex-shrink-0 w-1/2"
             type="text"
           />
-          <input
-            id="config-value"
-            v-model="valueLabel"
-            class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-s-gray-100 rounded-s-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500"
-            minlength="5"
+          <FormKit
             :placeholder="t('global.value')"
-            required
+            :validation="[['k8s_name']]"
+            input-class="rounded-none"
+            name="valueLabel"
+            outer-class="w-full"
             type="text"
           />
           <button
+            :title="t('global.button.add.title')"
             class="top-0 end-0 p-2.5 h-full text-sm font-medium text-white bg-blue-700 rounded-e-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
             type="button"
-            :title="t('global.button.add.title')"
             @click="addNewLabel()"
           >
             <FontAwesomeIcon :icon="faPlus" class="!w-4 !h-4" />
@@ -206,8 +212,8 @@
               </td>
               <td class="px-6 py-1.5">
                 <button
-                  class="inline-flex items-center px-2 py-1.5 text-xs font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"
                   :title="t('global.button.delete.title')"
+                  class="inline-flex items-center px-2 py-1.5 text-xs font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"
                   type="button"
                   @click="removeLabel(c[0])"
                 >
@@ -219,22 +225,14 @@
         </table>
       </div>
     </div>
-  </div>
+  </FormKit>
 
   <div
     id="tooltip-selector"
     class="absolute z-10 invisible inline-block px-3 py-2 text-xs text-gray-900 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 tooltip"
     role="tooltip"
   >
-    {{ t('form.tooltip.labelSelector')}}
-    <div class="tooltip-arrow" data-popper-arrow></div>
-  </div>
-  <div
-    id="tooltip-or-selector"
-    class="absolute z-10 invisible inline-block px-3 py-2 text-xs text-gray-900 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 tooltip"
-    role="tooltip"
-  >
-    {{ t('form.tooltip.labelSelector')}}
+    {{ t('form.tooltip.labelSelector') }}
     <div class="tooltip-arrow" data-popper-arrow></div>
   </div>
   <div
@@ -242,7 +240,7 @@
     class="absolute z-10 invisible inline-block px-3 py-2 text-xs text-gray-900 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 tooltip"
     role="tooltip"
   >
-    {{ t('form.tooltip.labels', {type: t('global.backup', 1)})}}
+    {{ t('form.tooltip.labels', { type: t('global.backup', 1) }) }}
     <div class="tooltip-arrow" data-popper-arrow></div>
   </div>
 </template>
@@ -260,11 +258,14 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { useI18n } from 'vue-i18n';
+import { useFormKitContextById } from '@formkit/vue';
 
 const { t } = useI18n();
 
 const formStore = useFormStore();
 const { currentStep, formContent } = storeToRefs(formStore);
+
+const formContext = useFormKitContextById('backup-form-labels');
 
 const currentForm = ref({
   isOrLabelSelector: false,
@@ -273,12 +274,7 @@ const currentForm = ref({
   orLabelsSelectors: [],
 });
 
-const keyLabel = ref('');
-const valueLabel = ref('');
 const errorLabel = ref('');
-
-const keyLabelSelector = ref('');
-const valueLabelSelector = ref('');
 const errorLabelSelector = ref('');
 
 onMounted(() => initTooltips());
@@ -291,17 +287,32 @@ onMounted(() => {
 });
 
 const addNewLabel = () => {
-  if (keyLabel.value in currentForm.value.labels) {
+  if (
+    formContext.value.node.at('keyLabel').context.value in
+    currentForm.value.labels
+  ) {
     errorLabel.value = 'Key is already defined!';
     return;
   }
-  if (!keyLabel.value || !valueLabel.value) {
+  if (
+    !formContext.value.node.at('keyLabel').context.value ||
+    !formContext.value.node.at('valueLabel').context.value
+  ) {
     errorLabel.value = 'Key/value cannot be empty!';
     return;
   }
-  currentForm.value.labels[keyLabel.value] = valueLabel.value;
-  keyLabel.value = '';
-  valueLabel.value = '';
+
+  if (
+    !formContext.value.node.at('keyLabel').context.state.valid &&
+    !formContext.value.node.at('valueLabel').context.state.valid
+  ) {
+    return;
+  }
+  currentForm.value.labels[
+    formContext.value.node.at('keyLabel').context.value
+  ] = formContext.value.node.at('valueLabel').context.value;
+  formContext.value.node.at('keyLabel').input('');
+  formContext.value.node.at('valueLabel').input('');
   errorLabel.value = '';
 };
 
@@ -310,18 +321,32 @@ const removeLabel = (key: string) => {
 };
 
 const addNewLabelSelector = () => {
-  if (keyLabelSelector.value in currentForm.value.labelsSelector) {
+  if (
+    formContext.value.node.at('keyLabelSelector').context.value in
+    currentForm.value.labelsSelector
+  ) {
     errorLabelSelector.value = 'Key is already defined!';
     return;
   }
-  if (!keyLabelSelector.value || !valueLabelSelector.value) {
+  if (
+    !formContext.value.node.at('keyLabelSelector').context.value ||
+    !formContext.value.node.at('valueLabelSelector').context.value
+  ) {
     errorLabelSelector.value = 'Key/value cannot be empty!';
     return;
   }
-  currentForm.value.labelsSelector[keyLabelSelector.value] =
-    valueLabelSelector.value;
-  keyLabelSelector.value = '';
-  valueLabelSelector.value = '';
+
+  if (
+    !formContext.value.node.at('keyLabelSelector').context.state.valid &&
+    !formContext.value.node.at('valueLabelSelector').context.state.valid
+  ) {
+    return;
+  }
+  currentForm.value.labelsSelector[
+    formContext.value.node.at('keyLabelSelector').context.value
+  ] = formContext.value.node.at('valueLabelSelector').context.value;
+  formContext.value.node.at('keyLabelSelector').input('');
+  formContext.value.node.at('valueLabelSelector').input('');
   errorLabelSelector.value = '';
 };
 

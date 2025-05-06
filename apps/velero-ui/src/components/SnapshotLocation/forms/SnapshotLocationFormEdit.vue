@@ -18,7 +18,7 @@
         {
           name: t('global.configurationAndLabels'),
           optional: true,
-          component: shallowRef(SnapshotLocationFormCreateConfig),
+          component: shallowRef(StorageLocationCreateConfig),
         },
         {
           name: t('global.confirmation'),
@@ -51,10 +51,10 @@ import {
 import type { EditFormBody } from '@velero-ui/shared-types';
 import SnapshotLocationFormCreateInfo from '@velero-ui-app/components/SnapshotLocation/forms/SnapshotLocationFormInfo.vue';
 import SnapshotLocationFormCreateCredential from '@velero-ui-app/components/SnapshotLocation/forms/SnapshotLocationFormCredential.vue';
-import SnapshotLocationFormCreateConfig from '@velero-ui-app/components/SnapshotLocation/forms/SnapshotLocationFormConfig.vue';
 import SnapshotLocationFormCreateConfirm from '@velero-ui-app/components/SnapshotLocation/forms/SnapshotLocationFormConfirm.vue';
 import { useKubernetesEditObject } from '@velero-ui-app/composables/useKubernetesEditObject';
 import { useI18n } from 'vue-i18n';
+import StorageLocationCreateConfig from '@velero-ui-app/components/StorageLocation/forms/StorageLocationFormConfig.vue';
 
 const props = defineProps({
   volumeLocation: Object as PropType<V1VolumeSnapshotLocation>,

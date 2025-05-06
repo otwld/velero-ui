@@ -46,7 +46,7 @@
             <dd
               class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400"
             >
-              {{ formContent[1]?.ttl }} {{ formContent[1]?.ttlUnit }}
+              {{ formContent[1]?.ttl?.value }} {{ formContent[1]?.ttl?.unit }}
             </dd>
           </div>
         </div>
@@ -347,7 +347,7 @@
           </div>
         </div>
         <div class="grid gap-4 mb-4 grid-cols-2">
-          <div class="col-span-2 sm:col-span-1">
+          <div v-if="formContent[1]?.csiSnapshotTimeout?.value"  class="col-span-2 sm:col-span-1">
             <dt
               class="mb-2 font-semibold leading-none text-gray-900 dark:text-white"
             >
@@ -356,11 +356,11 @@
             <dd
               class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400"
             >
-              {{ formContent[1]?.csiSnapshotTimeout }}
-              {{ formContent[1]?.csiSnapshotTimeoutUnit }}
+              {{ formContent[1]?.csiSnapshotTimeout?.value }}
+              {{ formContent[1]?.csiSnapshotTimeout?.unit }}
             </dd>
           </div>
-          <div class="col-span-2 sm:col-span-1">
+          <div v-if="formContent[1]?.itemOperationTimeout?.value" class="col-span-2 sm:col-span-1">
             <dt
               class="mb-2 font-semibold leading-none text-gray-900 dark:text-white"
             >
@@ -369,13 +369,13 @@
             <dd
               class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400"
             >
-              {{ formContent[1]?.itemOperationTimeout }}
-              {{ formContent[1]?.itemOperationTimeoutUnit }}
+              {{ formContent[1]?.itemOperationTimeout?.value }}
+              {{ formContent[1]?.itemOperationTimeout?.unit }}
             </dd>
           </div>
         </div>
         <div class="grid gap-4 mb-4 grid-cols-2">
-          <div class="col-span-2 sm:col-span-1">
+          <div v-if="formContent[1]?.datamover" class="col-span-2 sm:col-span-1">
             <dt
               class="mb-2 font-semibold leading-none text-gray-900 dark:text-white"
             >
@@ -385,11 +385,11 @@
               class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400"
             >
               {{
-                formContent[1]?.datamover ? formContent[1]?.datamover : 'velero'
+                formContent[1]?.datamover
               }}
             </dd>
           </div>
-          <div class="col-span-2 sm:col-span-1">
+          <div v-if="formContent[1]?.parallelFilesUpload" class="col-span-2 sm:col-span-1">
             <dt
               class="mb-2 font-semibold leading-none text-gray-900 dark:text-white"
             >

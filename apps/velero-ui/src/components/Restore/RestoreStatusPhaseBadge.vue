@@ -1,6 +1,5 @@
 <template>
   <span
-    v-if="status"
     :class="getClass()"
     class="text-xs font-medium inline-flex items-center me-2 px-2.5 py-0.5 rounded"
   >

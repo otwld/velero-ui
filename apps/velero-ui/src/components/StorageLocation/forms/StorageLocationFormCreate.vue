@@ -69,16 +69,22 @@ const onSubmit = () => {
         prefix: formContent.value[0].prefix,
       },
       provider: formContent.value[0].provider,
-      default: formContent.value[0].default,
-
-      backupSyncPeriod:
-        formContent.value[0].backupSyncPeriod +
-        formContent.value[0].backupSyncPeriodUnit,
-      validationFrequency:
-        formContent.value[0].validationFrequency +
-        formContent.value[0].validationFrequencyUnit,
     },
   };
+
+  if (formContent.value[0].backupSyncPeriod?.value) {
+    form.spec.backupSyncPeriod = formContent.value[0].backupSyncPeriod.value +
+        formContent.value[0].backupSyncPeriod.unit;
+  }
+
+  if (formContent.value[0].validationFrequency?.value) {
+    form.spec.validationFrequency = formContent.value[0].validationFrequency.value +
+        formContent.value[0].validationFrequency.unit;
+  }
+
+  if (formContent.value[0].default) {
+    form.spec.default = formContent.value[0].default;
+  }
 
   if (formContent.value[1].credential.name) {
     form.spec.credential = {

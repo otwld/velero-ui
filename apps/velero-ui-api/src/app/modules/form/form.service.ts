@@ -76,8 +76,8 @@ export class FormService {
           items: r.items
             .filter(
               (b) =>
-                b.status.phase === V1BackupPhase.Completed ||
-                b.status.phase === V1BackupPhase.PartiallyFailed,
+                b.status?.phase === V1BackupPhase.Completed ||
+                b.status?.phase === V1BackupPhase.PartiallyFailed,
             )
             .map((b: V1Backup): string => b.metadata.name),
           total: 0,

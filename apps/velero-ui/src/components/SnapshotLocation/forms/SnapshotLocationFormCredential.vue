@@ -1,5 +1,10 @@
 <template>
-  <div>
+  <FormKit
+    id="snapshot-location-form-credentials"
+    v-model="currentForm"
+    :actions="false"
+    type="form"
+  >
     <div class="space-y-4 mb-4">
       <div
         class="flex p-4 mb-4 text-sm text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-700 dark:text-blue-400"
@@ -14,10 +19,16 @@
           <span class="font-medium">About credentials:</span>
           <ul class="mt-1.5 list-disc list-inside">
             <li>
-              It is possible to create additional VolumeSnapshotLocations that use their own credentials. This may be necessary if you already have default credentials which don’t match the account used by the cloud volumes being backed up.
+              It is possible to create additional VolumeSnapshotLocations that
+              use their own credentials. This may be necessary if you already
+              have default credentials which don’t match the account used by the
+              cloud volumes being backed up.
             </li>
             <li>
-              If you create additional VolumeSnapshotLocations without specifying the credentials to use, Velero will use the credentials provided at install time and stored in the cloud-credentials secret.
+              If you create additional VolumeSnapshotLocations without
+              specifying the credentials to use, Velero will use the credentials
+              provided at install time and stored in the cloud-credentials
+              secret.
             </li>
           </ul>
           <a
@@ -32,75 +43,68 @@
                 :icon="faArrowUpRightFromSquare"
                 class="me-2 h-3 w-3"
               />
-              {{ t('global.button.learnMore.title')}}
+              {{ t('global.button.learnMore.title') }}
             </button>
           </a>
         </div>
       </div>
-      <div class="grid gap-4 mb-4 grid-cols-2">
-        <div class="col-span-2 sm:col-span-1">
-          <label
-            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            for="name"
-            >{{ t('resource.spec.credentialName') }}
-            <FontAwesomeIcon
-              :icon="faQuestionCircle"
-              class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
-              data-tooltip-style="light"
-              data-tooltip-target="tooltip-credential-name"
-            />
-          </label>
-          <select
-            id="name"
-            v-model="currentForm.credential.name"
-            :disabled="!data || isError"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-          >
-            <option selected value="">{{ t('form.placeholder.secret')}}</option>
-            <template v-if="data?.items">
-              <option
-                v-for="(secret, index) of data?.items"
-                :key="index"
-                :value="secret"
-              >
-                {{ secret }}
-              </option>
-            </template>
-          </select>
+      <FormKit name="credential" type="group">
+        <div class="grid gap-4 mb-4 grid-cols-2">
+          <div class="col-span-2 sm:col-span-1">
+            <FormKit
+              :disabled="!data || isError"
+              :options="
+                [{ label: t('form.placeholder.secret'), value: '' }].concat(
+                  data?.items.map((i) => ({ label: i, value: i })),
+                )
+              "
+              :placeholder="t('form.placeholder.secret')"
+              name="name"
+              outer-class="mb-2"
+              type="select"
+            >
+              <template #label="context">
+                <label
+                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  >{{ t('resource.spec.credentialName') }}
+                  <FontAwesomeIcon
+                    :icon="faQuestionCircle"
+                    class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
+                    data-tooltip-style="light"
+                    data-tooltip-target="tooltip-credential-name"
+                  />
+                </label>
+              </template>
+            </FormKit>
+          </div>
+          <div class="col-span-2 sm:col-span-1">
+            <FormKit
+              :placeholder="t('form.placeholder.secretName')"
+              :validation="[
+                ['field'],
+                ['length', 2],
+              ]"
+              name="key"
+              type="text"
+            >
+              <template #label="context">
+                <label
+                  class="flex mb-2 text-sm font-medium text-gray-900 dark:text-white items-center"
+                  >{{ t('resource.spec.credentialKey') }}
+                  <FontAwesomeIcon
+                    :icon="faQuestionCircle"
+                    class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
+                    data-tooltip-style="light"
+                    data-tooltip-target="tooltip-credential-key"
+                  />
+                </label>
+              </template>
+            </FormKit>
+          </div>
         </div>
-        <div class="col-span-2 sm:col-span-1">
-          <label
-            class="flex mb-2 text-sm font-medium text-gray-900 dark:text-white items-center"
-            for="key"
-            >{{ t('resource.spec.credentialKey') }}
-            <FontAwesomeIcon
-              :icon="faQuestionCircle"
-              class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
-              data-tooltip-style="light"
-              data-tooltip-target="tooltip-credential-key"
-            />
-          </label>
-          <FormKit
-            id="key"
-            v-model="currentForm.credential.key"
-            :validation="[
-              ['matches', /[a-zA-Z0-9.-]+/g],
-              ['length', 5],
-            ]"
-            :validation-messages="{
-              matches: 'Name can only include A-z, 0-9, and -.',
-              length: 'Min length is 5 characters.',
-            }"
-            input-class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-            messages-class="mt-1 text-sm text-red-600 dark:text-red-500"
-            name="Name"
-            :placeholder="t('form.placeholder.secretName')"
-            type="text"
-          />
-        </div>
-      </div>
+      </FormKit>
     </div>
-  </div>
+  </FormKit>
 
   <div
     id="tooltip-credential-name"
@@ -132,7 +136,8 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { initTooltips } from 'flowbite';
 import { useFormSecrets } from '@velero-ui-app/composables/form/useFormSecrets';
-import {useI18n} from "vue-i18n";
+import { useI18n } from 'vue-i18n';
+import { useFormKitContextById } from '@formkit/vue';
 
 const { t } = useI18n();
 
@@ -141,10 +146,12 @@ const { currentStep, formContent } = storeToRefs(formStore);
 
 const { data, isError } = useFormSecrets();
 
+const formContext = useFormKitContextById('snapshot-location-form-credentials');
+
 const currentForm = ref({
   credential: {
     key: '',
-    name: ''
+    name: '',
   },
 });
 
@@ -157,9 +164,9 @@ onMounted(() => {
   };
 });
 
-const validate = () => true;
+const validate = () => formContext.value.state.valid;
 
-const getForm = () => currentForm.value;
+const getForm = () => formContext.value.value;
 
 defineExpose({
   validate,
