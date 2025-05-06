@@ -10,6 +10,7 @@
         <div class="col-span-2 sm:col-span-1">
           <FormKit
             name="name"
+            :disabled="notApplicableFields?.scheduleName"
             :placeholder="t('form.placeholder.scheduleName')"
             :validation="
               [['required'], ['k8s_name'], ['length', 4]]
@@ -202,7 +203,7 @@ import { useFormKitContextById } from '@formkit/vue';
 const { t } = useI18n();
 
 const formStore = useFormStore();
-const { currentStep, formContent } = storeToRefs(formStore);
+const { currentStep, formContent, notApplicableFields } = storeToRefs(formStore);
 
 const formContext = useFormKitContextById('schedule-form-info');
 

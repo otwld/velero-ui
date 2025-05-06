@@ -4,7 +4,10 @@
       :is-loading="isPending"
       :not-applicable-fields="{
         backupName: true,
+        scheduleName: true,
+        labels: true,
       }"
+      :reset="false"
       :step-components="[
         {
           name: t('global.info'),
@@ -32,6 +35,7 @@
           component: shallowRef(ScheduleFormCreateConfirm),
         },
       ]"
+      @dismiss-error="dismissError()"
       @on-submit="onSubmit()"
     />
   </div>
@@ -41,19 +45,35 @@
 import Form from '@velero-ui-app/components/Form.vue';
 import { useFormStore } from '@velero-ui-app/stores/form.store';
 import { storeToRefs } from 'pinia';
-import type { CreateFormBody } from '@velero-ui/shared-types';
-import { onBeforeUnmount, shallowRef, watch } from 'vue';
-import { useKubernetesCreateObject } from '@velero-ui-app/composables/useKubernetesCreateObject';
-import { Resources, type V1ScheduleSpec } from '@velero-ui/velero';
+import type { CreateFormBody, EditFormBody } from '@velero-ui/shared-types';
+import {
+  onBeforeMount,
+  onBeforeUnmount,
+  type PropType,
+  shallowRef,
+  watch,
+} from 'vue';
+import {
+  Resources,
+  type V1Schedule,
+  type V1ScheduleSpec,
+} from '@velero-ui/velero';
 import ScheduleFormCreateConfirm from '@velero-ui-app/components/Schedule/forms/ScheduleFormConfirm.vue';
 import ScheduleFormInfo from '@velero-ui-app/components/Schedule/forms/ScheduleFormInfo.vue';
 import BackupCreateInfo from '@velero-ui-app/components/Backup/forms/BackupFormInfo.vue';
 import BackupCreateResources from '@velero-ui-app/components/Backup/forms/BackupFormResources.vue';
 import BackupCreateLabels from '@velero-ui-app/components/Backup/forms/BackupFormLabels.vue';
 import { useI18n } from 'vue-i18n';
+import { useKubernetesEditObject } from '@velero-ui-app/composables/useKubernetesEditObject';
+import { parseTimeString } from '@velero-ui-app/utils/date.utils';
 
-const { mutate, isPending, isError, isSuccess } = useKubernetesCreateObject(
+const props = defineProps({
+  schedule: { type: Object as PropType<V1Schedule>, required: true },
+});
+
+const { mutate, isPending, isError, isSuccess } = useKubernetesEditObject(
   Resources.SCHEDULE,
+  props.schedule.metadata.name
 );
 
 const { t } = useI18n();
@@ -61,14 +81,78 @@ const { t } = useI18n();
 const formStore = useFormStore();
 const { formContent } = storeToRefs(formStore);
 
+onBeforeMount(() => {
+  formStore.setFormContent([
+    {
+      name: props.schedule.metadata.name,
+      schedule: props.schedule.spec?.schedule,
+      paused: props.schedule.spec?.paused,
+      skipImmediately: props.schedule.spec?.skipImmediately,
+      useOwnerReferencesInBackup: props.schedule.spec?.useOwnerReferencesInBackup,
+    },
+    {
+      ttl: {
+        value: parseTimeString(props.schedule.spec?.template?.ttl)?.value || '',
+        unit: parseTimeString(props.schedule.spec?.template?.ttl)?.unit || 'h',
+      },
+      storageLocation: props.schedule.spec?.template?.storageLocation,
+      itemOperationTimeout: {
+        value:
+          parseTimeString(
+            props.schedule.spec?.template?.itemOperationTimeout
+          )?.value || '',
+        unit:
+          parseTimeString(
+            props.schedule.spec?.template?.itemOperationTimeout
+          )?.unit || 'm',
+      },
+      csiSnapshotTimeout: {
+        value:
+          parseTimeString(
+            props.schedule.spec?.template?.csiSnapshotTimeout
+          )?.value || '',
+        unit:
+          parseTimeString(
+            props.schedule.spec?.template?.csiSnapshotTimeout
+          )?.unit || 'm',
+      },
+      snapshotMoveData: props.schedule.spec?.template?.snapshotMoveData,
+      snapshotVolumes: props.schedule.spec?.template?.snapshotVolumes,
+      defaultVolumesToFsBackup:
+        props.schedule.spec?.template?.defaultVolumesToFsBackup,
+      volumeSnapshotLocations:
+        props.schedule.spec?.template?.volumeSnapshotLocations || [],
+      includedNamespaces: props.schedule.spec?.template?.includedNamespaces || [],
+      excludedNamespaces: props.schedule.spec?.template?.excludedNamespaces || [],
+      datamover: props.schedule.spec?.template?.datamover,
+      parallelFilesUpload:
+        props.schedule.spec?.template?.uploaderConfig?.parallelFilesUpload,
+    },
+    {
+      includeClusterResources:
+        props.schedule.spec?.template?.includeClusterResources,
+      resourcePolicy: props.schedule.spec?.template?.resourcePolicy,
+      includedResources: props.schedule.spec?.template?.includedResources || [],
+      excludedResources: props.schedule.spec?.template?.excludedResources || [],
+      includedClusterScopedResources: props.schedule.spec?.template?.includedClusterScopedResources || [],
+      excludedClusterScopedResources: props.schedule.spec?.template?.includedClusterScopedResources || [],
+      includedNamespaceScopedResources: props.schedule.spec?.template?.includedNamespaceScopedResources || [],
+      excludedNamespaceScopedResources: props.schedule.spec?.template?.excludedNamespaceScopedResources || [],
+    },
+    {
+      labelSelector: { ...props.schedule.spec?.labelSelector },
+    }
+  ]);
+});
+
 onBeforeUnmount(() => formStore.reset());
 
 const emit = defineEmits(['onConfirm', 'onCancel', 'onClose']);
 
+const dismissError = () => {};
+
 const onSubmit = () => {
-  const form: CreateFormBody<V1ScheduleSpec> = {
-    name: formContent.value[0].name,
-    labels: formContent.value[3].labels,
+  const form: EditFormBody<V1ScheduleSpec> = {
     spec: {
       template: {
         ttl: formContent.value[1].ttl.value + formContent.value[1].ttl.unit,

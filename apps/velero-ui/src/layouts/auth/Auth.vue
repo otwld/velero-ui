@@ -24,7 +24,7 @@
           <Alert :icon="faCircleExclamation" :message="error" color="red" />
           <Alert :icon="faCircleExclamation" :message="success" color="green" />
           <div class="space-y-4 md:space-y-6">
-            <form v-if="basicAuth?.enabled" @submit="classicLogin($event)">
+            <form v-if="basicAuth?.enabled" class="m-0" @submit="classicLogin($event)">
               <div class="mb-6">
                 <FormKit
                   v-model="username"
@@ -74,7 +74,7 @@
             </form>
             <div
               v-if="basicAuth?.enabled && isFederatedAuthEnabled()"
-              class="flex items-center mb-1.5 mt-1.5"
+              class="flex items-center my-3"
             >
               <div class="w-full bg-gray-300 h-0.5" />
               <div class="px-3 text-gray-600 text-center">

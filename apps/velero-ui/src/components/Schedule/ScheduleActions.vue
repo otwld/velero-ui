@@ -30,10 +30,22 @@
         />
         <div v-if="schedule" class="flex items-center gap-x-4 gap-y-2">
           <button
+            :class="{ 'cursor-not-allowed': isEditing || !schedule }"
+            :disabled="isEditing || !schedule"
             class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:ring-teal-300 dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
             type="button"
+            @click="showModalEdit = !showModalEdit"
           >
-            <FontAwesomeIcon :icon="faPen" class="!w-4 !h-4 mr-2" />
+            <FontAwesomeIcon
+              v-if="isEditing"
+              :icon="faCircleNotch"
+              class="!w-4 !h-4 animate-spin mr-2"
+            />
+            <FontAwesomeIcon
+              v-if="!isEditing"
+              :icon="faPen"
+              class="!w-4 !h-4 mr-2"
+            />
             {{ t('global.button.edit.title') }}
           </button>
           <button
@@ -124,6 +136,25 @@
       </div>
     </template>
   </ModalConfirmation>
+  <VModal
+    v-if="showModalEdit"
+    :id="`modal-edit-${schedule?.metadata?.name}`"
+    width="lg:w-6/12"
+    @on-close="showModalEdit = false"
+  >
+    <template #header>
+      <h3 class="text-lg text-gray-500 dark:text-gray-400">
+        {{ t('modal.text.title.editSchedule') }}
+        <span class="font-normal text-sm ml-2">{{ schedule?.metadata?.name }}</span>
+      </h3>
+    </template>
+    <template #content>
+      <ScheduleFormEdit
+        :schedule="schedule"
+        @on-close="showModalEdit = false"
+      />
+    </template>
+  </VModal>
 </template>
 
 <script lang="ts" setup>
@@ -143,6 +174,9 @@ import ModalConfirmation from '@velero-ui-app/components/Modals/ModalConfirmatio
 import { useDeleteKubernetesObject } from '@velero-ui-app/composables/useDeleteKubernetesObject';
 import { usePauseSchedule } from '@velero-ui-app/composables/schedule/usePauseSchedule';
 import { useI18n } from 'vue-i18n';
+import VModal from "@velero-ui-app/components/Modals/VModal.vue";
+import ScheduleFormEdit from "@velero-ui-app/components/Schedule/forms/ScheduleFormEdit.vue";
+import { useKubernetesEditObject } from "@velero-ui-app/composables/useKubernetesEditObject";
 
 const { t } = useI18n();
 const props = defineProps({
@@ -150,6 +184,7 @@ const props = defineProps({
 });
 
 const showModalDelete = ref(false);
+const showModalEdit = ref(false);
 
 const { mutate: togglePause, isPending: togglePauseLoading } = usePauseSchedule(
   toRef(() => props.schedule?.metadata?.name),
@@ -157,5 +192,10 @@ const { mutate: togglePause, isPending: togglePauseLoading } = usePauseSchedule(
 
 const { isPending: isDeleting, mutate: remove } = useDeleteKubernetesObject(
   Resources.SCHEDULE,
+);
+
+const { isPending: isEditing } = useKubernetesEditObject(
+  Resources.SCHEDULE,
+  props.schedule?.metadata.name,
 );
 </script>

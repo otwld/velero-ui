@@ -291,7 +291,7 @@
           </dt>
           <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">
             {{ formContent[1]?.csiSnapshotTimeout.value }}
-            {{ formContent[1]?.csiSnapshotTimeoutUnit.unit }}
+            {{ formContent[1]?.csiSnapshotTimeout.unit }}
           </dd>
         </div>
         <div

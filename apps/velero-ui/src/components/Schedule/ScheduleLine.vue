@@ -86,12 +86,20 @@
     <td class="p-4 space-x-2 whitespace-nowrap">
       <div class="inline-flex rounded-md shadow-sm" role="group">
         <button
+          :class="{ 'cursor-not-allowed': isEditing }"
           :data-tooltip-target="`tooltip-button-edit-${data?.metadata?.uid}`"
+          :disabled="isEditing"
           :title="t('global.button.edit.title')"
           class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-l-lg bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:ring-teal-300 dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
           type="button"
+          @click="showModalEdit = !showModalEdit"
         >
-          <FontAwesomeIcon :icon="faPen" class="!w-4 !h-4" />
+          <FontAwesomeIcon
+            v-if="isEditing"
+            :icon="faCircleNotch"
+            class="!w-4 !h-4 animate-spin"
+          />
+          <FontAwesomeIcon v-if="!isEditing" :icon="faPen" class="!w-4 !h-4" />
         </button>
         <button
           v-if="
@@ -168,7 +176,7 @@
     class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
     role="tooltip"
   >
-    {{ t('global.button.edit.title') }} (not implemented yet)
+    {{ t('global.button.edit.title') }}
     <div class="tooltip-arrow" data-popper-arrow />
   </div>
   <div
@@ -212,6 +220,25 @@
       </div>
     </template>
   </ModalConfirmation>
+  <VModal
+    v-if="showModalEdit"
+    :id="`modal-edit-${data?.metadata?.name}`"
+    width="lg:w-6/12"
+    @on-close="showModalEdit = false"
+  >
+    <template #header>
+      <h3 class="text-lg text-gray-500 dark:text-gray-400">
+        {{ t('modal.text.title.editSchedule') }}
+        <span class="font-normal text-sm ml-2">{{ data?.metadata?.name }}</span>
+      </h3>
+    </template>
+    <template #content>
+      <ScheduleFormEdit
+        :schedule="data"
+        @on-close="showModalEdit = false"
+      />
+    </template>
+  </VModal>
 </template>
 
 <script lang="ts" setup>
@@ -237,6 +264,9 @@ import { truncate } from '../../utils/string.utils';
 import { useDeleteKubernetesObject } from '@velero-ui-app/composables/useDeleteKubernetesObject';
 import { usePauseSchedule } from '@velero-ui-app/composables/schedule/usePauseSchedule';
 import { useI18n } from 'vue-i18n';
+import VModal from "@velero-ui-app/components/Modals/VModal.vue";
+import { useKubernetesEditObject } from "@velero-ui-app/composables/useKubernetesEditObject";
+import ScheduleFormEdit from "@velero-ui-app/components/Schedule/forms/ScheduleFormEdit.vue";
 
 const { t } = useI18n();
 const props = defineProps({
@@ -249,6 +279,7 @@ const emit = defineEmits(['onChecked']);
 onMounted(() => initTooltips());
 
 const showModalDelete = ref(false);
+const showModalEdit = ref(false);
 
 const { mutate: togglePause, isPending: togglePauseLoading } = usePauseSchedule(
   toRef(() => props.data?.metadata?.name),
@@ -256,5 +287,10 @@ const { mutate: togglePause, isPending: togglePauseLoading } = usePauseSchedule(
 
 const { isPending: isDeleting, mutate: remove } = useDeleteKubernetesObject(
   Resources.SCHEDULE,
+);
+
+const { isPending: isEditing } = useKubernetesEditObject(
+  Resources.SCHEDULE,
+  props.data.metadata.name,
 );
 </script>
