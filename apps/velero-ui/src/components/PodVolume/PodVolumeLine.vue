@@ -7,7 +7,7 @@
           class="!w-4 !h-4 border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600"
           type="checkbox"
           @click="emit('onChecked')"
-        />
+        >
         <label class="sr-only" for="checkbox-">checkbox</label>
       </div>
     </td>
@@ -115,7 +115,7 @@
     role="tooltip"
   >
     {{ t('global.button.delete.title') }}
-    <div class="tooltip-arrow" data-popper-arrow></div>
+    <div class="tooltip-arrow" data-popper-arrow />
   </div>
   <ModalConfirmation
     v-if="showModalDelete"
@@ -165,7 +165,7 @@ const router: Router = useRouter();
 const { t } = useI18n();
 
 defineProps({
-  data: Object as PropType<V1PodVolumeBackup | V1PodVolumeRestore>,
+  data: {type: Object as PropType<V1PodVolumeBackup | V1PodVolumeRestore>, required: true },
   checked: Boolean,
 });
 

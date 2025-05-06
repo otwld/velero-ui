@@ -8,7 +8,7 @@
           class="!w-4 !h-4 border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600"
           type="checkbox"
           @click="emit('onChecked')"
-        />
+        >
         <label class="sr-only" for="checkbox">checkbox</label>
       </div>
     </td>
@@ -56,7 +56,7 @@
         {{
           truncate(
             data?.metadata?.labels?.['velero.io/schedule-name'] || '',
-            30,
+            30
           )
         }}
         <FontAwesomeIcon
@@ -125,11 +125,7 @@
             :icon="faCircleNotch"
             class="!w-4 !h-4 animate-spin"
           />
-          <FontAwesomeIcon
-            v-else
-            :icon="faTrashCan"
-            class="!w-4 !h-4"
-          />
+          <FontAwesomeIcon v-else :icon="faTrashCan" class="!w-4 !h-4" />
         </button>
       </div>
     </td>
@@ -141,7 +137,7 @@
     role="tooltip"
   >
     {{ t('global.button.restore.title') }}
-    <div class="tooltip-arrow" data-popper-arrow/>
+    <div class="tooltip-arrow" data-popper-arrow />
   </div>
   <div
     :id="`tooltip-button-download-${data?.metadata?.uid}`"
@@ -149,7 +145,7 @@
     role="tooltip"
   >
     {{ t('global.button.download.title') }}
-    <div class="tooltip-arrow" data-popper-arrow/>
+    <div class="tooltip-arrow" data-popper-arrow />
   </div>
   <div
     :id="`tooltip-button-delete-${data?.metadata?.uid}`"
@@ -157,7 +153,7 @@
     role="tooltip"
   >
     {{ t('global.button.delete.title') }}
-    <div class="tooltip-arrow" data-popper-arrow/>
+    <div class="tooltip-arrow" data-popper-arrow />
   </div>
 
   <ModalConfirmation
@@ -167,7 +163,7 @@
     @on-close="showModalDelete = false"
     @on-confirm="remove(data?.metadata?.name)"
   >
-    <template v-slot:content>
+    <template #content>
       <div class="flex justify-center">
         <p
           class="mt-2 px-1 mb-6 text-sm rounded bg-gray-200 text-gray-600 dark:bg-gray-600 dark:text-gray-200"
@@ -183,14 +179,14 @@
     width="lg:w-6/12"
     @on-close="showModalRestore = false"
   >
-    <template v-slot:header>
+    <template #header>
       <h3 class="text-lg text-gray-500 dark:text-gray-400">
         {{ t('modal.text.title.restoreFromBackup') }}
         <span class="font-normal text-sm ml-2">{{ data?.metadata?.name }}</span>
       </h3>
     </template>
-    <template v-slot:content>
-      <BackupFormRestore :backup="data" @onClose="showModalRestore = false" />
+    <template #content>
+      <BackupFormRestore :backup="data" @on-close="showModalRestore = false" />
     </template>
   </VModal>
 </template>
@@ -231,7 +227,10 @@ import BackupFormRestore from '@velero-ui-app/components/Backup/forms/BackupForm
 
 const { t } = useI18n();
 const props = defineProps({
-  data: Object as PropType<V1Backup>,
+  data: {
+    type: Object as PropType<V1Backup>,
+    required: true,
+  },
   checked: Boolean,
 });
 
@@ -244,39 +243,40 @@ const showModalRestore = ref(false);
 const expireTime = ref('');
 
 const { download, downloadLoading } = useBackupDownloadContent(
-  toRef(() => props.data?.metadata?.name),
+  toRef(() => props.data?.metadata?.name)
 );
 
 const interval = setInterval(
   () =>
-    (expireTime.value = getRemainingTime(
-      props.data?.status?.expiration || '0',
-    )),
+    (expireTime.value = getRemainingTime(props.data?.status?.expiration || '0'))
 );
 
 onUnmounted(() => clearInterval(interval));
 
 const { mutate: remove, isPending: isLoading } = useDeleteKubernetesObject(
-  Resources.BACKUP,
+  Resources.BACKUP
 );
 
 const isDisabled = computed(
   () =>
     isLoading.value ||
     ![V1BackupPhase.Completed, V1BackupPhase.PartiallyFailed].includes(
-      props.data?.status?.phase,
-    ),
+      props.data?.status?.phase
+    )
 );
 
 const isDeleteDisabled = computed(
   () =>
     isLoading.value ||
-    [V1BackupPhase.New, V1BackupPhase.Finalizing, V1BackupPhase.InProgress, V1BackupPhase.FinalizingPartiallyFailed].includes(
-      props.data?.status?.phase,
-    ),
+    [
+      V1BackupPhase.New,
+      V1BackupPhase.Finalizing,
+      V1BackupPhase.InProgress,
+      V1BackupPhase.FinalizingPartiallyFailed,
+    ].includes(props.data?.status?.phase)
 );
 
 const isDeleting = computed(
-  () => isLoading.value || props.data?.status?.phase === V1BackupPhase.Deleting,
+  () => isLoading.value || props.data?.status?.phase === V1BackupPhase.Deleting
 );
 </script>

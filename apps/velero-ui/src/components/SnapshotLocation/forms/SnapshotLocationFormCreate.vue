@@ -24,7 +24,7 @@
           component: shallowRef(SnapshotLocationFormCreateConfirm),
         },
       ]"
-      @onSubmit="onSubmit()"
+      @on-submit="onSubmit()"
     />
   </div>
 </template>

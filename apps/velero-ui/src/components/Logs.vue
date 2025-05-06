@@ -39,7 +39,9 @@
           class="inline-flex items-center"
         >
           <FontAwesomeIcon :icon="faInfoCircle" class="!w-4 !h-4" />
-          <p class="ml-2">{{ t('log.text.noResult') }}</p>
+          <p class="ml-2">
+            {{ t('log.text.noResult') }}
+          </p>
         </div>
         <div v-if="loading" class="inline-flex items-center">
           <FontAwesomeIcon :icon="faCircleNotch" class="!w-4 !h-4 animate-spin" />
@@ -63,10 +65,10 @@ import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
 const props = defineProps({
-  data: Array as PropType<string[]>,
-  name: String,
+  data: {type: Array as PropType<string[]>, required: true},
+  name: {type: String, required: true},
   loading: Boolean,
-  type: String as PropType<V1DownloadTargetKind>,
+  type: {type: String as PropType<V1DownloadTargetKind>, required: true},
 });
 
 const { download, isLoading } = useLogsDownload(props.name, props.type);

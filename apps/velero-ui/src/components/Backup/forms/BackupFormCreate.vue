@@ -30,7 +30,7 @@
           component: shallowRef(BackupCreateConfirm),
         },
       ]"
-      @onSubmit="onSubmit()"
+      @on-submit="onSubmit()"
     />
   </div>
 </template>

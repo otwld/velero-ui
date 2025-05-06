@@ -36,7 +36,7 @@
           component: shallowRef(RestoreFormCreateConfirm),
         },
       ]"
-      @onSubmit="onSubmit()"
+      @on-submit="onSubmit()"
     />
   </div>
 </template>

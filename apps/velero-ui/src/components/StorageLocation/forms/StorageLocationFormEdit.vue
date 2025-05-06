@@ -26,8 +26,8 @@
           component: shallowRef(StorageLocationCreateConfirm),
         },
       ]"
-      @dismissError="dismissError()"
-      @onSubmit="onSubmit()"
+      @dismiss-error="dismissError()"
+      @on-submit="onSubmit()"
     />
   </div>
 </template>
@@ -59,7 +59,7 @@ import { parseTimeString } from '@velero-ui-app/utils/date.utils';
 import { useI18n } from 'vue-i18n';
 
 const props = defineProps({
-  storageLocation: Object as PropType<V1BackupStorageLocation>,
+  storageLocation: {type: Object as PropType<V1BackupStorageLocation>, required: true },
 });
 
 const { t } = useI18n();

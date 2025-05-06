@@ -16,10 +16,10 @@
             "
             type="text"
           >
-            <template #label="context">
+            <template #label>
               <label
                 class="flex mb-2 text-sm font-medium text-gray-900 dark:text-white items-center"
-                >{{ t('form.field.scheduleName') }} *
+              >{{ t('form.field.scheduleName') }} *
               </label>
             </template>
           </FormKit>
@@ -34,17 +34,17 @@
             help="sec min hour day month day-of-week (ex: * 6 * * * *)"
             type="text"
           >
-            <template #label="context">
+            <template #label>
               <label
-            class="flex mb-2 text-sm font-medium text-gray-900 dark:text-white items-center"
-            >{{ t('resource.spec.schedule') }} *
-            <FontAwesomeIcon
-              :icon="faQuestionCircle"
-              class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
-              data-tooltip-style="light"
-              data-tooltip-target="tooltip-schedule"
-            />
-          </label>
+                class="flex mb-2 text-sm font-medium text-gray-900 dark:text-white items-center"
+              >{{ t('resource.spec.schedule') }} *
+                <FontAwesomeIcon
+                  :icon="faQuestionCircle"
+                  class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
+                  data-tooltip-style="light"
+                  data-tooltip-target="tooltip-schedule"
+                />
+              </label>
             </template>
           </FormKit>
         </div>
@@ -64,7 +64,7 @@
                 wrapper-class="relative w-11 h-6 bg-gray-200 dark:bg-gray-700 rounded-full cursor-pointer"
                 outer-class="flex items-center"
               >
-                 <template #decorator>
+                <template #decorator>
                   <span
                     class="peer
                       peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full
@@ -78,7 +78,7 @@
               </FormKit>
               <span
                 class="ms-3 text-sm font-medium text-gray-400 dark:text-white"
-                >{{ t('resource.spec.useOwnerReferencesInBackup') }}
+              >{{ t('resource.spec.useOwnerReferencesInBackup') }}
               </span>
               <FontAwesomeIcon
                 :icon="faQuestionCircle"
@@ -96,7 +96,7 @@
                 wrapper-class="relative w-11 h-6 bg-gray-200 dark:bg-gray-700 rounded-full cursor-pointer"
                 outer-class="flex items-center"
               >
-                 <template #decorator>
+                <template #decorator>
                   <span
                     class="peer
                       peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full
@@ -110,7 +110,7 @@
               </FormKit>
               <span
                 class="ms-3 text-sm font-medium text-gray-400 dark:text-white"
-                >{{ t('resource.spec.skipImmediately') }}
+              >{{ t('resource.spec.skipImmediately') }}
               </span>
               <FontAwesomeIcon
                 :icon="faQuestionCircle"
@@ -128,7 +128,7 @@
                 wrapper-class="relative w-11 h-6 bg-gray-200 dark:bg-gray-700 rounded-full cursor-pointer"
                 outer-class="flex items-center"
               >
-                 <template #decorator>
+                <template #decorator>
                   <span
                     class="peer
                       peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full
@@ -142,8 +142,7 @@
               </FormKit>
               <span
                 class="ms-3 text-sm font-medium text-gray-400 dark:text-white"
-                >{{ t('global.paused') }}</span
-              >
+              >{{ t('global.paused') }}</span>
               <FontAwesomeIcon
                 :icon="faQuestionCircle"
                 class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help dark:text-white dark:hover:text-gray-200"
@@ -162,7 +161,7 @@
     role="tooltip"
   >
     {{ t('form.tooltip.schedule') }}
-    <div class="tooltip-arrow" data-popper-arrow></div>
+    <div class="tooltip-arrow" data-popper-arrow />
   </div>
   <div
     id="tooltip-paused"
@@ -170,7 +169,7 @@
     role="tooltip"
   >
     {{ t('form.tooltip.paused') }}
-    <div class="tooltip-arrow" data-popper-arrow></div>
+    <div class="tooltip-arrow" data-popper-arrow />
   </div>
   <div
     id="tooltip-use-owner-references-in-backup"
@@ -178,7 +177,7 @@
     role="tooltip"
   >
     {{ t('form.tooltip.useOwnerReferencesInBackup') }}
-    <div class="tooltip-arrow" data-popper-arrow></div>
+    <div class="tooltip-arrow" data-popper-arrow />
   </div>
   <div
     id="tooltip-skip-immediately"
@@ -186,7 +185,7 @@
     role="tooltip"
   >
     {{ t('form.tooltip.skipImmediately') }}
-    <div class="tooltip-arrow" data-popper-arrow></div>
+    <div class="tooltip-arrow" data-popper-arrow />
   </div>
 </template>
 

@@ -15,10 +15,10 @@
             name="name"
             type="text"
           >
-            <template #label="context">
+            <template #label>
               <label
                 class="flex mb-2 text-sm font-medium text-gray-900 dark:text-white items-center"
-                >{{ t('form.field.backupStorageLocationName') }} *
+              >{{ t('form.field.backupStorageLocationName') }} *
               </label>
             </template>
           </FormKit>
@@ -31,10 +31,10 @@
             name="accessMode"
             type="select"
           >
-            <template #label="context">
+            <template #label>
               <label
                 class="flex mb-2 text-sm font-medium text-gray-900 dark:text-white items-center"
-                >{{ t('resource.spec.accessMode') }} *
+              >{{ t('resource.spec.accessMode') }} *
                 <FontAwesomeIcon
                   :icon="faQuestionCircle"
                   class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
@@ -53,10 +53,10 @@
             name="bucket"
             type="text"
           >
-            <template #label="context">
+            <template #label>
               <label
                 class="flex mb-2 text-sm font-medium text-gray-900 dark:text-white items-center"
-                >{{ t('resource.spec.bucket') }} *
+              >{{ t('resource.spec.bucket') }} *
                 <FontAwesomeIcon
                   :icon="faQuestionCircle"
                   class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
@@ -74,10 +74,10 @@
             name="prefix"
             type="text"
           >
-            <template #label="context">
+            <template #label>
               <label
                 class="flex mb-2 text-sm font-medium text-gray-900 dark:text-white items-center"
-                >{{ t('resource.spec.prefix') }}
+              >{{ t('resource.spec.prefix') }}
                 <FontAwesomeIcon
                   :icon="faQuestionCircle"
                   class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
@@ -95,10 +95,10 @@
             name="provider"
             type="text"
           >
-            <template #label="context">
+            <template #label>
               <label
                 class="flex mb-2 text-sm font-medium text-gray-900 dark:text-white items-center"
-                >{{ t('resource.spec.provider') }} *
+              >{{ t('resource.spec.provider') }} *
                 <FontAwesomeIcon
                   :icon="faQuestionCircle"
                   class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
@@ -114,7 +114,7 @@
             <label
               class="flex mb-2 text-sm font-medium text-gray-900 dark:text-white items-center"
               for="backup-sync-period"
-              >{{ t('resource.spec.backupSyncPeriod') }}
+            >{{ t('resource.spec.backupSyncPeriod') }}
               <FontAwesomeIcon
                 :icon="faQuestionCircle"
                 class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
@@ -160,7 +160,7 @@
           <label
             class="flex mb-2 text-sm font-medium text-gray-900 dark:text-white items-center"
             for="certificate"
-            >{{ t('resource.spec.certificate') }}
+          >{{ t('resource.spec.certificate') }}
             <FontAwesomeIcon
               :icon="faQuestionCircle"
               class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
@@ -176,7 +176,7 @@
             size="4194304"
             type="file"
             @change="onFileChanged($event)"
-          />
+          >
           <p
             id="certificate-help"
             class="mt-1 text-xs text-gray-500 dark:text-gray-300"
@@ -187,15 +187,15 @@
         <div class="col-span-2 sm:col-span-1">
           <FormKit name="validationFrequency" type="group">
             <label
-            class="flex mb-2 text-sm font-medium text-gray-900 dark:text-white items-center"
+              class="flex mb-2 text-sm font-medium text-gray-900 dark:text-white items-center"
             >{{ t('resource.spec.validationFrequency') }}
-            <FontAwesomeIcon
-              :icon="faQuestionCircle"
-              class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
-              data-tooltip-style="light"
-              data-tooltip-target="tooltip-validation-frequency"
-            />
-          </label>
+              <FontAwesomeIcon
+                :icon="faQuestionCircle"
+                class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
+                data-tooltip-style="light"
+                data-tooltip-target="tooltip-validation-frequency"
+              />
+            </label>
             <div class="flex w-full">
               <FormKit
                 :placeholder="t('form.placeholder.validationFrequency')"
@@ -246,7 +246,7 @@
                 wrapper-class="relative w-11 h-6 bg-gray-200 dark:bg-gray-700 rounded-full cursor-pointer"
                 outer-class="flex items-center"
               >
-                 <template #decorator>
+                <template #decorator>
                   <span
                     class="peer
                       peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full
@@ -261,7 +261,7 @@
 
               <span
                 class="ms-3 text-sm font-medium text-gray-400 dark:text-white"
-                >{{ t('resource.spec.default') }}
+              >{{ t('resource.spec.default') }}
               </span>
               <FontAwesomeIcon
                 :icon="faQuestionCircle"
@@ -282,7 +282,7 @@
     role="tooltip"
   >
     {{ t('form.tooltip.accessMode') }}
-    <div class="tooltip-arrow" data-popper-arrow></div>
+    <div class="tooltip-arrow" data-popper-arrow />
   </div>
   <div
     id="tooltip-bucket-name"
@@ -290,7 +290,7 @@
     role="tooltip"
   >
     {{ t('form.tooltip.bucket') }}
-    <div class="tooltip-arrow" data-popper-arrow></div>
+    <div class="tooltip-arrow" data-popper-arrow />
   </div>
   <div
     id="tooltip-prefix"
@@ -298,7 +298,7 @@
     role="tooltip"
   >
     {{ t('form.tooltip.prefix') }}
-    <div class="tooltip-arrow" data-popper-arrow></div>
+    <div class="tooltip-arrow" data-popper-arrow />
   </div>
   <div
     id="tooltip-provider"
@@ -306,7 +306,7 @@
     role="tooltip"
   >
     {{ t('form.tooltip.provider') }}
-    <div class="tooltip-arrow" data-popper-arrow></div>
+    <div class="tooltip-arrow" data-popper-arrow />
   </div>
   <div
     id="tooltip-backup-sync-period"
@@ -314,7 +314,7 @@
     role="tooltip"
   >
     {{ t('form.tooltip.backupSyncPeriod') }}
-    <div class="tooltip-arrow" data-popper-arrow></div>
+    <div class="tooltip-arrow" data-popper-arrow />
   </div>
   <div
     id="tooltip-validation-frequency"
@@ -322,7 +322,7 @@
     role="tooltip"
   >
     {{ t('form.tooltip.validationFrequency') }}
-    <div class="tooltip-arrow" data-popper-arrow></div>
+    <div class="tooltip-arrow" data-popper-arrow />
   </div>
   <div
     id="tooltip-certificate"
@@ -330,7 +330,7 @@
     role="tooltip"
   >
     {{ t('form.tooltip.certificate') }}
-    <div class="tooltip-arrow" data-popper-arrow></div>
+    <div class="tooltip-arrow" data-popper-arrow />
   </div>
   <div
     id="tooltip-set-default"
@@ -338,7 +338,7 @@
     role="tooltip"
   >
     {{ t('form.tooltip.default') }}
-    <div class="tooltip-arrow" data-popper-arrow></div>
+    <div class="tooltip-arrow" data-popper-arrow />
   </div>
 </template>
 

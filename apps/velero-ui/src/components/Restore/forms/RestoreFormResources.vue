@@ -56,10 +56,10 @@
             outer-class="mb-2"
             type="select"
           >
-            <template #label="context">
+            <template #label>
               <label
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >{{ t('resource.spec.resourceModifier') }}
+              >{{ t('resource.spec.resourceModifier') }}
                 <FontAwesomeIcon
                   :icon="faQuestionCircle"
                   class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
@@ -73,11 +73,10 @@
       </div>
       <div class="grid gap-4 mb-4 grid-cols-1">
         <div class="col-span-1 sm:col-span-1">
-
           <label
             class="flex mb-2 text-sm font-medium text-gray-900 dark:text-white items-center"
             for="included-resources"
-            >{{ t('resource.spec.includedResources') }} *
+          >{{ t('resource.spec.includedResources') }} *
             <FontAwesomeIcon
               :icon="faQuestionCircle"
               class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
@@ -94,8 +93,7 @@
               input-class="rounded-s-lg rounded-e-none"
               :validation="[['k8s_resource']]"
               @keyup.enter="add('includedResource')"
-              >
-            </FormKit>
+            />
             <button
               :title="t('global.button.add.title')"
               class="top-0 end-0 p-2.5 h-full text-sm font-medium text-white bg-blue-700 rounded-e-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
@@ -127,7 +125,7 @@
           <label
             class="flex mb-2 text-sm font-medium text-gray-900 dark:text-white items-center"
             for="excluded-resources"
-            >{{ t('resource.spec.excludedResources') }}
+          >{{ t('resource.spec.excludedResources') }}
             <FontAwesomeIcon
               :icon="faQuestionCircle"
               class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
@@ -144,8 +142,7 @@
               input-class="rounded-s-lg rounded-e-none"
               :validation="[['k8s_resource']]"
               @keyup.enter="add('excludedResource')"
-              >
-            </FormKit>
+            />
             <button
               :title="t('global.button.add.title')"
               class="top-0 end-0 p-2.5 h-full text-sm font-medium text-white bg-blue-700 rounded-e-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
@@ -177,7 +174,7 @@
           <label
             class="flex mb-2 text-sm font-medium text-gray-900 dark:text-white items-center"
             for="status-include-resources"
-            >{{ t('resource.spec.restoreStatusIncludedResources') }}
+          >{{ t('resource.spec.restoreStatusIncludedResources') }}
             <FontAwesomeIcon
               :icon="faQuestionCircle"
               class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
@@ -194,8 +191,7 @@
               input-class="rounded-s-lg rounded-e-none"
               :validation="[['k8s_resource']]"
               @keyup.enter="add('statusIncludedResource')"
-              >
-            </FormKit>
+            />
             <button
               :title="t('global.button.add.title')"
               class="top-0 end-0 p-2.5 h-full text-sm font-medium text-white bg-blue-700 rounded-e-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
@@ -227,7 +223,7 @@
           <label
             class="flex mb-2 text-sm font-medium text-gray-900 dark:text-white items-center"
             for="status-exclude-resources"
-            >{{ t('resource.spec.restoreStatusExcludedResources') }}
+          >{{ t('resource.spec.restoreStatusExcludedResources') }}
             <FontAwesomeIcon
               :icon="faQuestionCircle"
               class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
@@ -244,8 +240,7 @@
               input-class="rounded-s-lg rounded-e-none"
               :validation="[['k8s_resource']]"
               @keyup.enter="add('statusExcludedResource')"
-              >
-            </FormKit>
+            />
             <button
               :title="t('global.button.add.title')"
               class="top-0 end-0 p-2.5 h-full text-sm font-medium text-white bg-blue-700 rounded-e-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
@@ -282,7 +277,7 @@
     role="tooltip"
   >
     {{ t('form.tooltip.resourceModifier') }}
-    <div class="tooltip-arrow" data-popper-arrow></div>
+    <div class="tooltip-arrow" data-popper-arrow />
   </div>
   <div
     id="tooltip-included-resources"
@@ -290,7 +285,7 @@
     role="tooltip"
   >
     {{ t('form.tooltip.includedResources', { type: t('global.restore', 1) }) }}
-    <div class="tooltip-arrow" data-popper-arrow></div>
+    <div class="tooltip-arrow" data-popper-arrow />
   </div>
   <div
     id="tooltip-excluded-resources"
@@ -298,7 +293,7 @@
     role="tooltip"
   >
     {{ t('form.tooltip.excludedResources', { type: t('global.restore', 1) }) }}
-    <div class="tooltip-arrow" data-popper-arrow></div>
+    <div class="tooltip-arrow" data-popper-arrow />
   </div>
   <div
     id="tooltip-status-exclude-resources"
@@ -306,7 +301,7 @@
     role="tooltip"
   >
     {{ t('form.tooltip.restoreStatusExcludedResources') }}
-    <div class="tooltip-arrow" data-popper-arrow></div>
+    <div class="tooltip-arrow" data-popper-arrow />
   </div>
   <div
     id="tooltip-status-include-resources"
@@ -314,7 +309,7 @@
     role="tooltip"
   >
     {{ t('form.tooltip.restoreStatusIncludedResources') }}
-    <div class="tooltip-arrow" data-popper-arrow></div>
+    <div class="tooltip-arrow" data-popper-arrow />
   </div>
 </template>
 

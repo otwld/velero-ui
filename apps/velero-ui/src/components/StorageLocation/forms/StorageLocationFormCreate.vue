@@ -24,8 +24,8 @@
           component: shallowRef(StorageLocationCreateConfirm),
         },
       ]"
-      @dismissError="dismissError()"
-      @onSubmit="onSubmit()"
+      @dismiss-error="dismissError()"
+      @on-submit="onSubmit()"
     />
   </div>
 </template>

@@ -7,7 +7,7 @@
           class="!w-4 !h-4 border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600"
           type="checkbox"
           @click="emit('onChecked')"
-        />
+        >
         <label class="sr-only" for="checkbox-">checkbox</label>
       </div>
     </td>
@@ -175,7 +175,7 @@ import SnapshotLocationFormEdit from '@velero-ui-app/components/SnapshotLocation
 
 const { t } = useI18n();
 const props = defineProps({
-  data: Object as PropType<V1VolumeSnapshotLocation>,
+  data: {type: Object as PropType<V1VolumeSnapshotLocation>, required: true },
   checked: Boolean,
 });
 

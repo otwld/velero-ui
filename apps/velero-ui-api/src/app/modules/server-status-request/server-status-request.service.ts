@@ -80,7 +80,7 @@ export class ServerStatusRequestService {
         count: 5,
         delay: 4000,
       }),
-      catchError((e) => {
+      catchError(() => {
         return throwError(
           () =>
             new Error('Server status request is not ready after 5 retries!'),

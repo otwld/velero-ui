@@ -16,6 +16,8 @@ export default [
     files: ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx', '**/*.vue'],
     rules: {
       'vue/multi-word-component-names': 'off',
+      'vue/max-attributes-per-line': 'off',
+      'vue/no-unknown-slot': 'off',
     },
   },
 ];

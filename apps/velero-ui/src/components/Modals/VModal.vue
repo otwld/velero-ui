@@ -33,7 +33,7 @@
             v-if="footer"
             class="flex items-center justify-end p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600"
           >
-            <slot name="footer"/>
+            <slot name="footer" />
           </div>
         </div>
       </div>

@@ -51,7 +51,7 @@
               class="h-2 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-72 mb-4"
             />
           </div>
-          <div class="flex items-center space-x-4"></div>
+          <div class="flex items-center space-x-4" />
         </div>
       </div>
     </div>

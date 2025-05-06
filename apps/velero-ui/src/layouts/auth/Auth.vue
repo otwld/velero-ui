@@ -10,7 +10,7 @@
           alt="logo"
           class="w-64 h-§4 mr-2"
           src="/src/assets/images/velero.svg"
-        />
+        >
       </div>
       <div
         class="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700"
@@ -34,12 +34,11 @@
                   name="username"
                   type="text"
                 >
-                  <template #label="context">
+                  <template #label>
                     <label
                       class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                     >
-                      {{ t('auth.form.username.label') }}</label
-                    >
+                      {{ t('auth.form.username.label') }}</label>
                   </template>
                 </FormKit>
               </div>
@@ -52,11 +51,10 @@
                   placeholder="••••••••"
                   type="password"
                 >
-                  <template #label="context">
+                  <template #label>
                     <label
                       class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                      >{{ t('auth.form.password.label') }}</label
-                    >
+                    >{{ t('auth.form.password.label') }}</label>
                   </template>
                 </FormKit>
               </div>
@@ -78,11 +76,11 @@
               v-if="basicAuth?.enabled && isFederatedAuthEnabled()"
               class="flex items-center mb-1.5 mt-1.5"
             >
-              <div class="w-full bg-gray-300 h-0.5"></div>
+              <div class="w-full bg-gray-300 h-0.5" />
               <div class="px-3 text-gray-600 text-center">
                 {{ t('auth.divider') }}
               </div>
-              <div class="w-full bg-gray-300 h-0.5"></div>
+              <div class="w-full bg-gray-300 h-0.5" />
             </div>
             <GithubAuth />
             <GitlabAuth />
@@ -95,14 +93,12 @@
       <div class="flex justify-center mt-5">
         <span
           class="inline-flex justify-center text-gray-500 text-xs dark:text-white"
-          >{{ t('global.powered', { version }) }}
+        >{{ t('global.powered', { version }) }}
           <a
             class="ml-1 hover:text-blue-600"
             href="https://otwld.com/"
             target="_blank"
-            >OTWLD</a
-          ></span
-        >
+          >OTWLD</a></span>
       </div>
     </div>
   </section>

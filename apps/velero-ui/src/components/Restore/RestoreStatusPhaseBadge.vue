@@ -3,8 +3,7 @@
     :class="getClass()"
     class="text-xs font-medium inline-flex items-center me-2 px-2.5 py-0.5 rounded"
   >
-    {{ t(`resource.phase.${status}`) }}</span
-  >
+    {{ t(`resource.phase.${status}`) }}</span>
 </template>
 
 <script lang="ts" setup>
@@ -15,7 +14,7 @@ import { useI18n } from 'vue-i18n';
 const { t } = useI18n();
 
 const props = defineProps({
-  status: String as PropType<V1RestorePhase>,
+  status: {type: String as PropType<V1RestorePhase>, required: true },
 });
 
 const getClass = () => {

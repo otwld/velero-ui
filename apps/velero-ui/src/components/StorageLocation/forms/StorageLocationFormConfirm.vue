@@ -167,8 +167,12 @@
               class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
             >
               <tr>
-                <th class="px-6 py-1.5" scope="col">{{ t('global.key') }}</th>
-                <th class="px-6 py-1.5" scope="col">{{ t('global.value') }}</th>
+                <th class="px-6 py-1.5" scope="col">
+                  {{ t('global.key') }}
+                </th>
+                <th class="px-6 py-1.5" scope="col">
+                  {{ t('global.value') }}
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -212,8 +216,12 @@
               class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
             >
               <tr>
-                <th class="px-6 py-1.5" scope="col">{{ t('global.key') }}</th>
-                <th class="px-6 py-1.5" scope="col">{{ t('global.value') }}</th>
+                <th class="px-6 py-1.5" scope="col">
+                  {{ t('global.key') }}
+                </th>
+                <th class="px-6 py-1.5" scope="col">
+                  {{ t('global.value') }}
+                </th>
               </tr>
             </thead>
             <tbody>

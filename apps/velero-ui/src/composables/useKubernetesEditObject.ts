@@ -25,7 +25,7 @@ export const useKubernetesEditObject = (resource: Resource, name: string) => {
         | V1ScheduleSpec
       >,
     ) => await axiosInstance.put(`${resource.route}/${name}`, body),
-    onSuccess: async (response) => {
+    onSuccess: async () => {
       await queryClient.cancelQueries({
         queryKey: [resource.plural, name],
       });

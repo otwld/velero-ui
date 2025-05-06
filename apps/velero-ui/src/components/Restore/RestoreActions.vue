@@ -95,7 +95,7 @@ import { useI18n } from 'vue-i18n';
 const { t } = useI18n();
 
 const props = defineProps({
-  restore: Object as PropType<V1Restore>,
+  restore: {type: Object as PropType<V1Restore>, required: true },
 });
 
 const { isPending: isDeleting, mutate: remove } = useDeleteKubernetesObject(

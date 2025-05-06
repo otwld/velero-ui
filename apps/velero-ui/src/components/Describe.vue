@@ -50,6 +50,6 @@ import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
 defineProps({
-  data: Object as PropType<any>,
+  data: { type: Object as PropType<any>, required: true },
 });
 </script>

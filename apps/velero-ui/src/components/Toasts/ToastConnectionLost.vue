@@ -10,7 +10,9 @@
       <FontAwesomeIcon :icon="faGlobe" class="!w-5 !h-5 animate-pulse" />
     </div>
 
-    <div class="ml-3 text-sm font-normal">{{ t('global.connectionLost') }}</div>
+    <div class="ml-3 text-sm font-normal">
+      {{ t('global.connectionLost') }}
+    </div>
   </div>
 </template>
 

@@ -19,14 +19,12 @@
         class="bg-green-100 text-green-800 text-xs font-medium inline-flex items-center me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300"
       >
         <FontAwesomeIcon :icon="faStar" class="!w-3 !h-3 mr-1.5" />
-        {{ t('resource.spec.default') }}</span
-      >
+        {{ t('resource.spec.default') }}</span>
       <span
         v-if="location?.spec?.accessMode"
         class="bg-blue-100 text-blue-800 text-xs font-medium inline-flex items-center me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300"
       >
-        {{ location.spec.accessMode }}</span
-      >
+        {{ location.spec.accessMode }}</span>
     </div>
     <div v-if="!location">
       <div
@@ -82,6 +80,9 @@ import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
 defineProps({
-  location: Object as PropType<V1BackupStorageLocation>,
+  location: {
+    type: {type: Object as PropType<V1BackupStorageLocation>, required: true },
+    required: true,
+  },
 });
 </script>

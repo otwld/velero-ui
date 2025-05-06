@@ -14,9 +14,11 @@ export const dropdown = {
         (el.contains(event.target) && !el.contains(el.targetElement))
       ) {
         el.hidden = !el.hidden;
-        el.hidden
-          ? el.targetElement.classList.add('hidden')
-          : el.targetElement.classList.remove(['hidden']);
+        if (el.hidden) {
+          el.targetElement.classList.add('hidden');
+        } else {
+          el.targetElement.classList.remove('hidden');
+        }
       }
     };
     document.addEventListener('click', el.clickDropdownButton);

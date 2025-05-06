@@ -7,7 +7,7 @@
           class="!w-4 !h-4 border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600"
           type="checkbox"
           @click="emit('onChecked')"
-        />
+        >
         <label class="sr-only" for="checkbox-">checkbox</label>
       </div>
     </td>
@@ -55,7 +55,7 @@
         <div
           v-if="
             data?.status?.phase === V1DeleteBackupRequestPhase.Processed &&
-            data?.status?.errors.length === 0
+              data?.status?.errors.length === 0
           "
           class="h-2.5 w-2.5 rounded-full bg-green-400 mr-2"
         />
@@ -66,7 +66,7 @@
         <div
           v-if="
             data?.status?.phase === V1DeleteBackupRequestPhase.Processed &&
-            data?.status?.errors.length > 0
+              data?.status?.errors.length > 0
           "
           class="h-2.5 w-2.5 rounded-full bg-orange-400 mr-2"
         />
@@ -125,7 +125,7 @@
     role="tooltip"
   >
     {{ t('global.button.describe.title') }}
-    <div class="tooltip-arrow" data-popper-arrow></div>
+    <div class="tooltip-arrow" data-popper-arrow />
   </div>
   <div
     :id="`tooltip-button-delete-${data?.metadata?.uid}`"
@@ -133,7 +133,7 @@
     role="tooltip"
   >
     {{ t('global.button.delete.title') }}
-    <div class="tooltip-arrow" data-popper-arrow></div>
+    <div class="tooltip-arrow" data-popper-arrow />
   </div>
   <ModalConfirmation
     v-if="showModalDelete"
@@ -187,7 +187,7 @@ import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
 defineProps({
-  data: Object as PropType<V1DeleteBackupRequest>,
+  data: {type: Object as PropType<V1DeleteBackupRequest>, required: true },
   checked: Boolean,
 });
 

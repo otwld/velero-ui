@@ -63,10 +63,10 @@
               outer-class="mb-2"
               type="select"
             >
-              <template #label="context">
+              <template #label>
                 <label
                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                  >{{ t('resource.spec.credentialName') }}
+                >{{ t('resource.spec.credentialName') }}
                   <FontAwesomeIcon
                     :icon="faQuestionCircle"
                     class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
@@ -87,10 +87,10 @@
               name="key"
               type="text"
             >
-              <template #label="context">
+              <template #label>
                 <label
                   class="flex mb-2 text-sm font-medium text-gray-900 dark:text-white items-center"
-                  >{{ t('resource.spec.credentialKey') }}
+                >{{ t('resource.spec.credentialKey') }}
                   <FontAwesomeIcon
                     :icon="faQuestionCircle"
                     class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
@@ -112,7 +112,7 @@
     role="tooltip"
   >
     {{ t('form.tooltip.credentialName') }}
-    <div class="tooltip-arrow" data-popper-arrow></div>
+    <div class="tooltip-arrow" data-popper-arrow />
   </div>
   <div
     id="tooltip-credential-key"
@@ -120,7 +120,7 @@
     role="tooltip"
   >
     {{ t('form.tooltip.credentialKey') }}
-    <div class="tooltip-arrow" data-popper-arrow></div>
+    <div class="tooltip-arrow" data-popper-arrow />
   </div>
 </template>
 

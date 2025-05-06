@@ -18,7 +18,7 @@
               alt="Velero Logo"
               class="h-8 mr-3"
               src="/src/assets/images/velero.svg"
-            />
+            >
           </router-link>
         </div>
         <div class="flex items-center">
@@ -62,7 +62,7 @@
             <FontAwesomeIcon :icon="faSun" class="!w-5 !h-5" />
             <FontAwesomeIcon :icon="faMoon" class="hidden !w-5 !h-5" />
           </button> -->
-          <div v-click-out="clickOutside" v-if="!noAuthRequired" class="flex flex-col items-center">
+          <div v-if="!noAuthRequired" v-click-out="clickOutside" class="flex flex-col items-center">
             <div class="flex items-center ml-3">
               <button
                 id="user-menu-button-2"
@@ -77,13 +77,15 @@
                   :src="user.picture"
                   alt="user photo"
                   class="w-8 h-8 rounded-full text-gray-900"
-                />
+                >
                 <FontAwesomeIcon
                   v-if="!user.picture"
                   :icon="faUserCircle"
                   class="w-8 h-8 text-gray-900 dark:text-white"
                 />
-                <p class="ms-3">{{ user.name }}</p>
+                <p class="ms-3">
+                  {{ user.name }}
+                </p>
                 <FontAwesomeIcon :icon="faAngleDown" class="w-2.5 h-2.5 ms-3" />
               </button>
             </div>

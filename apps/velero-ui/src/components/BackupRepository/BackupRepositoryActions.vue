@@ -49,7 +49,7 @@
               :icon="faTrashCan"
               class="!w-4 !h-4 mr-2"
             />
-            {{ isDeleting ? t('global.button.delete.loading') : t('global.button.delete.title')}}
+            {{ isDeleting ? t('global.button.delete.loading') : t('global.button.delete.title') }}
           </button>
         </div>
       </div>
@@ -60,10 +60,10 @@
     v-if="showModalDelete"
     :icon="faExclamationCircle"
     :text="t('modal.text.confirmation.delete')"
-    @onClose="showModalDelete = false"
-    @onConfirm="remove(repository.metadata.name)"
+    @on-close="showModalDelete = false"
+    @on-confirm="remove(repository.metadata.name)"
   >
-    <template v-slot:content>
+    <template #content>
       <div class="flex justify-center">
         <p
           class="mt-2 px-1 mb-6 text-sm rounded bg-gray-200 text-gray-600 dark:bg-gray-600 dark:text-gray-200"
@@ -92,7 +92,7 @@ import { useI18n } from 'vue-i18n';
 const { t } = useI18n();
 
 defineProps({
-  repository: Object as PropType<V1BackupRepository>,
+  repository: { type: Object as PropType<V1BackupRepository>, required: true },
 });
 
 const showModalDelete = ref(false);

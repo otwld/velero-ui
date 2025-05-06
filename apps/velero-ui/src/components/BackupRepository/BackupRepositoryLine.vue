@@ -7,7 +7,7 @@
           class="!w-4 !h-4 border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600"
           type="checkbox"
           @click="emit('onChecked')"
-        />
+        >
         <label class="sr-only" for="checkbox-">checkbox</label>
       </div>
     </td>
@@ -65,12 +65,12 @@
         v-if="data?.spec?.repositoryType === V1BackupRepositoryType.Kopia"
         class="h-5 w-5 mr-2"
         src="/src/assets/images/kopia.svg"
-      />
+      >
       <img
         v-if="data?.spec?.repositoryType === V1BackupRepositoryType.Restic"
         class="h-5 w-5 mr-2"
         src="/src/assets/images/restic.png"
-      />
+      >
       {{ data?.spec?.repositoryType }}
     </td>
     <td
@@ -135,7 +135,7 @@
     role="tooltip"
   >
     {{ t('global.button.delete.title') }}
-    <div class="tooltip-arrow" data-popper-arrow></div>
+    <div class="tooltip-arrow" data-popper-arrow />
   </div>
   <ModalConfirmation
     v-if="showModalDelete"
@@ -144,7 +144,7 @@
     @on-close="showModalDelete = false"
     @on-confirm="remove(data?.metadata?.name)"
   >
-    <template v-slot:content>
+    <template #content>
       <div class="flex justify-center">
         <p
           class="mt-2 px-1 mb-6 text-sm rounded bg-gray-200 text-gray-600 dark:bg-gray-600 dark:text-gray-200"
@@ -182,7 +182,7 @@ import { initTooltips } from 'flowbite';
 
 const { t } = useI18n();
 defineProps({
-  data: Object as PropType<V1BackupRepository>,
+  data: { type: Object as PropType<V1BackupRepository>, required: true },
   checked: Boolean,
 });
 

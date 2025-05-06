@@ -13,11 +13,10 @@
           name="name"
           type="text"
         >
-          <template #label="context">
+          <template #label>
             <label
               class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >{{ t('form.field.restoreName') }} *</label
-            >
+            >{{ t('form.field.restoreName') }} *</label>
           </template>
         </FormKit>
       </div>
@@ -32,11 +31,10 @@
           outer-class="mb-2"
           type="select"
         >
-          <template #label="context">
+          <template #label>
             <label
               class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >{{ t('resource.spec.schedule') }} *</label
-            >
+            >{{ t('resource.spec.schedule') }} *</label>
           </template>
         </FormKit>
       </div>

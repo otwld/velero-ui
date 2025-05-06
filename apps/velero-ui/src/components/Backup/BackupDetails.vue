@@ -36,8 +36,7 @@
         class="bg-blue-100 text-blue-800 text-xs font-medium inline-flex items-center me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300"
       >
         <FontAwesomeIcon :icon="faClock" class="!w-3 !h-3 mr-1.5" />
-        {{ spec.ttl }}</span
-      >
+        {{ spec.ttl }}</span>
     </div>
     <div v-if="!spec">
       <div
@@ -124,24 +123,20 @@
       v-if="spec?.includedNamespaceScopedResources"
       class="mt-4 flex flex-col"
     >
-      <span class="text-base font-medium text-gray-900 dark:text-white"
-        >{{
+      <span class="text-base font-medium text-gray-900 dark:text-white">{{
         t('resource.spec.excludedClusterScopedResources')
-      }}</span
-      >
+      }}</span>
       <i class="mt-1 text-xs text-gray-500 dark:text-gray-400">{{
-          spec.includedNamespaceScopedResources.join(', ')
-        }}</i>
+        spec.includedNamespaceScopedResources.join(', ')
+      }}</i>
     </div>
     <div
       v-if="spec?.excludedNamespaceScopedResources"
       class="mt-4 flex flex-col"
     >
-      <span class="text-base font-medium text-gray-900 dark:text-white"
-        >{{
+      <span class="text-base font-medium text-gray-900 dark:text-white">{{
         t('resource.spec.excludedNamespaceScopedResources')
-      }}</span
-      >
+      }}</span>
       <i class="mt-1 text-xs text-gray-500 dark:text-gray-400">{{
         spec.excludedNamespaceScopedResources.join(', ')
       }}</i>
@@ -164,6 +159,9 @@ import { useI18n } from 'vue-i18n';
 const { t } = useI18n();
 
 defineProps({
-  spec: Object as PropType<V1BackupSpec>,
+  spec: {
+    type: Object as PropType<V1BackupSpec>,
+    required: true,
+  },
 });
 </script>

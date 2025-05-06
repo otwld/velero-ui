@@ -54,7 +54,7 @@
             <li
               v-if="
                 formContent[1]?.includedNamespaces?.length === 0 ||
-                formContent[2]?.includedNamespaces?.length === 0
+                  formContent[2]?.includedNamespaces?.length === 0
               "
             >
               *
@@ -93,7 +93,7 @@
             <p
               v-if="
                 formContent[1]?.excludedNamespaces?.length === 0 ||
-                formContent[2]?.excludedNamespaces?.length === 0
+                  formContent[2]?.excludedNamespaces?.length === 0
               "
             >
               -
@@ -165,7 +165,7 @@
             <p
               v-if="
                 formContent[2]?.excludedResources?.length === 0 ||
-                formContent[3]?.excludedResources?.length === 0
+                  formContent[3]?.excludedResources?.length === 0
               "
             >
               -
@@ -199,7 +199,7 @@
         <div
           v-if="
             formContent[2]?.statusIncludedResources?.length > 0 ||
-            formContent[3]?.statusIncludedResources?.length > 0
+              formContent[3]?.statusIncludedResources?.length > 0
           "
           class="col-span-2 sm:col-span-1"
         >
@@ -238,7 +238,7 @@
         <div
           v-if="
             formContent[2]?.statusExcludedResources?.length > 0 ||
-            formContent[3]?.statusExcludedResources?.length > 0
+              formContent[3]?.statusExcludedResources?.length > 0
           "
           class="col-span-2 sm:col-span-1"
         >
@@ -280,7 +280,7 @@
           <template
             v-if="
               formContent[1]?.itemOperationTimeout?.value ||
-              formContent[2]?.itemOperationTimeout?.value
+                formContent[2]?.itemOperationTimeout?.value
             "
           >
             <dt
@@ -293,18 +293,18 @@
             >
               {{
                 formContent[1]?.itemOperationTimeout?.value ||
-                formContent[2]?.itemOperationTimeout?.value
+                  formContent[2]?.itemOperationTimeout?.value
               }}
               {{
                 formContent[1]?.itemOperationTimeout?.unit ||
-                formContent[2]?.itemOperationTimeout?.unit
+                  formContent[2]?.itemOperationTimeout?.unit
               }}
             </dd>
           </template>
           <template
             v-if="
               formContent[1]?.parallelFilesDownload ||
-              formContent[2]?.parallelFilesDownload
+                formContent[2]?.parallelFilesDownload
             "
           >
             <dt
@@ -317,14 +317,14 @@
             >
               {{
                 formContent[1]?.parallelFilesDownload ||
-                formContent[2]?.parallelFilesDownload
+                  formContent[2]?.parallelFilesDownload
               }}
             </dd>
           </template>
           <template
             v-if="
               formContent[1]?.existingResourcePolicy ||
-              formContent[2]?.existingResourcePolicy
+                formContent[2]?.existingResourcePolicy
             "
           >
             <dt
@@ -337,7 +337,7 @@
             >
               {{
                 formContent[1]?.existingResourcePolicy ||
-                formContent[2]?.existingResourcePolicy
+                  formContent[2]?.existingResourcePolicy
               }}
             </dd>
           </template>
@@ -356,7 +356,7 @@
                 <FontAwesomeIcon
                   v-if="
                     formContent[1]?.includeClusterResources ||
-                    formContent[2]?.includeClusterResources
+                      formContent[2]?.includeClusterResources
                   "
                   :icon="faCheckCircle"
                   class="w-3.5 h-3.5 me-2 text-green-500 dark:text-green-500 flex-shrink-0"
@@ -365,8 +365,8 @@
                   v-if="
                     (formContent[1].includeClusterResources !== undefined &&
                       !formContent[1]?.includeClusterResources) ||
-                    (formContent[2].includeClusterResources !== undefined &&
-                      !formContent[2]?.includeClusterResources)
+                      (formContent[2].includeClusterResources !== undefined &&
+                        !formContent[2]?.includeClusterResources)
                   "
                   :icon="faXmarkCircle"
                   class="w-3.5 h-3.5 me-2 text-red-500 dark:text-red-500 flex-shrink-0"
@@ -385,8 +385,8 @@
                   v-if="
                     (formContent[1].restorePVs !== undefined &&
                       !formContent[1]?.restorePVs) ||
-                    (formContent[2].restorePVs !== undefined &&
-                      !formContent[2]?.restorePVs)
+                      (formContent[2].restorePVs !== undefined &&
+                        !formContent[2]?.restorePVs)
                   "
                   :icon="faXmarkCircle"
                   class="w-3.5 h-3.5 me-2 text-red-500 dark:text-red-500 flex-shrink-0"
@@ -397,7 +397,7 @@
                 <FontAwesomeIcon
                   v-if="
                     formContent[1]?.preserveNodePorts ||
-                    formContent[2]?.preserveNodePorts
+                      formContent[2]?.preserveNodePorts
                   "
                   :icon="faCheckCircle"
                   class="w-3.5 h-3.5 me-2 text-green-500 dark:text-green-500 flex-shrink-0"
@@ -406,8 +406,8 @@
                   v-if="
                     (formContent[1].preserveNodePorts !== undefined &&
                       !formContent[1]?.preserveNodePorts) ||
-                    (formContent[2].preserveNodePorts !== undefined &&
-                      !formContent[2]?.preserveNodePorts)
+                      (formContent[2].preserveNodePorts !== undefined &&
+                        !formContent[2]?.preserveNodePorts)
                   "
                   :icon="faXmarkCircle"
                   class="w-3.5 h-3.5 me-2 text-red-500 dark:text-red-500 flex-shrink-0"
@@ -418,7 +418,7 @@
                 <FontAwesomeIcon
                   v-if="
                     formContent[1]?.writeSparseFiles ||
-                    formContent[2]?.writeSparseFiles
+                      formContent[2]?.writeSparseFiles
                   "
                   :icon="faCheckCircle"
                   class="w-3.5 h-3.5 me-2 text-green-500 dark:text-green-500 flex-shrink-0"
@@ -427,8 +427,8 @@
                   v-if="
                     (formContent[1].writeSparseFiles !== undefined &&
                       !formContent[1]?.writeSparseFiles) ||
-                    (formContent[2].writeSparseFiles !== undefined &&
-                      !formContent[2]?.writeSparseFiles)
+                      (formContent[2].writeSparseFiles !== undefined &&
+                        !formContent[2]?.writeSparseFiles)
                   "
                   :icon="faXmarkCircle"
                   class="w-3.5 h-3.5 me-2 text-red-500 dark:text-red-500 flex-shrink-0"
@@ -463,8 +463,12 @@
               class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
             >
               <tr>
-                <th class="px-6 py-1.5" scope="col">{{ t('global.from') }}</th>
-                <th class="px-6 py-1.5" scope="col">{{ t('global.to') }}</th>
+                <th class="px-6 py-1.5" scope="col">
+                  {{ t('global.from') }}
+                </th>
+                <th class="px-6 py-1.5" scope="col">
+                  {{ t('global.to') }}
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -513,8 +517,12 @@
               class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
             >
               <tr>
-                <th class="px-6 py-1.5" scope="col">{{ t('global.key') }}</th>
-                <th class="px-6 py-1.5" scope="col">{{ t('global.value') }}</th>
+                <th class="px-6 py-1.5" scope="col">
+                  {{ t('global.key') }}
+                </th>
+                <th class="px-6 py-1.5" scope="col">
+                  {{ t('global.value') }}
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -562,8 +570,12 @@
               class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
             >
               <tr>
-                <th class="px-6 py-1.5" scope="col">{{ t('global.key') }}</th>
-                <th class="px-6 py-1.5" scope="col">{{ t('global.value') }}</th>
+                <th class="px-6 py-1.5" scope="col">
+                  {{ t('global.key') }}
+                </th>
+                <th class="px-6 py-1.5" scope="col">
+                  {{ t('global.value') }}
+                </th>
               </tr>
             </thead>
             <tbody>

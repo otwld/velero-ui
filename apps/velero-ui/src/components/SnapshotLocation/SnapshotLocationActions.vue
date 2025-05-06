@@ -138,7 +138,7 @@ import SnapshotLocationFormEdit from '@velero-ui-app/components/SnapshotLocation
 
 const { t } = useI18n();
 const props = defineProps({
-  location: Object as PropType<V1VolumeSnapshotLocation>,
+  location: {type: Object as PropType<V1VolumeSnapshotLocation>, required: true },
 });
 
 const showModalDelete = ref(false);

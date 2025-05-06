@@ -28,7 +28,7 @@
           {{ backup?.metadata?.uid }}
         </div>
         <div
-         v-else
+          v-else
           class="bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-48 mb-4"
         />
         <div class="flex items-center gap-x-4 gap-y-2 flex-wrap">
@@ -39,7 +39,10 @@
             type="button"
             @click="showModalRestore = !showModalRestore"
           >
-            <FontAwesomeIcon :icon="faClockRotateLeft" class="!w-4 !h-4 mr-2" />
+            <FontAwesomeIcon
+              :icon="faClockRotateLeft"
+              class="!w-4 !h-4 mr-2"
+            />
             {{ t('global.button.restore.title') }}
           </button>
           <button
@@ -101,7 +104,7 @@
     @on-close="showModalDelete = false"
     @on-confirm="remove(backup.metadata.name)"
   >
-    <template v-slot:content>
+    <template #content>
       <div class="flex justify-center">
         <p
           class="mt-2 px-1 mb-6 text-sm rounded bg-gray-200 text-gray-600 dark:bg-gray-600 dark:text-gray-200"
@@ -115,9 +118,9 @@
     v-if="showModalRestore"
     :id="`modal-restore-${backup?.metadata?.name}`"
     width="lg:w-6/12"
-    @onClose="showModalRestore = false"
+    @on-close="showModalRestore = false"
   >
-    <template v-slot:header>
+    <template #header>
       <h3 class="text-lg text-gray-500 dark:text-gray-400">
         {{ t('modal.text.title.restoreFromBackup') }}
         <span class="font-normal text-sm ml-2">{{
@@ -125,8 +128,11 @@
         }}</span>
       </h3>
     </template>
-    <template v-slot:content>
-      <BackupFormRestore :backup="backup" @onClose="showModalRestore = false" />
+    <template #content>
+      <BackupFormRestore
+        :backup="backup"
+        @on-close="showModalRestore = false"
+      />
     </template>
   </VModal>
 </template>
@@ -150,17 +156,20 @@ import { useI18n } from 'vue-i18n';
 import VModal from '@velero-ui-app/components/Modals/VModal.vue';
 import BackupFormRestore from '@velero-ui-app/components/Backup/forms/BackupFormRestore.vue';
 
-const { t } = useI18n();
+const {t} = useI18n();
 
 const props = defineProps({
-  backup: Object as PropType<V1Backup>,
+  backup: {
+    type: Object as PropType<V1Backup>,
+    required: true
+  },
 });
 
-const { download, downloadLoading } = useBackupDownloadContent(
+const {download, downloadLoading} = useBackupDownloadContent(
   toRef(() => props.backup?.metadata?.name),
 );
 
-const { isPending, mutate: remove } = useDeleteKubernetesObject(
+const {isPending, mutate: remove} = useDeleteKubernetesObject(
   Resources.BACKUP,
 );
 

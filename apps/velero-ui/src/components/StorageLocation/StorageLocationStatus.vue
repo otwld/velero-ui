@@ -67,6 +67,6 @@ import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
 defineProps({
-  location: Object as PropType<V1BackupStorageLocation>,
+  location: {type: Object as PropType<V1BackupStorageLocation>, required: true },
 });
 </script>

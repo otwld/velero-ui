@@ -13,10 +13,10 @@
           name="name"
           type="text"
         >
-          <template #label="context">
+          <template #label>
             <label
               class="flex mb-2 text-sm font-medium text-gray-900 dark:text-white items-center"
-              >{{ t('form.field.backupName') }} *
+            >{{ t('form.field.backupName') }} *
             </label>
           </template>
         </FormKit>
@@ -32,10 +32,10 @@
           outer-class="mb-2"
           type="select"
         >
-          <template #label="context">
+          <template #label>
             <label
               class="flex mb-2 text-sm font-medium text-gray-900 dark:text-white items-center"
-              >{{ t('form.field.schedule') }} *
+            >{{ t('form.field.schedule') }} *
             </label>
           </template>
         </FormKit>

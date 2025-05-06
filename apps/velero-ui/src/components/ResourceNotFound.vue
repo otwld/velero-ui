@@ -18,7 +18,8 @@
         <router-link
           :to="page.path"
           class="inline-flex text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:focus:ring-blue-900 my-4"
-          >{{ t('resourceNotFound.button.title', { resource: page.name }) }}
+        >
+          {{ t('resourceNotFound.button.title', { resource: page.name }) }}
         </router-link>
       </div>
     </div>
@@ -31,6 +32,6 @@ import { useI18n } from 'vue-i18n';
 const { t } = useI18n();
 
 const props = defineProps({
-  page: Object,
+  page: {type: Object, required: true },
 });
 </script>

@@ -20,16 +20,14 @@
         class="bg-red-100 text-red-800 text-xs font-medium inline-flex items-center me-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300"
       >
         <FontAwesomeIcon :icon="faCircleExclamation" class="!w-3 !h-3 mr-1.5" />
-        {{ restore.status.errors }}</span
-      >
+        {{ restore.status.errors }}</span>
       <span
         v-if="restore?.status?.warnings"
         class="bg-orange-100 text-orange-800 text-xs font-medium inline-flex items-center me-2 px-2.5 py-0.5 rounded dark:bg-orange-900 dark:text-orange-300"
       >
         <FontAwesomeIcon :icon="faTriangleExclamation" class="!w-3 !h-3 mr-1.5" />
 
-        {{ restore.status.warnings }}</span
-      >
+        {{ restore.status.warnings }}</span>
     </div>
     <div v-if="restore?.status?.progress" class="mt-4">
       <div class="flex items-center justify-between mb-1">
@@ -40,13 +38,11 @@
           v-if="!restore"
           class="ml-4 h-2 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-24"
         />
-        <span class="text-xs font-medium text-gray-900 dark:text-white"
-          >{{ restore.status.progress?.itemsRestored || '0' }} /
-          {{ restore.status.progress?.totalItems }}</span
-        >
+        <span class="text-xs font-medium text-gray-900 dark:text-white">{{ restore.status.progress?.itemsRestored || '0' }} /
+          {{ restore.status.progress?.totalItems }}</span>
       </div>
       <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-        <div :style="getPercent()" class="bg-blue-600 h-2.5 rounded-full"></div>
+        <div :style="getPercent()" class="bg-blue-600 h-2.5 rounded-full" />
       </div>
     </div>
     <div v-if="!restore" class="mt-4">
@@ -98,7 +94,7 @@ import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
 const props = defineProps({
-  restore: Object as PropType<V1Restore>,
+  restore: {type: Object as PropType<V1Restore>, required: true },
 });
 
 const getPercent = () => {

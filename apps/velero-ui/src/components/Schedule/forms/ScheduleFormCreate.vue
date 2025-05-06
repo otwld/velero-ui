@@ -32,7 +32,7 @@
           component: shallowRef(ScheduleFormCreateConfirm),
         },
       ]"
-      @onSubmit="onSubmit()"
+      @on-submit="onSubmit()"
     />
   </div>
 </template>

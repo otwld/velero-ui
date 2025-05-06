@@ -138,7 +138,7 @@ import { useKubernetesEditObject } from '@velero-ui-app/composables/useKubernete
 
 const { t } = useI18n();
 const props = defineProps({
-  location: Object as PropType<V1BackupStorageLocation>,
+  location: {type: Object as PropType<V1BackupStorageLocation>, required: true },
 });
 
 const showModalDelete = ref(false);

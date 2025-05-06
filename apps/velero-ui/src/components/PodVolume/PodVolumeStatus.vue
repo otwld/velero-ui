@@ -36,15 +36,13 @@
         <span class="text-base font-medium text-gray-900 dark:text-white">{{
           t('resource.status.bytes')
         }}</span>
-        <span class="text-xs font-medium text-gray-900 dark:text-white"
-          >{{ convertBytes(podVolume.status.progress?.bytesDone) || '0' }} /
+        <span class="text-xs font-medium text-gray-900 dark:text-white">{{ convertBytes(podVolume.status.progress?.bytesDone) || '0' }} /
           {{
             convertBytes(podVolume.status.progress?.totalBytes) || '0'
-          }}</span
-        >
+          }}</span>
       </div>
       <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-        <div :style="getPercent()" class="bg-blue-600 h-2.5 rounded-full"></div>
+        <div :style="getPercent()" class="bg-blue-600 h-2.5 rounded-full" />
       </div>
     </div>
     <div v-if="!podVolume" class="mt-4">
@@ -58,7 +56,7 @@
       </div>
       <div
         class="w-full bg-gray-200 rounded-full animate-pulse h-2.5 dark:bg-gray-700"
-      ></div>
+      />
     </div>
     <div v-if="podVolume?.status?.message" class="mt-4 flex flex-col">
       <span class="text-base font-medium text-gray-900 dark:text-white">
@@ -67,8 +65,8 @@
         }}
       </span>
       <i class="mt-1 text-xs text-gray-500 dark:text-gray-400">{{
-          podVolume.status.message
-        }}</i>
+        podVolume.status.message
+      }}</i>
     </div>
   </div>
 </template>
@@ -83,7 +81,7 @@ import { convertTimestampToDate } from '@velero-ui-app/utils/date.utils';
 
 const { t } = useI18n();
 const props = defineProps({
-  podVolume: Object as PropType<V1PodVolumeBackup | V1PodVolumeRestore>,
+  podVolume: {type: Object as PropType<V1PodVolumeBackup | V1PodVolumeRestore>, required: true },
 });
 
 const getPercent = () => {

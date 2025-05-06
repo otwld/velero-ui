@@ -26,8 +26,8 @@
           component: shallowRef(SnapshotLocationFormCreateConfirm),
         },
       ]"
-      @dismissError="dismissError()"
-      @onSubmit="onSubmit()"
+      @dismiss-error="dismissError()"
+      @on-submit="onSubmit()"
     />
   </div>
 </template>
@@ -57,7 +57,7 @@ import { useI18n } from 'vue-i18n';
 import StorageLocationCreateConfig from '@velero-ui-app/components/StorageLocation/forms/StorageLocationFormConfig.vue';
 
 const props = defineProps({
-  volumeLocation: Object as PropType<V1VolumeSnapshotLocation>,
+  volumeLocation: {type: Object as PropType<V1VolumeSnapshotLocation>, required: true },
 });
 
 const { t } = useI18n();

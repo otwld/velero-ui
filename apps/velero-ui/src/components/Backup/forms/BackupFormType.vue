@@ -1,6 +1,8 @@
 <template>
   <div>
-    <p class="text-gray-900 dark:text-white mb-4">{{ t('form.hint.typeBackup') }}</p>
+    <p class="text-gray-900 dark:text-white mb-4">
+      {{ t('form.hint.typeBackup') }}
+    </p>
     <ul class="space-y-4 mb-4">
       <li>
         <input
@@ -11,7 +13,7 @@
           name="type"
           required
           type="radio"
-        />
+        >
         <label
           class="inline-flex items-center justify-between w-full p-5 text-gray-900 bg-white border border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-500 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-900 hover:bg-gray-100 dark:text-white dark:bg-gray-600 dark:hover:bg-gray-500"
           for="schedule"
@@ -38,7 +40,7 @@
           class="hidden peer"
           name="type"
           type="radio"
-        />
+        >
         <label
           class="inline-flex items-center justify-between w-full p-5 text-gray-900 bg-white border border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-500 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-900 hover:bg-gray-100 dark:text-white dark:bg-gray-600 dark:hover:bg-gray-500"
           for="custom"

@@ -71,8 +71,7 @@
           v-for="(item, index) in childListRef?.getCheckedItems()"
           :key="index"
           class="mt-2 px-1 text-sm rounded bg-gray-200 text-gray-600 dark:bg-gray-600 dark:text-gray-200"
-          >{{ item }}</span
-        >
+        >{{ item }}</span>
       </div>
     </template>
   </ModalConfirmation>

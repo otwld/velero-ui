@@ -28,7 +28,7 @@
           component: shallowRef(RestoreFormConfirm),
         },
       ]"
-      @onSubmit="onSubmit()"
+      @on-submit="onSubmit()"
     />
   </div>
 </template>
@@ -64,7 +64,7 @@ import { useI18n } from 'vue-i18n';
 const { t } = useI18n();
 
 const props = defineProps({
-  backup: Object as PropType<V1Backup>,
+  backup: { type: Object as PropType<V1Backup>, required: true}
 });
 
 const { mutate, isPending, isError, isSuccess } = useKubernetesCreateObject(

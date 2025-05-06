@@ -20,14 +20,14 @@
         :title="spec?.repositoryType"
         class="h-5 w-5"
         src="/src/assets/images/kopia.svg"
-      />
+      >
       <img
         v-if="spec?.repositoryType === V1BackupRepositoryType.Restic"
         :alt="spec?.repositoryType"
         :title="spec?.repositoryType"
         class="h-5 w-5"
         src="/src/assets/images/restic.png"
-      />
+      >
       <router-link
         v-if="spec?.backupStorageLocation"
         :to="{
@@ -50,8 +50,7 @@
         class="bg-blue-100 text-blue-800 text-xs font-medium inline-flex items-center me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300"
       >
         <FontAwesomeIcon :icon="faClock" class="!w-3 !h-3 mr-1.5" />
-        {{ spec.maintenanceFrequency }}</span
-      >
+        {{ spec.maintenanceFrequency }}</span>
     </div>
     <div v-if="!spec">
       <div
@@ -94,6 +93,6 @@ import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
 defineProps({
-  spec: Object as PropType<V1BackupRepositorySpec>,
+  spec: { type: Object as PropType<V1BackupRepositorySpec>, required: true },
 });
 </script>

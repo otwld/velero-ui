@@ -52,10 +52,10 @@
             outer-class="mb-2"
             type="select"
           >
-            <template #label="context">
+            <template #label>
               <label
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >{{ t('resource.spec.resourcePolicy') }}
+              >{{ t('resource.spec.resourcePolicy') }}
                 <FontAwesomeIcon
                   :icon="faQuestionCircle"
                   class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
@@ -82,7 +82,7 @@
                 wrapper-class="relative w-11 h-6 bg-gray-200 dark:bg-gray-700 rounded-full cursor-pointer"
                 outer-class="flex items-center"
               >
-                 <template #decorator>
+                <template #decorator>
                   <span
                     class="peer
                       peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full
@@ -96,8 +96,7 @@
               </FormKit>
               <span
                 class="ms-3 text-sm font-medium text-gray-400 dark:text-white"
-                >{{ t('resource.spec.includeClusterResources') }}</span
-              >
+              >{{ t('resource.spec.includeClusterResources') }}</span>
               <FontAwesomeIcon
                 :icon="faQuestionCircle"
                 class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help dark:text-white dark:hover:text-gray-200"
@@ -120,7 +119,7 @@
                 wrapper-class="relative w-11 h-6 bg-gray-200 dark:bg-gray-700 rounded-full cursor-pointer"
                 outer-class="flex items-center"
               >
-                 <template #decorator>
+                <template #decorator>
                   <span
                     class="peer
                       peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full
@@ -134,8 +133,7 @@
               </FormKit>
               <span
                 class="ms-3 text-sm font-medium text-gray-400 dark:text-white"
-                >{{ t('resource.spec.includeNamespaceClusterResources') }}</span
-              >
+              >{{ t('resource.spec.includeNamespaceClusterResources') }}</span>
               <FontAwesomeIcon
                 :icon="faQuestionCircle"
                 class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help dark:text-white dark:hover:text-gray-200"
@@ -153,7 +151,7 @@
         <div class="col-span-1 sm:col-span-1">
           <label
             class="flex mb-2 text-sm font-medium text-gray-900 dark:text-white items-center"
-            >{{ t('resource.spec.includedResources') }} *
+          >{{ t('resource.spec.includedResources') }} *
             <FontAwesomeIcon
               :icon="faQuestionCircle"
               class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
@@ -170,8 +168,7 @@
               input-class="rounded-s-lg rounded-e-none"
               :validation="[['k8s_resource']]"
               @keyup.enter="add('includedResource')"
-              >
-            </FormKit>
+            />
             <button
               :title="t('global.button.add.title')"
               class="top-0 end-0 p-2.5 h-full text-sm font-medium text-white bg-blue-700 rounded-e-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
@@ -203,7 +200,7 @@
           <label
             class="flex mb-2 text-sm font-medium text-gray-900 dark:text-white items-center"
             for="excluded-resources"
-            >{{ t('resource.spec.excludedResources') }}
+          >{{ t('resource.spec.excludedResources') }}
             <FontAwesomeIcon
               :icon="faQuestionCircle"
               class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
@@ -220,8 +217,7 @@
               input-class="rounded-s-lg rounded-e-none"
               :validation="[['k8s_resource']]"
               @keyup.enter="add('excludedResource')"
-              >
-            </FormKit>
+            />
             <button
               :title="t('global.button.add.title')"
               class="top-0 end-0 p-2.5 h-full text-sm font-medium text-white bg-blue-700 rounded-e-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
@@ -262,7 +258,7 @@
           <label
             class="flex mb-2 text-sm font-medium text-gray-900 dark:text-white items-center"
             for="include-cluster-scoped-resources"
-            >{{ t('resource.spec.includedClusterScopedResources') }}
+          >{{ t('resource.spec.includedClusterScopedResources') }}
             <FontAwesomeIcon
               :icon="faQuestionCircle"
               class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
@@ -279,8 +275,7 @@
               input-class="rounded-s-lg rounded-e-none"
               :validation="[['k8s_resource']]"
               @keyup.enter="add('includedClusterScopedResource')"
-              >
-            </FormKit>
+            />
             <button
               :title="t('global.button.add.title')"
               class="top-0 end-0 p-2.5 h-full text-sm font-medium text-white bg-blue-700 rounded-e-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
@@ -314,7 +309,7 @@
           <label
             class="flex mb-2 text-sm font-medium text-gray-900 dark:text-white items-center"
             for="exclude-cluster-scoped-resources"
-            >{{ t('resource.spec.excludedClusterScopedResources') }}
+          >{{ t('resource.spec.excludedClusterScopedResources') }}
             <FontAwesomeIcon
               :icon="faQuestionCircle"
               class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
@@ -331,8 +326,7 @@
               input-class="rounded-s-lg rounded-e-none"
               :validation="[['k8s_resource']]"
               @keyup.enter="add('excludedClusterScopedResource')"
-              >
-            </FormKit>
+            />
             <button
               :title="t('global.button.add.title')"
               class="top-0 end-0 p-2.5 h-full text-sm font-medium text-white bg-blue-700 rounded-e-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
@@ -375,7 +369,7 @@
           <label
             class="flex mb-2 text-sm font-medium text-gray-900 dark:text-white items-center"
             for="include-namespace-scoped-resources"
-            >{{ t('resource.spec.includedNamespaceScopedResources') }}
+          >{{ t('resource.spec.includedNamespaceScopedResources') }}
             <FontAwesomeIcon
               :icon="faQuestionCircle"
               class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
@@ -392,8 +386,7 @@
               input-class="rounded-s-lg rounded-e-none"
               :validation="[['k8s_resource']]"
               @keyup.enter="add('includedNamespaceScopedResource')"
-              >
-            </FormKit>
+            />
             <button
               :title="t('global.button.add.title')"
               class="top-0 end-0 p-2.5 h-full text-sm font-medium text-white bg-blue-700 rounded-e-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
@@ -427,7 +420,7 @@
           <label
             class="flex mb-2 text-sm font-medium text-gray-900 dark:text-white items-center"
             for="exclude-namespace-scoped-resources"
-            >{{ t('resource.spec.excludedNamespaceScopedResources') }}
+          >{{ t('resource.spec.excludedNamespaceScopedResources') }}
             <FontAwesomeIcon
               :icon="faQuestionCircle"
               class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
@@ -444,8 +437,7 @@
               input-class="rounded-s-lg rounded-e-none"
               :validation="[['k8s_resource']]"
               @keyup.enter="add('excludedNamespaceScopedResource')"
-              >
-            </FormKit>
+            />
             <button
               :title="t('global.button.add.title')"
               class="top-0 end-0 p-2.5 h-full text-sm font-medium text-white bg-blue-700 rounded-e-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
@@ -486,7 +478,7 @@
     {{
       t('form.tooltip.includeClusterResources', { type: t('global.backup', 1) })
     }}
-    <div class="tooltip-arrow" data-popper-arrow></div>
+    <div class="tooltip-arrow" data-popper-arrow />
   </div>
   <div
     id="tooltip-include-namespace-cluster-resources"
@@ -498,7 +490,7 @@
         type: t('global.backup', 1),
       })
     }}
-    <div class="tooltip-arrow" data-popper-arrow></div>
+    <div class="tooltip-arrow" data-popper-arrow />
   </div>
   <div
     id="tooltip-resource-policies-configmap"
@@ -506,7 +498,7 @@
     role="tooltip"
   >
     {{ t('form.tooltip.resourcePolicy') }}
-    <div class="tooltip-arrow" data-popper-arrow></div>
+    <div class="tooltip-arrow" data-popper-arrow />
   </div>
   <div
     id="tooltip-included-resources"
@@ -514,7 +506,7 @@
     role="tooltip"
   >
     {{ t('form.tooltip.includedResources', { type: t('global.backup', 1) }) }}
-    <div class="tooltip-arrow" data-popper-arrow></div>
+    <div class="tooltip-arrow" data-popper-arrow />
   </div>
   <div
     id="tooltip-excluded-resources"
@@ -522,7 +514,7 @@
     role="tooltip"
   >
     {{ t('form.tooltip.excludedResources', { type: t('global.backup', 1) }) }}
-    <div class="tooltip-arrow" data-popper-arrow></div>
+    <div class="tooltip-arrow" data-popper-arrow />
   </div>
   <div
     id="tooltip-exclude-cluster-scoped-resources"
@@ -534,7 +526,7 @@
         type: t('global.backup', 1),
       })
     }}
-    <div class="tooltip-arrow" data-popper-arrow></div>
+    <div class="tooltip-arrow" data-popper-arrow />
   </div>
   <div
     id="tooltip-include-cluster-scoped-resources"
@@ -546,7 +538,7 @@
         type: t('global.backup', 1),
       })
     }}
-    <div class="tooltip-arrow" data-popper-arrow></div>
+    <div class="tooltip-arrow" data-popper-arrow />
   </div>
   <div
     id="tooltip-include-namespace-scoped-resources"
@@ -558,7 +550,7 @@
         type: t('global.backup', 1),
       })
     }}
-    <div class="tooltip-arrow" data-popper-arrow></div>
+    <div class="tooltip-arrow" data-popper-arrow />
   </div>
   <div
     id="tooltip-exclude-namespace-scoped-resources"
@@ -570,7 +562,7 @@
         type: t('global.backup', 1),
       })
     }}
-    <div class="tooltip-arrow" data-popper-arrow></div>
+    <div class="tooltip-arrow" data-popper-arrow />
   </div>
 </template>
 

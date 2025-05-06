@@ -34,12 +34,12 @@
             type="button"
           >
             <FontAwesomeIcon :icon="faPen" class="!w-4 !h-4 mr-2" />
-            {{ t('global.button.edit.title')}}
+            {{ t('global.button.edit.title') }}
           </button>
           <button
             v-if="
               schedule?.status?.phase !== V1SchedulePhase.FailedValidation &&
-              schedule?.spec?.paused
+                schedule?.spec?.paused
             "
             :disabled="togglePauseLoading"
             class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
@@ -56,12 +56,12 @@
               :icon="faCircleNotch"
               class="!w-4 !h-4 animate-spin mr-2"
             />
-            {{ t('global.button.enable.title')}}
+            {{ t('global.button.enable.title') }}
           </button>
           <button
             v-if="
               schedule?.status?.phase !== V1SchedulePhase.FailedValidation &&
-              !schedule?.spec?.paused
+                !schedule?.spec?.paused
             "
             :disabled="togglePauseLoading"
             class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
@@ -78,7 +78,7 @@
               :icon="faCircleNotch"
               class="!w-4 !h-4 animate-spin mr-2"
             />
-            {{ t('global.button.pause.title')}}
+            {{ t('global.button.pause.title') }}
           </button>
           <button
             :class="{ 'cursor-not-allowed': isDeleting || !schedule }"
@@ -111,10 +111,10 @@
     v-if="showModalDelete"
     :icon="faExclamationCircle"
     :text="t('modal.text.confirmation.delete')"
-    @onClose="showModalDelete = false"
-    @onConfirm="remove(schedule.metadata.name)"
+    @on-close="showModalDelete = false"
+    @on-confirm="remove(schedule.metadata.name)"
   >
-    <template v-slot:content>
+    <template #content>
       <div class="flex justify-center">
         <p
           class="mt-2 px-1 mb-6 text-sm rounded bg-gray-200 text-gray-600 dark:bg-gray-600 dark:text-gray-200"
@@ -146,7 +146,7 @@ import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
 const props = defineProps({
-  schedule: Object as PropType<V1Schedule>,
+  schedule: {type: Object as PropType<V1Schedule>, required: true },
 });
 
 const showModalDelete = ref(false);

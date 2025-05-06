@@ -61,8 +61,8 @@ import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
 defineProps({
-  icon: Object as PropType<IconDefinition>,
-  text: String,
+  icon:{type: Object as PropType<IconDefinition>, required: true},
+  text: {type: String, required: true},
 });
 
 const emit = defineEmits(['onConfirm', 'onCancel', 'onClose']);

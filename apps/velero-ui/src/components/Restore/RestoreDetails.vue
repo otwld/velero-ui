@@ -36,8 +36,7 @@
         class="bg-blue-100 text-blue-800 text-xs font-medium inline-flex items-center me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300"
       >
         <FontAwesomeIcon :icon="faClock" class="!w-3 !h-3 mr-1.5" />
-        {{ spec?.itemOperationTimeout }}</span
-      >
+        {{ spec?.itemOperationTimeout }}</span>
     </div>
     <div v-if="!spec">
       <div
@@ -76,8 +75,8 @@
         t('resource.spec.excludedResources')
       }}</span>
       <i class="mt-1 text-xs text-gray-500 dark:text-gray-400">{{
-          spec.excludedResources.join(', ')
-        }}</i>
+        spec.excludedResources.join(', ')
+      }}</i>
     </div>
   </div>
 </template>
@@ -96,6 +95,6 @@ import { useI18n } from 'vue-i18n';
 const { t } = useI18n();
 
 defineProps({
-  spec: Object as PropType<V1RestoreSpec>,
+  spec: {type: Object as PropType<V1RestoreSpec>, required: true },
 });
 </script>

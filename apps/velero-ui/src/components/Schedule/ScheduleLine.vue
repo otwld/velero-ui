@@ -7,7 +7,7 @@
           class="!w-4 !h-4 border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600"
           type="checkbox"
           @click="emit('onChecked')"
-        />
+        >
         <label class="sr-only" for="checkbox-">checkbox</label>
       </div>
     </td>
@@ -96,7 +96,7 @@
         <button
           v-if="
             data?.status?.phase !== V1SchedulePhase.FailedValidation &&
-            data?.spec?.paused
+              data?.spec?.paused
           "
           :data-tooltip-target="`tooltip-button-resume-${data?.metadata?.uid}`"
           :disabled="togglePauseLoading"
@@ -119,7 +119,7 @@
         <button
           v-if="
             data?.status?.phase !== V1SchedulePhase.FailedValidation &&
-            !data?.spec?.paused
+              !data?.spec?.paused
           "
           :data-tooltip-target="`tooltip-button-pause-${data?.metadata?.uid}`"
           :disabled="togglePauseLoading"
@@ -240,7 +240,7 @@ import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
 const props = defineProps({
-  data: Object as PropType<V1Schedule>,
+  data: {type: Object as PropType<V1Schedule>, required: true },
   checked: Boolean,
 });
 

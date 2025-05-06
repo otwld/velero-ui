@@ -9,7 +9,9 @@
     </div>
     <div v-if="data?.length === 0" class="inline-flex items-center">
       <FontAwesomeIcon :icon="faInfoCircle" class="!w-4 !h-4" />
-      <p class="ml-2">{{ t('log.text.noResult') }}</p>
+      <p class="ml-2">
+        {{ t('log.text.noResult') }}
+      </p>
     </div>
   </div>
 </template>
@@ -22,8 +24,8 @@ import { useSettingsLogs } from '@velero-ui-app/composables/settings/useSettings
 import { useI18n } from 'vue-i18n';
 
 const props = defineProps({
-  type: String,
-  name: String,
+  type: {type: String, required: true },
+  name: {type: String, required: true },
 });
 
 const { t } = useI18n();

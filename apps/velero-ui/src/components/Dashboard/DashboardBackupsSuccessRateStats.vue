@@ -7,8 +7,7 @@
         <div>
           <span
             class="text-xl font-bold leading-none text-gray-900 sm:text-2xl dark:text-white"
-            >{{ t('dashboard.stats.title.successRate') }}</span
-          >
+          >{{ t('dashboard.stats.title.successRate') }}</span>
           <h3 class="text-base font-light text-gray-500 dark:text-gray-400">
             {{ t('dashboard.stats.backups.description') }}
           </h3>

@@ -27,7 +27,9 @@
       </p>
     </div>
     <div class="inline-flex items-center">
-      <p class="text-right dark:text-white">{{ data.ip }}</p>
+      <p class="text-right dark:text-white">
+        {{ data.ip }}
+      </p>
     </div>
     <div class="inline-flex items-center">
       <button
@@ -78,7 +80,7 @@ import { useI18n } from 'vue-i18n';
 import type { SocketIO } from '@velero-ui-app/plugins/socket.plugin';
 
 defineProps({
-  data: Object as PropType<VeleroAgentSettings>,
+  data: {type: Object as PropType<VeleroAgentSettings>, required: true },
 });
 
 const socket: SocketIO = inject('socketIo');

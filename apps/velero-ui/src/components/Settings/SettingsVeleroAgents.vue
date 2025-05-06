@@ -48,7 +48,7 @@
             :key="`agent-${index}`"
             class="py-4"
           >
-            <SettingsVeleroAgentLine :data="agent"/>
+            <SettingsVeleroAgentLine :data="agent" />
           </li>
         </ul>
       </div>

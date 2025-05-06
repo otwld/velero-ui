@@ -20,14 +20,14 @@
         :title="spec?.uploaderType"
         class="h-5 w-5"
         src="/src/assets/images/kopia.svg"
-      />
+      >
       <img
         v-if="spec?.uploaderType === V1BackupRepositoryType.Restic"
         :alt="spec?.uploaderType"
         :title="spec?.uploaderType"
         class="h-5 w-5"
         src="/src/assets/images/restic.png"
-      />
+      >
       <router-link
         v-if="spec?.backupStorageLocation"
         :to="{
@@ -121,6 +121,6 @@ import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
 defineProps({
-  spec: Object as PropType<V1PodVolumeBackupSpec | V1PodVolumeRestoreSpec>,
+  spec: {type: Object as PropType<V1PodVolumeBackupSpec | V1PodVolumeRestoreSpec>, required: true },
 });
 </script>

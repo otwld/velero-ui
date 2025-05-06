@@ -2,7 +2,6 @@ import { Body, Controller, Delete, Get, Param, Query } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { V1DownloadRequestList } from '@velero-ui/velero';
 import { K8sCustomObjectService } from '@velero-ui-api/modules/k8s-custom-object/k8s-custom-object.service';
-import { DownloadRequestService } from '@velero-ui-api/modules/download-request/download-request.service';
 import {
   K8sCustomObjectParams,
   K8SCustomObjectQueries,

@@ -16,8 +16,7 @@
           class="ml-4 bg-blue-100 text-blue-800 text-xs font-medium inline-flex items-center me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300"
         >
           <FontAwesomeIcon :icon="faCubes" class="!w-3 !h-3 mr-1.5" />
-          {{ data.length }}</span
-        >
+          {{ data.length }}</span>
       </div>
       <ul class="overflow-auto mt-2 max-h-[300px]">
         <div v-if="data && data.length === 0 && isFetching">

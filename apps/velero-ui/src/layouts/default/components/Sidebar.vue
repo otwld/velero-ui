@@ -277,14 +277,12 @@
           </div>
           <span
             class="inline-flex justify-center text-gray-500 text-xs dark:text-white"
-            >{{ t('global.powered', { version }) }}
+          >{{ t('global.powered', { version }) }}
             <a
               class="ml-1 hover:text-blue-600"
               href="https://otwld.com/"
               target="_blank"
-              >OTWLD</a
-            ></span
-          >
+            >OTWLD</a></span>
         </div>
       </div>
     </div>

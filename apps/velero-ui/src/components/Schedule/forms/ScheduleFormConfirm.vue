@@ -95,7 +95,9 @@
             {{ t('resource.spec.includedNamespaces') }} *
           </dt>
           <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">
-            <li v-if="formContent[1]?.includedNamespaces.length === 0">*</li>
+            <li v-if="formContent[1]?.includedNamespaces.length === 0">
+              *
+            </li>
             <ul
               v-if="formContent[1]?.includedNamespaces.length > 0"
               class="max-w-md space-y-1 list-disc list-inside dark:text-gray-400"
@@ -116,7 +118,9 @@
             {{ t('resource.spec.excludedNamespaces') }}
           </dt>
           <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">
-            <p v-if="formContent[1]?.excludedNamespaces.length === 0">-</p>
+            <p v-if="formContent[1]?.excludedNamespaces.length === 0">
+              -
+            </p>
             <ul
               v-if="formContent[1]?.excludedNamespaces.length > 0"
               class="max-w-md space-y-1 list-disc list-inside dark:text-gray-400"
@@ -159,7 +163,9 @@
             {{ t('resource.spec.excludedResources') }}
           </dt>
           <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">
-            <p v-if="formContent[2]?.excludedResources.length === 0">-</p>
+            <p v-if="formContent[2]?.excludedResources.length === 0">
+              -
+            </p>
             <ul
               v-if="formContent[2]?.excludedResources"
               class="max-w-md space-y-1 list-disc list-inside dark:text-gray-400"
@@ -194,7 +200,9 @@
                 {{ volume }}
               </li>
             </ul>
-            <p v-else>-</p>
+            <p v-else>
+              -
+            </p>
           </dd>
           <dt
             class="mb-2 font-semibold leading-none text-gray-900 dark:text-white"
@@ -344,8 +352,12 @@
               class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
             >
               <tr>
-                <th class="px-6 py-1.5" scope="col">{{ t('global.key') }}</th>
-                <th class="px-6 py-1.5" scope="col">{{ t('global.value') }}</th>
+                <th class="px-6 py-1.5" scope="col">
+                  {{ t('global.key') }}
+                </th>
+                <th class="px-6 py-1.5" scope="col">
+                  {{ t('global.value') }}
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -389,8 +401,12 @@
               class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
             >
               <tr>
-                <th class="px-6 py-1.5" scope="col">{{ t('global.key') }}</th>
-                <th class="px-6 py-1.5" scope="col">{{ t('global.value') }}</th>
+                <th class="px-6 py-1.5" scope="col">
+                  {{ t('global.key') }}
+                </th>
+                <th class="px-6 py-1.5" scope="col">
+                  {{ t('global.value') }}
+                </th>
               </tr>
             </thead>
             <tbody>

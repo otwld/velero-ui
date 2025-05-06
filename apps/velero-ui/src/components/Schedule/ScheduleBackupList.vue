@@ -30,6 +30,6 @@ listStore.setObjectType(Resources.BACKUP);
 listStore.applyNameFilter(router.currentRoute.value.params.name as string);
 
 defineProps({
-  schedule: Object as PropType<V1Schedule>,
+  schedule: {type: Object as PropType<V1Schedule>, required: true },
 });
 </script>

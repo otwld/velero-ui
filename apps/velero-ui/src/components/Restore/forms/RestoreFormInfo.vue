@@ -15,10 +15,10 @@
             name="includedNamespaces"
             type="select"
           >
-            <template #label="context">
+            <template #label>
               <label
                 class="flex mb-2 text-sm font-medium text-gray-900 dark:text-white items-center"
-                >{{ t('resource.spec.includedNamespaces') }}
+              >{{ t('resource.spec.includedNamespaces') }}
                 <FontAwesomeIcon
                   :icon="faQuestionCircle"
                   class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
@@ -37,10 +37,10 @@
             name="excludedNamespaces"
             type="select"
           >
-            <template #label="context">
+            <template #label>
               <label
                 class="flex mb-2 text-sm font-medium text-gray-900 dark:text-white items-center"
-                >{{ t('resource.spec.excludedNamespaces') }}
+              >{{ t('resource.spec.excludedNamespaces') }}
                 <FontAwesomeIcon
                   :icon="faQuestionCircle"
                   class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
@@ -55,7 +55,7 @@
           <FormKit name="itemOperationTimeout" type="group">
             <label
               class="flex mb-2 text-sm font-medium text-gray-900 dark:text-white items-center"
-              >{{ t('resource.spec.itemOperationTimeout') }}
+            >{{ t('resource.spec.itemOperationTimeout') }}
               <FontAwesomeIcon
                 :icon="faQuestionCircle"
                 class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
@@ -103,10 +103,10 @@
             outer-class="my-2"
             type="number"
           >
-            <template #label="context">
+            <template #label>
               <label
                 class="flex mb-2 text-sm font-medium text-gray-900 dark:text-white items-center"
-                >{{ t('resource.spec.parallelFilesDownload') }}
+              >{{ t('resource.spec.parallelFilesDownload') }}
                 <FontAwesomeIcon
                   :icon="faQuestionCircle"
                   class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
@@ -127,10 +127,10 @@
             outer-class="mb-2"
             type="select"
           >
-            <template #label="context">
+            <template #label>
               <label
                 class="flex mb-2 text-sm font-medium text-gray-900 dark:text-white items-center"
-                >{{ t('resource.spec.existingResourcePolicy') }}
+              >{{ t('resource.spec.existingResourcePolicy') }}
                 <FontAwesomeIcon
                   :icon="faQuestionCircle"
                   class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
@@ -157,7 +157,7 @@
                 wrapper-class="relative w-11 h-6 bg-gray-200 dark:bg-gray-700 rounded-full cursor-pointer"
                 outer-class="flex items-center"
               >
-                 <template #decorator>
+                <template #decorator>
                   <span
                     class="peer
                       peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full
@@ -171,8 +171,7 @@
               </FormKit>
               <span
                 class="ms-3 text-sm font-medium text-gray-400 dark:dark:text-white"
-                >{{ t('resource.spec.includeClusterResources') }}</span
-              >
+              >{{ t('resource.spec.includeClusterResources') }}</span>
               <FontAwesomeIcon
                 :icon="faQuestionCircle"
                 class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help dark:text-white dark:hover:text-gray-200"
@@ -189,7 +188,7 @@
                 wrapper-class="relative w-11 h-6 bg-gray-200 dark:bg-gray-700 rounded-full cursor-pointer"
                 outer-class="flex items-center"
               >
-                 <template #decorator>
+                <template #decorator>
                   <span
                     class="peer
                       peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full
@@ -203,7 +202,7 @@
               </FormKit>
               <span
                 class="ms-3 text-sm font-medium text-gray-400 dark:text-white"
-                >{{ t('resource.spec.restorePVs') }}
+              >{{ t('resource.spec.restorePVs') }}
               </span>
               <FontAwesomeIcon
                 :icon="faQuestionCircle"
@@ -221,7 +220,7 @@
                 wrapper-class="relative w-11 h-6 bg-gray-200 dark:bg-gray-700 rounded-full cursor-pointer"
                 outer-class="flex items-center"
               >
-                 <template #decorator>
+                <template #decorator>
                   <span
                     class="peer
                       peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full
@@ -235,7 +234,7 @@
               </FormKit>
               <span
                 class="ms-3 text-sm font-medium text-gray-400 dark:dark:text-white"
-                >{{ t('resource.spec.preserveNodePorts') }}
+              >{{ t('resource.spec.preserveNodePorts') }}
               </span>
               <FontAwesomeIcon
                 :icon="faQuestionCircle"
@@ -253,7 +252,7 @@
                 wrapper-class="relative w-11 h-6 bg-gray-200 dark:bg-gray-700 rounded-full cursor-pointer"
                 outer-class="flex items-center"
               >
-                 <template #decorator>
+                <template #decorator>
                   <span
                     class="peer
                       peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full
@@ -267,8 +266,7 @@
               </FormKit>
               <span
                 class="ms-3 text-sm font-medium text-gray-400 dark:dark:text-white"
-                >{{ t('resource.spec.writeSparseFiles') }}</span
-              >
+              >{{ t('resource.spec.writeSparseFiles') }}</span>
               <FontAwesomeIcon
                 :icon="faQuestionCircle"
                 class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help dark:text-white dark:hover:text-gray-200"
@@ -288,7 +286,7 @@
     role="tooltip"
   >
     {{ t('form.tooltip.includedNamespaces', { type: t('global.restore', 1) }) }}
-    <div class="tooltip-arrow" data-popper-arrow></div>
+    <div class="tooltip-arrow" data-popper-arrow />
   </div>
   <div
     id="tooltip-excluded-namespace"
@@ -296,7 +294,7 @@
     role="tooltip"
   >
     {{ t('form.tooltip.excludedNamespaces', { type: t('global.restore', 1) }) }}
-    <div class="tooltip-arrow" data-popper-arrow></div>
+    <div class="tooltip-arrow" data-popper-arrow />
   </div>
   <div
     id="tooltip-include-cluster-resources"
@@ -308,7 +306,7 @@
         type: t('global.restore', 1),
       })
     }}
-    <div class="tooltip-arrow" data-popper-arrow></div>
+    <div class="tooltip-arrow" data-popper-arrow />
   </div>
   <div
     id="tooltip-write-sparse-files"
@@ -316,7 +314,7 @@
     role="tooltip"
   >
     {{ t('form.tooltip.writeSparseFiles') }}
-    <div class="tooltip-arrow" data-popper-arrow></div>
+    <div class="tooltip-arrow" data-popper-arrow />
   </div>
   <div
     id="tooltip-restore-volumes"
@@ -324,7 +322,7 @@
     role="tooltip"
   >
     {{ t('form.tooltip.restorePVs') }}
-    <div class="tooltip-arrow" data-popper-arrow></div>
+    <div class="tooltip-arrow" data-popper-arrow />
   </div>
   <div
     id="tooltip-preserve-nodeports"
@@ -332,7 +330,7 @@
     role="tooltip"
   >
     {{ t('form.tooltip.preserveNodePorts') }}
-    <div class="tooltip-arrow" data-popper-arrow></div>
+    <div class="tooltip-arrow" data-popper-arrow />
   </div>
   <div
     id="tooltip-item-operation-timeout"
@@ -340,7 +338,7 @@
     role="tooltip"
   >
     {{ t('form.tooltip.itemOperationTimeout') }}
-    <div class="tooltip-arrow" data-popper-arrow></div>
+    <div class="tooltip-arrow" data-popper-arrow />
   </div>
   <div
     id="tooltip-parallel-files-download"
@@ -348,7 +346,7 @@
     role="tooltip"
   >
     {{ t('form.tooltip.parallelFilesDownload') }}
-    <div class="tooltip-arrow" data-popper-arrow></div>
+    <div class="tooltip-arrow" data-popper-arrow />
   </div>
   <div
     id="tooltip-existing-resource-policy"
@@ -356,7 +354,7 @@
     role="tooltip"
   >
     {{ t('form.tooltip.existingResourcePolicy') }}
-    <div class="tooltip-arrow" data-popper-arrow></div>
+    <div class="tooltip-arrow" data-popper-arrow />
   </div>
 </template>
 

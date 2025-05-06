@@ -32,12 +32,14 @@
       <FontAwesomeIcon :icon="icon || faCircleInfo" class="!w-5 !h-5" />
     </div>
 
-    <div class="ml-3 text-sm font-normal">{{ message }}</div>
+    <div class="ml-3 text-sm font-normal">
+      {{ message }}
+    </div>
     <button
       type="button"
-      @click="emit('onDismiss')"
       class="ml-auto m-1 bg-white text-gray-400 hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-gray-100 inline-flex items-center justify-center h-8 w-8 dark:text-gray-500 dark:hover:text-white dark:bg-gray-800 dark:hover:bg-gray-700"
       aria-label="Close"
+      @click="emit('onDismiss')"
     >
       <span class="sr-only">Close</span>
       <FontAwesomeIcon :icon="faXmark" class="!w-3 !h-3" />
@@ -59,9 +61,9 @@ import {
 import { ToastType } from '@velero-ui-app/stores/toasts.store';
 
 defineProps({
-  icon: Object as PropType<IconDefinition>,
-  message: String,
-  type: String as PropType<ToastType>,
+  icon: {type: Object as PropType<IconDefinition>, required: true },
+  message: {type: String, required: true },
+  type: {type: String as PropType<ToastType>, required: true },
 });
 
 const emit = defineEmits(['onDismiss']);

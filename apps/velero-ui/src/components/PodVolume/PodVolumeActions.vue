@@ -97,8 +97,8 @@ import { useI18n } from 'vue-i18n';
 const { t } = useI18n();
 
 const props = defineProps({
-  podVolume: Object as PropType<V1PodVolumeBackup | V1PodVolumeRestore>,
-  type: Object as PropType<Resource>,
+  podVolume: {type: Object as PropType<V1PodVolumeBackup | V1PodVolumeRestore>, required: true },
+  type: {type: Object as PropType<Resource>, required: true },
 });
 
 const showModalDelete = ref(false);

@@ -43,7 +43,7 @@
       <label
         class="block text-sm font-medium text-gray-900 dark:text-white"
         for="namespace-mappings-from"
-        >{{ t('resource.spec.namespaceMapping') }}
+      >{{ t('resource.spec.namespaceMapping') }}
         <FontAwesomeIcon
           :icon="faQuestionCircle"
           class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
@@ -93,9 +93,15 @@
             class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
           >
             <tr>
-              <th class="px-6 py-1.5" scope="col">{{ t('global.from') }}</th>
-              <th class="px-6 py-1.5" scope="col">{{ t('global.to') }}</th>
-              <th class="px-6 py-1.5" scope="col">{{ t('global.actions') }}</th>
+              <th class="px-6 py-1.5" scope="col">
+                {{ t('global.from') }}
+              </th>
+              <th class="px-6 py-1.5" scope="col">
+                {{ t('global.to') }}
+              </th>
+              <th class="px-6 py-1.5" scope="col">
+                {{ t('global.actions') }}
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -161,7 +167,7 @@
       <label
         class="block text-sm font-medium text-gray-900 dark:text-white"
         for="name"
-        >{{ t('resource.spec.labelSelector') }}
+      >{{ t('resource.spec.labelSelector') }}
         <FontAwesomeIcon
           :icon="faQuestionCircle"
           class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
@@ -211,9 +217,15 @@
             class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
           >
             <tr>
-              <th class="px-6 py-1.5" scope="col">{{ t('global.key') }}</th>
-              <th class="px-6 py-1.5" scope="col">{{ t('global.value') }}</th>
-              <th class="px-6 py-1.5" scope="col">{{ t('global.actions') }}</th>
+              <th class="px-6 py-1.5" scope="col">
+                {{ t('global.key') }}
+              </th>
+              <th class="px-6 py-1.5" scope="col">
+                {{ t('global.value') }}
+              </th>
+              <th class="px-6 py-1.5" scope="col">
+                {{ t('global.actions') }}
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -266,7 +278,7 @@
       <label
         class="block text-sm font-medium text-gray-900 dark:text-white"
         for="name"
-        >{{ t('resource.metadata.labels') }}
+      >{{ t('resource.metadata.labels') }}
         <FontAwesomeIcon
           :icon="faQuestionCircle"
           class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
@@ -316,9 +328,15 @@
             class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
           >
             <tr>
-              <th class="px-6 py-1.5" scope="col">{{ t('global.key') }}</th>
-              <th class="px-6 py-1.5" scope="col">{{ t('global.value') }}</th>
-              <th class="px-6 py-1.5" scope="col">{{ t('global.actions') }}</th>
+              <th class="px-6 py-1.5" scope="col">
+                {{ t('global.key') }}
+              </th>
+              <th class="px-6 py-1.5" scope="col">
+                {{ t('global.value') }}
+              </th>
+              <th class="px-6 py-1.5" scope="col">
+                {{ t('global.actions') }}
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -358,7 +376,7 @@
     role="tooltip"
   >
     {{ t('form.tooltip.namespaceMapping') }}
-    <div class="tooltip-arrow" data-popper-arrow></div>
+    <div class="tooltip-arrow" data-popper-arrow />
   </div>
   <div
     id="tooltip-selector"
@@ -366,7 +384,7 @@
     role="tooltip"
   >
     {{ t('form.tooltip.labelSelector') }}
-    <div class="tooltip-arrow" data-popper-arrow></div>
+    <div class="tooltip-arrow" data-popper-arrow />
   </div>
   <div
     id="tooltip-labels"
@@ -374,7 +392,7 @@
     role="tooltip"
   >
     {{ t('form.tooltip.labels', {type: t('global.restore', 1)}) }}
-    <div class="tooltip-arrow" data-popper-arrow></div>
+    <div class="tooltip-arrow" data-popper-arrow />
   </div>
 </template>
 

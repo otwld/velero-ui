@@ -15,11 +15,10 @@
             name="name"
             type="text"
           >
-            <template #label="context">
+            <template #label>
               <label
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >{{ t('form.field.volumeSnapshotLocationName') }} *</label
-              >
+              >{{ t('form.field.volumeSnapshotLocationName') }} *</label>
             </template>
           </FormKit>
         </div>
@@ -30,10 +29,10 @@
             name="provider"
             type="text"
           >
-            <template #label="context">
+            <template #label>
               <label
                 class="flex mb-2 text-sm font-medium text-gray-900 dark:text-white items-center"
-                >{{ t('resource.spec.provider') }} *
+              >{{ t('resource.spec.provider') }} *
                 <FontAwesomeIcon
                   :icon="faQuestionCircle"
                   class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
@@ -53,7 +52,7 @@
     role="tooltip"
   >
     {{ t('form.tooltip.provider') }}
-    <div class="tooltip-arrow" data-popper-arrow></div>
+    <div class="tooltip-arrow" data-popper-arrow />
   </div>
 </template>
 
