@@ -157,32 +157,35 @@
           </FormKit>
         </div>
         <div class="col-span-2 sm:col-span-1">
-          <label
-            class="flex mb-2 text-sm font-medium text-gray-900 dark:text-white items-center"
-            for="certificate"
-          >{{ t('resource.spec.certificate') }}
-            <FontAwesomeIcon
-              :icon="faQuestionCircle"
-              class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
-              data-tooltip-style="light"
-              data-tooltip-target="tooltip-certificate"
-            />
-          </label>
-          <input
-            id="certificate"
+          <FormKit
             accept=".pem,.crt,.cer,.key"
-            aria-describedby="certificate-help"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+            file-item-class="relative w-full h-0 text-[0px]"
+            file-name-class="sr-only"
+            help=".PEM, .CRT, .CER or .KEY (MAX. 2mo)."
+            no-files-class="sr-only"
             size="4194304"
             type="file"
             @change="onFileChanged($event)"
           >
-          <p
-            id="certificate-help"
-            class="mt-1 text-xs text-gray-500 dark:text-gray-300"
-          >
-            .PEM, .CRT, .CER or .KEY (MAX. 2mo).
-          </p>
+            <template #label>
+              <label
+                class="flex mb-2 text-sm font-medium text-gray-900 dark:text-white items-center"
+              >{{ t('resource.spec.certificate') }}
+                <FontAwesomeIcon
+                  :icon="faQuestionCircle"
+                  class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
+                  data-tooltip-style="light"
+                  data-tooltip-target="tooltip-certificate"
+                />
+              </label>
+            </template>
+            <template #fileRemoveIcon>
+              <FontAwesomeIcon
+                :icon="faXmark"
+                class="absolute right-[10px] top-[-28px] !w-4 !h-4 cursor-pointer"
+              />
+            </template>
+          </FormKit>
         </div>
         <div class="col-span-2 sm:col-span-1">
           <FormKit name="validationFrequency" type="group">
@@ -239,22 +242,16 @@
             </p>
             <label class="inline-flex items-center mb-5 cursor-pointer">
               <FormKit
-                name="default"
-                type="checkbox"
                 input-class="sr-only peer"
                 label-class="ml-2"
-                wrapper-class="relative w-11 h-6 bg-gray-200 dark:bg-gray-700 rounded-full cursor-pointer"
+                name="default"
                 outer-class="flex items-center"
+                type="checkbox"
+                wrapper-class="relative w-11 h-6 bg-gray-200 dark:bg-gray-700 rounded-full cursor-pointer"
               >
                 <template #decorator>
                   <span
-                    class="peer
-                      peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full
-                      peer-checked:after:border-white after:content-['']
-                      after:absolute after:top-0.5 after:start-[2px]
-                      after:bg-white after:border-gray-300 after:border after:rounded-full
-                      after:h-5 after:w-5 after:transition-all dark:border-gray-600
-                      peer-checked:bg-blue-600"
+                    class="peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"
                   />
                 </template>
               </FormKit>
@@ -347,7 +344,7 @@ import { onMounted, ref } from 'vue';
 import { useFormStore } from '@velero-ui-app/stores/form.store';
 import { storeToRefs } from 'pinia';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
+import { faQuestionCircle, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { initTooltips } from 'flowbite';
 import { useI18n } from 'vue-i18n';
 import { useFormKitContextById } from '@formkit/vue';
@@ -366,15 +363,16 @@ const currentForm = ref({
   bucket: '',
   prefix: '',
   provider: '',
-  caCert: null,
+  caCert: '',
+  certificate: null,
   default: false,
   backupSyncPeriod: {
     value: '',
-    unit: 'm'
+    unit: 'm',
   },
   validationFrequency: {
     value: '',
-    unit: 'm'
+    unit: 'm',
   },
 });
 
@@ -385,21 +383,30 @@ onMounted(() => {
     ...currentForm.value,
     ...formContent.value[currentStep.value],
   };
-  currentForm.value.caCert = null;
+  currentForm.value.caCert = '';
+  currentForm.value.certificate = null;
 });
 
-const onFileChanged = (event) => {
-  console.log(currentForm.value.caCert);
+function readFileAsText(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = reject;
+    reader.readAsText(file);
+  });
+}
 
+const onFileChanged = async (event) => {
   const file = event.target.files[0];
-  if (!file) return;
 
-  const reader = new FileReader();
-  reader.onload = (e) => {
-    currentForm.value.caCert = e.target.result;
-  };
-  reader.readAsText(file);
-  console.log(file);
+  if (!file) {
+    return;
+  }
+
+  const content = await readFileAsText(file);
+  const bytes = new TextEncoder().encode(content);
+  currentForm.value.caCert = btoa(String.fromCharCode(...bytes));
+  currentForm.value.certificate = file;
 };
 
 const validate = () => formContext.value.state.valid;

@@ -73,14 +73,14 @@
         </div>
       </div>
       <div class="grid gap-4 mb-2 grid-cols-2">
-        <div class="col-span-2 sm:col-span-1">
+        <div v-if="formContent[0]?.certificate?.name" class="col-span-2 sm:col-span-1">
           <dt
             class="mb-2 font-semibold leading-none text-gray-900 dark:text-white"
           >
             {{ t('resource.spec.certificate') }}
           </dt>
           <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">
-            {{ formContent[0]?.caCert?.name || '-' }}
+            {{ formContent[0]?.certificate?.name || '-' }}
           </dd>
         </div>
         <div v-if="formContent[0]?.validationFrequency.value" class="col-span-2 sm:col-span-1">
