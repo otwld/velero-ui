@@ -4,6 +4,7 @@ import Strategy from 'passport-ldapauth';
 import { ConfigService } from '@nestjs/config';
 import { AppLogger } from '@velero-ui-api/shared/modules/logger/logger.service';
 import { IncomingMessage } from 'http';
+import { Action } from "@velero-ui/shared-types";
 
 @Injectable()
 export class LdapStrategy extends PassportStrategy(Strategy, 'ldap') {
@@ -44,6 +45,7 @@ export class LdapStrategy extends PassportStrategy(Strategy, 'ldap') {
       id: user.uid,
       provider: 'ldap',
       displayName: user.givenName,
+      permissions: [{ action: Action.Manage, subject: 'all' }],
     };
   }
 }

@@ -4,6 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import { InternalOAuthError, Strategy } from 'passport-oauth2';
 import { AppLogger } from '@velero-ui-api/shared/modules/logger/logger.service';
 import {AuthenticationException} from "@velero-ui-api/shared/exceptions/authentication.exception";
+import { Action } from "@velero-ui/shared-types";
 
 @Injectable()
 export class OauthStrategy extends PassportStrategy(Strategy, 'oauth') {
@@ -70,6 +71,7 @@ export class OauthStrategy extends PassportStrategy(Strategy, 'oauth') {
                   value: json.email,
                 },
               ],
+              permissions: [{ action: Action.Manage, subject: 'all' }],
               ...json,
             };
 

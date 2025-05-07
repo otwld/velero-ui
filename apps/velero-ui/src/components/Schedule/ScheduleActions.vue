@@ -5,7 +5,10 @@
     <div
       class="items-center sm:flex xl:block 2xl:flex sm:space-x-4 xl:space-x-0 2xl:space-x-4"
     >
-      <FontAwesomeIcon :icon="faClock" class="!w-16 !h-16 mr-2 dark:text-white" />
+      <FontAwesomeIcon
+        :icon="faClock"
+        class="!w-16 !h-16 mr-2 dark:text-white"
+      />
 
       <div class="pl-3">
         <h3
@@ -30,6 +33,7 @@
         />
         <div v-if="schedule" class="flex items-center gap-x-4 gap-y-2">
           <button
+            v-if="can(Action.Update, Resources.SCHEDULE.subject)"
             :class="{ 'cursor-not-allowed': isEditing || !schedule }"
             :disabled="isEditing || !schedule"
             class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:ring-teal-300 dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
@@ -50,8 +54,9 @@
           </button>
           <button
             v-if="
+              can(Action.Update, Resources.SCHEDULE.subject) &&
               schedule?.status?.phase !== V1SchedulePhase.FailedValidation &&
-                schedule?.spec?.paused
+              schedule?.spec?.paused
             "
             :disabled="togglePauseLoading"
             class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
@@ -72,8 +77,9 @@
           </button>
           <button
             v-if="
+              can(Action.Update, Resources.SCHEDULE.subject) &&
               schedule?.status?.phase !== V1SchedulePhase.FailedValidation &&
-                !schedule?.spec?.paused
+              !schedule?.spec?.paused
             "
             :disabled="togglePauseLoading"
             class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
@@ -93,6 +99,7 @@
             {{ t('global.button.pause.title') }}
           </button>
           <button
+            v-if="can(Action.Delete, Resources.SCHEDULE.subject)"
             :class="{ 'cursor-not-allowed': isDeleting || !schedule }"
             :disabled="isDeleting || !schedule"
             class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-red-600 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"
@@ -145,7 +152,9 @@
     <template #header>
       <h3 class="text-lg text-gray-500 dark:text-gray-400">
         {{ t('modal.text.title.editSchedule') }}
-        <span class="font-normal text-sm ml-2">{{ schedule?.metadata?.name }}</span>
+        <span class="font-normal text-sm ml-2">{{
+          schedule?.metadata?.name
+        }}</span>
       </h3>
     </template>
     <template #content>
@@ -174,28 +183,30 @@ import ModalConfirmation from '@velero-ui-app/components/Modals/ModalConfirmatio
 import { useDeleteKubernetesObject } from '@velero-ui-app/composables/useDeleteKubernetesObject';
 import { usePauseSchedule } from '@velero-ui-app/composables/schedule/usePauseSchedule';
 import { useI18n } from 'vue-i18n';
-import VModal from "@velero-ui-app/components/Modals/VModal.vue";
-import ScheduleFormEdit from "@velero-ui-app/components/Schedule/forms/ScheduleFormEdit.vue";
-import { useKubernetesEditObject } from "@velero-ui-app/composables/useKubernetesEditObject";
+import VModal from '@velero-ui-app/components/Modals/VModal.vue';
+import ScheduleFormEdit from '@velero-ui-app/components/Schedule/forms/ScheduleFormEdit.vue';
+import { useKubernetesEditObject } from '@velero-ui-app/composables/useKubernetesEditObject';
+import { can } from '@velero-ui-app/utils/policy.utils';
+import { Action } from '@velero-ui/shared-types';
 
 const { t } = useI18n();
 const props = defineProps({
-  schedule: {type: Object as PropType<V1Schedule>, required: true },
+  schedule: { type: Object as PropType<V1Schedule>, required: true },
 });
 
 const showModalDelete = ref(false);
 const showModalEdit = ref(false);
 
 const { mutate: togglePause, isPending: togglePauseLoading } = usePauseSchedule(
-  toRef(() => props.schedule?.metadata?.name),
+  toRef(() => props.schedule?.metadata?.name)
 );
 
 const { isPending: isDeleting, mutate: remove } = useDeleteKubernetesObject(
-  Resources.SCHEDULE,
+  Resources.SCHEDULE
 );
 
 const { isPending: isEditing } = useKubernetesEditObject(
   Resources.SCHEDULE,
-  props.schedule?.metadata.name,
+  props.schedule?.metadata.name
 );
 </script>

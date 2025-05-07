@@ -33,6 +33,7 @@
         />
         <div class="flex items-center gap-x-4 gap-y-2">
           <button
+            v-if="can(Action.Delete, Resources.RESTORE.subject)"
             :class="{ 'cursor-not-allowed': isDisabled || !restore }"
             :disabled="isDisabled || !restore"
             class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-red-600 hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"
@@ -91,6 +92,8 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import ModalConfirmation from '@velero-ui-app/components/Modals/ModalConfirmation.vue';
 import { useDeleteKubernetesObject } from '@velero-ui-app/composables/useDeleteKubernetesObject';
 import { useI18n } from 'vue-i18n';
+import { can } from "@velero-ui-app/utils/policy.utils";
+import { Action } from "@velero-ui/shared-types";
 
 const { t } = useI18n();
 

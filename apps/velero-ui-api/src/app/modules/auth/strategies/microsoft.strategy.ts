@@ -4,6 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import { Strategy } from 'passport-microsoft';
 import { AppLogger } from '@velero-ui-api/shared/modules/logger/logger.service';
 import { AuthenticationException } from '@velero-ui-api/shared/exceptions/authentication.exception';
+import { Action } from "@velero-ui/shared-types";
 
 @Injectable()
 export class MicrosoftStrategy extends PassportStrategy(Strategy, 'microsoft') {
@@ -43,6 +44,7 @@ export class MicrosoftStrategy extends PassportStrategy(Strategy, 'microsoft') {
       provider,
       displayName,
       email: emails[0].value,
+      permissions: [{ action: Action.Manage, subject: 'all' }],
     };
   }
 }

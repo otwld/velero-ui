@@ -1,14 +1,4 @@
-import {
-  Body,
-  Controller,
-  DefaultValuePipe,
-  Delete,
-  Get,
-  Param,
-  ParseIntPipe,
-  Post,
-  Query,
-} from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { RestoreService } from './restore.service';
 import { Observable } from 'rxjs';
 import {
@@ -21,72 +11,54 @@ import {
 import { K8sCustomObjectService } from '@velero-ui-api/modules/k8s-custom-object/k8s-custom-object.service';
 import { DownloadRequestService } from '@velero-ui-api/modules/download-request/download-request.service';
 import { CreateRestoreDto } from '@velero-ui-api/shared/dto/restore.dto';
+import { Subject } from '@velero-ui-api/shared/decorators/subject.decorator';
+import { K8sCustomObjectController } from '@velero-ui-api/modules/k8s-custom-object/k8s-custom-object.controller';
+import { CheckPolicies } from "@velero-ui-api/shared/decorators/check-policies.decorator";
+import { AppAbility } from "@velero-ui-api/shared/modules/casl/casl-ability.factory";
+import { Action } from "@velero-ui/shared-types";
 
 @Controller(Resources.RESTORE.route)
-export class RestoreController {
+@Subject(Resources.RESTORE.subject)
+export class RestoreController extends K8sCustomObjectController<
+  V1Restore,
+  V1RestoreList
+> {
   constructor(
     private readonly restoreService: RestoreService,
     private readonly downloadRequestService: DownloadRequestService,
-    private readonly k8sCustomObjectService: K8sCustomObjectService,
-  ) {}
-
-  @Get()
-  public get(
-    @Query('offset', new DefaultValuePipe(0), ParseIntPipe) offset: number,
-    @Query('limit', new DefaultValuePipe(20), ParseIntPipe) limit: number,
-    @Query('search', new DefaultValuePipe('')) search: string,
-    @Query('sortColumnName', new DefaultValuePipe('')) sortColumnName: string,
-    @Query('sortColumnAscending', new DefaultValuePipe(''))
-    sortColumnAscending: boolean,
-  ): Observable<V1RestoreList> {
-    return this.k8sCustomObjectService.get<V1Restore, V1RestoreList>(
-      Resources.RESTORE.plural,
-      offset,
-      limit,
-      search,
-      sortColumnName,
-      sortColumnAscending,
-    );
-  }
-
-  @Get('/:name')
-  public getByName(@Param('name') name: string): Observable<V1Restore> {
-    return this.k8sCustomObjectService.getByName<V1Restore>(
-      Resources.RESTORE.plural,
-      name,
-    );
+    readonly k8sCustomObjectService: K8sCustomObjectService
+  ) {
+    super(k8sCustomObjectService, Resources.RESTORE);
   }
 
   @Post()
+  @CheckPolicies((ability: AppAbility) =>
+    ability.can(Action.Create, Resources.RESTORE.subject)
+  )
   public create(@Body() data: CreateRestoreDto) {
     return this.restoreService.create(data);
   }
 
   @Get('/:name/logs')
+  @CheckPolicies((ability: AppAbility) =>
+    ability.can(Action.Logs, Resources.RESTORE.subject)
+  )
   public logs(@Param('name') name: string): Observable<string[]> {
     return this.restoreService.logs(name);
   }
 
   @Post('/:name/logs/download')
+  @CheckPolicies(
+    (ability: AppAbility) =>
+      ability.can(Action.Logs, Resources.RESTORE.subject) &&
+      ability.can(Action.Download, Resources.RESTORE.subject)
+  )
   public downloadLogs(
-    @Param('name') name: string,
+    @Param('name') name: string
   ): Observable<V1DownloadRequest> {
     return this.downloadRequestService.create({
       name,
       kind: V1DownloadTargetKind.RestoreLog,
     });
-  }
-
-  @Delete()
-  public delete(@Body() names: string[]): Observable<void> {
-    return this.k8sCustomObjectService.delete(Resources.RESTORE.plural, names);
-  }
-
-  @Delete('/:name')
-  public deleteByName(@Param('name') name: string) {
-    return this.k8sCustomObjectService.deleteByName(
-      Resources.RESTORE.plural,
-      name,
-    );
   }
 }

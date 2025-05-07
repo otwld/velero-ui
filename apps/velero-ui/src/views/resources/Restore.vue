@@ -10,8 +10,9 @@
         <Describe :data="data" />
       </div>
     </div>
-    <PodVolumes />
+    <PodVolumes v-if="can(Action.Read, Resources.POD_VOLUME_RESTORE.subject)" />
     <Logs
+      v-if="can(Action.Logs, Resources.RESTORE.subject)"
       :data="logs"
       :loading="isLoading"
       :name="data?.metadata?.name"
@@ -42,6 +43,8 @@ import { useKubernetesWatchObject } from '@velero-ui-app/composables/useKubernet
 import { Pages } from '@velero-ui-app/utils/constants.utils';
 import ResourceNotFound from '@velero-ui-app/components/ResourceNotFound.vue';
 import PodVolumes from '@velero-ui-app/components/PodVolume/PodVolumes.vue';
+import { can } from "@velero-ui-app/utils/policy.utils";
+import { Action } from "@velero-ui/shared-types";
 
 const router: Router = useRouter();
 

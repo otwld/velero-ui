@@ -4,12 +4,19 @@ import type {
   RouteLocationRaw,
 } from 'vue-router';
 import { Pages } from './constants.utils';
-import { hasExpired } from '@velero-ui-app/utils/jwt.utils';
+import { getUser, hasExpired } from '@velero-ui-app/utils/jwt.utils';
 import { inject } from 'vue';
-import type { AppPublicConfig } from '@velero-ui/shared-types';
+import {
+  Action,
+  type AppPublicConfig,
+  type JwtPayload,
+  type Subjects,
+} from '@velero-ui/shared-types';
+import { ToastType, useToastsStore } from '@velero-ui-app/stores/toasts.store';
+import { canAbility } from '@velero-ui-app/utils/policy.utils';
 
-const guard: NavigationGuardWithThis<string> = async (
-  to: RouteLocationNormalized,
+export const guard: NavigationGuardWithThis<string> = async (
+  to: RouteLocationNormalized
 ): Promise<RouteLocationRaw> => {
   const accessToken: string = localStorage.getItem('access_token');
   const { noAuthRequired } = inject('config') as AppPublicConfig;
@@ -20,7 +27,6 @@ const guard: NavigationGuardWithThis<string> = async (
       return { name: Pages.HOME.name };
     }
   } else {
-
     if (accessToken) {
       if (hasExpired(accessToken)) {
         localStorage.removeItem('access_token');
@@ -50,4 +56,33 @@ const guard: NavigationGuardWithThis<string> = async (
     }
   }
 };
-export default guard;
+
+export const resourceGuard = (
+  action: Action,
+  subject: Subjects
+): RouteLocationRaw => {
+  const accessToken: string = localStorage.getItem('access_token');
+
+  if (!accessToken) {
+    return {
+      name: Pages.LOGIN.name,
+      query: {
+        state: 'error',
+        reason: 'unauthorized',
+      },
+    };
+  }
+
+  const user: JwtPayload = getUser(accessToken);
+  const can = canAbility(user.permissions, action, subject);
+
+  if (!can) {
+    const toastsStore = useToastsStore();
+
+    toastsStore.push('Access denied by policy.', ToastType.ERROR);
+
+    return {
+      name: Pages.HOME.name,
+    };
+  }
+};

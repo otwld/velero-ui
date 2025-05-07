@@ -97,6 +97,7 @@
           <FontAwesomeIcon :icon="faFileCode" class="!w-4 !h-4" />
         </button>
         <button
+          v-if="can(Action.Delete, Resources.DELETE_BACKUP_REQUEST.subject)"
           :class="{ 'cursor-not-allowed': isDeleting }"
           :data-tooltip-target="`tooltip-button-delete-${data?.metadata?.uid}`"
           :disabled="isDeleting"
@@ -184,6 +185,8 @@ import ModalConfirmation from '@velero-ui-app/components/Modals/ModalConfirmatio
 import { truncate } from '../../utils/string.utils';
 import { useDeleteKubernetesObject } from '@velero-ui-app/composables/useDeleteKubernetesObject';
 import { useI18n } from 'vue-i18n';
+import { can } from "@velero-ui-app/utils/policy.utils";
+import { Action } from "@velero-ui/shared-types";
 
 const { t } = useI18n();
 defineProps({

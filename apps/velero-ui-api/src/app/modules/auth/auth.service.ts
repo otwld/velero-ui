@@ -43,6 +43,7 @@ export class AuthService {
       name: req.user.displayName,
       picture: req.user.picture,
       provider: req.user.provider,
+      permissions: req.user.permissions,
     };
 
     return {

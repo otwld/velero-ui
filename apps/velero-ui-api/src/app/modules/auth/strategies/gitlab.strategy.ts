@@ -4,6 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import { Strategy } from 'passport-gitlab2';
 import { AppLogger } from '@velero-ui-api/shared/modules/logger/logger.service';
 import {AuthenticationException} from "@velero-ui-api/shared/exceptions/authentication.exception";
+import { Action } from "@velero-ui/shared-types";
 
 @Injectable()
 export class GitlabStrategy extends PassportStrategy(Strategy, 'gitlab') {
@@ -44,6 +45,7 @@ export class GitlabStrategy extends PassportStrategy(Strategy, 'gitlab') {
       displayName,
       email: emails[0].value,
       picture: avatarUrl,
+      permissions: [{ action: Action.Manage, subject: 'all' }],
     };
   }
 }

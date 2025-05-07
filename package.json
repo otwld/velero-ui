@@ -27,6 +27,7 @@
   },
   "private": false,
   "dependencies": {
+    "@casl/ability": "^6.7.3",
     "@docusaurus/core": "^3.7.0",
     "@docusaurus/preset-classic": "^3.7.0",
     "@formkit/addons": "^1.6.9",
