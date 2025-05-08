@@ -1,4 +1,4 @@
-export const clickOutside = {
+export const clickOutsideDirective = {
   mounted: (el, binding) => {
     el.clickOutsideEvent = (event) => {
       if (!(el == event.target || el.contains(event.target))) {

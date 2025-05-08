@@ -5,7 +5,10 @@
     <div
       class="items-center sm:flex xl:block 2xl:flex sm:space-x-4 xl:space-x-0 2xl:space-x-4"
     >
-      <FontAwesomeIcon :icon="faCube" class="!w-16 !h-16 mr-2 dark:text-white" />
+      <FontAwesomeIcon
+        :icon="faCube"
+        class="!w-16 !h-16 mr-2 dark:text-white"
+      />
 
       <div class="pl-3">
         <h3
@@ -18,10 +21,7 @@
           v-if="!podVolume"
           class="h-2.5 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-48 mb-4"
         />
-        <div
-          v-else
-          class="mb-4 text-xs text-gray-500 dark:text-gray-400"
-        >
+        <div v-else class="mb-4 text-xs text-gray-500 dark:text-gray-400">
           {{ podVolume?.metadata?.uid }}
         </div>
         <div
@@ -30,6 +30,7 @@
         />
         <div v-if="podVolume" class="flex items-center gap-x-4 gap-y-2">
           <button
+            v-if="can(Action.Delete, type.subjectt)"
             :class="{ 'cursor-not-allowed': isDeleting || !podVolume }"
             :disabled="isDeleting || !podVolume"
             class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-red-600 hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"
@@ -93,17 +94,22 @@ import {
 import { useDeleteKubernetesObject } from '@velero-ui-app/composables/useDeleteKubernetesObject';
 import ModalConfirmation from '@velero-ui-app/components/Modals/ModalConfirmation.vue';
 import { useI18n } from 'vue-i18n';
+import { can } from '@velero-ui-app/utils/policy.utils';
+import { Action } from '@velero-ui/shared-types';
 
 const { t } = useI18n();
 
 const props = defineProps({
-  podVolume: {type: Object as PropType<V1PodVolumeBackup | V1PodVolumeRestore>, required: true },
-  type: {type: Object as PropType<Resource>, required: true },
+  podVolume: {
+    type: Object as PropType<V1PodVolumeBackup | V1PodVolumeRestore>,
+    required: true,
+  },
+  type: { type: Object as PropType<Resource>, required: true },
 });
 
 const showModalDelete = ref(false);
 
 const { isPending: isDeleting, mutate: remove } = useDeleteKubernetesObject(
-  props.type,
+  props.type
 );
 </script>

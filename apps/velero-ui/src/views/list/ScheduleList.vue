@@ -2,6 +2,7 @@
   <ListHeader>
     <template #bulk-buttons>
       <button
+        v-if="can(Action.Delete, Resources.SCHEDULE.subject)"
         :class="{
           'cursor-not-allowed':
             childListRef?.getCheckedItems().length === 0 || isLoadingDeleting,
@@ -26,7 +27,7 @@
       </button>
     </template>
     <template #buttons>
-      <button
+      <button v-if="can(Action.Create, Resources.SCHEDULE.subject)"
         class="inline-flex items-center justify-center w-1/2 px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 sm:w-auto dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
         type="button"
         @click="showModalAdd = !showModalAdd"
@@ -90,6 +91,8 @@ import ScheduleFormCreate from '@velero-ui-app/components/Schedule/forms/Schedul
 import ModalConfirmation from "@velero-ui-app/components/Modals/ModalConfirmation.vue";
 import {useDeleteManyKubernetesObjects} from "@velero-ui-app/composables/useDeleteManyKubernetesObjects";
 import {Resources} from "@velero-ui/velero";
+import { can } from "@velero-ui-app/utils/policy.utils";
+import { Action } from "@velero-ui/shared-types";
 
 const { t } = useI18n();
 const listStore = useListStore();

@@ -287,6 +287,12 @@ configuration.
 - **Type**: `string`
 - **Description**: Sets the token URL for OAuth2 authentication, used to exchange the authorization code for access tokens.
 
+#### `OAUTH_GROUP_CLAIM`
+
+- **Type**: `string`
+- **Default**: `groups`
+- **Description**: Specifies the field name in the OAuth2 response that contains the user's group memberships. This claim is used to retrieve and map user groups from the OAuth2 provider to application permissions.
+
 #### `OAUTH_NAME`
 
 - **Type**: `string`

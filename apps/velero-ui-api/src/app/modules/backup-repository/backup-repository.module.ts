@@ -1,12 +1,11 @@
 import { Module } from '@nestjs/common';
 import { BackupRepositoryController } from './backup-repository.controller';
-import { BackupRepositoryService } from './backup-repository.service';
 import { DeleteBackupRequestModule } from '@velero-ui-api/modules/delete-backup-request/delete-backup-request.module';
 import { DownloadRequestModule } from '@velero-ui-api/modules/download-request/download-request.module';
 
 @Module({
   imports: [DeleteBackupRequestModule, DownloadRequestModule],
   controllers: [BackupRepositoryController],
-  providers: [BackupRepositoryService],
+  providers: [],
 })
 export class BackupRepositoryModule {}

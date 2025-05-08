@@ -1,8 +1,5 @@
 <template>
   <div class="fixed z-50 right-2 bottom-2 min-w-[350px]">
-    <ToastNewVeleroVersion />
-    <ToastNewVeleroUiVersion />
-    <ToastConnectionLost v-if="!socket.connected" />
     <div v-for="(toast, index) in toasts" :key="`toast-${index}`">
       <ToastItem
         :icon="toast?.icon"
@@ -11,6 +8,9 @@
         @on-dismiss="dismiss(index)"
       />
     </div>
+    <ToastNewVeleroVersion />
+    <ToastNewVeleroUiVersion />
+    <ToastConnectionLost v-if="!socket.connected" />
   </div>
 </template>
 

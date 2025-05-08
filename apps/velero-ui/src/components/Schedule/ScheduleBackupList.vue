@@ -14,8 +14,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { PropType } from 'vue';
-import { Resources, type V1Schedule } from '@velero-ui/velero';
+import { Resources } from '@velero-ui/velero';
 import { useI18n } from 'vue-i18n';
 import BackupList from '@velero-ui-app/views/list/BackupList.vue';
 import { useListStore } from '@velero-ui-app/stores/list.store';
@@ -28,8 +27,4 @@ const router: Router = useRouter();
 const listStore = useListStore();
 listStore.setObjectType(Resources.BACKUP);
 listStore.applyNameFilter(router.currentRoute.value.params.name as string);
-
-defineProps({
-  schedule: {type: Object as PropType<V1Schedule>, required: true },
-});
 </script>

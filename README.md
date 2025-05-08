@@ -33,6 +33,7 @@ This dashboard implement the same functionalities as the velero CLI.
 - 🔑 **Built-in Authentication:** Velero UI is secured by default with username and password credentials.
 - 🌐 **Federated Authentication:** Supports up to five external authentication providers, including GitHub, GitLab, Google, Microsoft, and generic OAuth/OpenID.
 - 📂 **LDAP Integration:** Configure Velero UI to integrate with your existing LDAP system.
+- 🔒 **Role Based Access Control:** Flexible RBAC system with user and group policies for granular access control.
 
 ### Statistics
 

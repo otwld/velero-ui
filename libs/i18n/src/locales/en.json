@@ -81,7 +81,8 @@
         "unableToEdit": "Unable to edit {resource}, please try again.",
         "unableToDownloadLogs": "Unable to download logs, please try again.",
         "unableToDownload": "Unable to download backup content, please try again.",
-        "unableToRetrieveLogs": "Unable to retrieve logs, please try again."
+        "unableToRetrieveLogs": "Unable to retrieve logs, please try again.",
+        "policyAccessDenied": "Access denied by policy."
       },
       "success": {
         "created": "{resource} created, request will now be processed by velero server.",
