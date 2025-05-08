@@ -43,14 +43,14 @@ import { useKubernetesWatchObject } from '@velero-ui-app/composables/useKubernet
 import ResourceNotFound from '@velero-ui-app/components/ResourceNotFound.vue';
 import { Pages } from '@velero-ui-app/utils/constants.utils';
 import PodVolumes from '@velero-ui-app/components/PodVolume/PodVolumes.vue';
-import { Action } from "@velero-ui/shared-types";
-import { can } from "@velero-ui-app/utils/policy.utils";
+import { Action } from '@velero-ui/shared-types';
+import { can } from '@velero-ui-app/utils/policy.utils';
 
 const router: Router = useRouter();
 
 const { on, off, data, error } = useKubernetesWatchObject<V1Backup>(
   Resources.BACKUP,
-  router.currentRoute.value.params.name as string,
+  router.currentRoute.value.params.name as string
 );
 
 const {
@@ -59,10 +59,13 @@ const {
   isLoading,
 } = useLogsGet(
   router.currentRoute.value.params.name as string,
-  V1DownloadTargetKind.BackupLog,
+  V1DownloadTargetKind.BackupLog
 );
 
 onBeforeMount((): void => on());
 onBeforeUnmount((): void => off());
-onBeforeMount((): Promise<void> => getLogs());
+onBeforeMount(
+  (): Promise<void> =>
+    can(Action.Logs, Resources.BACKUP.subject) ? getLogs() : void 0
+);
 </script>

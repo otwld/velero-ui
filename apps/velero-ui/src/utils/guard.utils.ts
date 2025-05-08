@@ -14,6 +14,7 @@ import {
 } from '@velero-ui/shared-types';
 import { ToastType, useToastsStore } from '@velero-ui-app/stores/toasts.store';
 import { canAbility } from '@velero-ui-app/utils/policy.utils';
+import { i18n } from "../plugins/i18n.plugin";
 
 export const guard: NavigationGuardWithThis<string> = async (
   to: RouteLocationNormalized
@@ -61,6 +62,12 @@ export const resourceGuard = (
   action: Action,
   subject: Subjects
 ): RouteLocationRaw => {
+  const { noAuthRequired } = inject('config') as AppPublicConfig;
+
+  if (noAuthRequired) {
+    return;
+  }
+
   const accessToken: string = localStorage.getItem('access_token');
 
   if (!accessToken) {
@@ -79,7 +86,7 @@ export const resourceGuard = (
   if (!can) {
     const toastsStore = useToastsStore();
 
-    toastsStore.push('Access denied by policy.', ToastType.ERROR);
+    toastsStore.push(i18n.global.t('global.message.error.policyAccessDenied'), ToastType.ERROR);
 
     return {
       name: Pages.HOME.name,

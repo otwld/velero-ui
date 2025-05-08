@@ -1,0 +1,3 @@
+# Please refer to https://velero-ui.docs.otwld.com/ to configure policies
+# g,*,manage,all
+# u,*,manage,all

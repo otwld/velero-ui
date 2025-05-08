@@ -3,7 +3,6 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
 import { AuthService } from '../auth.service';
 import { AppLogger } from '@velero-ui-api/shared/modules/logger/logger.service';
-import { Action } from '@velero-ui/shared-types';
 
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy, 'local') {
@@ -35,7 +34,7 @@ export class LocalStrategy extends PassportStrategy(Strategy, 'local') {
       id: 'local',
       provider: 'local',
       displayName: username,
-      permissions: [{ action: Action.Manage, subject: 'all' }],
+      policy: {}
     };
   }
 }

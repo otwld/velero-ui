@@ -13,6 +13,8 @@ import { GithubStrategy } from '@velero-ui-api/modules/auth/strategies/github.st
 import { GitlabStrategy } from '@velero-ui-api/modules/auth/strategies/gitlab.strategy';
 import { MicrosoftStrategy } from '@velero-ui-api/modules/auth/strategies/microsoft.strategy';
 import { OauthStrategy } from '@velero-ui-api/modules/auth/strategies/oauth.strategy';
+import { CaslModule } from '@velero-ui-api/shared/modules/casl/casl.module';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
   imports: [
@@ -26,6 +28,8 @@ import { OauthStrategy } from '@velero-ui-api/modules/auth/strategies/oauth.stra
       }),
       inject: [ConfigService],
     }),
+    CaslModule,
+    HttpModule,
   ],
   controllers: [AuthController],
   providers: [

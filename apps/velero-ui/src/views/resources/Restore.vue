@@ -10,7 +10,7 @@
         <Describe :data="data" />
       </div>
     </div>
-    <PodVolumes v-if="can(Action.Read, Resources.POD_VOLUME_RESTORE.subject)" />
+    <PodVolumes v-if="can(Action.Read, Resources.RESTORE.subject)" />
     <Logs
       v-if="can(Action.Logs, Resources.RESTORE.subject)"
       :data="logs"
@@ -43,14 +43,14 @@ import { useKubernetesWatchObject } from '@velero-ui-app/composables/useKubernet
 import { Pages } from '@velero-ui-app/utils/constants.utils';
 import ResourceNotFound from '@velero-ui-app/components/ResourceNotFound.vue';
 import PodVolumes from '@velero-ui-app/components/PodVolume/PodVolumes.vue';
-import { can } from "@velero-ui-app/utils/policy.utils";
-import { Action } from "@velero-ui/shared-types";
+import { can } from '@velero-ui-app/utils/policy.utils';
+import { Action } from '@velero-ui/shared-types';
 
 const router: Router = useRouter();
 
 const { on, off, data, error } = useKubernetesWatchObject<V1Restore>(
   Resources.RESTORE,
-  router.currentRoute.value.params.name as string,
+  router.currentRoute.value.params.name as string
 );
 
 const {
@@ -59,10 +59,13 @@ const {
   isLoading,
 } = useLogsGet(
   router.currentRoute.value.params.name as string,
-  V1DownloadTargetKind.RestoreLog,
+  V1DownloadTargetKind.RestoreLog
 );
 
 onBeforeMount((): void => on());
 onBeforeUnmount((): void => off());
-onBeforeMount((): Promise<void> => getLogs());
+onBeforeMount(
+  (): Promise<void> =>
+    can(Action.Read, Resources.RESTORE.subject) ? getLogs() : void 0
+);
 </script>

@@ -1,10 +1,11 @@
 import {
-  Action,
+  Action, type AppPublicConfig,
   type JwtPayload,
   type Subjects,
   type UserPermission,
 } from '@velero-ui/shared-types';
 import { getUser } from '@velero-ui-app/utils/jwt.utils';
+import { inject } from "vue";
 
 export const canAbility = (
   permissions: UserPermission[] = [],
@@ -21,8 +22,14 @@ export const canAbility = (
 };
 
 export const can = (action: Action, subject: Subjects): boolean => {
+  const { noAuthRequired } = inject('config') as AppPublicConfig;
+
+  if (noAuthRequired) {
+    return true;
+  }
+
   const accessToken: string = localStorage.getItem('access_token');
   const user: JwtPayload = getUser(accessToken);
 
-  return canAbility(user.permissions, action, subject);
+  return canAbility(user?.permissions, action, subject);
 };

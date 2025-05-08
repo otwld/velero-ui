@@ -7,3 +7,8 @@ export enum Action {
   Download = 'download',
   Logs = 'logs',
 }
+
+export enum PolicyType {
+  Group = 'g',
+  User = 'u'
+}
