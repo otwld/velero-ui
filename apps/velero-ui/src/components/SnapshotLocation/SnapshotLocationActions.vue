@@ -85,7 +85,7 @@
     :icon="faExclamationCircle"
     :text="t('modal.text.confirmation.delete')"
     @on-close="showModalDelete = false"
-    @on-confirm="remove(location.metadata.name)"
+    @on-confirm="remove({ name: location.metadata.name })"
   >
     <template #content>
       <div class="flex justify-center">

@@ -128,7 +128,7 @@
     :name="data?.metadata?.name"
     :text="t('modal.text.confirmation.delete')"
     @on-close="showModalDelete = false"
-    @on-confirm="remove(data.metadata.name)"
+    @on-confirm="remove({ name: data.metadata.name })"
   />
   <VModal
     v-if="showModalEdit"

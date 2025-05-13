@@ -98,15 +98,37 @@
     :icon="faExclamationCircle"
     :text="t('modal.text.confirmation.delete')"
     @on-close="showModalDelete = false"
-    @on-confirm="remove(backup.metadata.name)"
+    @on-confirm="
+      remove({ name: backup.metadata.name, forced: forceDeleteContext?.value })
+    "
   >
     <template #content>
-      <div class="flex justify-center">
+      <div class="flex justify-center flex-col">
         <p
           class="mt-2 px-1 mb-6 text-sm rounded bg-gray-200 text-gray-600 dark:bg-gray-600 dark:text-gray-200"
         >
           {{ backup?.metadata?.name }}
         </p>
+        <FormKit
+          id="force-delete"
+          :name="t('form.field.forceDelete')"
+          outer-class="mb-2"
+          type="checkbox"
+          wrapper-class="flex items-center justify-center"
+        >
+          <template #label>
+            <label
+              class="flex ml-2 text-sm font-medium text-gray-900 dark:text-white items-center"
+              >{{ t('form.field.forceDelete') }}
+              <FontAwesomeIcon
+                :icon="faQuestionCircle"
+                class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
+                data-tooltip-style="light"
+                data-tooltip-target="tooltip-force-delete"
+              />
+            </label>
+          </template>
+        </FormKit>
       </div>
     </template>
   </ModalConfirmation>
@@ -131,6 +153,14 @@
       />
     </template>
   </VModal>
+  <div
+    id="tooltip-force-delete"
+    class="absolute z-10 invisible inline-block px-3 py-2 text-xs text-gray-900 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 tooltip"
+    role="tooltip"
+  >
+    Delete resource instead of creating delete request.
+    <div class="tooltip-arrow" data-popper-arrow />
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -142,6 +172,7 @@ import {
   faDownload,
   faExclamationCircle,
   faFloppyDisk,
+  faQuestionCircle,
   faTrashCan,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
@@ -152,7 +183,8 @@ import { useI18n } from 'vue-i18n';
 import VModal from '@velero-ui-app/components/Modals/VModal.vue';
 import BackupFormRestore from '@velero-ui-app/components/Backup/forms/BackupFormRestore.vue';
 import { Action } from '@velero-ui/shared-types';
-import { can } from "@velero-ui-app/utils/policy.utils";
+import { can } from '@velero-ui-app/utils/policy.utils';
+import { useFormKitContextById } from '@formkit/vue';
 
 const { t } = useI18n();
 
@@ -170,6 +202,8 @@ const { download, downloadLoading } = useBackupDownloadContent(
 const { isPending, mutate: remove } = useDeleteKubernetesObject(
   Resources.BACKUP
 );
+
+const forceDeleteContext = useFormKitContextById('force-delete');
 
 const showModalDelete = ref(false);
 const showModalRestore = ref(false);

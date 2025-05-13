@@ -99,6 +99,26 @@
           >{{ item }}</span
         >
       </div>
+      <FormKit
+          id="force-delete"
+          :name="t('form.field.forceDelete')"
+          outer-class="mb-2"
+          type="checkbox"
+          wrapper-class="flex items-center justify-center"
+        >
+          <template #label>
+            <label
+              class="flex ml-2 text-sm font-medium text-gray-900 dark:text-white items-center"
+              >{{ t('form.field.forceDelete') }}
+              <FontAwesomeIcon
+                :icon="faQuestionCircle"
+                class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
+                data-tooltip-style="light"
+                data-tooltip-target="tooltip-force-delete"
+              />
+            </label>
+          </template>
+        </FormKit>
     </template>
   </ModalConfirmation>
   <ModalConfirmation
@@ -130,7 +150,7 @@ import {
   faCircleNotch,
   faDownload,
   faExclamationCircle,
-  faPlus,
+  faPlus, faQuestionCircle,
   faTrashCan,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
@@ -148,6 +168,7 @@ import { useDeleteManyKubernetesObjects } from '@velero-ui-app/composables/useDe
 import { useBackupManyDownloadContent } from '@velero-ui-app/composables/backup/useBackupManyDownloadContent';
 import { Action } from '@velero-ui/shared-types';
 import { can } from '@velero-ui-app/utils/policy.utils';
+import { useFormKitContextById } from "@formkit/vue";
 
 const { t } = useI18n();
 const listStore = useListStore();
@@ -209,13 +230,15 @@ const showModalAdd = ref(false);
 const showModalBulkRemove = ref(false);
 const showModalBulkDownload = ref(false);
 
+const forceDeleteContext = useFormKitContextById('force-delete');
+
 const bulkDownload = () => {
   download(childListRef?.value.getCheckedItems());
   childListRef?.value.resetCheckedItems();
 };
 
 const bulkRemove = () => {
-  remove(childListRef?.value.getCheckedItems());
+  remove({ names: childListRef?.value.getCheckedItems(), forced: forceDeleteContext.value.value });
   childListRef?.value.resetCheckedItems();
 };
 </script>

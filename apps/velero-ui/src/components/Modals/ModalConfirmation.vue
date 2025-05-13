@@ -50,20 +50,31 @@
       </div>
     </div>
   </div>
+  <div
+    id="tooltip-force-delete"
+    class="absolute z-10 invisible inline-block px-3 py-2 text-xs text-gray-900 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 tooltip"
+    role="tooltip"
+  >
+    {{ t('form.tooltip.forceDelete') }}
+    <div class="tooltip-arrow" data-popper-arrow />
+  </div>
 </template>
 
 <script lang="ts" setup>
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import type { PropType } from 'vue';
+import { onMounted, type PropType } from 'vue';
 import type { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { useI18n } from 'vue-i18n';
+import { initTooltips } from 'flowbite';
 
 const { t } = useI18n();
 defineProps({
-  icon:{type: Object as PropType<IconDefinition>, required: true},
-  text: {type: String, required: true},
+  icon: { type: Object as PropType<IconDefinition>, required: true },
+  text: { type: String, required: true },
 });
+
+onMounted(() => initTooltips());
 
 const emit = defineEmits(['onConfirm', 'onCancel', 'onClose']);
 </script>

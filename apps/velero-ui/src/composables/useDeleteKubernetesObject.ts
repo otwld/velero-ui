@@ -1,15 +1,15 @@
 import { QueryClient, useMutation, useQueryClient } from '@tanstack/vue-query';
 import type { AxiosInstance } from 'axios';
 import { inject } from 'vue';
-import { type Resource } from '@velero-ui/velero';
+import { type Resource, Resources } from '@velero-ui/velero';
 import { ToastType, useToastsStore } from '@velero-ui-app/stores/toasts.store';
 import type { KubernetesObject } from '@kubernetes/client-node';
 import { useListStore } from '@velero-ui-app/stores/list.store';
 import { storeToRefs } from 'pinia';
-import {useI18n} from "vue-i18n";
+import { useI18n } from 'vue-i18n';
 
 export const useDeleteKubernetesObject = <T extends KubernetesObject>(
-  resource: Resource,
+  resource: Resource
 ) => {
   const toastsStore = useToastsStore();
   const axiosInstance: AxiosInstance = inject('axios') as AxiosInstance;
@@ -20,9 +20,16 @@ export const useDeleteKubernetesObject = <T extends KubernetesObject>(
   const { offset, limit, filters, sort } = storeToRefs(listStore);
 
   return useMutation({
-    mutationFn: async (name: string) =>
-      await axiosInstance.delete(`${resource.route}/${name}`),
-    onSuccess: async (response, name: string) => {
+    mutationFn: async ({ name, forced }: { name: string; forced?: boolean }) =>
+      await axiosInstance.delete(`${resource.route}/${name}`, {
+        params: {
+          forced,
+        },
+      }),
+    onSuccess: async (
+      response,
+      { name, forced }: { name: string; forced?: boolean }
+    ) => {
       await queryClient.cancelQueries({
         queryKey: [
           resource.plural,
@@ -58,7 +65,7 @@ export const useDeleteKubernetesObject = <T extends KubernetesObject>(
             },
           ],
           (objects: T[]) =>
-            objects.filter((object: T) => object.metadata.name !== name),
+            objects.filter((object: T) => object.metadata.name !== name)
         );
       }
 
@@ -67,10 +74,19 @@ export const useDeleteKubernetesObject = <T extends KubernetesObject>(
         exact: true,
       });
 
-      toastsStore.push(
-        t('global.message.success.deleteRequestCreated'),
-        ToastType.SUCCESS,
-      );
+      if (resource.kind === Resources.BACKUP.kind && !forced) {
+        toastsStore.push(
+          t('global.message.success.deleteRequestCreated', {
+            resource: resource.name,
+          }),
+          ToastType.SUCCESS
+        );
+      } else {
+        toastsStore.push(
+          t('global.message.success.deleted', { resource: resource.name }),
+          ToastType.SUCCESS
+        );
+      }
     },
     onError: (error: Error): void => {
       toastsStore.push(t('global.message.error.unexpected'), ToastType.ERROR);

@@ -129,7 +129,7 @@ onBeforeMount(() =>
 const showModalBulkRemove = ref(false);
 
 const bulkRemove = () => {
-  remove(childListRef?.value.getCheckedItems());
+  remove({ names: childListRef?.value.getCheckedItems() });
   childListRef?.value.resetCheckedItems();
 };
 </script>

@@ -1,4 +1,4 @@
-import { Body, Delete, Get, Param, Query } from '@nestjs/common';
+import { Body, DefaultValuePipe, Delete, Get, Param, ParseBoolPipe, Query } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { PluralsNames, Resource } from '@velero-ui/velero';
 import { K8sCustomObjectService } from '@velero-ui-api/modules/k8s-custom-object/k8s-custom-object.service';
@@ -62,7 +62,10 @@ export class K8sCustomObjectController<
   @CheckPolicies((ability: AppAbility, resource: PluralsNames) =>
     ability.can(Action.Delete, resource)
   )
-  protected delete(@Body() names: string[]): Observable<any> {
+  protected delete(
+    @Body() names: string[],
+    @Query('forced', new DefaultValuePipe(false), ParseBoolPipe) forced?: boolean
+  ): Observable<any> {
     return this.k8sCustomObjectService.delete(this.resource.plural, names);
   }
 
@@ -71,7 +74,8 @@ export class K8sCustomObjectController<
     ability.can(Action.Delete, resource)
   )
   protected deleteByName(
-    @Param() params: K8sCustomObjectParams
+    @Param() params: K8sCustomObjectParams,
+    @Query('forced', new DefaultValuePipe(false), ParseBoolPipe) forced?: boolean
   ): Observable<any> {
     return this.k8sCustomObjectService.deleteByName(
       this.resource.plural,
