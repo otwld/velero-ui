@@ -44,6 +44,7 @@ export const useListStore = defineStore('list', {
     },
     resetSearch(): void {
       this.filters.startWith = '';
+      this.offset = 0;
     },
     resetSort(): void {
       this.sort.column.name = 'Name';

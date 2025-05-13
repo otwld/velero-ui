@@ -18,9 +18,27 @@
                 :name="t('list.search.name')"
                 :placeholder="t('list.search.placeholder')"
                 :validation="[['k8s_name']]"
-                value=""
                 type="text"
-              />
+                value=""
+                @keyup="handleNameSearch()"
+                @keyup.enter="applyNameSearch()"
+              >
+                <template #suffixIcon>
+                  <FontAwesomeIcon
+                    v-if="isFetching"
+                    :icon="faCircleNotch"
+                    class="absolute right-[10px] top-[14px] !w-4 !h-4 animate-spin text-gray-400"
+                  />
+                  <button class="absolute right-[10px] top-[10px] cursor-pointer" type="button">
+                    <FontAwesomeIcon
+                      v-if="searchContext.value && !isFetching"
+                      :icon="faXmark"
+                      class="!w-4 !h-4"
+                      @click="resetNameSearch()"
+                    />
+                  </button>
+                </template>
+              </FormKit>
             </div>
           </div>
           <div class="flex pl-0 mt-3 space-x-1 sm:pl-2 sm:mt-0">
@@ -52,9 +70,13 @@
 </template>
 
 <script lang="ts" setup>
-import { onBeforeUnmount, onWatcherCleanup, ref, watch } from 'vue';
+import { onBeforeUnmount } from 'vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { faArrowsRotate } from '@fortawesome/free-solid-svg-icons';
+import {
+  faArrowsRotate,
+  faCircleNotch,
+  faXmark,
+} from '@fortawesome/free-solid-svg-icons';
 import { useListStore } from '../../stores/list.store';
 import { storeToRefs } from 'pinia';
 import { useI18n } from 'vue-i18n';
@@ -62,7 +84,6 @@ import { useKubernetesWatchListObject } from '@velero-ui-app/composables/useKube
 import { type Router, useRouter } from 'vue-router';
 import { Pages } from '@velero-ui-app/utils/constants.utils';
 import { useFormKitContextById } from '@formkit/vue';
-
 
 const router: Router = useRouter();
 
@@ -76,17 +97,25 @@ const searchContext = useFormKitContextById('search');
 
 let timeout: NodeJS.Timeout;
 
-watch(() => searchContext?.value, () => {
-  if(searchContext.value.state.complete) {
-    timeout = setTimeout(() => {
-      listStore.applyNameFilter(searchContext.value.value);
-      listStore.setOffset(0);
-    }, 1500);
+const applyNameSearch = () => {
+  if (searchContext.value.state.complete) {
+    listStore.applyNameFilter(searchContext.value.value);
+    listStore.setOffset(0);
   }
-  onWatcherCleanup(() => {
-    clearTimeout(timeout);
-  });
-}, {deep: true});
+};
+
+const handleNameSearch = () => {
+  clearTimeout(timeout);
+  timeout = setTimeout(() => {
+    applyNameSearch();
+  }, 1500);
+};
+
+const resetNameSearch = () => {
+  searchContext.value.node.input('');
+  searchContext.value.value = '';
+  applyNameSearch();
+};
 
 onBeforeUnmount(() => clearTimeout(timeout));
 onBeforeUnmount(() => listStore.reset());

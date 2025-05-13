@@ -99,7 +99,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onBeforeMount, onBeforeUnmount, ref, watch } from 'vue';
+import { onBeforeMount, onBeforeUnmount, ref } from 'vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import {
   faCircleNotch,
