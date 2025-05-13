@@ -42,7 +42,7 @@ configuration:
       value: "this is not a secret passphrase"
 
       # -- Whether a secret should be used.
-      useSecret: false
+      useSecret: true
 
       # -- Name of the secret to create if `useSecret` is true and `existingSecret` is empty
       name: ""
@@ -65,13 +65,14 @@ configuration:
 
   policies:
     # -- Value of the policy file, this is a sample policy file
+    # if `useConfigMap` is true and `existingSecret` is empty, this value will be stored in secret at first deployment
     value: |
       # Please refer to https://velero-ui.docs.otwld.com/ to configure policies
       # g,*,manage,all
       # u,*,manage,all
 
     # -- Whether a configMap should be used.
-    useConfigMap: false
+    useConfigMap: true
 
     # -- Name of the configMap to create if `useConfigMap` is true and `existingConfigMap` is empty
     name: ""
