@@ -92,7 +92,7 @@
     <td class="p-4 space-x-2 whitespace-nowrap">
       <div class="inline-flex rounded-md shadow-sm" role="group">
         <button
-          v-if="can(Action.Delete, Resources.RESTORE.subject)"
+          v-if="can(Action.Delete, Resources.RESTORE.plural)"
           :class="{ 'cursor-not-allowed': isDeleting }"
           :data-tooltip-target="`tooltip-button-delete-${data?.metadata?.uid}`"
           :disabled="isDeleting"

@@ -10,9 +10,9 @@
         <Describe :data="data" />
       </div>
     </div>
-    <PodVolumes v-if="can(Action.Read, Resources.POD_VOLUME_BACKUP.subject)" />
+    <PodVolumes v-if="can(Action.Read, Resources.POD_VOLUME_BACKUP.plural)" />
     <Logs
-      v-if="can(Action.Logs, Resources.BACKUP.subject)"
+      v-if="can(Action.Logs, Resources.BACKUP.plural)"
       :data="logs"
       :loading="isLoading"
       :name="data?.metadata?.name"
@@ -66,6 +66,6 @@ onBeforeMount((): void => on());
 onBeforeUnmount((): void => off());
 onBeforeMount(
   (): Promise<void> =>
-    can(Action.Logs, Resources.BACKUP.subject) ? getLogs() : void 0
+    can(Action.Logs, Resources.BACKUP.plural) ? getLogs() : void 0
 );
 </script>

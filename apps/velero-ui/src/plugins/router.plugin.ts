@@ -41,7 +41,7 @@ const routes: Array<RouteRecordRaw> = [
       },
       {
         ...Pages.BACKUPS,
-        beforeEnter: () => resourceGuard(Action.Read, Resources.BACKUP.subject),
+        beforeEnter: () => resourceGuard(Action.Read, Resources.BACKUP.plural),
         children: [
           {
             path: '',
@@ -58,7 +58,7 @@ const routes: Array<RouteRecordRaw> = [
       {
         ...Pages.STORAGE_LOCATIONS,
         beforeEnter: () =>
-          resourceGuard(Action.Read, Resources.BACKUP_STORAGE_LOCATION.subject),
+          resourceGuard(Action.Read, Resources.BACKUP_STORAGE_LOCATION.plural),
         children: [
           {
             path: '',
@@ -76,7 +76,7 @@ const routes: Array<RouteRecordRaw> = [
       {
         ...Pages.RESTORES,
         beforeEnter: () =>
-          resourceGuard(Action.Read, Resources.RESTORE.subject),
+          resourceGuard(Action.Read, Resources.RESTORE.plural),
         children: [
           {
             path: '',
@@ -93,7 +93,7 @@ const routes: Array<RouteRecordRaw> = [
       {
         ...Pages.SCHEDULES,
         beforeEnter: () =>
-          resourceGuard(Action.Read, Resources.SCHEDULE.subject),
+          resourceGuard(Action.Read, Resources.SCHEDULE.plural),
         children: [
           {
             path: '',
@@ -112,7 +112,7 @@ const routes: Array<RouteRecordRaw> = [
         beforeEnter: () =>
           resourceGuard(
             Action.Read,
-            Resources.VOLUME_SNAPSHOT_LOCATION.subject
+            Resources.VOLUME_SNAPSHOT_LOCATION.plural
           ),
         children: [
           {
@@ -131,7 +131,7 @@ const routes: Array<RouteRecordRaw> = [
       {
         ...Pages.BACKUP_REPOSITORIES,
         beforeEnter: () =>
-          resourceGuard(Action.Read, Resources.BACKUP_REPOSITORY.subject),
+          resourceGuard(Action.Read, Resources.BACKUP_REPOSITORY.plural),
         children: [
           {
             path: '',
@@ -149,7 +149,7 @@ const routes: Array<RouteRecordRaw> = [
       {
         ...Pages.POD_VOLUME_BACKUPS,
         beforeEnter: () =>
-          resourceGuard(Action.Read, Resources.POD_VOLUME_BACKUP.subject),
+          resourceGuard(Action.Read, Resources.POD_VOLUME_BACKUP.plural),
         children: [
           {
             path: '',
@@ -167,7 +167,7 @@ const routes: Array<RouteRecordRaw> = [
       {
         ...Pages.POD_VOLUME_RESTORES,
         beforeEnter: () =>
-          resourceGuard(Action.Read, Resources.POD_VOLUME_RESTORE.subject),
+          resourceGuard(Action.Read, Resources.POD_VOLUME_RESTORE.plural),
         children: [
           {
             path: '',
@@ -187,7 +187,7 @@ const routes: Array<RouteRecordRaw> = [
         component: DownloadRequestList,
         beforeEnter: () => {
           useListStore().setObjectType(Resources.DOWNLOAD_REQUEST);
-          return resourceGuard(Action.Read, Resources.DOWNLOAD_REQUEST.subject);
+          return resourceGuard(Action.Read, Resources.DOWNLOAD_REQUEST.plural);
         },
       },
       {
@@ -197,7 +197,7 @@ const routes: Array<RouteRecordRaw> = [
           useListStore().setObjectType(Resources.SERVER_STATUS_REQUEST);
           return resourceGuard(
             Action.Read,
-            Resources.SERVER_STATUS_REQUEST.subject
+            Resources.SERVER_STATUS_REQUEST.plural
           );
         },
       },
@@ -208,7 +208,7 @@ const routes: Array<RouteRecordRaw> = [
           useListStore().setObjectType(Resources.DELETE_BACKUP_REQUEST);
           return resourceGuard(
             Action.Read,
-            Resources.DELETE_BACKUP_REQUEST.subject
+            Resources.DELETE_BACKUP_REQUEST.plural
           );
         },
       },

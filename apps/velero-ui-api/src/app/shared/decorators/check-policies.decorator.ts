@@ -1,14 +1,14 @@
 import { AppAbility } from '@velero-ui-api/shared/modules/casl/casl-ability.factory';
 import { SetMetadata } from '@nestjs/common';
-import { ResourcesNames } from '@velero-ui/velero';
+import { PluralsNames } from '@velero-ui/velero';
 
 interface IPolicyHandler {
-  handle(ability: AppAbility, resource?: ResourcesNames): boolean;
+  handle(ability: AppAbility, resource?: PluralsNames): boolean;
 }
 
 type PolicyHandlerCallback = (
   ability: AppAbility,
-  resource?: ResourcesNames
+  resource?: PluralsNames
 ) => boolean;
 
 export type PolicyHandler = IPolicyHandler | PolicyHandlerCallback;

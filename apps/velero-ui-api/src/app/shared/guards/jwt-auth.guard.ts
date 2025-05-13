@@ -16,7 +16,7 @@ import {
   CaslAbilityFactory,
 } from '@velero-ui-api/shared/modules/casl/casl-ability.factory';
 import { SUBJECT_KEY } from '@velero-ui-api/shared/decorators/subject.decorator';
-import { ResourcesNames } from '@velero-ui/velero';
+import { PluralsNames } from '@velero-ui/velero';
 import { JwtPayload } from '@velero-ui/shared-types';
 
 @Injectable()
@@ -49,8 +49,8 @@ export class JwtAuthGuard extends AuthGuard(['jwt']) {
     const ability: AppAbility = this.caslAbilityFactory.createForUser(user);
     request.ability = ability;
 
-    const subject: ResourcesNames =
-      this.reflector.getAllAndOverride<ResourcesNames>(SUBJECT_KEY, [
+    const subject: PluralsNames =
+      this.reflector.getAllAndOverride<PluralsNames>(SUBJECT_KEY, [
         context.getHandler(),
         context.getClass(),
       ]);
@@ -75,7 +75,7 @@ export class JwtAuthGuard extends AuthGuard(['jwt']) {
   private execPolicyHandler(
     handler: PolicyHandler,
     ability: AppAbility,
-    subject?: ResourcesNames
+    subject?: PluralsNames
   ) {
     if (typeof handler === 'function') {
       if (handler.length === 2) {

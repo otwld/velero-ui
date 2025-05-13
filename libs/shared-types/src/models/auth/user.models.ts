@@ -1,12 +1,12 @@
 import { Action } from "../../enums";
-import { ResourcesNames } from "@velero-ui/velero";
+import { PluralsNames } from "@velero-ui/velero";
 
 export type UserPermission = {
   action: Action;
-  subject: ResourcesNames | 'all';
+  subject: PluralsNames | 'all';
 }
 
-export type Subjects = ResourcesNames | 'all';
+export type Subjects = PluralsNames | 'all';
 
 export type JwtPayload = {
   sub: number;

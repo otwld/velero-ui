@@ -33,7 +33,7 @@
         />
         <div v-if="repository" class="flex items-center gap-x-4 gap-y-2">
           <button
-            v-if="can(Action.Delete, Resources.BACKUP_REPOSITORY.subject)"
+            v-if="can(Action.Delete, Resources.BACKUP_REPOSITORY.plural)"
             :class="{ 'cursor-not-allowed': isDeleting || !repository }"
             :disabled="isDeleting || !repository"
             class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-red-600 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"

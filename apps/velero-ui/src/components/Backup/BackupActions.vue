@@ -33,7 +33,7 @@
         />
         <div class="flex items-center gap-x-4 gap-y-2 flex-wrap">
           <button
-            v-if="can(Action.Create, Resources.RESTORE.subject)"
+            v-if="can(Action.Create, Resources.RESTORE.plural)"
             :class="{ 'cursor-not-allowed': isDisabled || !backup }"
             :disabled="!backup"
             class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:ring-teal-300 dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
@@ -44,7 +44,7 @@
             {{ t('global.button.restore.title') }}
           </button>
           <button
-            v-if="can(Action.Download, Resources.BACKUP.subject)"
+            v-if="can(Action.Download, Resources.BACKUP.plural)"
             :class="{
               'cursor-not-allowed': downloadLoading || isDisabled || !backup,
             }"
@@ -70,7 +70,7 @@
             }}
           </button>
           <button
-            v-if="can(Action.Delete, Resources.BACKUP.subject)"
+            v-if="can(Action.Delete, Resources.BACKUP.plural)"
             :class="{ 'cursor-not-allowed': isDeleteDisabled || !backup }"
             :disabled="isDeleteDisabled || !backup"
             class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"

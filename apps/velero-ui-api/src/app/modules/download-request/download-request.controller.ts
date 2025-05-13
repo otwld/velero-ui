@@ -9,7 +9,7 @@ import { K8sCustomObjectController } from '@velero-ui-api/modules/k8s-custom-obj
 import { Subject } from '@velero-ui-api/shared/decorators/subject.decorator';
 
 @Controller(Resources.DOWNLOAD_REQUEST.route)
-@Subject(Resources.DOWNLOAD_REQUEST.subject)
+@Subject(Resources.DOWNLOAD_REQUEST.plural)
 export class DownloadRequestController extends K8sCustomObjectController<
   V1DownloadRequest,
   V1DownloadRequestList

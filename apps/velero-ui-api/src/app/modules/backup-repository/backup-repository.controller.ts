@@ -11,7 +11,7 @@ import { Subject } from "@velero-ui-api/shared/decorators/subject.decorator";
 import { K8sCustomObjectController } from "@velero-ui-api/modules/k8s-custom-object/k8s-custom-object.controller";
 
 @Controller(Resources.BACKUP_REPOSITORY.route)
-@Subject(Resources.BACKUP_REPOSITORY.subject)
+@Subject(Resources.BACKUP_REPOSITORY.plural)
 export class BackupRepositoryController extends K8sCustomObjectController<V1BackupRepository, V1BackupRepositoryList> {
   constructor(
     readonly k8sCustomObjectService: K8sCustomObjectService,

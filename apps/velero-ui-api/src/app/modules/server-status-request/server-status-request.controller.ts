@@ -9,7 +9,7 @@ import { K8sCustomObjectController } from '@velero-ui-api/modules/k8s-custom-obj
 import { Subject } from '@velero-ui-api/shared/decorators/subject.decorator';
 
 @Controller(Resources.SERVER_STATUS_REQUEST.route)
-@Subject(Resources.BACKUP.subject)
+@Subject(Resources.BACKUP.plural)
 export class ServerStatusRequestController extends K8sCustomObjectController<
   V1ServerStatusRequest,
   V1ServerStatusRequestList

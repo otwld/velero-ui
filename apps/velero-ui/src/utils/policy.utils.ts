@@ -33,3 +33,29 @@ export const can = (action: Action, subject: Subjects): boolean => {
 
   return canAbility(user?.permissions, action, subject);
 };
+
+export const canAnd = (policies: UserPermission[]): boolean => {
+  const { noAuthRequired } = inject('config') as AppPublicConfig;
+
+  if (noAuthRequired) {
+    return true;
+  }
+
+  const accessToken: string = localStorage.getItem('access_token');
+  const user: JwtPayload = getUser(accessToken);
+
+  return policies.every((p: UserPermission) => canAbility(user?.permissions, p.action, p.subject));
+}
+
+export const canOr = (policies: UserPermission[]): boolean => {
+  const { noAuthRequired } = inject('config') as AppPublicConfig;
+
+  if (noAuthRequired) {
+    return true;
+  }
+
+  const accessToken: string = localStorage.getItem('access_token');
+  const user: JwtPayload = getUser(accessToken);
+
+  return policies.some((p: UserPermission) => canAbility(user?.permissions, p.action, p.subject));
+}

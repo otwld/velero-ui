@@ -33,7 +33,7 @@
         />
         <div class="flex items-center gap-x-4 gap-y-2">
           <button
-            v-if="can(Action.Delete, Resources.RESTORE.subject)"
+            v-if="can(Action.Delete, Resources.RESTORE.plural)"
             :class="{ 'cursor-not-allowed': isDisabled || !restore }"
             :disabled="isDisabled || !restore"
             class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-red-600 hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"

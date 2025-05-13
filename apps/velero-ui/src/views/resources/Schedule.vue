@@ -10,7 +10,7 @@
         <Describe :data="data" />
       </div>
     </div>
-    <ScheduleBackupList v-if="can(Action.Read, Resources.BACKUP.subject)" />
+    <ScheduleBackupList v-if="can(Action.Read, Resources.BACKUP.plural)" />
   </div>
   <ResourceNotFound v-if="error" :page="Pages.SCHEDULES" />
 </template>

@@ -17,7 +17,7 @@ import { AppAbility } from '@velero-ui-api/shared/modules/casl/casl-ability.fact
 import { Action } from '@velero-ui/shared-types';
 
 @Controller(Resources.VOLUME_SNAPSHOT_LOCATION.route)
-@Subject(Resources.VOLUME_SNAPSHOT_LOCATION.subject)
+@Subject(Resources.VOLUME_SNAPSHOT_LOCATION.plural)
 export class SnapshotLocationController extends K8sCustomObjectController<
   V1VolumeSnapshotLocation,
   V1VolumeSnapshotLocationList
@@ -31,7 +31,7 @@ export class SnapshotLocationController extends K8sCustomObjectController<
 
   @Post()
   @CheckPolicies((ability: AppAbility) =>
-    ability.can(Action.Create, Resources.VOLUME_SNAPSHOT_LOCATION.subject)
+    ability.can(Action.Create, Resources.VOLUME_SNAPSHOT_LOCATION.plural)
   )
   public create(@Body() data: CreateVolumeSnapshotLocationDto) {
     return this.snapshotLocationService.create(data);
@@ -39,7 +39,7 @@ export class SnapshotLocationController extends K8sCustomObjectController<
 
   @Put('/:name')
   @CheckPolicies((ability: AppAbility) =>
-    ability.can(Action.Update, Resources.VOLUME_SNAPSHOT_LOCATION.subject)
+    ability.can(Action.Update, Resources.VOLUME_SNAPSHOT_LOCATION.plural)
   )
   public editByName(
     @Param('name') name: string,

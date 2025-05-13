@@ -32,11 +32,10 @@ export class K8sCustomObjectGateway implements OnGatewayDisconnect {
     @MessageBody('plural') plural: string,
     @MessageBody('version') version: string
   ): void {
-
-    const ability: AppAbility = this.caslAbilityFactory.createForUser(client.data);
+    const ability: AppAbility = this.caslAbilityFactory.createForUser(client.data.user);
 
     for (const [key, value] of Object.entries(Resources)) {
-      if (ability.can(Action.Read, value.subject)) {
+      if (ability.can(Action.Read, value.plural)) {
         this.k8sCustomObjectService.watch(client, plural, name, version);
         break;
       }

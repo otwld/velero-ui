@@ -128,11 +128,7 @@ export class CaslAbilityFactory {
 
     if (user.permissions && Array.isArray(user.permissions)) {
       for (const perm of user.permissions) {
-        if (perm.action === Action.Manage) {
-          can(perm.action, 'all');
-        } else {
-          can(perm.action, perm.subject);
-        }
+        can(perm.action, perm.subject);
       }
     }
 

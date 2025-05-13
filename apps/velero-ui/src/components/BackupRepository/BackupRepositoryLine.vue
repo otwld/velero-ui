@@ -107,7 +107,7 @@
     </td>
     <td class="p-4 space-x-2 whitespace-nowrap">
       <button
-        v-if="can(Action.Delete, Resources.BACKUP_REPOSITORY.subject)"
+        v-if="can(Action.Delete, Resources.BACKUP_REPOSITORY.plural)"
         :class="{ 'cursor-not-allowed': isDeleting }"
         :data-tooltip-target="`tooltip-button-delete-${data?.metadata?.uid}`"
         :disabled="isDeleting"

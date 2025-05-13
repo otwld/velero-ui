@@ -9,7 +9,7 @@ import { K8sCustomObjectController } from '@velero-ui-api/modules/k8s-custom-obj
 import { Subject } from '@velero-ui-api/shared/decorators/subject.decorator';
 
 @Controller(Resources.POD_VOLUME_RESTORE.route)
-@Subject(Resources.POD_VOLUME_RESTORE.subject)
+@Subject(Resources.POD_VOLUME_RESTORE.plural)
 export class PodVolumeRestoreController extends K8sCustomObjectController<
   V1PodVolumeRestore,
   V1PodVolumeRestoreList

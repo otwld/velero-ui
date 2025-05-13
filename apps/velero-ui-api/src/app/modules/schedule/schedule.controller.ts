@@ -14,7 +14,7 @@ import { AppAbility } from '@velero-ui-api/shared/modules/casl/casl-ability.fact
 import { Action } from '@velero-ui/shared-types';
 
 @Controller(Resources.SCHEDULE.route)
-@Subject(Resources.SCHEDULE.subject)
+@Subject(Resources.SCHEDULE.plural)
 export class ScheduleController extends K8sCustomObjectController<
   V1Schedule,
   V1ScheduleList
@@ -28,7 +28,7 @@ export class ScheduleController extends K8sCustomObjectController<
 
   @Post()
   @CheckPolicies((ability: AppAbility) =>
-    ability.can(Action.Create, Resources.SCHEDULE.subject)
+    ability.can(Action.Create, Resources.SCHEDULE.plural)
   )
   public create(@Body() data: CreateScheduleDto) {
     return this.scheduleService.create(data);
@@ -36,7 +36,7 @@ export class ScheduleController extends K8sCustomObjectController<
 
   @Put('/:name')
   @CheckPolicies((ability: AppAbility) =>
-    ability.can(Action.Update, Resources.SCHEDULE.subject)
+    ability.can(Action.Update, Resources.SCHEDULE.plural)
   )
   public editByName(
     @Param('name') name: string,
@@ -47,7 +47,7 @@ export class ScheduleController extends K8sCustomObjectController<
 
   @Post('/:name/pause')
   @CheckPolicies((ability: AppAbility) =>
-    ability.can(Action.Update, Resources.SCHEDULE.subject)
+    ability.can(Action.Update, Resources.SCHEDULE.plural)
   )
   public pause(@Param('name') name: string): Observable<V1Schedule> {
     return this.scheduleService.togglePause(name, true);
@@ -55,7 +55,7 @@ export class ScheduleController extends K8sCustomObjectController<
 
   @Post('/:name/unpause')
   @CheckPolicies((ability: AppAbility) =>
-    ability.can(Action.Update, Resources.SCHEDULE.subject)
+    ability.can(Action.Update, Resources.SCHEDULE.plural)
   )
   public unpause(@Param('name') name: string): Observable<V1Schedule> {
     return this.scheduleService.togglePause(name, false);

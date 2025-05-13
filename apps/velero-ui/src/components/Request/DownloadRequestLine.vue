@@ -92,7 +92,7 @@
           </div>
         </button>
         <button
-          v-if="can(Action.Delete, Resources.DOWNLOAD_REQUEST.subject)"
+          v-if="can(Action.Delete, Resources.DOWNLOAD_REQUEST.plural)"
           :class="{ 'cursor-not-allowed': isDeleting }"
           :data-tooltip-target="`tooltip-button-delete-${data?.metadata?.uid}`"
           :disabled="isDeleting"

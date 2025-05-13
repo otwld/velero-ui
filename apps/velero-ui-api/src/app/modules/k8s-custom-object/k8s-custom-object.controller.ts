@@ -1,6 +1,6 @@
 import { Body, Delete, Get, Param, Query } from '@nestjs/common';
 import { Observable } from 'rxjs';
-import { Resource, Resources, ResourcesNames } from '@velero-ui/velero';
+import { PluralsNames, Resource } from '@velero-ui/velero';
 import { K8sCustomObjectService } from '@velero-ui-api/modules/k8s-custom-object/k8s-custom-object.service';
 import {
   K8sCustomObjectParams,
@@ -10,24 +10,24 @@ import {
   KubernetesListObject,
   KubernetesObject,
 } from '@kubernetes/client-node';
-import { Action } from "@velero-ui/shared-types";
-import { CheckPolicies } from "@velero-ui-api/shared/decorators/check-policies.decorator";
-import { AppAbility } from "@velero-ui-api/shared/modules/casl/casl-ability.factory";
-
+import { Action } from '@velero-ui/shared-types';
+import { CheckPolicies } from '@velero-ui-api/shared/decorators/check-policies.decorator';
+import { AppAbility } from '@velero-ui-api/shared/modules/casl/casl-ability.factory';
 
 export class K8sCustomObjectController<
   CustomObjectType extends KubernetesObject = KubernetesObject,
   CustomObjectTypeList extends
     KubernetesListObject<CustomObjectType> = KubernetesListObject<CustomObjectType>,
 > {
-
   constructor(
     readonly k8sCustomObjectService: K8sCustomObjectService,
     readonly resource: Resource
   ) {}
 
   @Get()
-  @CheckPolicies((ability: AppAbility, resource: ResourcesNames) => ability.can(Action.Read, resource))
+  @CheckPolicies((ability: AppAbility, resource: PluralsNames) =>
+    ability.can(Action.Read, resource)
+  )
   protected get(
     @Param() params: K8sCustomObjectParams,
     @Query() queries: K8SCustomObjectQueries
@@ -46,7 +46,9 @@ export class K8sCustomObjectController<
   }
 
   @Get('/:name')
-  @CheckPolicies((ability: AppAbility, resource: ResourcesNames) => ability.can(Action.Read, resource))
+  @CheckPolicies((ability: AppAbility, resource: PluralsNames) =>
+    ability.can(Action.Read, resource)
+  )
   protected getByName(
     @Param() params: K8sCustomObjectParams
   ): Observable<CustomObjectType> {
@@ -57,18 +59,23 @@ export class K8sCustomObjectController<
   }
 
   @Delete()
-  @CheckPolicies((ability: AppAbility, resource: ResourcesNames) => ability.can(Action.Delete, resource))
-  protected delete(
-    @Body() names: string[]
-  ): Observable<any> {
+  @CheckPolicies((ability: AppAbility, resource: PluralsNames) =>
+    ability.can(Action.Delete, resource)
+  )
+  protected delete(@Body() names: string[]): Observable<any> {
     return this.k8sCustomObjectService.delete(this.resource.plural, names);
   }
 
   @Delete('/:name')
-  @CheckPolicies((ability: AppAbility, resource: ResourcesNames) => ability.can(Action.Delete, resource))
+  @CheckPolicies((ability: AppAbility, resource: PluralsNames) =>
+    ability.can(Action.Delete, resource)
+  )
   protected deleteByName(
     @Param() params: K8sCustomObjectParams
   ): Observable<any> {
-    return this.k8sCustomObjectService.deleteByName(this.resource.plural, params.name);
+    return this.k8sCustomObjectService.deleteByName(
+      this.resource.plural,
+      params.name
+    );
   }
 }

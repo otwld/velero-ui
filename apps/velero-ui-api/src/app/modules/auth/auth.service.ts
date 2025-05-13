@@ -42,8 +42,6 @@ export class AuthService {
       });
     }
 
-    console.log(req.user.policy)
-
     const permissions: UserPermission[] = [];
 
     if (req.user.provider === 'local') {

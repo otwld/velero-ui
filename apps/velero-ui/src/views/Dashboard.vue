@@ -27,7 +27,7 @@
         {{ t('backups.title') }}
       </h1>
       <router-link
-        v-if="can(Action.Read, Resources.BACKUP.subject)"
+        v-if="can(Action.Read, Resources.BACKUP.plural)"
         :to="Pages.BACKUPS.path"
         class="inline-flex items-center p-2 text-xs font-medium uppercase rounded-lg text-blue-700 sm:text-sm hover:bg-gray-100 dark:text-blue-500 dark:hover:bg-gray-700"
       >
@@ -46,7 +46,7 @@
         {{ t('restores.title') }}
       </h1>
       <router-link
-        v-if="can(Action.Read, Resources.RESTORE.subject)"
+        v-if="can(Action.Read, Resources.RESTORE.plural)"
         :to="Pages.RESTORES.path"
         class="inline-flex items-center p-2 text-xs font-medium uppercase rounded-lg text-blue-700 sm:text-sm hover:bg-gray-100 dark:text-blue-500 dark:hover:bg-gray-700"
       >

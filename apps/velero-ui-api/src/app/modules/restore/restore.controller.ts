@@ -18,7 +18,7 @@ import { AppAbility } from "@velero-ui-api/shared/modules/casl/casl-ability.fact
 import { Action } from "@velero-ui/shared-types";
 
 @Controller(Resources.RESTORE.route)
-@Subject(Resources.RESTORE.subject)
+@Subject(Resources.RESTORE.plural)
 export class RestoreController extends K8sCustomObjectController<
   V1Restore,
   V1RestoreList
@@ -33,7 +33,7 @@ export class RestoreController extends K8sCustomObjectController<
 
   @Post()
   @CheckPolicies((ability: AppAbility) =>
-    ability.can(Action.Create, Resources.RESTORE.subject)
+    ability.can(Action.Create, Resources.RESTORE.plural)
   )
   public create(@Body() data: CreateRestoreDto) {
     return this.restoreService.create(data);
@@ -41,7 +41,7 @@ export class RestoreController extends K8sCustomObjectController<
 
   @Get('/:name/logs')
   @CheckPolicies((ability: AppAbility) =>
-    ability.can(Action.Logs, Resources.RESTORE.subject)
+    ability.can(Action.Logs, Resources.RESTORE.plural)
   )
   public logs(@Param('name') name: string): Observable<string[]> {
     return this.restoreService.logs(name);
@@ -50,8 +50,8 @@ export class RestoreController extends K8sCustomObjectController<
   @Post('/:name/logs/download')
   @CheckPolicies(
     (ability: AppAbility) =>
-      ability.can(Action.Logs, Resources.RESTORE.subject) &&
-      ability.can(Action.Download, Resources.RESTORE.subject)
+      ability.can(Action.Logs, Resources.RESTORE.plural) &&
+      ability.can(Action.Download, Resources.RESTORE.plural)
   )
   public downloadLogs(
     @Param('name') name: string

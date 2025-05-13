@@ -2,6 +2,7 @@ import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { BackupService } from './backup.service';
 import { forkJoin, Observable } from 'rxjs';
 import {
+  PluralsNames,
   Resources, ResourcesNames,
   V1Backup,
   V1BackupList, V1DeleteBackupRequest,
@@ -19,7 +20,7 @@ import { Subject } from '@velero-ui-api/shared/decorators/subject.decorator';
 import { K8sCustomObjectParams } from "@velero-ui-api/shared/dto/k8s-custom-object.dto";
 
 @Controller(Resources.BACKUP.route)
-@Subject(Resources.BACKUP.subject)
+@Subject(Resources.BACKUP.plural)
 export class BackupController extends K8sCustomObjectController<
   V1Backup,
   V1BackupList
@@ -46,7 +47,7 @@ export class BackupController extends K8sCustomObjectController<
 
   @Post()
   @CheckPolicies((ability: AppAbility) =>
-    ability.can(Action.Create, Resources.BACKUP.subject)
+    ability.can(Action.Create, Resources.BACKUP.plural)
   )
   public create(@Body() data: CreateBackupDto) {
     return this.backupService.create(data);
@@ -54,7 +55,7 @@ export class BackupController extends K8sCustomObjectController<
 
   @Get('/:name/logs')
   @CheckPolicies((ability: AppAbility) =>
-    ability.can(Action.Logs, Resources.BACKUP.subject)
+    ability.can(Action.Logs, Resources.BACKUP.plural)
   )
   public logs(@Param('name') name: string): Observable<string[]> {
     return this.backupService.logs(name);
@@ -63,8 +64,8 @@ export class BackupController extends K8sCustomObjectController<
   @Post('/:name/logs/download')
   @CheckPolicies(
     (ability: AppAbility) =>
-      ability.can(Action.Logs, Resources.BACKUP.subject) &&
-      ability.can(Action.Download, Resources.BACKUP.subject)
+      ability.can(Action.Logs, Resources.BACKUP.plural) &&
+      ability.can(Action.Download, Resources.BACKUP.plural)
   )
   public downloadLogs(
     @Param('name') name: string
@@ -77,7 +78,7 @@ export class BackupController extends K8sCustomObjectController<
 
   @Post('/:name/download')
   @CheckPolicies((ability: AppAbility) =>
-    ability.can(Action.Download, Resources.BACKUP.subject)
+    ability.can(Action.Download, Resources.BACKUP.plural)
   )
   public downloadByName(
     @Param('name') name: string
@@ -89,15 +90,17 @@ export class BackupController extends K8sCustomObjectController<
   }
 
   @Delete()
-  @CheckPolicies((ability: AppAbility, resource: ResourcesNames) => ability.can(Action.Delete, resource))
-  public delete(
-    @Body() names: string[]
-  ): Observable<any> {
+  @CheckPolicies((ability: AppAbility, resource: PluralsNames) =>
+    ability.can(Action.Delete, resource)
+  )
+  public delete(@Body() names: string[]): Observable<any> {
     return this.backupService.delete(names);
   }
 
   @Delete('/:name')
-  @CheckPolicies((ability: AppAbility) => ability.can(Action.Delete, Resources.BACKUP.subject))
+  @CheckPolicies((ability: AppAbility) =>
+    ability.can(Action.Delete, Resources.BACKUP.plural)
+  )
   protected deleteByName(
     @Param() params: K8sCustomObjectParams
   ): Observable<V1DeleteBackupRequest> {

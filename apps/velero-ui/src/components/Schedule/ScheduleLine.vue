@@ -84,7 +84,7 @@
     <td class="p-4 space-x-2 whitespace-nowrap">
       <div class="inline-flex rounded-md shadow-sm" role="group">
         <button
-          v-if="can(Action.Update, Resources.SCHEDULE.subject)"
+          v-if="can(Action.Update, Resources.SCHEDULE.plural)"
           :class="{ 'cursor-not-allowed': isEditing }"
           :data-tooltip-target="`tooltip-button-edit-${data?.metadata?.uid}`"
           :disabled="isEditing"
@@ -102,7 +102,7 @@
         </button>
         <button
           v-if="
-            can(Action.Update, Resources.SCHEDULE.subject) &&
+            can(Action.Update, Resources.SCHEDULE.plural) &&
             data?.status?.phase !== V1SchedulePhase.FailedValidation &&
             data?.spec?.paused
           "
@@ -126,7 +126,7 @@
         </button>
         <button
           v-if="
-            can(Action.Update, Resources.SCHEDULE.subject) &&
+            can(Action.Update, Resources.SCHEDULE.plural) &&
             data?.status?.phase !== V1SchedulePhase.FailedValidation &&
             !data?.spec?.paused
           "
@@ -150,7 +150,7 @@
         </button>
 
         <button
-          v-if="can(Action.Delete, Resources.SCHEDULE.subject)"
+          v-if="can(Action.Delete, Resources.SCHEDULE.plural)"
           :class="{ 'cursor-not-allowed': isDeleting }"
           :data-tooltip-target="`tooltip-button-delete-${data?.metadata?.uid}`"
           :disabled="isDeleting"

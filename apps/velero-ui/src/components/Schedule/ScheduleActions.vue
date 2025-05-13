@@ -33,7 +33,7 @@
         />
         <div v-if="schedule" class="flex items-center gap-x-4 gap-y-2">
           <button
-            v-if="can(Action.Update, Resources.SCHEDULE.subject)"
+            v-if="can(Action.Update, Resources.SCHEDULE.plural)"
             :class="{ 'cursor-not-allowed': isEditing || !schedule }"
             :disabled="isEditing || !schedule"
             class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:ring-teal-300 dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
@@ -54,7 +54,7 @@
           </button>
           <button
             v-if="
-              can(Action.Update, Resources.SCHEDULE.subject) &&
+              can(Action.Update, Resources.SCHEDULE.plural) &&
               schedule?.status?.phase !== V1SchedulePhase.FailedValidation &&
               schedule?.spec?.paused
             "
@@ -77,7 +77,7 @@
           </button>
           <button
             v-if="
-              can(Action.Update, Resources.SCHEDULE.subject) &&
+              can(Action.Update, Resources.SCHEDULE.plural) &&
               schedule?.status?.phase !== V1SchedulePhase.FailedValidation &&
               !schedule?.spec?.paused
             "
@@ -99,7 +99,7 @@
             {{ t('global.button.pause.title') }}
           </button>
           <button
-            v-if="can(Action.Delete, Resources.SCHEDULE.subject)"
+            v-if="can(Action.Delete, Resources.SCHEDULE.plural)"
             :class="{ 'cursor-not-allowed': isDeleting || !schedule }"
             :disabled="isDeleting || !schedule"
             class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-red-600 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"

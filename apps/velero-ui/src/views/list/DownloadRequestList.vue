@@ -2,7 +2,7 @@
   <ListHeader>
     <template #bulk-buttons>
       <button
-        v-if="can(Action.Delete, Resources.DOWNLOAD_REQUEST.subject)"
+        v-if="can(Action.Delete, Resources.DOWNLOAD_REQUEST.plural)"
         :class="{
           'cursor-not-allowed':
             childListRef?.getCheckedItems().length === 0 || isLoadingDeleting,

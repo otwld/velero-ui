@@ -17,7 +17,7 @@ import { AppAbility } from '@velero-ui-api/shared/modules/casl/casl-ability.fact
 import { Action } from '@velero-ui/shared-types';
 
 @Controller(Resources.BACKUP_STORAGE_LOCATION.route)
-@Subject(Resources.BACKUP_STORAGE_LOCATION.subject)
+@Subject(Resources.BACKUP_STORAGE_LOCATION.plural)
 export class StorageLocationController extends K8sCustomObjectController<
   V1BackupStorageLocation,
   V1BackupStorageLocationList
@@ -31,7 +31,7 @@ export class StorageLocationController extends K8sCustomObjectController<
 
   @Post()
   @CheckPolicies((ability: AppAbility) =>
-    ability.can(Action.Create, Resources.BACKUP_STORAGE_LOCATION.subject)
+    ability.can(Action.Create, Resources.BACKUP_STORAGE_LOCATION.plural)
   )
   public create(@Body() data: CreateStorageLocationDto) {
     return this.storageLocationService.create(data);
@@ -39,7 +39,7 @@ export class StorageLocationController extends K8sCustomObjectController<
 
   @Put('/:name')
   @CheckPolicies((ability: AppAbility) =>
-    ability.can(Action.Update, Resources.BACKUP_STORAGE_LOCATION.subject)
+    ability.can(Action.Update, Resources.BACKUP_STORAGE_LOCATION.plural)
   )
   public editByName(
     @Param('name') name: string,

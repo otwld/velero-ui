@@ -51,7 +51,10 @@ export class LdapStrategy extends PassportStrategy(Strategy, 'ldap') {
       id: user.uid,
       provider: 'ldap',
       displayName: user.givenName,
-      permissions: [{ action: Action.Manage, subject: 'all' }],
+      permissions: {
+        user: user.username,
+        groups
+      },
     };
   }
 

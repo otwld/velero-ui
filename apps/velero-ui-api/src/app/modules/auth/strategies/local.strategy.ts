@@ -34,7 +34,6 @@ export class LocalStrategy extends PassportStrategy(Strategy, 'local') {
       id: 'local',
       provider: 'local',
       displayName: username,
-      policy: {}
     };
   }
 }

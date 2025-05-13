@@ -9,7 +9,7 @@ import { K8sCustomObjectController } from '@velero-ui-api/modules/k8s-custom-obj
 import { Subject } from '@velero-ui-api/shared/decorators/subject.decorator';
 
 @Controller(Resources.DELETE_BACKUP_REQUEST.route)
-@Subject(Resources.DELETE_BACKUP_REQUEST.subject)
+@Subject(Resources.DELETE_BACKUP_REQUEST.plural)
 export class DeleteBackupRequestController extends K8sCustomObjectController<
   V1DeleteBackupRequest,
   V1DeleteBackupRequestList
