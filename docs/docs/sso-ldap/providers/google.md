@@ -43,6 +43,22 @@ To enable Google authentication, set the following environment variables:
 3. **Restart Your Application**
    - Restart the Velero UI to apply the changes.
 
+## RBAC
+
+If you are using Google Groups for RBAC, ensure that [Cloud Identity API](https://cloud.google.com/identity/docs/set-up-cloud-identity-admin) is enabled in your Google Cloud project. This allows Velero UI to read the user's group memberships.
+
+Add the special scope `https://www.googleapis.com/auth/cloud-identity.groups` to your `GOOGLE_OAUTH_SCOPE` environment variable.
+
+**Setup permissions:**
+1. From Google Cloud Console, navigate to **Google Auth API > Data Access**.
+2. Click on **Add or remove scopes** and search for **Cloud Identity Groups API**.
+3. Select the **auth/cloud-identity.groups.readonly** scope.
+
+**Group syntax is** `group_name`, example: `admin`.
+
+Then refer to the [RBAC documentation](../rbac.md) for further configuration.
+
+
 ## Troubleshooting
 
 - Ensure that the redirect URI set in Google Cloud matches `GOOGLE_REDIRECT_URI`.

@@ -339,4 +339,7 @@ configuration.
 - **Type**: `string`
 - **Description**: This variable defines which attributes should be retrieved from the LDAP entries during a search. Multiple attributes can be specified, separated by commas. This allows the application to obtain only the necessary data for user authentication and profile management, improving efficiency and security.
 
+#### `LDAP_GROUP_SEARCH_BASE`
 
+- **Type**: `string`
+- **Description**: This variable specifies the base DN from which the LDAP group search queries will start. It should represent the root of the group entries in the LDAP directory and is important for limiting the search scope to relevant groups.
