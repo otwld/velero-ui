@@ -11,7 +11,7 @@ import { ToastType, useToastsStore } from '@velero-ui-app/stores/toasts.store';
 
 export const useKubernetesWatchObject = <T extends KubernetesObject>(
   resource: Resource,
-  name: string,
+  name: string
 ) => {
   const toastsStore = useToastsStore();
   const axiosInstance: AxiosInstance = inject('axios') as AxiosInstance;
@@ -19,58 +19,59 @@ export const useKubernetesWatchObject = <T extends KubernetesObject>(
   const queryClient: QueryClient = useQueryClient();
 
   const listStore = useListStore();
-  const {offset, limit, filters, sort} = storeToRefs(listStore);
+  const { offset, limit, filters, sort } = storeToRefs(listStore);
 
   const on = () => {
-    socket.io.emit(`watch:on`, {name, plural: resource.plural});
+    socket.io.emit(`watch:on`, { name, plural: resource.plural });
 
     socket.io.on(
-      `watch:${ resource.plural }:${ name }:ADDED`,
+      `watch:${resource.plural}:${name}:ADDED`,
       (object: T): void => {
         queryClient.setQueryData([resource.plural, name], object);
-      },
+      }
     );
 
     socket.io.on(
-      `watch:${ resource.plural }:${ name }:MODIFIED`,
+      `watch:${resource.plural}:${name}:MODIFIED`,
       debounce((object: T) => {
         queryClient.setQueryData([resource.plural, name], object);
-      }, 300),
+      }, 300)
     );
 
-    socket.io.on(`watch:${ resource.plural }:${ name }:DELETED`,
+    socket.io.on(
+      `watch:${resource.plural}:${name}:DELETED`,
       debounce((object: T) => {
         queryClient.setQueryData([resource.plural, name], undefined);
         queryClient.setQueryData(
-          [resource.plural, {limit, offset, filters, sort}],
+          [resource.plural, { limit, offset, filters, sort }],
           (oldData?: T[]) => {
             return oldData?.filter(
-              (obj: T) => obj.metadata.name !== object.metadata.name,
+              (obj: T) => obj.metadata.name !== object.metadata.name
             );
-          },
+          }
         );
 
         toastsStore.push(
-          `Resource ${ name } has been deleted by velero server.`,
-          ToastType.WARNING,
+          `Resource ${name} has been deleted by velero server.`,
+          ToastType.WARNING
         );
-      }, 300));
-
+      }, 300)
+    );
   };
 
   const off = () => {
-    socket.io.off(`watch:${ resource.plural }:${ name }:ADDED`);
-    socket.io.off(`watch:${ resource.plural }:${ name }:MODIFIED`);
-    socket.io.off(`watch:${ resource.plural }:${ name }:DELETED`);
+    socket.io.off(`watch:${resource.plural}:${name}:ADDED`);
+    socket.io.off(`watch:${resource.plural}:${name}:MODIFIED`);
+    socket.io.off(`watch:${resource.plural}:${name}:DELETED`);
     socket.io.emit(`watch:off`, {
       name,
     });
   };
 
-  const {data, isLoading, error} = useQuery<T>({
+  const { data, isLoading, error } = useQuery<T>({
     queryKey: [resource.plural, name],
     queryFn: async () =>
-      (await axiosInstance.get<T>(`/resources/${ resource.plural }/${ name }`))
+      (await axiosInstance.get<T>(`${resource.route}/${name}`))
         .data,
     initialData: () => {
       return queryClient
@@ -87,5 +88,5 @@ export const useKubernetesWatchObject = <T extends KubernetesObject>(
     },
   });
 
-  return {on, off, data, isLoading, error};
+  return { on, off, data, isLoading, error };
 };

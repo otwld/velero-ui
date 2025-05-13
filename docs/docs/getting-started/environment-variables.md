@@ -287,6 +287,12 @@ configuration.
 - **Type**: `string`
 - **Description**: Sets the token URL for OAuth2 authentication, used to exchange the authorization code for access tokens.
 
+#### `OAUTH_GROUP_CLAIM`
+
+- **Type**: `string`
+- **Default**: `groups`
+- **Description**: Specifies the field name in the OAuth2 response that contains the user's group memberships. This claim is used to retrieve and map user groups from the OAuth2 provider to application permissions.
+
 #### `OAUTH_NAME`
 
 - **Type**: `string`
@@ -333,4 +339,7 @@ configuration.
 - **Type**: `string`
 - **Description**: This variable defines which attributes should be retrieved from the LDAP entries during a search. Multiple attributes can be specified, separated by commas. This allows the application to obtain only the necessary data for user authentication and profile management, improving efficiency and security.
 
+#### `LDAP_GROUP_SEARCH_BASE`
 
+- **Type**: `string`
+- **Description**: This variable specifies the base DN from which the LDAP group search queries will start. It should represent the root of the group entries in the LDAP directory and is important for limiting the search scope to relevant groups.

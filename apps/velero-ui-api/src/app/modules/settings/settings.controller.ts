@@ -1,7 +1,8 @@
 import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { SettingsService } from './settings.service';
 import { Observable } from 'rxjs';
-import type {
+import {
+  Action,
   ClusterSettings,
   VeleroAgentSettings,
   VeleroServerSettings,
@@ -9,12 +10,15 @@ import type {
 } from '@velero-ui/shared-types';
 import { V1PluginInfo } from '@velero-ui/velero';
 import { AddVeleroPluginDTO } from '@velero-ui-api/shared/dto/settings.dto';
+import { CheckPolicies } from '@velero-ui-api/shared/decorators/check-policies.decorator';
+import { AppAbility } from '@velero-ui-api/shared/modules/casl/casl-ability.factory';
 
 @Controller('/settings')
 export class SettingsController {
   constructor(private readonly settingsService: SettingsService) {}
 
   @Get('/cluster')
+  @CheckPolicies((ability: AppAbility) => ability.can(Action.Manage, 'all'))
   public getCluster(): Observable<ClusterSettings> {
     return this.settingsService.getCluster();
   }
@@ -25,6 +29,7 @@ export class SettingsController {
   }
 
   @Get('/velero/agents')
+  @CheckPolicies((ability: AppAbility) => ability.can(Action.Manage, 'all'))
   public getVeleroAgents(): Observable<VeleroAgentSettings[]> {
     return this.settingsService.getVeleroAgents();
   }
@@ -35,11 +40,13 @@ export class SettingsController {
   }
 
   @Get('/velero/plugins')
+  @CheckPolicies((ability: AppAbility) => ability.can(Action.Manage, 'all'))
   public getVeleroPlugins(): Observable<V1PluginInfo[]> {
     return this.settingsService.getPlugins();
   }
 
   @Post('/velero/plugins')
+  @CheckPolicies((ability: AppAbility) => ability.can(Action.Manage, 'all'))
   public addVeleroPlugin(@Body() data: AddVeleroPluginDTO) {
     return {};
   }

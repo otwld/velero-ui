@@ -87,6 +87,7 @@
     </td>
     <td class="p-4 space-x-2 whitespace-nowrap">
       <button
+        v-if="can(Action.Delete, type.plural)"
         :class="{ 'cursor-not-allowed': isDeleting }"
         :data-tooltip-target="`tooltip-button-delete-${data?.metadata?.uid}`"
         :disabled="isDeleting"
@@ -160,6 +161,8 @@ import { useI18n } from 'vue-i18n';
 import { initTooltips } from 'flowbite';
 import { type Router, useRouter } from 'vue-router';
 import PodVolumePhaseBadge from '@velero-ui-app/components/PodVolume/PodVolumePhaseBadge.vue';
+import { can } from "@velero-ui-app/utils/policy.utils";
+import { Action } from "@velero-ui/shared-types";
 
 const router: Router = useRouter();
 const { t } = useI18n();

@@ -8,7 +8,13 @@
           {{ t('log.title') }}
         </h3>
         <button
-          v-if="data?.length > 0"
+          v-if="
+            data?.length > 0 &&
+            canOr([
+              { subject: Resources.BACKUP.plural, action: Action.Download },
+              { subject: Resources.RESTORE.plural, action: Action.Download },
+            ])
+          "
           :disabled="isLoading"
           class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
           @click="download()"
@@ -44,7 +50,10 @@
           </p>
         </div>
         <div v-if="loading" class="inline-flex items-center">
-          <FontAwesomeIcon :icon="faCircleNotch" class="!w-4 !h-4 animate-spin" />
+          <FontAwesomeIcon
+            :icon="faCircleNotch"
+            class="!w-4 !h-4 animate-spin"
+          />
           <i class="ml-2">{{ t('log.text.loading') }}</i>
         </div>
       </div>
@@ -59,16 +68,18 @@ import {
   faInfoCircle,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import type { V1DownloadTargetKind } from '@velero-ui/velero';
+import { Resources, type V1DownloadTargetKind } from '@velero-ui/velero';
 import { useLogsDownload } from '@velero-ui-app/composables/useLogsDownload';
 import { useI18n } from 'vue-i18n';
+import { canOr } from '@velero-ui-app/utils/policy.utils';
+import { Action } from '@velero-ui/shared-types';
 
 const { t } = useI18n();
 const props = defineProps({
-  data: {type: Array as PropType<string[]>, required: true},
-  name: {type: String, required: true},
+  data: { type: Array as PropType<string[]>, required: true },
+  name: { type: String, required: true },
   loading: Boolean,
-  type: {type: String as PropType<V1DownloadTargetKind>, required: true},
+  type: { type: String as PropType<V1DownloadTargetKind>, required: true },
 });
 
 const { download, isLoading } = useLogsDownload(props.name, props.type);

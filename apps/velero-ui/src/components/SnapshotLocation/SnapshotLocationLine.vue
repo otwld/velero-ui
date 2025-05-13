@@ -66,6 +66,7 @@
     <td class="p-4 space-x-2 whitespace-nowrap">
       <div class="inline-flex rounded-md shadow-sm" role="group">
         <button
+          v-if="can(Action.Update, Resources.VOLUME_SNAPSHOT_LOCATION.plural)"
           :class="{ 'cursor-not-allowed': isEditing }"
           :data-tooltip-target="`tooltip-button-edit-${data?.metadata?.uid}`"
           :disabled="isEditing"
@@ -82,6 +83,7 @@
           <FontAwesomeIcon v-else :icon="faPen" class="!w-4 !h-4" />
         </button>
         <button
+          v-if="can(Action.Delete, Resources.VOLUME_SNAPSHOT_LOCATION.plural)"
           :class="{ 'cursor-not-allowed': isDeleting }"
           :data-tooltip-target="`tooltip-button-delete-${data?.metadata?.uid}`"
           :disabled="isDeleting"
@@ -172,6 +174,8 @@ import { initTooltips } from 'flowbite';
 import VModal from '@velero-ui-app/components/Modals/VModal.vue';
 import { useKubernetesEditObject } from '@velero-ui-app/composables/useKubernetesEditObject';
 import SnapshotLocationFormEdit from '@velero-ui-app/components/SnapshotLocation/forms/SnapshotLocationFormEdit.vue';
+import { can } from "@velero-ui-app/utils/policy.utils";
+import { Action } from "@velero-ui/shared-types";
 
 const { t } = useI18n();
 const props = defineProps({

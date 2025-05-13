@@ -40,10 +40,21 @@ Velero UI supports authentication via LDAP (Lightweight Directory Access Protoco
      LDAP_SEARCH_BASE=ou=users,dc=example,dc=org
      LDAP_SEARCH_FILTER=(uid={{username}})
      LDAP_SEARCH_ATTRIBUTES=
+     LDAP_GROUP_SEARCH_BASE=
      ```
 
 4. **Restart Your Application**
    - Restart the Velero UI to apply the changes.
+
+## RBAC
+
+If you are using LDAP groups for RBAC, ensure that the LDAP server is configured to return group memberships. This allows Velero UI to read the user's group memberships.
+
+You can define the group claim with the `LDAP_GROUP_SEARCH_BASE` environment variable.
+
+**Group syntax is** `group_name`, example: `admin`.
+
+Then refer to the [RBAC documentation](../rbac.md) for further configuration.
 
 ## Troubleshooting
 

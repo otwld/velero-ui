@@ -2,6 +2,7 @@
   <ListHeader>
     <template #bulk-buttons>
       <button
+        v-if="can(Action.Download, Resources.BACKUP.plural)"
         :class="{
           'cursor-not-allowed':
             childListRef?.getCheckedItems().length === 0 || downloadLoading,
@@ -25,6 +26,7 @@
         />
       </button>
       <button
+        v-if="can(Action.Delete, Resources.BACKUP.plural)"
         :class="{
           'cursor-not-allowed':
             childListRef?.getCheckedItems().length === 0 || isLoadingDeleting,
@@ -50,6 +52,7 @@
     </template>
     <template #buttons>
       <button
+        v-if="can(Action.Create, Resources.BACKUP.plural)"
         class="inline-flex items-center justify-center w-1/2 px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 sm:w-auto dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
         type="button"
         @click="showModalAdd = !showModalAdd"
@@ -93,7 +96,8 @@
           v-for="(item, index) in childListRef?.getCheckedItems()"
           :key="index"
           class="mt-2 px-1 text-sm rounded bg-gray-200 text-gray-600 dark:bg-gray-600 dark:text-gray-200"
-        >{{ item }}</span>
+          >{{ item }}</span
+        >
       </div>
     </template>
   </ModalConfirmation>
@@ -114,7 +118,8 @@
           v-for="(item, index) in childListRef?.getCheckedItems()"
           :key="index"
           class="mt-2 px-1 text-sm rounded bg-gray-200 text-gray-600 dark:bg-gray-600 dark:text-gray-200"
-        >{{ item }}</span>
+          >{{ item }}</span
+        >
       </div>
     </template>
   </ModalConfirmation>
@@ -141,6 +146,8 @@ import ModalConfirmation from '@velero-ui-app/components/Modals/ModalConfirmatio
 import { Resources } from '@velero-ui/velero';
 import { useDeleteManyKubernetesObjects } from '@velero-ui-app/composables/useDeleteManyKubernetesObjects';
 import { useBackupManyDownloadContent } from '@velero-ui-app/composables/backup/useBackupManyDownloadContent';
+import { Action } from '@velero-ui/shared-types';
+import { can } from '@velero-ui-app/utils/policy.utils';
 
 const { t } = useI18n();
 const listStore = useListStore();
@@ -195,7 +202,7 @@ onBeforeMount(() =>
         enabled: false,
       },
     },
-  ]),
+  ])
 );
 
 const showModalAdd = ref(false);

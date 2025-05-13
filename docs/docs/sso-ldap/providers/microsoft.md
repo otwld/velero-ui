@@ -46,6 +46,26 @@ Velero UI also supports authentication via Microsoft using OAuth 2.0. This guide
 4. **Restart Your Application**
    - Restart the Velero UI to apply the changes.
 
+## RBAC
+
+If you are using Azure AD groups for RBAC, ensure that the `user.read` scope is included in your application settings. This allows Velero UI to read the user's group memberships.
+
+Associate users with groups in Azure AD and assign roles in Velero UI based on these groups.
+
+**Setup permissions:**
+1. From the API permissions menu, choose **+ Add a permission**
+2. Find **User.Read** permission (under Microsoft Graph) and grant it
+3. From the Token Configuration menu, choose **+ Add groups claim**
+4. Check **"Groups assigned to the application"** and/or **"Security groups assigned to the application"**
+
+**Associate group to application:**
+1. From the **Microsoft Entra ID > Enterprise applications** menu, search the App that you created
+2. From the Users and groups menu of the app, add any users or groups requiring access to the service.
+
+**Group syntax is** `group_name`, example: `ADMINS`.
+
+Then refer to the [RBAC documentation](../rbac.md) for further configuration.
+
 ## Troubleshooting
 
 - Ensure that the redirect URI set in Azure matches `MICROSOFT_REDIRECT_URI`.

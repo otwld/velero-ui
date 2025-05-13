@@ -30,7 +30,7 @@
                 <span class="ml-3">{{ t('dashboard.title') }}</span>
               </router-link>
             </li>
-            <li>
+            <li v-if="can(Action.Read, Resources.BACKUP.plural)">
               <router-link
                 :to="Pages.BACKUPS.path"
                 active-class="bg-gray-100 dark:bg-gray-700"
@@ -43,7 +43,7 @@
                 <span class="ml-3">{{ t('backups.title') }}</span>
               </router-link>
             </li>
-            <li>
+            <li v-if="can(Action.Read, Resources.SCHEDULE.plural)">
               <router-link
                 :to="Pages.SCHEDULES.path"
                 active-class="bg-gray-100 dark:bg-gray-700"
@@ -56,7 +56,7 @@
                 <span class="ml-3">{{ t('schedules.title') }}</span>
               </router-link>
             </li>
-            <li>
+            <li v-if="can(Action.Read, Resources.RESTORE.plural)">
               <router-link
                 :to="Pages.RESTORES.path"
                 active-class="bg-gray-100 dark:bg-gray-700"
@@ -71,7 +71,7 @@
                 <span class="ml-3">{{ t('restores.title') }}</span>
               </router-link>
             </li>
-            <li>
+            <li v-if="can(Action.Read, Resources.BACKUP_REPOSITORY.plural)">
               <router-link
                 :to="Pages.BACKUP_REPOSITORIES.path"
                 active-class="bg-gray-100 dark:bg-gray-700"
@@ -84,7 +84,9 @@
                 <span class="ml-3">{{ t('backupRepositories.title') }}</span>
               </router-link>
             </li>
-            <li>
+            <li
+              v-if="can(Action.Read, Resources.BACKUP_STORAGE_LOCATION.plural)"
+            >
               <router-link
                 :to="Pages.STORAGE_LOCATIONS.path"
                 active-class="bg-gray-100 dark:bg-gray-700"
@@ -97,7 +99,9 @@
                 <span class="ml-3">{{ t('storageLocations.title') }}</span>
               </router-link>
             </li>
-            <li>
+            <li
+              v-if="can(Action.Read, Resources.VOLUME_SNAPSHOT_LOCATION.plural)"
+            >
               <router-link
                 :to="Pages.SNAPSHOT_LOCATIONS.path"
                 active-class="bg-gray-100 dark:bg-gray-700"
@@ -110,7 +114,20 @@
                 <span class="ml-3">{{ t('snapshotLocations.title') }}</span>
               </router-link>
             </li>
-            <li>
+            <li
+              v-if="
+                canOr([
+                  {
+                    action: Action.Read,
+                    subject: Resources.POD_VOLUME_BACKUP.plural,
+                  },
+                  {
+                    action: Action.Read,
+                    subject: Resources.POD_VOLUME_RESTORE.plural,
+                  },
+                ])
+              "
+            >
               <button
                 aria-controls="dropdown-pod-volumes"
                 class="flex w-full items-center p-2 text-base text-gray-900 rounded-lg transition duration-75 hover:bg-gray-100 group dark:text-gray-200 dark:hover:bg-gray-700"
@@ -139,7 +156,7 @@
                 :class="{ hidden: hiddenDropdownPodVolumes }"
                 class="py-2 space-y-2"
               >
-                <li>
+                <li v-if="can(Action.Read, Resources.POD_VOLUME_BACKUP.plural)">
                   <router-link
                     :to="Pages.POD_VOLUME_BACKUPS.path"
                     active-class="bg-gray-100 dark:bg-gray-700"
@@ -152,7 +169,9 @@
                     <span class="ml-3">Pod Volume Backups</span>
                   </router-link>
                 </li>
-                <li>
+                <li
+                  v-if="can(Action.Read, Resources.POD_VOLUME_RESTORE.plural)"
+                >
                   <router-link
                     :to="Pages.POD_VOLUME_RESTORES.path"
                     active-class="bg-gray-100 dark:bg-gray-700"
@@ -167,7 +186,24 @@
                 </li>
               </ul>
             </li>
-            <li>
+            <li
+              v-if="
+                canOr([
+                  {
+                    action: Action.Read,
+                    subject: Resources.DELETE_BACKUP_REQUEST.plural,
+                  },
+                  {
+                    action: Action.Read,
+                    subject: Resources.SERVER_STATUS_REQUEST.plural,
+                  },
+                  {
+                    action: Action.Read,
+                    subject: Resources.DOWNLOAD_REQUEST.plural,
+                  },
+                ])
+              "
+            >
               <button
                 aria-controls="dropdown-requests"
                 class="flex w-full items-center p-2 text-base text-gray-900 rounded-lg transition duration-75 hover:bg-gray-100 group dark:text-gray-200 dark:hover:bg-gray-700"
@@ -198,7 +234,11 @@
                 :class="{ hidden: hiddenDropdown }"
                 class="py-2 space-y-2"
               >
-                <li>
+                <li
+                  v-if="
+                    can(Action.Read, Resources.DELETE_BACKUP_REQUEST.plural)
+                  "
+                >
                   <router-link
                     :to="Pages.DELETE_BACKUP_REQUESTS.path"
                     active-class="bg-gray-100 dark:bg-gray-700"
@@ -213,7 +253,7 @@
                     }}</span>
                   </router-link>
                 </li>
-                <li>
+                <li v-if="can(Action.Read, Resources.DOWNLOAD_REQUEST.plural)">
                   <router-link
                     :to="Pages.DOWNLOAD_REQUESTS.path"
                     active-class="bg-gray-100 dark:bg-gray-700"
@@ -226,7 +266,11 @@
                     <span class="ml-3">{{ t('downloadRequests.title') }}</span>
                   </router-link>
                 </li>
-                <li>
+                <li
+                  v-if="
+                    can(Action.Read, Resources.SERVER_STATUS_REQUEST.plural)
+                  "
+                >
                   <router-link
                     :to="Pages.SERVER_STATUS_REQUESTS.path"
                     active-class="bg-gray-100 dark:bg-gray-700"
@@ -244,7 +288,7 @@
               </ul>
             </li>
           </ul>
-          <div class="pt-2 space-y-2">
+          <div v-if="can(Action.Manage, 'all')" class="pt-2 space-y-2">
             <router-link
               :to="Pages.SETTINGS.path"
               active-class="bg-gray-100 dark:bg-gray-700"
@@ -277,12 +321,14 @@
           </div>
           <span
             class="inline-flex justify-center text-gray-500 text-xs dark:text-white"
-          >{{ t('global.powered', { version }) }}
+            >{{ t('global.powered', { version }) }}
             <a
               class="ml-1 hover:text-blue-600"
               href="https://otwld.com/"
               target="_blank"
-            >OTWLD</a></span>
+              >OTWLD</a
+            ></span
+          >
         </div>
       </div>
     </div>
@@ -314,6 +360,9 @@ import { ref } from 'vue';
 import { useAppStore } from '@velero-ui-app/stores/app.store';
 import { storeToRefs } from 'pinia';
 import { useI18n } from 'vue-i18n';
+import { Action } from '@velero-ui/shared-types';
+import { Resources } from '@velero-ui/velero';
+import { can, canOr } from '@velero-ui-app/utils/policy.utils';
 
 const { t } = useI18n();
 

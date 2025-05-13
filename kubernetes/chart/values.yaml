@@ -63,6 +63,27 @@ configuration:
     # -- Add an URL to a grafana Dashboard
     grafanaUrl: ""
 
+  policies:
+    # -- Value of the policy file, this is a sample policy file
+    value: |
+      # Please refer to https://velero-ui.docs.otwld.com/ to configure policies
+      # g,*,manage,all
+      # u,*,manage,all
+
+    # -- Whether a configMap should be used.
+    useConfigMap: false
+
+    # -- Name of the configMap to create if `useConfigMap` is true and `existingConfigMap` is empty
+    name: ""
+
+    # -- key in the configMap containing the policies
+    key: "policies.csv"
+
+    existingConfigMap: ""
+
+    # -- Annotations to add to the configMap
+    annotations: { }
+
 
 # Service account
 # ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
@@ -238,6 +259,7 @@ volumeMounts: [ ]
 extraArgs: [ ]
 
 # -- Additional environments variables on the output Deployment definition.
+# Docs: https://velero-ui.docs.otwld.com/getting-started/environment-variables
 env: [ ]
 # - name: BASIC_AUTH_ENABLED
 #   value: VALUE

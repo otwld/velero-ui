@@ -4,6 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import { InternalOAuthError, Strategy } from 'passport-oauth2';
 import { AppLogger } from '@velero-ui-api/shared/modules/logger/logger.service';
 import {AuthenticationException} from "@velero-ui-api/shared/exceptions/authentication.exception";
+import { Action } from "@velero-ui/shared-types";
 
 @Injectable()
 export class OauthStrategy extends PassportStrategy(Strategy, 'oauth') {
@@ -28,6 +29,9 @@ export class OauthStrategy extends PassportStrategy(Strategy, 'oauth') {
 
       const { id, emails, provider, displayName } = profile;
 
+      const groupClaim = this.configService.get<string | undefined>('oauth.groupClaim');
+      const groups: string[] = profile[groupClaim] ?? [];
+
       this.logger.info(
         `Federated OAuth2 user ${id} signed in.`,
         OauthStrategy.name,
@@ -38,6 +42,10 @@ export class OauthStrategy extends PassportStrategy(Strategy, 'oauth') {
         provider,
         displayName,
         email: emails[0].value,
+        policy: {
+          user: emails[0].value,
+          groups,
+        },
       };
     } catch (e) {
       this.logger.error(e, OauthStrategy.name);
@@ -70,6 +78,7 @@ export class OauthStrategy extends PassportStrategy(Strategy, 'oauth') {
                   value: json.email,
                 },
               ],
+              permissions: [{ action: Action.Manage, subject: 'all' }],
               ...json,
             };
 

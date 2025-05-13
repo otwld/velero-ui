@@ -1,25 +1,29 @@
+export const ResourceList = [
+  'BACKUP',
+  'RESTORE',
+  'SCHEDULE',
+  'DOWNLOAD_REQUEST',
+  'DELETE_BACKUP_REQUEST',
+  'POD_VOLUME_BACKUP',
+  'POD_VOLUME_RESTORE',
+  'BACKUP_REPOSITORY',
+  'RESTIC_REPOSITORY',
+  'BACKUP_STORAGE_LOCATION',
+  'VOLUME_SNAPSHOT_LOCATION',
+  'SERVER_STATUS_REQUEST',
+] as const;
+
+
 export interface Resource {
   name: string;
   kind: string;
-  plural: string;
+  plural: PluralsNames;
   route: string;
 }
 
-export type ResourcesNames =
-  | 'BACKUP'
-  | 'RESTORE'
-  | 'SCHEDULE'
-  | 'DOWNLOAD_REQUEST'
-  | 'DELETE_BACKUP_REQUEST'
-  | 'POD_VOLUME_BACKUP'
-  | 'POD_VOLUME_RESTORE'
-  | 'BACKUP_REPOSITORY'
-  | 'RESTIC_REPOSITORY'
-  | 'BACKUP_STORAGE_LOCATION'
-  | 'VOLUME_SNAPSHOT_LOCATION'
-  | 'SERVER_STATUS_REQUEST';
+export type ResourcesNames = typeof ResourceList[number];
 
-export const PLURALS: string[] = [
+export const PLURALS = [
   'backups',
   'restores',
   'schedules',
@@ -28,11 +32,13 @@ export const PLURALS: string[] = [
   'podvolumebackups',
   'podvolumerestores',
   'backuprepositories',
-  'ResticRepository',
+  'resticrepositories',
   'backupstoragelocations',
   'volumesnapshotlocations',
   'serverstatusrequests'
-];
+] as const;
+
+export type PluralsNames = typeof PLURALS[number];
 
 export const Resources: Record<ResourcesNames, Resource> = {
   BACKUP: {
