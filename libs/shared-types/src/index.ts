@@ -7,3 +7,4 @@ export * from './models/form/restore.models';
 export * from './models/auth/user.models';
 export * from './models/list/list.models';
 export * from './enums/index';
+export * from './regex/index';
