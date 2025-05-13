@@ -7,7 +7,7 @@
           class="!w-4 !h-4 border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600"
           type="checkbox"
           @click="emit('onChecked')"
-        >
+        />
         <label class="sr-only" for="checkbox-">checkbox</label>
       </div>
     </td>
@@ -72,9 +72,7 @@
       class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white"
     >
       <div class="flex items-start flex-col">
-        <ScheduleStatusPhaseBadge
-          :status="data.status?.phase"
-        />
+        <ScheduleStatusPhaseBadge :status="data.status?.phase" />
         <span
           v-if="data?.spec?.paused"
           class="mt-2 bg-yellow-100 text-yellow-800 text-xs font-medium inline-flex items-center me-2 px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300"
@@ -86,6 +84,7 @@
     <td class="p-4 space-x-2 whitespace-nowrap">
       <div class="inline-flex rounded-md shadow-sm" role="group">
         <button
+          v-if="can(Action.Update, Resources.SCHEDULE.plural)"
           :class="{ 'cursor-not-allowed': isEditing }"
           :data-tooltip-target="`tooltip-button-edit-${data?.metadata?.uid}`"
           :disabled="isEditing"
@@ -103,8 +102,9 @@
         </button>
         <button
           v-if="
+            can(Action.Update, Resources.SCHEDULE.plural) &&
             data?.status?.phase !== V1SchedulePhase.FailedValidation &&
-              data?.spec?.paused
+            data?.spec?.paused
           "
           :data-tooltip-target="`tooltip-button-resume-${data?.metadata?.uid}`"
           :disabled="togglePauseLoading"
@@ -126,8 +126,9 @@
         </button>
         <button
           v-if="
+            can(Action.Update, Resources.SCHEDULE.plural) &&
             data?.status?.phase !== V1SchedulePhase.FailedValidation &&
-              !data?.spec?.paused
+            !data?.spec?.paused
           "
           :data-tooltip-target="`tooltip-button-pause-${data?.metadata?.uid}`"
           :disabled="togglePauseLoading"
@@ -149,6 +150,7 @@
         </button>
 
         <button
+          v-if="can(Action.Delete, Resources.SCHEDULE.plural)"
           :class="{ 'cursor-not-allowed': isDeleting }"
           :data-tooltip-target="`tooltip-button-delete-${data?.metadata?.uid}`"
           :disabled="isDeleting"
@@ -162,11 +164,7 @@
             :icon="faCircleNotch"
             class="!w-4 !h-4 animate-spin"
           />
-          <FontAwesomeIcon
-            v-else
-            :icon="faTrashCan"
-            class="!w-4 !h-4"
-          />
+          <FontAwesomeIcon v-else :icon="faTrashCan" class="!w-4 !h-4" />
         </button>
       </div>
     </td>
@@ -233,10 +231,7 @@
       </h3>
     </template>
     <template #content>
-      <ScheduleFormEdit
-        :schedule="data"
-        @on-close="showModalEdit = false"
-      />
+      <ScheduleFormEdit :schedule="data" @on-close="showModalEdit = false" />
     </template>
   </VModal>
 </template>
@@ -264,13 +259,15 @@ import { truncate } from '../../utils/string.utils';
 import { useDeleteKubernetesObject } from '@velero-ui-app/composables/useDeleteKubernetesObject';
 import { usePauseSchedule } from '@velero-ui-app/composables/schedule/usePauseSchedule';
 import { useI18n } from 'vue-i18n';
-import VModal from "@velero-ui-app/components/Modals/VModal.vue";
-import { useKubernetesEditObject } from "@velero-ui-app/composables/useKubernetesEditObject";
-import ScheduleFormEdit from "@velero-ui-app/components/Schedule/forms/ScheduleFormEdit.vue";
+import VModal from '@velero-ui-app/components/Modals/VModal.vue';
+import { useKubernetesEditObject } from '@velero-ui-app/composables/useKubernetesEditObject';
+import ScheduleFormEdit from '@velero-ui-app/components/Schedule/forms/ScheduleFormEdit.vue';
+import { can } from '@velero-ui-app/utils/policy.utils';
+import { Action } from '@velero-ui/shared-types';
 
 const { t } = useI18n();
 const props = defineProps({
-  data: {type: Object as PropType<V1Schedule>, required: true },
+  data: { type: Object as PropType<V1Schedule>, required: true },
   checked: Boolean,
 });
 
@@ -282,15 +279,15 @@ const showModalDelete = ref(false);
 const showModalEdit = ref(false);
 
 const { mutate: togglePause, isPending: togglePauseLoading } = usePauseSchedule(
-  toRef(() => props.data?.metadata?.name),
+  toRef(() => props.data?.metadata?.name)
 );
 
 const { isPending: isDeleting, mutate: remove } = useDeleteKubernetesObject(
-  Resources.SCHEDULE,
+  Resources.SCHEDULE
 );
 
 const { isPending: isEditing } = useKubernetesEditObject(
   Resources.SCHEDULE,
-  props.data.metadata.name,
+  props.data.metadata.name
 );
 </script>

@@ -107,6 +107,7 @@
     </td>
     <td class="p-4 space-x-2 whitespace-nowrap">
       <button
+        v-if="can(Action.Delete, Resources.BACKUP_REPOSITORY.plural)"
         :class="{ 'cursor-not-allowed': isDeleting }"
         :data-tooltip-target="`tooltip-button-delete-${data?.metadata?.uid}`"
         :disabled="isDeleting"
@@ -179,6 +180,8 @@ import { useDeleteKubernetesObject } from '@velero-ui-app/composables/useDeleteK
 import ModalConfirmation from '@velero-ui-app/components/Modals/ModalConfirmation.vue';
 import { useI18n } from 'vue-i18n';
 import { initTooltips } from 'flowbite';
+import { can } from "@velero-ui-app/utils/policy.utils";
+import { Action } from "@velero-ui/shared-types";
 
 const { t } = useI18n();
 defineProps({

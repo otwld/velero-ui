@@ -33,19 +33,18 @@
         />
         <div class="flex items-center gap-x-4 gap-y-2 flex-wrap">
           <button
+            v-if="can(Action.Create, Resources.RESTORE.plural)"
             :class="{ 'cursor-not-allowed': isDisabled || !backup }"
             :disabled="!backup"
             class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:ring-teal-300 dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
             type="button"
             @click="showModalRestore = !showModalRestore"
           >
-            <FontAwesomeIcon
-              :icon="faClockRotateLeft"
-              class="!w-4 !h-4 mr-2"
-            />
+            <FontAwesomeIcon :icon="faClockRotateLeft" class="!w-4 !h-4 mr-2" />
             {{ t('global.button.restore.title') }}
           </button>
           <button
+            v-if="can(Action.Download, Resources.BACKUP.plural)"
             :class="{
               'cursor-not-allowed': downloadLoading || isDisabled || !backup,
             }"
@@ -71,6 +70,7 @@
             }}
           </button>
           <button
+            v-if="can(Action.Delete, Resources.BACKUP.plural)"
             :class="{ 'cursor-not-allowed': isDeleteDisabled || !backup }"
             :disabled="isDeleteDisabled || !backup"
             class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"
@@ -82,11 +82,7 @@
               :icon="faCircleNotch"
               class="!w-4 !h-4 animate-spin mr-2"
             />
-            <FontAwesomeIcon
-              v-else
-              :icon="faTrashCan"
-              class="!w-4 !h-4 mr-2"
-            />
+            <FontAwesomeIcon v-else :icon="faTrashCan" class="!w-4 !h-4 mr-2" />
             {{
               isDeleting
                 ? t('global.button.delete.loading')
@@ -155,22 +151,24 @@ import { useDeleteKubernetesObject } from '@velero-ui-app/composables/useDeleteK
 import { useI18n } from 'vue-i18n';
 import VModal from '@velero-ui-app/components/Modals/VModal.vue';
 import BackupFormRestore from '@velero-ui-app/components/Backup/forms/BackupFormRestore.vue';
+import { Action } from '@velero-ui/shared-types';
+import { can } from "@velero-ui-app/utils/policy.utils";
 
-const {t} = useI18n();
+const { t } = useI18n();
 
 const props = defineProps({
   backup: {
     type: Object as PropType<V1Backup>,
-    required: true
+    required: true,
   },
 });
 
-const {download, downloadLoading} = useBackupDownloadContent(
-  toRef(() => props.backup?.metadata?.name),
+const { download, downloadLoading } = useBackupDownloadContent(
+  toRef(() => props.backup?.metadata?.name)
 );
 
-const {isPending, mutate: remove} = useDeleteKubernetesObject(
-  Resources.BACKUP,
+const { isPending, mutate: remove } = useDeleteKubernetesObject(
+  Resources.BACKUP
 );
 
 const showModalDelete = ref(false);
@@ -180,7 +178,7 @@ const isDisabled = computed(() => {
   return (
     isPending.value ||
     ![V1BackupPhase.Completed, V1BackupPhase.PartiallyFailed].includes(
-      props.backup?.status?.phase,
+      props.backup?.status?.phase
     )
   );
 });
@@ -188,13 +186,16 @@ const isDisabled = computed(() => {
 const isDeleteDisabled = computed(
   () =>
     isPending.value ||
-    [V1BackupPhase.New, V1BackupPhase.Finalizing, V1BackupPhase.InProgress, V1BackupPhase.FinalizingPartiallyFailed].includes(
-      props.backup?.status?.phase,
-    ),
+    [
+      V1BackupPhase.New,
+      V1BackupPhase.Finalizing,
+      V1BackupPhase.InProgress,
+      V1BackupPhase.FinalizingPartiallyFailed,
+    ].includes(props.backup?.status?.phase)
 );
 
 const isDeleting = computed(
   () =>
-    isPending.value || props.backup?.status?.phase === V1BackupPhase.Deleting,
+    isPending.value || props.backup?.status?.phase === V1BackupPhase.Deleting
 );
 </script>

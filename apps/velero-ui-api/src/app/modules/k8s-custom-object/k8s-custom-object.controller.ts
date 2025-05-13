@@ -1,6 +1,6 @@
-import { Body, Controller, Delete, Get, Param, Query } from '@nestjs/common';
+import { Body, Delete, Get, Param, Query } from '@nestjs/common';
 import { Observable } from 'rxjs';
-import { V1DownloadRequestList } from '@velero-ui/velero';
+import { PluralsNames, Resource } from '@velero-ui/velero';
 import { K8sCustomObjectService } from '@velero-ui-api/modules/k8s-custom-object/k8s-custom-object.service';
 import {
   K8sCustomObjectParams,
@@ -10,53 +10,72 @@ import {
   KubernetesListObject,
   KubernetesObject,
 } from '@kubernetes/client-node';
+import { Action } from '@velero-ui/shared-types';
+import { CheckPolicies } from '@velero-ui-api/shared/decorators/check-policies.decorator';
+import { AppAbility } from '@velero-ui-api/shared/modules/casl/casl-ability.factory';
 
-@Controller('/resources')
-export class K8sCustomObjectController {
+export class K8sCustomObjectController<
+  CustomObjectType extends KubernetesObject = KubernetesObject,
+  CustomObjectTypeList extends
+    KubernetesListObject<CustomObjectType> = KubernetesListObject<CustomObjectType>,
+> {
   constructor(
-    private readonly k8sCustomObjectService: K8sCustomObjectService,
+    readonly k8sCustomObjectService: K8sCustomObjectService,
+    readonly resource: Resource
   ) {}
 
-  @Get('/:plural')
-  public get(
+  @Get()
+  @CheckPolicies((ability: AppAbility, resource: PluralsNames) =>
+    ability.can(Action.Read, resource)
+  )
+  protected get(
     @Param() params: K8sCustomObjectParams,
-    @Query() queries: K8SCustomObjectQueries,
-  ): Observable<V1DownloadRequestList> {
+    @Query() queries: K8SCustomObjectQueries
+  ): Observable<CustomObjectTypeList> {
     return this.k8sCustomObjectService.get<
-      KubernetesObject,
-      KubernetesListObject<KubernetesObject>
+      CustomObjectType,
+      CustomObjectTypeList
     >(
-      params.plural,
+      this.resource.plural,
       queries.offset,
       queries.limit,
       queries.search,
       queries.sortColumnName,
-      queries.sortColumnAscending,
+      queries.sortColumnAscending
     );
   }
 
-  @Get('/:plural/:name')
-  public getByName(
-    @Param() params: K8sCustomObjectParams,
-  ): Observable<KubernetesObject> {
-    return this.k8sCustomObjectService.getByName<KubernetesObject>(
-      params.plural,
-      params.name,
+  @Get('/:name')
+  @CheckPolicies((ability: AppAbility, resource: PluralsNames) =>
+    ability.can(Action.Read, resource)
+  )
+  protected getByName(
+    @Param() params: K8sCustomObjectParams
+  ): Observable<CustomObjectType> {
+    return this.k8sCustomObjectService.getByName<CustomObjectType>(
+      this.resource.plural,
+      params.name
     );
   }
 
-  @Delete('/:plural')
-  public delete(
-    @Param() params: K8sCustomObjectParams,
-    @Body() names: string[],
-  ): Observable<void> {
-    return this.k8sCustomObjectService.delete(params.plural, names);
+  @Delete()
+  @CheckPolicies((ability: AppAbility, resource: PluralsNames) =>
+    ability.can(Action.Delete, resource)
+  )
+  protected delete(@Body() names: string[]): Observable<any> {
+    return this.k8sCustomObjectService.delete(this.resource.plural, names);
   }
 
-  @Delete('/:plural/:name')
-  public deleteByName(
-    @Param() params: K8sCustomObjectParams,
-  ): Observable<void> {
-    return this.k8sCustomObjectService.deleteByName(params.plural, params.name);
+  @Delete('/:name')
+  @CheckPolicies((ability: AppAbility, resource: PluralsNames) =>
+    ability.can(Action.Delete, resource)
+  )
+  protected deleteByName(
+    @Param() params: K8sCustomObjectParams
+  ): Observable<any> {
+    return this.k8sCustomObjectService.deleteByName(
+      this.resource.plural,
+      params.name
+    );
   }
 }

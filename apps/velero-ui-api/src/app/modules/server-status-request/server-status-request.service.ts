@@ -1,6 +1,10 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { K8S_CONNECTION } from '@velero-ui-api/shared/utils/k8s.utils';
-import { CustomObjectsApi, KubeConfig } from '@kubernetes/client-node';
+import {
+  CustomObjectsApi,
+  KubeConfig,
+  KubernetesObject,
+} from '@kubernetes/client-node';
 import { ConfigService } from '@nestjs/config';
 import {
   catchError,
@@ -19,7 +23,8 @@ import {
   V1ServerStatusRequestPhase,
 } from '@velero-ui/velero';
 import { VELERO } from '@velero-ui-api/shared/modules/velero/velero.constants';
-import { createServerStatusRequest } from 'apps/velero-ui-api/src/app/modules/server-status-request/server-status-request.utils';
+import { createK8sCustomObject } from '@velero-ui-api/modules/k8s-custom-object/k8s-custom-object.utils';
+import { K8sCustomObjectService } from '@velero-ui-api/modules/k8s-custom-object/k8s-custom-object.service';
 
 @Injectable()
 export class ServerStatusRequestService {
@@ -27,35 +32,39 @@ export class ServerStatusRequestService {
 
   constructor(
     @Inject(K8S_CONNECTION) private readonly k8s: KubeConfig,
-    private configService: ConfigService,
+    private readonly k8sCustomObjectService: K8sCustomObjectService,
+    private configService: ConfigService
   ) {
     this.k8sCustomObjectApi = this.k8s.makeApiClient(CustomObjectsApi);
   }
 
   public create(): Observable<V1ServerStatusRequest> {
     return of(
-      createServerStatusRequest(this.configService.get('velero.namespace')),
+      createK8sCustomObject(
+        'velero-ui',
+        this.configService.get('velero.namespace'),
+        Resources.SERVER_STATUS_REQUEST,
+        {},
+        {}
+      )
     )
       .pipe(
-        concatMap((request: V1ServerStatusRequest) =>
-          this.k8sCustomObjectApi.createNamespacedCustomObject({
-            group: VELERO.GROUP,
-            version: VELERO.VERSION,
-            namespace: this.configService.get('velero.namespace'),
-            plural: Resources.SERVER_STATUS_REQUEST.plural,
-            body: request,
-          }),
-        ),
+        concatMap((body: KubernetesObject) =>
+          this.k8sCustomObjectService.create(
+            Resources.SERVER_STATUS_REQUEST.plural,
+            body
+          )
+        )
       )
       .pipe(
         concatMap((request: V1ServerStatusRequest) =>
-          this.waitAndGetServerStatusRequest(request),
-        ),
+          this.waitAndGetServerStatusRequest(request)
+        )
       );
   }
 
   private waitAndGetServerStatusRequest(
-    request: V1ServerStatusRequest,
+    request: V1ServerStatusRequest
   ): Observable<V1ServerStatusRequest> {
     return defer(() =>
       from(
@@ -65,8 +74,8 @@ export class ServerStatusRequestService {
           namespace: this.configService.get('velero.namespace'),
           plural: Resources.SERVER_STATUS_REQUEST.plural,
           name: request.metadata.name,
-        }),
-      ),
+        })
+      )
     ).pipe(
       map((requestStatus: V1ServerStatusRequest): V1ServerStatusRequest => {
         if (
@@ -82,10 +91,9 @@ export class ServerStatusRequestService {
       }),
       catchError(() => {
         return throwError(
-          () =>
-            new Error('Server status request is not ready after 5 retries!'),
+          () => new Error('Server status request is not ready after 5 retries!')
         );
-      }),
+      })
     );
   }
 }

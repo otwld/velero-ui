@@ -1,16 +1,5 @@
-import {
-  Body,
-  Controller,
-  DefaultValuePipe,
-  Delete,
-  Get,
-  Param,
-  ParseIntPipe,
-  Post, Put,
-  Query,
-} from '@nestjs/common';
+import { Body, Controller, Param, Post, Put } from '@nestjs/common';
 import { StorageLocationService } from './storage-location.service';
-import { Observable } from 'rxjs';
 import {
   Resources,
   V1BackupStorageLocation,
@@ -21,72 +10,41 @@ import {
   CreateStorageLocationDto,
   EditStorageLocationDto,
 } from '@velero-ui-api/shared/dto/storage-location.dto';
+import { K8sCustomObjectController } from '@velero-ui-api/modules/k8s-custom-object/k8s-custom-object.controller';
+import { Subject } from '@velero-ui-api/shared/decorators/subject.decorator';
+import { CheckPolicies } from '@velero-ui-api/shared/decorators/check-policies.decorator';
+import { AppAbility } from '@velero-ui-api/shared/modules/casl/casl-ability.factory';
+import { Action } from '@velero-ui/shared-types';
 
 @Controller(Resources.BACKUP_STORAGE_LOCATION.route)
-export class StorageLocationController {
+@Subject(Resources.BACKUP_STORAGE_LOCATION.plural)
+export class StorageLocationController extends K8sCustomObjectController<
+  V1BackupStorageLocation,
+  V1BackupStorageLocationList
+> {
   constructor(
     private readonly storageLocationService: StorageLocationService,
-    private readonly k8sCustomObjectService: K8sCustomObjectService,
-  ) {}
-
-  @Get()
-  public get(
-    @Query('offset', new DefaultValuePipe(0), ParseIntPipe) offset: number,
-    @Query('limit', new DefaultValuePipe(20), ParseIntPipe) limit: number,
-    @Query('search', new DefaultValuePipe('')) search: string,
-    @Query('sortColumnName', new DefaultValuePipe('')) sortColumnName: string,
-    @Query('sortColumnAscending', new DefaultValuePipe(''))
-    sortColumnAscending: boolean,
-  ): Observable<V1BackupStorageLocationList> {
-    return this.k8sCustomObjectService.get<
-      V1BackupStorageLocation,
-      V1BackupStorageLocationList
-    >(
-      Resources.BACKUP_STORAGE_LOCATION.plural,
-      offset,
-      limit,
-      search,
-      sortColumnName,
-      sortColumnAscending,
-    );
-  }
-
-  @Get('/:name')
-  public getByName(
-    @Param('name') name: string,
-  ): Observable<V1BackupStorageLocation> {
-    return this.k8sCustomObjectService.getByName<V1BackupStorageLocation>(
-      Resources.BACKUP_STORAGE_LOCATION.plural,
-      name,
-    );
+    readonly k8sCustomObjectService: K8sCustomObjectService
+  ) {
+    super(k8sCustomObjectService, Resources.BACKUP_STORAGE_LOCATION);
   }
 
   @Post()
+  @CheckPolicies((ability: AppAbility) =>
+    ability.can(Action.Create, Resources.BACKUP_STORAGE_LOCATION.plural)
+  )
   public create(@Body() data: CreateStorageLocationDto) {
     return this.storageLocationService.create(data);
   }
 
   @Put('/:name')
+  @CheckPolicies((ability: AppAbility) =>
+    ability.can(Action.Update, Resources.BACKUP_STORAGE_LOCATION.plural)
+  )
   public editByName(
     @Param('name') name: string,
-    @Body() data: EditStorageLocationDto,
+    @Body() data: EditStorageLocationDto
   ) {
     return this.storageLocationService.edit(name, data);
-  }
-
-  @Delete()
-  public delete(@Body() names: string[]): Observable<void> {
-    return this.k8sCustomObjectService.delete(
-      Resources.BACKUP_STORAGE_LOCATION.plural,
-      names,
-    );
-  }
-
-  @Delete('/:name')
-  public deleteByName(@Param('name') name: string): Observable<void> {
-    return this.k8sCustomObjectService.deleteByName(
-      Resources.BACKUP_STORAGE_LOCATION.plural,
-      name,
-    );
   }
 }
