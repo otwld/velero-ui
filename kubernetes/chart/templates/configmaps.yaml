@@ -1,0 +1,16 @@
+{{- if and .Values.configuration.policies.useConfigMap (not .Values.configuration.policies.existingConfigMap)}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "velero-ui.configMapName" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "velero-ui.labels" . | nindent 4 }}
+  {{- with .Values.configuration.policies.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+data:
+  {{ .Values.configuration.policies.key }}: {{ .Values.configuration.policies.value }}
+{{- end}}
+

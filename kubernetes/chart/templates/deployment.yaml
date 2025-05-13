@@ -73,6 +73,8 @@ spec:
             {{- with .Values.env }}
               {{- toYaml . | nindent 12 }}
             {{- end }}
+            - name: POLICY_FILE_PATH
+              value: /policies.csv
             - name: LOG_LEVEL
               value: {{ .Values.configuration.logLevel | default "info"  | quote }}
             - name: VELERO_NAMESPACE
@@ -89,14 +91,24 @@ spec:
             {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
-          {{- with .Values.volumeMounts }}
           volumeMounts:
-            {{- toYaml . | nindent 12 }}
-          {{- end }}
-      {{- with .Values.volumes }}
+            - name: policies
+              mountPath: "/policies.csv"
+              readOnly: true
+            {{- with .Values.volumeMounts }}
+              {{- toYaml . | nindent 12 }}
+            {{- end }}
+
       volumes:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
+        - name: policies
+          configMap:
+            name: {{ include "velero-ui.configMapName" . }}
+            items:
+              - key: {{ .Values.configuration.policies.key }}
+                path: {{ .Values.configuration.policies.key }}
+        {{- with .Values.volumes }}
+          {{- toYaml . | nindent 8 }}
+        {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
