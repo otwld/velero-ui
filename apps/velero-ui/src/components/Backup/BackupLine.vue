@@ -8,7 +8,7 @@
           class="!w-4 !h-4 border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600"
           type="checkbox"
           @click="emit('onChecked')"
-        >
+        />
         <label class="sr-only" for="checkbox">checkbox</label>
       </div>
     </td>
@@ -164,16 +164,38 @@
     :icon="faExclamationCircle"
     :text="t('modal.text.confirmation.delete')"
     @on-close="showModalDelete = false"
-    @on-confirm="remove(data?.metadata?.name)"
+    @on-confirm="
+      remove({ name: data?.metadata?.name, forced: forceDeleteContext?.value })
+    "
   >
     <template #content>
-      <div class="flex justify-center">
+      <div class="flex justify-center flex-col">
         <p
           class="mt-2 px-1 mb-6 text-sm rounded bg-gray-200 text-gray-600 dark:bg-gray-600 dark:text-gray-200"
         >
           {{ data?.metadata?.name }}
         </p>
       </div>
+      <FormKit
+        :id="`force-delete-${props.data?.metadata?.uid}`"
+        :name="t('form.field.forceDelete')"
+        outer-class="mb-2"
+        type="checkbox"
+        wrapper-class="flex items-center justify-center"
+      >
+        <template #label>
+          <label
+            class="flex ml-2 text-sm font-medium text-gray-900 dark:text-white items-center"
+            >{{ t('form.field.forceDelete') }}
+            <FontAwesomeIcon
+              :icon="faQuestionCircle"
+              class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
+              data-tooltip-style="light"
+              data-tooltip-target="tooltip-force-delete"
+            />
+          </label>
+        </template>
+      </FormKit>
     </template>
   </ModalConfirmation>
   <VModal
@@ -216,6 +238,7 @@ import {
   faClockRotateLeft,
   faDownload,
   faExclamationCircle,
+  faQuestionCircle,
   faTrashCan,
 } from '@fortawesome/free-solid-svg-icons';
 import { initTooltips } from 'flowbite';
@@ -227,8 +250,9 @@ import { useDeleteKubernetesObject } from '@velero-ui-app/composables/useDeleteK
 import { useI18n } from 'vue-i18n';
 import VModal from '@velero-ui-app/components/Modals/VModal.vue';
 import BackupFormRestore from '@velero-ui-app/components/Backup/forms/BackupFormRestore.vue';
-import { can } from "@velero-ui-app/utils/policy.utils";
-import { Action } from "@velero-ui/shared-types";
+import { can } from '@velero-ui-app/utils/policy.utils';
+import { Action } from '@velero-ui/shared-types';
+import { useFormKitContextById } from '@formkit/vue';
 
 const { t } = useI18n();
 const props = defineProps({
@@ -246,6 +270,10 @@ const emit = defineEmits(['onChecked']);
 const showModalDelete = ref(false);
 const showModalRestore = ref(false);
 const expireTime = ref('');
+
+const forceDeleteContext = useFormKitContextById(
+  `force-delete-${props.data?.metadata?.uid}`
+);
 
 const { download, downloadLoading } = useBackupDownloadContent(
   toRef(() => props.data?.metadata?.name)

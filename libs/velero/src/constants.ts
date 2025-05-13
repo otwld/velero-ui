@@ -98,7 +98,7 @@ export const Resources: Record<ResourcesNames, Resource> = {
     route: '/restic-repositories',
   },
   BACKUP_STORAGE_LOCATION: {
-    name: 'backup Storage Location',
+    name: 'Backup Storage Location',
     kind: 'BackupStorageLocation',
     plural: 'backupstoragelocations',
     route: '/backup-storage-locations',

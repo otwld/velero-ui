@@ -1,11 +1,21 @@
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  DefaultValuePipe,
+  Delete,
+  Get,
+  Param,
+  ParseBoolPipe,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { BackupService } from './backup.service';
 import { forkJoin, Observable } from 'rxjs';
 import {
   PluralsNames,
-  Resources, ResourcesNames,
+  Resources,
   V1Backup,
-  V1BackupList, V1DeleteBackupRequest,
+  V1BackupList,
   V1DownloadRequest,
   V1DownloadTargetKind,
 } from '@velero-ui/velero';
@@ -17,7 +27,7 @@ import { AppAbility } from '@velero-ui-api/shared/modules/casl/casl-ability.fact
 import { Action } from '@velero-ui/shared-types';
 import { K8sCustomObjectController } from '@velero-ui-api/modules/k8s-custom-object/k8s-custom-object.controller';
 import { Subject } from '@velero-ui-api/shared/decorators/subject.decorator';
-import { K8sCustomObjectParams } from "@velero-ui-api/shared/dto/k8s-custom-object.dto";
+import { K8sCustomObjectParams } from '@velero-ui-api/shared/dto/k8s-custom-object.dto';
 
 @Controller(Resources.BACKUP.route)
 @Subject(Resources.BACKUP.plural)
@@ -93,7 +103,13 @@ export class BackupController extends K8sCustomObjectController<
   @CheckPolicies((ability: AppAbility, resource: PluralsNames) =>
     ability.can(Action.Delete, resource)
   )
-  public delete(@Body() names: string[]): Observable<any> {
+  public delete(
+    @Body() names: string[],
+    @Query('forced', new DefaultValuePipe(false), ParseBoolPipe) forced: boolean
+  ) {
+    if (forced) {
+      return super.delete(names, forced);
+    }
     return this.backupService.delete(names);
   }
 
@@ -102,8 +118,12 @@ export class BackupController extends K8sCustomObjectController<
     ability.can(Action.Delete, Resources.BACKUP.plural)
   )
   protected deleteByName(
-    @Param() params: K8sCustomObjectParams
-  ): Observable<V1DeleteBackupRequest> {
+    @Param() params: K8sCustomObjectParams,
+    @Query('forced', new DefaultValuePipe(false), ParseBoolPipe) forced: boolean
+  ) {
+    if (forced) {
+      return super.deleteByName(params, forced);
+    }
     return this.backupService.deleteByName(params.name);
   }
 }

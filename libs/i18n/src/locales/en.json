@@ -85,11 +85,13 @@
         "policyAccessDenied": "Access denied by policy."
       },
       "success": {
-        "created": "{resource} created, request will now be processed by velero server.",
-        "edited": "{resource} edited, request will now be processed by velero server.",
-        "deleteRequestCreated": "Delete request created, request will now be processed by velero server.",
+        "created": "{resource} created.",
+        "edited": "{resource} edited.",
+        "deleted": "{resource} deleted.",
+        "deleteRequestCreated": "Delete request created.",
         "downloadStarted": "Download started...",
-        "downloadsStarted": "Downloads started... Accept Pop-ups in navigator"
+        "downloadsStarted": "Downloads started... Accept Pop-ups in navigator",
+        "deletedByServer": "Resource {resource} has been deleted by velero server."
       }
     },
     "optional": "(Optional)",
@@ -274,7 +276,8 @@
       "fromScratch": "From Scratch",
       "fromBackup": "From a Backup",
       "scheduleOptions": "Schedule Options",
-      "backupOptions": "Backup Options"
+      "backupOptions": "Backup Options",
+      "forceDelete": "Force delete"
     },
     "hint": {
       "storageProvider": "See your object storage provider’s plugin documentation",
@@ -362,7 +365,8 @@
       "restorePVs": "Whether to restore volumes from snapshots.",
       "preserveNodePorts": "Whether to preserve nodeports of Services when restoring.",
       "writeSparseFiles": "Whether to write sparse files during restoring volumes.",
-      "resourceModifier": "Reference to the resource modifier configmap that restore will use."
+      "resourceModifier": "Reference to the resource modifier configmap that restore will use.",
+      "forceDelete": "Delete resource instead of creating a delete request."
     },
     "message": {
       "error": {

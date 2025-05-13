@@ -45,12 +45,12 @@
               :icon="faCircleNotch"
               class="!w-4 !h-4 animate-spin mr-2"
             />
-            <FontAwesomeIcon
-              v-else
-              :icon="faTrashCan"
-              class="!w-4 !h-4 mr-2"
-            />
-            {{ isDeleting ? t('global.button.delete.loading') : t('global.button.delete.title') }}
+            <FontAwesomeIcon v-else :icon="faTrashCan" class="!w-4 !h-4 mr-2" />
+            {{
+              isDeleting
+                ? t('global.button.delete.loading')
+                : t('global.button.delete.title')
+            }}
           </button>
         </div>
       </div>
@@ -62,7 +62,7 @@
     :icon="faExclamationCircle"
     :text="t('modal.text.confirmation.delete')"
     @on-close="showModalDelete = false"
-    @on-confirm="remove(repository.metadata.name)"
+    @on-confirm="remove({ name: repository.metadata.name })"
   >
     <template #content>
       <div class="flex justify-center">
@@ -89,8 +89,8 @@ import {
 import { useDeleteKubernetesObject } from '@velero-ui-app/composables/useDeleteKubernetesObject';
 import ModalConfirmation from '@velero-ui-app/components/Modals/ModalConfirmation.vue';
 import { useI18n } from 'vue-i18n';
-import { can } from "@velero-ui-app/utils/policy.utils";
-import { Action } from "@velero-ui/shared-types";
+import { can } from '@velero-ui-app/utils/policy.utils';
+import { Action } from '@velero-ui/shared-types';
 
 const { t } = useI18n();
 
@@ -101,6 +101,6 @@ defineProps({
 const showModalDelete = ref(false);
 
 const { isPending: isDeleting, mutate: remove } = useDeleteKubernetesObject(
-  Resources.BACKUP_REPOSITORY,
+  Resources.BACKUP_REPOSITORY
 );
 </script>

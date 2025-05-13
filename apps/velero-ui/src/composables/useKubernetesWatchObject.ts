@@ -8,6 +8,7 @@ import type { Resource } from '@velero-ui/velero';
 import type { AxiosInstance } from 'axios';
 import type { SocketIO } from '@velero-ui-app/plugins/socket.plugin';
 import { ToastType, useToastsStore } from '@velero-ui-app/stores/toasts.store';
+import { useI18n } from "vue-i18n";
 
 export const useKubernetesWatchObject = <T extends KubernetesObject>(
   resource: Resource,
@@ -17,6 +18,7 @@ export const useKubernetesWatchObject = <T extends KubernetesObject>(
   const axiosInstance: AxiosInstance = inject('axios') as AxiosInstance;
   const socket = inject('socketIo') as SocketIO;
   const queryClient: QueryClient = useQueryClient();
+  const { t } = useI18n();
 
   const listStore = useListStore();
   const { offset, limit, filters, sort } = storeToRefs(listStore);
@@ -52,7 +54,7 @@ export const useKubernetesWatchObject = <T extends KubernetesObject>(
         );
 
         toastsStore.push(
-          `Resource ${name} has been deleted by velero server.`,
+          t('global.message.success.deletedByServer', { resource: name }),
           ToastType.WARNING
         );
       }, 300)
@@ -70,6 +72,7 @@ export const useKubernetesWatchObject = <T extends KubernetesObject>(
 
   const { data, isLoading, error } = useQuery<T>({
     queryKey: [resource.plural, name],
+
     queryFn: async () =>
       (await axiosInstance.get<T>(`${resource.route}/${name}`))
         .data,
