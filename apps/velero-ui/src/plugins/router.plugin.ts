@@ -45,7 +45,6 @@ const routes: Array<RouteRecordRaw> = [
         children: [
           {
             path: '',
-            name: 'Backups List',
             component: BackupList,
             beforeEnter: () => useListStore().setObjectType(Resources.BACKUP),
           },
@@ -62,7 +61,6 @@ const routes: Array<RouteRecordRaw> = [
         children: [
           {
             path: '',
-            name: 'Storage Locations List',
             component: StorageLocationList,
             beforeEnter: () =>
               useListStore().setObjectType(Resources.BACKUP_STORAGE_LOCATION),
@@ -80,7 +78,6 @@ const routes: Array<RouteRecordRaw> = [
         children: [
           {
             path: '',
-            name: 'Restores List',
             component: RestoreList,
             beforeEnter: () => useListStore().setObjectType(Resources.RESTORE),
           },
@@ -97,7 +94,6 @@ const routes: Array<RouteRecordRaw> = [
         children: [
           {
             path: '',
-            name: 'Schedules List',
             component: ScheduleList,
             beforeEnter: () => useListStore().setObjectType(Resources.SCHEDULE),
           },
@@ -117,7 +113,6 @@ const routes: Array<RouteRecordRaw> = [
         children: [
           {
             path: '',
-            name: 'Snapshot Locations List',
             component: SnapshotLocationList,
             beforeEnter: () =>
               useListStore().setObjectType(Resources.VOLUME_SNAPSHOT_LOCATION),
@@ -135,7 +130,6 @@ const routes: Array<RouteRecordRaw> = [
         children: [
           {
             path: '',
-            name: 'Backup Repositories List',
             component: BackupRepositoryList,
             beforeEnter: () =>
               useListStore().setObjectType(Resources.BACKUP_REPOSITORY),
@@ -153,7 +147,6 @@ const routes: Array<RouteRecordRaw> = [
         children: [
           {
             path: '',
-            name: 'Pod Volume Backups List',
             component: PodVolumeBackupList,
             beforeEnter: () =>
               useListStore().setObjectType(Resources.POD_VOLUME_BACKUP),
@@ -171,7 +164,6 @@ const routes: Array<RouteRecordRaw> = [
         children: [
           {
             path: '',
-            name: 'Pod Volume Restores List',
             component: PodVolumeRestoreList,
             beforeEnter: () =>
               useListStore().setObjectType(Resources.POD_VOLUME_RESTORE),
