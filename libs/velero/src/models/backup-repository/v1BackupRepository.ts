@@ -14,6 +14,7 @@ export interface V1BackupRepositorySpec {
   repositoryType?: V1BackupRepositoryType;
   resticIdentifier: string;
   maintenanceFrequency: Date;
+  repositoryConfig?: object;
 }
 
 export const enum V1BackupRepositoryPhase {
@@ -27,8 +28,21 @@ export const enum V1BackupRepositoryType {
   Kopia = 'kopia',
 }
 
+export const enum V1BackupRepositoryMaintenanceResult {
+  Succeeded = 'Succeeded',
+  Failed = 'Failed',
+}
+
 export interface V1BackupRepositoryStatus {
   phase: V1BackupRepositoryPhase;
   message: string;
   lastMaintenanceTime: string;
+  recentMaintenance: V1BackupRepositoryMaintenanceStatus[]
+}
+
+export interface V1BackupRepositoryMaintenanceStatus {
+  result: V1BackupRepositoryMaintenanceResult;
+  startTimestamp: Date;
+  completionTimestamp: Date;
+  message: string;
 }

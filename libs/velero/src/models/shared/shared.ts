@@ -43,4 +43,12 @@ export interface V1LabelsAnnotations {
   'velero.io/resource-usage'?: string;
   'backup.velero.io/backup-volumes'?: string;
   'backup.velero.io/backup-volumes-excludes'?: string;
+  'snapshot.storage.kubernetes.io/is-default-class'?: string;
+}
+
+
+export const enum NodeOS {
+  Linux = 'linux',
+  Windows = 'windows',
+  auto = 'auto',
 }
