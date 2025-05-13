@@ -21,7 +21,6 @@ export interface AppConfig {
   secret?: string;
   sessionDuration?: string;
   namespace?: string;
-  policyPath?: string;
 }
 
 export interface LDAPConfig {
@@ -32,7 +31,6 @@ export interface LDAPConfig {
   searchBase: string;
   searchFilter: string;
   searchAttributes: string;
-  groupSearchBase: string;
 }
 
 export interface BasicAuthConfig {
@@ -85,7 +83,6 @@ export interface OauthConfig {
   tokenUrl: string;
   authorizationUrl: string;
   userInfoUrl: string;
-  groupClaim?: string;
 }
 
 export interface VeleroConfig {

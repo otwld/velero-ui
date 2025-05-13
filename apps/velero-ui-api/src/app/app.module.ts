@@ -37,7 +37,6 @@ import { PodVolumeBackupModule } from '@velero-ui-api/modules/pod-volume-backup/
 import { PodVolumeRestoreModule } from '@velero-ui-api/modules/pod-volume-restore/pod-volume-restore.module';
 import { KubernetesModule, LoadFrom } from '@otwld/nestjs-kubernetes';
 import { K8S_CONNECTION } from '@velero-ui-api/shared/utils/k8s.utils';
-import { CaslModule } from './shared/modules/casl/casl.module';
 
 @Module({
   imports: [
@@ -103,7 +102,6 @@ import { CaslModule } from './shared/modules/casl/casl.module';
     AppConfigModule,
     AuthModule,
     LoggerModule,
-    CaslModule,
   ],
   controllers: [],
   providers: [

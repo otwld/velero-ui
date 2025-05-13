@@ -33,16 +33,4 @@ spec:
             value: admin
           - name: VELERO_UI_NAMESPACE
             value: velero-ui
-          - name: POLICY_FILE_PATH
-            value: /policies.csv
-        volumeMounts:
-          - name: policies
-            mountPath: "/policies.csv"
-            readOnly: true
-      volumes:
-        - name: policies
-          configMap:
-            name: velero-ui
-            items:
-              - key: policies.csv
-                path: policies.csv
+

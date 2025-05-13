@@ -81,7 +81,6 @@
     <td class="p-4 space-x-2 whitespace-nowrap">
       <div class="inline-flex rounded-md shadow-sm" role="group">
         <button
-          v-if="can(Action.Create, Resources.RESTORE.plural)"
           :class="{ 'cursor-not-allowed': isDisabled }"
           :data-tooltip-target="`tooltip-button-restore-${data?.metadata?.uid}`"
           :disabled="isDisabled"
@@ -93,7 +92,6 @@
           <FontAwesomeIcon :icon="faClockRotateLeft" class="!w-4 !h-4" />
         </button>
         <button
-          v-if="can(Action.Download, Resources.BACKUP.plural)"
           :class="{ 'cursor-not-allowed': isDisabled || downloadLoading }"
           :data-tooltip-target="`tooltip-button-download-${data?.metadata?.uid}`"
           :disabled="isDisabled || downloadLoading"
@@ -114,7 +112,6 @@
           />
         </button>
         <button
-          v-if="can(Action.Delete, Resources.BACKUP.plural)"
           :class="{ 'cursor-not-allowed': isDeleteDisabled }"
           :data-tooltip-target="`tooltip-button-delete-${data?.metadata?.uid}`"
           :disabled="isDeleteDisabled"
@@ -227,8 +224,6 @@ import { useDeleteKubernetesObject } from '@velero-ui-app/composables/useDeleteK
 import { useI18n } from 'vue-i18n';
 import VModal from '@velero-ui-app/components/Modals/VModal.vue';
 import BackupFormRestore from '@velero-ui-app/components/Backup/forms/BackupFormRestore.vue';
-import { can } from "@velero-ui-app/utils/policy.utils";
-import { Action } from "@velero-ui/shared-types";
 
 const { t } = useI18n();
 const props = defineProps({

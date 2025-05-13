@@ -9,7 +9,6 @@ import { Transform } from 'class-transformer';
 import { PLURALS } from '@velero-ui/velero';
 
 export class K8sCustomObjectParams {
-  @IsOptional()
   @IsIn(PLURALS)
   plural: string;
 

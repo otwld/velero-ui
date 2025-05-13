@@ -36,31 +36,13 @@ To enable GitLab authentication, set the following environment variables:
      GITLAB_AUTH_ENABLED=true
      GITLAB_CLIENT_ID=your-client-id
      GITLAB_CLIENT_SECRET=your-client-secret
-     GITLAB_OAUTH_SCOPE="read_user" # read_api
+     GITLAB_OAUTH_SCOPE="read_user"
      GITLAB_REDIRECT_URI=http://localhost:4200/login
      GITLAB_BASE_URL=https://gitlab.com
      ```
 
 3. **Restart Your Application**
    - Restart the Velero UI to apply the changes.
-
-## RBAC
-
-If you are using GitLab Groups for RBAC, ensure that the `read_api` scope is included in your OAuth app settings. This allows Velero UI to read the user's group memberships.
-
-Group members can be granted access to Velero UI based on their GitLab group memberships.
-
-**Group syntax is** `group_name:role_in_group`, example: `my-group:owner`, `my-group:maintainer`, `my-group:guest`.
-
-Gitlab roles:
-- `owner`
-- `maintainer`
-- `developer`
-- `reporter`
-- `guest`
-
-Then refer to the [RBAC documentation](../rbac.md) for further configuration.
-
 
 ## Troubleshooting
 

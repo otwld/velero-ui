@@ -10,7 +10,7 @@
         <Describe :data="data" />
       </div>
     </div>
-    <ScheduleBackupList v-if="can(Action.Read, Resources.BACKUP.plural)" />
+    <ScheduleBackupList />
   </div>
   <ResourceNotFound v-if="error" :page="Pages.SCHEDULES" />
 </template>
@@ -28,14 +28,12 @@ import { onBeforeMount, onBeforeUnmount } from 'vue';
 import { Pages } from '@velero-ui-app/utils/constants.utils';
 import ResourceNotFound from '@velero-ui-app/components/ResourceNotFound.vue';
 import ScheduleBackupList from '@velero-ui-app/components/Schedule/ScheduleBackupList.vue';
-import { can } from '@velero-ui-app/utils/policy.utils';
-import { Action } from '@velero-ui/shared-types';
 
 const router: Router = useRouter();
 
 const { on, off, data, error } = useKubernetesWatchObject<V1Schedule>(
   Resources.SCHEDULE,
-  router.currentRoute.value.params.name as string
+  router.currentRoute.value.params.name as string,
 );
 
 onBeforeMount((): void => on());

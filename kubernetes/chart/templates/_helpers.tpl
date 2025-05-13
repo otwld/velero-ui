@@ -84,14 +84,3 @@ Create the name for the admin password secret.
 {{- end -}}
 {{- end -}}
 
-{{/*
-Create the name for the configmap.
-*/}}
-{{- define "velero-ui.configMapName" -}}
-{{- if .Values.configuration.policies.existingConfigMap -}}
-  {{- .Values.configuration.policies.existingConfigMap -}}
-{{- else -}}
-  {{ default (include "velero-ui.fullname" .) .Values.configuration.policies.name }}
-{{- end -}}
-{{- end -}}
-

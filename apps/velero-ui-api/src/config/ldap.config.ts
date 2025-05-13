@@ -11,6 +11,5 @@ export default registerAs('ldap', (): LDAPConfig => {
     searchBase: process.env.LDAP_SEARCH_BASE || '',
     searchFilter: process.env.LDAP_SEARCH_FILTER || '',
     searchAttributes: process.env.LDAP_SEARCH_ATTRIBUTES || '',
-    groupSearchBase: process.env.LDAP_GROUP_SEARCH_BASE || '',
   };
 });

@@ -15,6 +15,10 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   }
 
   public validate(payload: JwtPayload): Partial<JwtPayload> {
-    return payload;
+    return {
+      sub: payload.sub,
+      name: payload.name,
+      provider: payload.provider,
+    };
   }
 }

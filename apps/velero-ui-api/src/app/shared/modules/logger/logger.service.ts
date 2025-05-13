@@ -52,9 +52,7 @@ export class AppLogger implements LoggerService {
     this.logger.verbose(message, optionalParams);
   }
 
-  public warn(message: string, scope: string);
-
-  public warn(message: object, scope: string);
+  public warn(message: never, scope: string);
 
   public warn(message: never, ...optionalParams: never[]): void {
     this.logger.warn(message, optionalParams);

@@ -4,15 +4,14 @@ import Strategy from 'passport-ldapauth';
 import { ConfigService } from '@nestjs/config';
 import { AppLogger } from '@velero-ui-api/shared/modules/logger/logger.service';
 import { IncomingMessage } from 'http';
-import { Action } from '@velero-ui/shared-types';
-import { Client } from 'ldapts';
 
 @Injectable()
 export class LdapStrategy extends PassportStrategy(Strategy, 'ldap') {
   constructor(
     private logger: AppLogger,
-    private readonly configService: ConfigService
+    private readonly configService: ConfigService,
   ) {
+
     super({
       passReqToCallback: true,
       server: {
@@ -29,20 +28,14 @@ export class LdapStrategy extends PassportStrategy(Strategy, 'ldap') {
     });
   }
 
-  public async validate(req, user: any) {
+  public validate(req, user: any) {
     this.logger.debug(
       `Try to validate LDAP user ${req.body?.username} with password ****...`,
-      LdapStrategy.name
+      LdapStrategy.name,
     );
 
     if (!user) {
       return null;
-    }
-
-    let groups: string[] = [];
-
-    if (this.configService.get('ldap.groupSearchBase')) {
-      groups = await this.getUserGroups(user);
     }
 
     this.logger.info(`LDAP user ${user.uid} signed in.`, LdapStrategy.name);
@@ -51,39 +44,6 @@ export class LdapStrategy extends PassportStrategy(Strategy, 'ldap') {
       id: user.uid,
       provider: 'ldap',
       displayName: user.givenName,
-      permissions: {
-        user: user.username,
-        groups
-      },
     };
-  }
-
-  private async getUserGroups(user: any): Promise<string[]> {
-    const ldapUrl = this.configService.get('ldap.url');
-    const client = new Client({ url: ldapUrl });
-
-    try {
-      await client.bind(
-        this.configService.get('ldap.bindDn'),
-        this.configService.get('ldap.bindCredentials')
-      );
-
-      const groupSearchBase = this.configService.get('ldap.groupSearchBase');
-      const userDn = `uid=${user.uid},${this.configService.get('ldap.searchBase')}`;
-
-      const { searchEntries } = await client.search(groupSearchBase, {
-        scope: 'sub',
-        filter: `(member=${userDn})`,
-        attributes: ['cn'],
-      });
-
-      return searchEntries.map((entry) => entry.cn as string);
-    } catch (error) {
-      this.logger.warn(
-        'Error fetching LDAP groups: ' + error.message,
-        LdapStrategy.name
-      );
-      return [];
-    }
   }
 }

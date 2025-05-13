@@ -27,7 +27,6 @@
         {{ t('backups.title') }}
       </h1>
       <router-link
-        v-if="can(Action.Read, Resources.BACKUP.plural)"
         :to="Pages.BACKUPS.path"
         class="inline-flex items-center p-2 text-xs font-medium uppercase rounded-lg text-blue-700 sm:text-sm hover:bg-gray-100 dark:text-blue-500 dark:hover:bg-gray-700"
       >
@@ -46,7 +45,6 @@
         {{ t('restores.title') }}
       </h1>
       <router-link
-        v-if="can(Action.Read, Resources.RESTORE.plural)"
         :to="Pages.RESTORES.path"
         class="inline-flex items-center p-2 text-xs font-medium uppercase rounded-lg text-blue-700 sm:text-sm hover:bg-gray-100 dark:text-blue-500 dark:hover:bg-gray-700"
       >
@@ -74,10 +72,8 @@ import DashboardBackupsSuccessRateStats from '@velero-ui-app/components/Dashboar
 import DashboardRestoresStatusStats from '@velero-ui-app/components/Dashboard/DashboardRestoresStatusStats.vue';
 import DashboardRestoresSuccessRateStats from '@velero-ui-app/components/Dashboard/DashboardRestoresSuccessRateStats.vue';
 import { inject } from 'vue';
-import { Action, type AppConfig } from '@velero-ui/shared-types';
+import type { AppConfig } from '@velero-ui/shared-types';
 import { useI18n } from 'vue-i18n';
-import { Resources } from "@velero-ui/velero";
-import { can } from "@velero-ui-app/utils/policy.utils";
 
 const { t } = useI18n();
 const { grafanaUrl } = inject('config') as AppConfig;

@@ -2,7 +2,7 @@ import type { Router, RouteRecordRaw } from 'vue-router';
 import { createRouter, createWebHistory } from 'vue-router';
 import Default from '../layouts/default/Default.vue';
 import Auth from '../layouts/auth/Auth.vue';
-import { guard, resourceGuard } from '../utils/guard.utils';
+import guard from '../utils/guard.utils';
 import BackupList from '@velero-ui-app/views/list/BackupList.vue';
 import NotFound from '../layouts/not-found/NotFound.vue';
 import ScheduleList from '@velero-ui-app/views/list/ScheduleList.vue';
@@ -27,7 +27,6 @@ import PodVolumeRestoreList from '@velero-ui-app/views/list/PodVolumeRestoreList
 import PodVolumeBackupList from '@velero-ui-app/views/list/PodVolumeBackupList.vue';
 import PodVolume from '@velero-ui-app/views/resources/PodVolume.vue';
 import { Resources } from '@velero-ui/velero';
-import { Action } from '@velero-ui/shared-types';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -41,7 +40,6 @@ const routes: Array<RouteRecordRaw> = [
       },
       {
         ...Pages.BACKUPS,
-        beforeEnter: () => resourceGuard(Action.Read, Resources.BACKUP.plural),
         children: [
           {
             path: '',
@@ -57,8 +55,6 @@ const routes: Array<RouteRecordRaw> = [
       },
       {
         ...Pages.STORAGE_LOCATIONS,
-        beforeEnter: () =>
-          resourceGuard(Action.Read, Resources.BACKUP_STORAGE_LOCATION.plural),
         children: [
           {
             path: '',
@@ -75,8 +71,6 @@ const routes: Array<RouteRecordRaw> = [
       },
       {
         ...Pages.RESTORES,
-        beforeEnter: () =>
-          resourceGuard(Action.Read, Resources.RESTORE.plural),
         children: [
           {
             path: '',
@@ -92,8 +86,6 @@ const routes: Array<RouteRecordRaw> = [
       },
       {
         ...Pages.SCHEDULES,
-        beforeEnter: () =>
-          resourceGuard(Action.Read, Resources.SCHEDULE.plural),
         children: [
           {
             path: '',
@@ -109,11 +101,6 @@ const routes: Array<RouteRecordRaw> = [
       },
       {
         ...Pages.SNAPSHOT_LOCATIONS,
-        beforeEnter: () =>
-          resourceGuard(
-            Action.Read,
-            Resources.VOLUME_SNAPSHOT_LOCATION.plural
-          ),
         children: [
           {
             path: '',
@@ -130,8 +117,6 @@ const routes: Array<RouteRecordRaw> = [
       },
       {
         ...Pages.BACKUP_REPOSITORIES,
-        beforeEnter: () =>
-          resourceGuard(Action.Read, Resources.BACKUP_REPOSITORY.plural),
         children: [
           {
             path: '',
@@ -148,8 +133,6 @@ const routes: Array<RouteRecordRaw> = [
       },
       {
         ...Pages.POD_VOLUME_BACKUPS,
-        beforeEnter: () =>
-          resourceGuard(Action.Read, Resources.POD_VOLUME_BACKUP.plural),
         children: [
           {
             path: '',
@@ -166,10 +149,9 @@ const routes: Array<RouteRecordRaw> = [
       },
       {
         ...Pages.POD_VOLUME_RESTORES,
-        beforeEnter: () =>
-          resourceGuard(Action.Read, Resources.POD_VOLUME_RESTORE.plural),
         children: [
           {
+
             path: '',
             name: 'Pod Volume Restores List',
             component: PodVolumeRestoreList,
@@ -185,36 +167,23 @@ const routes: Array<RouteRecordRaw> = [
       {
         ...Pages.DOWNLOAD_REQUESTS,
         component: DownloadRequestList,
-        beforeEnter: () => {
-          useListStore().setObjectType(Resources.DOWNLOAD_REQUEST);
-          return resourceGuard(Action.Read, Resources.DOWNLOAD_REQUEST.plural);
-        },
+        beforeEnter: () =>
+          useListStore().setObjectType(Resources.DOWNLOAD_REQUEST),
       },
       {
         ...Pages.SERVER_STATUS_REQUESTS,
         component: ServerStatusRequestList,
-        beforeEnter: () => {
-          useListStore().setObjectType(Resources.SERVER_STATUS_REQUEST);
-          return resourceGuard(
-            Action.Read,
-            Resources.SERVER_STATUS_REQUEST.plural
-          );
-        },
+        beforeEnter: () =>
+          useListStore().setObjectType(Resources.SERVER_STATUS_REQUEST),
       },
       {
         ...Pages.DELETE_BACKUP_REQUESTS,
         component: DeleteBackupRequestList,
-        beforeEnter: () => {
-          useListStore().setObjectType(Resources.DELETE_BACKUP_REQUEST);
-          return resourceGuard(
-            Action.Read,
-            Resources.DELETE_BACKUP_REQUEST.plural
-          );
-        },
+        beforeEnter: () =>
+          useListStore().setObjectType(Resources.DELETE_BACKUP_REQUEST),
       },
       {
         ...Pages.SETTINGS,
-        beforeEnter: () => resourceGuard(Action.Manage, 'all'),
         component: Settings,
       },
     ],

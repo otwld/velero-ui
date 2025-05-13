@@ -74,7 +74,6 @@
           <FontAwesomeIcon :icon="faFileCode" class="!w-4 !h-4" />
         </button>
         <button
-          v-if="can(Action.Download, 'all')"
           :data-tooltip-target="`tooltip-button-download-${data?.metadata?.uid}`"
           :title="t('global.button.download.title')"
           class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
@@ -92,7 +91,6 @@
           </div>
         </button>
         <button
-          v-if="can(Action.Delete, Resources.DOWNLOAD_REQUEST.plural)"
           :class="{ 'cursor-not-allowed': isDeleting }"
           :data-tooltip-target="`tooltip-button-delete-${data?.metadata?.uid}`"
           :disabled="isDeleting"
@@ -187,8 +185,6 @@ import ModalConfirmation from '@velero-ui-app/components/Modals/ModalConfirmatio
 import { truncate } from '../../utils/string.utils';
 import { useDeleteKubernetesObject } from '@velero-ui-app/composables/useDeleteKubernetesObject';
 import { useI18n } from 'vue-i18n';
-import { can } from "@velero-ui-app/utils/policy.utils";
-import { Action } from "@velero-ui/shared-types";
 
 const { t } = useI18n();
 const props = defineProps({

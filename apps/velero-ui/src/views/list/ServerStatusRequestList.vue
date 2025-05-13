@@ -2,7 +2,6 @@
   <ListHeader>
     <template #bulk-buttons>
       <button
-        v-if="can(Action.Delete, Resources.SERVER_STATUS_REQUEST.plural)"
         :class="{
           'cursor-not-allowed':
             childListRef?.getCheckedItems().length === 0 || isLoadingDeleting,
@@ -64,8 +63,6 @@ import {useDeleteManyKubernetesObjects} from "@velero-ui-app/composables/useDele
 import {Resources} from "@velero-ui/velero";
 import ModalConfirmation from "@velero-ui-app/components/Modals/ModalConfirmation.vue";
 import {useI18n} from "vue-i18n";
-import { can } from "@velero-ui-app/utils/policy.utils";
-import { Action } from "@velero-ui/shared-types";
 
 const { t } = useI18n();
 

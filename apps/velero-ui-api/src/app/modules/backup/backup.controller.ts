@@ -1,36 +1,55 @@
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  DefaultValuePipe,
+  Delete,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { BackupService } from './backup.service';
 import { forkJoin, Observable } from 'rxjs';
 import {
-  PluralsNames,
-  Resources, ResourcesNames,
+  Resources,
   V1Backup,
-  V1BackupList, V1DeleteBackupRequest,
+  V1BackupList,
+  V1DeleteBackupRequest,
   V1DownloadRequest,
   V1DownloadTargetKind,
 } from '@velero-ui/velero';
+import { DeleteBackupRequestService } from '@velero-ui-api/modules/delete-backup-request/delete-backup-request.service';
 import { DownloadRequestService } from '@velero-ui-api/modules/download-request/download-request.service';
 import { K8sCustomObjectService } from '@velero-ui-api/modules/k8s-custom-object/k8s-custom-object.service';
 import { CreateBackupDto } from '@velero-ui-api/shared/dto/backup.dto';
-import { CheckPolicies } from '@velero-ui-api/shared/decorators/check-policies.decorator';
-import { AppAbility } from '@velero-ui-api/shared/modules/casl/casl-ability.factory';
-import { Action } from '@velero-ui/shared-types';
-import { K8sCustomObjectController } from '@velero-ui-api/modules/k8s-custom-object/k8s-custom-object.controller';
-import { Subject } from '@velero-ui-api/shared/decorators/subject.decorator';
-import { K8sCustomObjectParams } from "@velero-ui-api/shared/dto/k8s-custom-object.dto";
 
 @Controller(Resources.BACKUP.route)
-@Subject(Resources.BACKUP.plural)
-export class BackupController extends K8sCustomObjectController<
-  V1Backup,
-  V1BackupList
-> {
+export class BackupController {
   constructor(
     private readonly backupService: BackupService,
+    private readonly deleteBackupRequestService: DeleteBackupRequestService,
     private readonly downloadRequestService: DownloadRequestService,
-    readonly k8sCustomObjectService: K8sCustomObjectService
-  ) {
-    super(k8sCustomObjectService, Resources.BACKUP);
+    private readonly k8sCustomObjectService: K8sCustomObjectService,
+  ) {}
+
+  @Get()
+  public get(
+    @Query('offset', new DefaultValuePipe(0), ParseIntPipe) offset: number,
+    @Query('limit', new DefaultValuePipe(20), ParseIntPipe) limit: number,
+    @Query('search', new DefaultValuePipe('')) search: string,
+    @Query('sortColumnName', new DefaultValuePipe('')) sortColumnName: string,
+    @Query('sortColumnAscending', new DefaultValuePipe(''))
+    sortColumnAscending: boolean,
+  ): Observable<V1BackupList> {
+    return this.k8sCustomObjectService.get<V1Backup, V1BackupList>(
+      Resources.BACKUP.plural,
+      offset,
+      limit,
+      search,
+      sortColumnName,
+      sortColumnAscending,
+    );
   }
 
   @Post('/download')
@@ -40,35 +59,39 @@ export class BackupController extends K8sCustomObjectController<
         this.downloadRequestService.create({
           name,
           kind: V1DownloadTargetKind.BackupContents,
-        })
-      )
+        }),
+      ),
+    );
+  }
+
+  @Delete()
+  public delete(@Body() names: string[]) {
+    return forkJoin(
+      names.map((name) => this.deleteBackupRequestService.create({ name })),
     );
   }
 
   @Post()
-  @CheckPolicies((ability: AppAbility) =>
-    ability.can(Action.Create, Resources.BACKUP.plural)
-  )
   public create(@Body() data: CreateBackupDto) {
     return this.backupService.create(data);
   }
 
+  @Get('/:name')
+  public getByName(@Param('name') name: string): Observable<V1Backup> {
+    return this.k8sCustomObjectService.getByName<V1Backup>(
+      Resources.BACKUP.plural,
+      name,
+    );
+  }
+
   @Get('/:name/logs')
-  @CheckPolicies((ability: AppAbility) =>
-    ability.can(Action.Logs, Resources.BACKUP.plural)
-  )
   public logs(@Param('name') name: string): Observable<string[]> {
     return this.backupService.logs(name);
   }
 
   @Post('/:name/logs/download')
-  @CheckPolicies(
-    (ability: AppAbility) =>
-      ability.can(Action.Logs, Resources.BACKUP.plural) &&
-      ability.can(Action.Download, Resources.BACKUP.plural)
-  )
   public downloadLogs(
-    @Param('name') name: string
+    @Param('name') name: string,
   ): Observable<V1DownloadRequest> {
     return this.downloadRequestService.create({
       name,
@@ -77,11 +100,8 @@ export class BackupController extends K8sCustomObjectController<
   }
 
   @Post('/:name/download')
-  @CheckPolicies((ability: AppAbility) =>
-    ability.can(Action.Download, Resources.BACKUP.plural)
-  )
   public downloadByName(
-    @Param('name') name: string
+    @Param('name') name: string,
   ): Observable<V1DownloadRequest> {
     return this.downloadRequestService.create({
       name,
@@ -89,21 +109,12 @@ export class BackupController extends K8sCustomObjectController<
     });
   }
 
-  @Delete()
-  @CheckPolicies((ability: AppAbility, resource: PluralsNames) =>
-    ability.can(Action.Delete, resource)
-  )
-  public delete(@Body() names: string[]): Observable<any> {
-    return this.backupService.delete(names);
-  }
-
   @Delete('/:name')
-  @CheckPolicies((ability: AppAbility) =>
-    ability.can(Action.Delete, Resources.BACKUP.plural)
-  )
-  protected deleteByName(
-    @Param() params: K8sCustomObjectParams
+  public deleteByName(
+    @Param('name') name: string,
   ): Observable<V1DeleteBackupRequest> {
-    return this.backupService.deleteByName(params.name);
+    return this.deleteBackupRequestService.create({
+      name,
+    });
   }
 }

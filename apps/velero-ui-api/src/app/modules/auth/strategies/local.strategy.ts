@@ -8,7 +8,7 @@ import { AppLogger } from '@velero-ui-api/shared/modules/logger/logger.service';
 export class LocalStrategy extends PassportStrategy(Strategy, 'local') {
   constructor(
     private logger: AppLogger,
-    private readonly authService: AuthService
+    private readonly authService: AuthService,
   ) {
     super();
   }
@@ -16,12 +16,12 @@ export class LocalStrategy extends PassportStrategy(Strategy, 'local') {
   public validate(username: string, password: string) {
     this.logger.debug(
       `Try to validate local user ${username} with password ****...`,
-      LocalStrategy.name
+      LocalStrategy.name,
     );
 
     const success: boolean = this.authService.validateBasicUser(
       username,
-      password
+      password,
     );
 
     if (!success) {

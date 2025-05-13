@@ -4,8 +4,7 @@
     :class="getClass()"
     class="text-xs font-medium inline-flex items-center me-2 px-2.5 py-0.5 rounded"
   >
-    {{ t(`resource.phase.${status}`) }}</span
-  >
+    {{ t(`resource.phase.${status}`) }}</span>
 </template>
 
 <script lang="ts" setup>
@@ -14,16 +13,12 @@ import {
   V1PodVolumeBackupPhase,
   V1PodVolumeRestorePhase,
 } from '@velero-ui/velero';
-import { useI18n } from 'vue-i18n';
+import {useI18n} from "vue-i18n";
 
 const { t } = useI18n();
 
 const props = defineProps({
-  status: {
-    type: String as PropType<V1PodVolumeBackupPhase | V1PodVolumeRestorePhase>,
-    required: false,
-    default: undefined,
-  },
+  status: {type: String as PropType<V1PodVolumeBackupPhase | V1PodVolumeRestorePhase>, required: true },
 });
 
 const getClass = () => {

@@ -5,7 +5,6 @@ import { concatMap, from, map, Observable, of } from 'rxjs';
 import {
   Resources,
   V1Backup,
-  V1DeleteBackupRequest,
   V1DownloadRequest,
   V1DownloadTargetKind,
   V1Schedule,
@@ -33,7 +32,7 @@ export class BackupService {
     private readonly downloadRequestService: DownloadRequestService,
     private readonly httpService: HttpService,
     private readonly k8sCustomObjectService: K8sCustomObjectService,
-    private configService: ConfigService
+    private configService: ConfigService,
   ) {}
 
   public logs(name: string): Observable<string[]> {
@@ -43,17 +42,17 @@ export class BackupService {
       this.downloadRequestService.create({
         name,
         kind: V1DownloadTargetKind.BackupLog,
-      })
+      }),
     )
       .pipe(
         concatMap(
           (
-            downloadRequest: V1DownloadRequest
+            downloadRequest: V1DownloadRequest,
           ): Observable<AxiosResponse<ArrayBuffer>> =>
             this.httpService.get(downloadRequest?.status?.downloadURL, {
               responseType: 'arraybuffer',
-            })
-        )
+            }),
+        ),
       )
       .pipe(map((response: AxiosResponse<ArrayBuffer>) => response.data))
       .pipe(map((buffer: ArrayBuffer) => unzipSync(buffer)))
@@ -71,12 +70,12 @@ export class BackupService {
           this.configService.get('velero.namespace'),
           Resources.BACKUP,
           data.labels,
-          data.spec
-        )
+          data.spec,
+        ),
       ).pipe(
         concatMap((body: KubernetesObject) =>
-          this.k8sCustomObjectService.create(Resources.BACKUP.plural, body)
-        )
+          this.k8sCustomObjectService.create(Resources.BACKUP.plural, body),
+        ),
       );
     } else if (
       data.type === CreateBackupTypeEnum.FROM_SCHEDULE &&
@@ -85,8 +84,8 @@ export class BackupService {
       return from(
         this.k8sCustomObjectService.getByName<V1Schedule>(
           Resources.SCHEDULE.plural,
-          data.spec.name
-        )
+          data.spec.name,
+        ),
       )
         .pipe(
           map(
@@ -96,41 +95,17 @@ export class BackupService {
                 this.configService.get('velero.namespace'),
                 Resources.BACKUP,
                 data.labels,
-                schedule.spec.template
-              )
-          )
+                schedule.spec.template,
+              ),
+          ),
         )
         .pipe(
           concatMap((body: V1Backup) =>
-            this.k8sCustomObjectService.create(Resources.BACKUP.plural, body)
-          )
+            this.k8sCustomObjectService.create(Resources.BACKUP.plural, body),
+          ),
         );
     } else {
       throw new BadRequestException('Invalid body');
     }
-  }
-
-
-  public delete(names: string[]) {
-    return from(names).pipe(
-        concatMap((name: string) => this.deleteByName(name)))
-  }
-
-  public deleteByName(name: string): Observable<V1DeleteBackupRequest> {
-    return of(
-      createK8sCustomObject(
-        name,
-        this.configService.get('velero.namespace'),
-        Resources.DELETE_BACKUP_REQUEST,
-        {},
-        {
-          backupName: name,
-        }
-      )
-    ).pipe(
-      concatMap((body: KubernetesObject) =>
-        this.k8sCustomObjectService.create(Resources.DELETE_BACKUP_REQUEST.plural, body)
-      )
-    );
   }
 }

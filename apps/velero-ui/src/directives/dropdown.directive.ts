@@ -1,4 +1,4 @@
-export const dropdownDirective = {
+export const dropdown = {
   mounted: (el, binding) => {
     el.hidden = true;
     el.targetElement = document.getElementById(binding.value);

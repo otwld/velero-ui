@@ -13,6 +13,5 @@ export default registerAs('oauth', (): OauthConfig => {
     authorizationUrl: process.env.OAUTH_AUTHORIZATION_URL || '',
     userInfoUrl: process.env.OAUTH_USER_INFO_URL || '',
     name: process.env.OAUTH_NAME || 'SSO',
-    groupClaim: process.env.OAUTH_GROUP_CLAIM || 'groups',
   };
 });

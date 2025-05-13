@@ -44,21 +44,10 @@ Velero UI supports authentication via a custom OAuth provider. This section expl
      OAUTH_CLIENT_SECRET=your-client-secret
      OAUTH_OAUTH_SCOPE="openid profile email"
      OAUTH_REDIRECT_URI=http://localhost:4200/login
-     OAUTH_GROUP_CLAIM=groups
      ```
 
 4. **Restart Your Application**
    - Restart the Velero UI to apply the changes.
-
-## RBAC
-
-If you are using groups or roles for RBAC, ensure that the OAuth provider supports group claims in the user info response. This allows Velero UI to read the user's group memberships.
-
-You can define the group claim with the `OAUTH_GROUP_CLAIM` environment variable. The default is `groups`.
-
-**Group syntax is** `group_name`, example: `admin`.
-
-Then refer to the [RBAC documentation](../rbac.md) for further configuration.
 
 ## Troubleshooting
 

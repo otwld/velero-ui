@@ -36,7 +36,6 @@
           class="flex items-center gap-x-4 gap-y-2"
         >
           <button
-            v-if="can(Action.Update, Resources.BACKUP_STORAGE_LOCATION.plural)"
             :class="{ 'cursor-not-allowed': isEditing || !location }"
             :disabled="isEditing || !location"
             class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:ring-teal-300 dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
@@ -56,7 +55,6 @@
             {{ t('global.button.edit.title') }}
           </button>
           <button
-            v-if="can(Action.Delete, Resources.BACKUP_STORAGE_LOCATION.plural)"
             :class="{ 'cursor-not-allowed': isDeleting || !location }"
             :disabled="isDeleting || !location"
             class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-red-600 hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"
@@ -137,8 +135,6 @@ import { useI18n } from 'vue-i18n';
 import VModal from '@velero-ui-app/components/Modals/VModal.vue';
 import StorageLocationFormEdit from '@velero-ui-app/components/StorageLocation/forms/StorageLocationFormEdit.vue';
 import { useKubernetesEditObject } from '@velero-ui-app/composables/useKubernetesEditObject';
-import { can } from "@velero-ui-app/utils/policy.utils";
-import { Action } from "@velero-ui/shared-types";
 
 const { t } = useI18n();
 const props = defineProps({

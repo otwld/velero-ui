@@ -11,11 +11,6 @@ import { SettingsService } from '@velero-ui-api/modules/settings/settings.servic
 import { AppLogger } from '@velero-ui-api/shared/modules/logger/logger.service';
 import { UseGuards } from '@nestjs/common';
 import { WsJwtAuthGuard } from '@velero-ui-api/shared/guards/ws-jwt-auth.guard';
-import {
-  AppAbility,
-  CaslAbilityFactory,
-} from '@velero-ui-api/shared/modules/casl/casl-ability.factory';
-import { Action } from '@velero-ui/shared-types';
 
 @WebSocketGateway({ cors: true })
 export class SettingsGateway
@@ -23,8 +18,7 @@ export class SettingsGateway
 {
   constructor(
     private readonly settingsService: SettingsService,
-    private readonly caslAbilityFactory: CaslAbilityFactory,
-    private logger: AppLogger
+    private logger: AppLogger,
   ) {}
 
   handleConnection(@ConnectedSocket() client: Socket): void {
@@ -34,7 +28,7 @@ export class SettingsGateway
   handleDisconnect(@ConnectedSocket() client: Socket): void {
     this.logger.debug(
       `Client disconnected ${client.id}`,
-      WebSocketGateway.name
+      WebSocketGateway.name,
     );
     this.settingsService.closeLogsSteam(client);
   }
@@ -44,15 +38,9 @@ export class SettingsGateway
   public logsServerOn(
     @ConnectedSocket() client: Socket,
     @MessageBody('type') type: string,
-    @MessageBody('name') name: string
+    @MessageBody('name') name: string,
   ): void {
-    const ability: AppAbility = this.caslAbilityFactory.createForUser(
-      client.data.user
-    );
-
-    if (ability.can(Action.Manage, 'all')) {
-      this.settingsService.openLogsStream(client, type, name);
-    }
+    this.settingsService.openLogsStream(client, type, name);
   }
 
   @UseGuards(WsJwtAuthGuard)

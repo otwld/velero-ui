@@ -1,7 +1,6 @@
 ---
 sidebar_position: 1
 title: Github
-icon: github
 ---
 
 # GitHub Authentication
@@ -35,24 +34,12 @@ To enable GitHub authentication, set the following environment variables:
      GITHUB_AUTH_ENABLED=true
      GITHUB_CLIENT_ID=your-client-id
      GITHUB_CLIENT_SECRET=your-client-secret
-     GITHUB_OAUTH_SCOPE="openid email profile" # read:org
+     GITHUB_OAUTH_SCOPE="openid email profile"
      GITHUB_REDIRECT_URI=http://localhost:4200/login
      ```
 
 3. **Restart Your Application**
    - Restart the Velero UI to apply the changes.
-
-## RBAC
-
-If you are using GitHub Teams for RBAC, ensure that the `read:org` scope is included in your OAuth app settings. This allows Velero UI to read the user's organization and team memberships.
-
-Organization members can be granted access to Velero UI based on their GitHub team memberships.
-
-**Group syntax is** `organisation_name:role_in_organization`, example: `my-org:admin`, `my-org:viewer`, `my-org:developer`.
-
-Then refer to the [RBAC documentation](../rbac.md) for further configuration.
-
-
 
 ## Troubleshooting
 

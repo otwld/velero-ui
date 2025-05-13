@@ -141,7 +141,7 @@ const props = defineProps({
   stepComponents: {type: Array as PropType<any[]>, required: true},
   isLoading: Boolean as PropType<boolean>,
   error: Error as PropType<Error>,
-  notApplicableFields: {type: Object as PropType<object>, required: false},
+  notApplicableFields: {type: Object as PropType<object>, required: true},
 });
 
 const steps = ref(props.stepComponents.filter((c) => !c.hidden));

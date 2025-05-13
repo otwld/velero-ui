@@ -10,7 +10,6 @@ export default registerAs('app', (): AppConfig => {
     logLevel: process.env.LOG_LEVEL || 'info',
     secret: process.env.AUTH_SECRET_PASSPHRASE || 'this is the secret pass phrase',
     sessionDuration: process.env.AUTH_SESSION_DURATION || '1h',
-    namespace: process.env.VELERO_UI_NAMESPACE || 'velero-ui',
-    policyPath: process.env.POLICY_FILE_PATH,
+    namespace: process.env.VELERO_UI_NAMESPACE || 'velero-ui'
   };
 });

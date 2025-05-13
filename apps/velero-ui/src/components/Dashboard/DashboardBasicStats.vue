@@ -25,7 +25,7 @@
             </div>
           </div>
         </div>
-        <div v-can="{ action: Action.Read, subject: Resources.BACKUP.plural }" class="flex self-center">
+        <div class="flex self-center">
           <router-link
             :to="Pages.BACKUPS.path"
             class="inline-flex text-gray-500 p-2 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
@@ -62,7 +62,7 @@
             </div>
           </div>
         </div>
-        <div v-can="{ action: Action.Read, subject: Resources.SCHEDULE.plural }" class="flex self-center">
+        <div class="flex self-center">
           <router-link
             :to="Pages.SCHEDULES.path"
             class="inline-flex text-gray-500 p-2 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
@@ -99,7 +99,7 @@
             </div>
           </div>
         </div>
-        <div v-can="{ action: Action.Read, subject: Resources.RESTORE.plural }" class="flex self-center">
+        <div class="flex self-center">
           <router-link
             :to="Pages.RESTORES.path"
             class="inline-flex text-gray-500 p-2 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
@@ -136,7 +136,7 @@
             </div>
           </div>
         </div>
-        <div v-can="{ action: Action.Read, subject: Resources.BACKUP_STORAGE_LOCATION.plural }" class="flex self-center">
+        <div class="flex self-center">
           <router-link
             :to="Pages.STORAGE_LOCATIONS.path"
             class="inline-flex text-gray-500 p-2 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
@@ -162,8 +162,6 @@ import { Pages } from '@velero-ui-app/utils/constants.utils';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { useStatsBasic } from '@velero-ui-app/composables/stats/useStatsBasic';
 import { useI18n } from 'vue-i18n';
-import { Action } from "@velero-ui/shared-types";
-import { Resources } from "@velero-ui/velero";
 
 const { t } = useI18n();
 const { isFetching, data } = useStatsBasic();
