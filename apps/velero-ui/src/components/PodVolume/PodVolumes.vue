@@ -18,7 +18,7 @@
           <FontAwesomeIcon :icon="faCubes" class="!w-3 !h-3 mr-1.5" />
           {{ data.length }}</span>
       </div>
-      <ul class="overflow-auto mt-2 max-h-[300px]">
+      <ul class="overflow-auto mt-2 pr-2 max-h-[300px]">
         <div v-if="data && data.length === 0 && isFetching">
           <div
             class="ml-4 h-3 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-96"
