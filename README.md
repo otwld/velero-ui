@@ -49,6 +49,7 @@ This dashboard implement the same functionalities as the velero CLI.
 
 - ⚡ **Optimized Performance:** Velero UI leverages caching for fast performance and quick rendering.
 - 📱 **Responsive Design:** Fully functional on mobile devices and tablets.
+- 🖥️ **Desktop Application:** Available as a desktop application through Tauri for Windows, macOS and Linux.
 
 
 ## 📋 Requirements
@@ -61,6 +62,12 @@ This dashboard implement the same functionalities as the velero CLI.
 ## 📚 Documentation
 
 Want to learn more about Velero UI's features? Check out [Velero UI documentation](https://velero-ui.docs.otwld.com) for a comprehensive overview!
+
+## 🖥️ Desktop applications
+
+- MacOS
+- Linux
+- Windows
 
 ## 🚀 Deployments
 

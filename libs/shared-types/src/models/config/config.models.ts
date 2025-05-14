@@ -96,3 +96,8 @@ export interface K8sConfig {
   configPath: string;
   context: string;
 }
+
+
+export interface TauriConfig {
+  enabled: boolean;
+}

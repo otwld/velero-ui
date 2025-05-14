@@ -23,7 +23,9 @@ export class VeleroService {
   ) {
     this.k8sCoreV1Api = this.k8s.makeApiClient(CoreV1Api);
 
-    this.findServer().subscribe();
+    if (configService.get<boolean>('tauri.enabled')) {
+      this.findServer().subscribe();
+    }
   }
 
   public checkServer(): Observable<string> {

@@ -41,6 +41,8 @@ Thumbs.db
 .nx/cache
 .nx/workspace-data
 
+.cargo
+
 # Generated Docusaurus files
 .docusaurus/
 .cache-loader/

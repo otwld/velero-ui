@@ -1,0 +1,63 @@
+{
+  "name": "velero-ui-desktop",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/velero-ui-desktop/src",
+  "targets": {
+    "lint": {
+      "cache": true,
+      "executor": "@monodon/rust:lint",
+      "outputs": [
+        "{options.target-dir}"
+      ],
+      "options": {
+        "target-dir": "dist/target/velero-ui-desktop"
+      }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "dependsOn": [
+        {
+          "projects": [
+            "velero-ui"
+          ],
+          "target": "build-tauri",
+          "params": "forward"
+        }
+      ],
+      "options": {
+        "commands": [
+          {
+            "command": "tauri build"
+          }
+        ],
+        "parallel": false
+      }
+    },
+    "serve": {
+      "executor": "nx:run-commands",
+      "dependsOn": [
+        {
+          "projects": [
+            "velero-ui"
+          ],
+          "target": "build-tauri",
+          "params": "forward"
+        }
+      ],
+      "options": {
+        "commands": [
+          {
+            "command": "tauri dev"
+          }
+        ],
+        "env": {
+          "TAURI": "true"
+        },
+        "cwd": "{projectRoot}",
+        "parallel": true
+      }
+    }
+  },
+  "tags": []
+}

@@ -11,10 +11,10 @@
       "options": {
         "target": "node",
         "compiler": "tsc",
-        "outputPath": "dist/apps/velero-ui",
-        "main": "apps/velero-ui-api/src/main.ts",
-        "tsConfig": "apps/velero-ui-api/tsconfig.app.json",
-        "webpackConfig": "apps/velero-ui-api/webpack.config.js",
+        "outputPath": "{workspaceRoot}/dist/apps/velero-ui",
+        "main": "{projectRoot}/src/main.ts",
+        "tsConfig": "{projectRoot}/tsconfig.app.json",
+        "webpackConfig": "{projectRoot}/webpack.config.js",
         "generatePackageJson": true
       },
       "configurations": {
@@ -40,13 +40,6 @@
     "lint": {
       "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"]
-    },
-    "test": {
-      "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
-      "options": {
-        "jestConfig": "apps/velero-ui-api/jest.config.ts"
-      }
     }
   },
   "tags": []

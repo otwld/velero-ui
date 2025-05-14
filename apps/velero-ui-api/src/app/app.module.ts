@@ -31,6 +31,7 @@ import github from '../config/github.config';
 import gitlab from '../config/gitlab.config';
 import microsoft from '../config/microsoft.config';
 import oauth from '../config/oauth.config';
+import tauri from '../config/tauri.config';
 import { FormModule } from '@velero-ui-api/modules/form/form.module';
 import { HttpExceptionFilter } from '@velero-ui-api/shared/exceptions/filters/http.exception-filter';
 import { PodVolumeBackupModule } from '@velero-ui-api/modules/pod-volume-backup/pod-volume-backup.module';
@@ -54,6 +55,7 @@ import { CaslModule } from './shared/modules/casl/casl.module';
         gitlab,
         microsoft,
         oauth,
+        tauri,
       ],
     }),
     LoggerModule.forRoot(),
@@ -64,16 +66,17 @@ import { CaslModule } from './shared/modules/casl/casl.module';
       servers: [
         {
           name: K8S_CONNECTION,
-          useFactory: (configService: ConfigService) =>
-            configService.get('k8s.configPath')
+          useFactory: (configService: ConfigService) => {
+            return configService.get('k8s.configPath')
               ? {
-                  loadFrom: LoadFrom.FILE,
-                  opts: {
-                    file: configService.get('k8s.configPath'),
-                    context: configService.get('k8s.context'),
-                  },
-                }
-              : { loadFrom: LoadFrom.CLUSTER },
+                loadFrom: LoadFrom.FILE,
+                opts: {
+                  file: configService.get('k8s.configPath'),
+                  context: configService.get('k8s.context'),
+                },
+              }
+              : {loadFrom: LoadFrom.CLUSTER};
+          },
           inject: [ConfigService],
         },
       ],

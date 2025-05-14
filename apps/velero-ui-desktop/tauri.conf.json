@@ -1,0 +1,43 @@
+{
+  "$schema": "../../node_modules/@tauri-apps/cli/config.schema.json",
+  "productName": "Velero UI",
+  "version": "0.7.0",
+  "identifier": "com.otwld.velero-ui",
+  "mainBinaryName": "Velero UI",
+  "build": {
+    "frontendDist": "../../dist/apps/velero-ui-desktop/static",
+    "devUrl": "http://localhost:4200",
+    "beforeDevCommand": "nx run velero-ui:serve-tauri & nx run velero-ui-api:serve ",
+    "beforeBuildCommand": "nx run velero-ui:build-tauri --prod"
+  },
+  "app": {
+    "windows": [
+      {
+        "title": "Velero UI",
+        "width": 1280,
+        "height": 800,
+        "resizable": true,
+        "fullscreen": false
+      }
+    ],
+    "security": {
+      "csp": null
+    }
+  },
+  "bundle": {
+    "homepage": "https://velero-ui.docs.otwld.com",
+    "publisher": "OTWLD",
+    "longDescription": "A fully realtime lightweight dashboard interface to interact with Velero (vmware-tanzu).",
+    "license": "Apache-2.0",
+    "category": "DeveloperTool",
+    "active": true,
+    "targets": "all",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ]
+  }
+}

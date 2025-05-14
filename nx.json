@@ -66,7 +66,8 @@
       "options": {
         "targetName": "eslint:lint"
       }
-    }
+    },
+    "@monodon/rust"
   ],
   "nxCloudId": "6810d336946c0c1470a5c8dd",
   "useLegacyCache": true

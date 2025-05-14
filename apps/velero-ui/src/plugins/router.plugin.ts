@@ -213,7 +213,7 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     ...Pages.LOGIN,
-    component: Auth,
+    component: () => import('@velero-ui-app/layouts/auth/Auth.vue'),
   },
   {
     ...Pages.NOT_FOUND,

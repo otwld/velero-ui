@@ -20,7 +20,31 @@
         }
       ],
       "options": {
-        "outputPath": "dist/apps/velero-ui/static",
+        "outputPath": "{workspaceRoot}/dist/apps/velero-ui/static",
+        "skipTypeCheck": true
+      },
+      "configurations": {
+        "development": {
+          "mode": "development"
+        },
+        "production": {
+          "mode": "production"
+        }
+      }
+    },
+    "build-tauri": {
+      "executor": "@nx/vite:build",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "dependsOn": [
+        {
+          "projects": ["velero-ui-api"],
+          "target": "build",
+          "params": "forward"
+        }
+      ],
+      "options": {
+        "outputPath": "{workspaceRoot}/dist/apps/velero-ui-desktop/static",
         "skipTypeCheck": true
       },
       "configurations": {
@@ -37,6 +61,23 @@
       "defaultConfiguration": "development",
       "options": {
         "buildTarget": "velero-ui:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "velero-ui:build:development",
+          "hmr": true
+        },
+        "production": {
+          "buildTarget": "velero-ui:build:production",
+          "hmr": false
+        }
+      }
+    },
+    "serve-tauri": {
+      "executor": "@nx/vite:dev-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "velero-ui:build-tauri"
       },
       "configurations": {
         "development": {

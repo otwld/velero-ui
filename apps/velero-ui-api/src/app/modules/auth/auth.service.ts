@@ -14,7 +14,7 @@ export class AuthService {
   ) {}
 
   public noAuthRequired(): boolean {
-    return (
+    return this.configService.get<boolean>('tauri.enabled', { infer: true }) || (
       !this.configService.get<boolean>('basicAuth.enabled', { infer: true }) &&
       !this.configService.get<boolean>('github.enabled', { infer: true }) &&
       !this.configService.get<boolean>('gitlab.enabled', { infer: true }) &&

@@ -1,0 +1,9 @@
+
+[workspace]
+resolver = '2'
+members = [
+	'apps/velero-ui-desktop',
+]
+
+[profile.release]
+lto = true
