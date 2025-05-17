@@ -16,7 +16,7 @@ export const sortObjects = <R extends KubernetesObject>(
   sortColumnAscending?: boolean,
 ): R[] => {
   switch (sortColumnName) {
-    case 'Name':
+    case 'list.header.name':
       return objects.sort((a: R, b: R) =>
         sortAlphabetically(
           a.metadata.name,
@@ -24,7 +24,7 @@ export const sortObjects = <R extends KubernetesObject>(
           sortColumnAscending,
         ),
       );
-    case 'Schedules':
+    case 'schedules.title':
       return objects.sort((a: R, b: R) =>
         sortAlphabetically(
           a.metadata?.labels['velero.io/schedule-name'],
@@ -32,7 +32,7 @@ export const sortObjects = <R extends KubernetesObject>(
           sortColumnAscending,
         ),
       );
-    case 'Storage Locations':
+    case 'storageLocations.title':
       return objects.sort((a: V1Schedule, b: V1Schedule) =>
         sortAlphabetically(
           a.spec?.template?.storageLocation || 'z',
@@ -40,7 +40,7 @@ export const sortObjects = <R extends KubernetesObject>(
           sortColumnAscending,
         ),
       );
-    case 'Date':
+    case 'list.header.date':
       return objects.sort((a: V1Backup, b: V1Backup) =>
         sortDate(
           new Date(a.status?.startTimestamp),
@@ -48,7 +48,7 @@ export const sortObjects = <R extends KubernetesObject>(
           sortColumnAscending,
         ),
       );
-    case 'Last Backup':
+    case 'list.header.lastBackup':
       return objects.sort((a: V1Schedule, b: V1Schedule) =>
         sortDate(
           new Date(a.status?.lastBackup),
@@ -56,7 +56,7 @@ export const sortObjects = <R extends KubernetesObject>(
           sortColumnAscending,
         ),
       );
-    case 'Expire In':
+    case 'list.header.expireIn':
       return objects.sort((a: V1Backup, b: V1Backup) =>
         sortDate(
           new Date(a.status?.expiration),
