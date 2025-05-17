@@ -281,7 +281,10 @@ const { download, downloadLoading } = useBackupDownloadContent(
 
 const interval = setInterval(
   () =>
-    (expireTime.value = getRemainingTime(props.data?.status?.expiration || '0'))
+    (expireTime.value = getRemainingTime(
+      props.data?.status?.expiration || '0'
+    )),
+  1000
 );
 
 onUnmounted(() => clearInterval(interval));

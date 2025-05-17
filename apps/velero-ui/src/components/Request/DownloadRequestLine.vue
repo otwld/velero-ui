@@ -204,7 +204,7 @@ const interval = setInterval(
   () =>
     (remainingTime.value = getRemainingTime(
       props.data?.status?.expiration || '0',
-    )),
+    )), 1000,
 );
 
 onUnmounted(() => clearInterval(interval));
