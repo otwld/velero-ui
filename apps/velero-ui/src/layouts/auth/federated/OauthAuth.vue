@@ -29,7 +29,7 @@ import { useI18n } from 'vue-i18n';
 const { t } = useI18n();
 
 const route = useRoute();
-const { login, isLoading } = useAuth();
+const { mutate: login } = useAuth();
 
 const { oauth } = inject('config') as AppPublicConfig;
 

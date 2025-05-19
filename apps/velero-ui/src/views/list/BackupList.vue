@@ -176,7 +176,7 @@ const listStore = useListStore();
 const { mutate: remove, isPending: isLoadingDeleting } =
   useDeleteManyKubernetesObjects(Resources.BACKUP);
 
-const { download, downloadLoading } = useBackupManyDownloadContent();
+const { mutate: download, isPending: downloadLoading } = useBackupManyDownloadContent();
 
 const childListRef = ref(null);
 

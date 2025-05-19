@@ -39,9 +39,9 @@ import { useGithubVersionChecker } from '@velero-ui-app/composables/useGithubVer
 
 const { t } = useI18n();
 
-const { get, newVersion } = useGithubVersionChecker('otwld', 'velero-ui');
+const { mutate, data: newVersion  } = useGithubVersionChecker('otwld', 'velero-ui');
 const show = ref(true);
 
-onBeforeMount(() => get(import.meta.env.APP_VERSION));
+onBeforeMount(() => mutate(import.meta.env.APP_VERSION));
 
 </script>

@@ -40,13 +40,13 @@ import { useSettingsServer } from '@velero-ui-app/composables/settings/useSettin
 
 const { t } = useI18n();
 
-const { get, newVersion } = useGithubVersionChecker('vmware-tanzu', 'velero');
+const { mutate, data: newVersion } = useGithubVersionChecker('vmware-tanzu', 'velero');
 const { data } = useSettingsServer();
 const show = ref(true);
 
 watch(data, () => {
   if (data.value?.version) {
-    get(data.value.version);
+    mutate(data.value.version);
   }
 });
 </script>

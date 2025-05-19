@@ -1,40 +1,38 @@
-import type { V1DownloadRequest } from '@velero-ui/velero';
-import { useAxios } from '@vueuse/integrations/useAxios';
-import type { Ref } from 'vue';
+import { Resources, type V1DownloadRequest } from '@velero-ui/velero';
 import { inject } from 'vue';
 import type { AxiosInstance } from 'axios';
-import { ApiRoutes } from '../../utils/constants.utils';
 import { ToastType, useToastsStore } from '@velero-ui-app/stores/toasts.store';
 import { useI18n } from 'vue-i18n';
+import { useMutation } from '@tanstack/vue-query';
 
-export const useBackupDownloadContent = (name: Ref<string>) => {
+export const useBackupDownloadContent = (name: string) => {
   const toastsStore = useToastsStore();
   const axiosInstance: AxiosInstance = inject('axios') as AxiosInstance;
 
   const { t } = useI18n();
-  const { execute, isLoading, data } =
-    useAxios<V1DownloadRequest>(axiosInstance);
 
-  const downloadLoading = isLoading;
-
-  const download = async () => {
-    try {
-      await execute(`${ApiRoutes.BACKUPS}/${name.value}/download`, {
-        method: 'POST',
-      });
-
-      if (data?.value?.status?.downloadURL) {
+  return useMutation({
+    mutationFn: async () =>
+      (
+        await axiosInstance.post<V1DownloadRequest>(
+          `${Resources.BACKUP.route}/${name}/download`
+        )
+      ).data,
+    onSuccess: async (data: V1DownloadRequest) => {
+      if (data?.status?.downloadURL) {
         toastsStore.push(
           t('global.message.success.downloadStarted'),
-          ToastType.SUCCESS,
+          ToastType.SUCCESS
         );
-        window.open(data.value.status.downloadURL);
+        window.open(data.status.downloadURL);
       }
-    } catch (e) {
-      toastsStore.push(t('global.message.error.unableToDownload'), ToastType.ERROR);
-      console.error(e);
-    }
-  };
-
-  return { download, downloadLoading };
+    },
+    onError: (error) => {
+      toastsStore.push(
+        t('global.message.error.unableToDownload'),
+        ToastType.ERROR
+      );
+      console.error(error);
+    },
+  });
 };

@@ -1,46 +1,40 @@
-import type { V1DownloadRequest } from '@velero-ui/velero';
-import { useAxios } from '@vueuse/integrations/useAxios';
+import { Resources, type V1DownloadRequest } from '@velero-ui/velero';
 import { inject } from 'vue';
 import type { AxiosInstance } from 'axios';
-import { ApiRoutes } from '../../utils/constants.utils';
 import { ToastType, useToastsStore } from '@velero-ui-app/stores/toasts.store';
 import { useI18n } from 'vue-i18n';
 import { forEach } from 'lodash';
+import { useMutation } from '@tanstack/vue-query';
 
 export const useBackupManyDownloadContent = () => {
   const toastsStore = useToastsStore();
   const axiosInstance: AxiosInstance = inject('axios') as AxiosInstance;
-
   const { t } = useI18n();
-  const { execute, isLoading, data } =
-    useAxios<V1DownloadRequest[]>(axiosInstance);
 
-  const downloadLoading = isLoading;
-
-  const download = async (names: string[]) => {
-    try {
-      await execute(`${ApiRoutes.BACKUPS}/download`, {
-        method: 'POST',
-        data: names,
-      });
-
-      if (data?.value?.length > 0) {
+  return useMutation({
+    mutationFn: async () =>
+      (
+        await axiosInstance.post<V1DownloadRequest[]>(
+          `${Resources.BACKUP.route}/download`
+        )
+      ).data,
+    onSuccess: async (data: V1DownloadRequest[]) => {
+      if (data?.length > 0) {
         toastsStore.push(
           t('global.message.success.downloadsStarted'),
-          ToastType.SUCCESS,
+          ToastType.SUCCESS
         );
-        forEach(data.value, (item: V1DownloadRequest) => {
+        forEach(data, (item: V1DownloadRequest) => {
           window.open(item.status.downloadURL);
         });
       }
-    } catch (e) {
+    },
+    onError: (error) => {
       toastsStore.push(
         t('global.message.error.unableToDownload'),
-        ToastType.ERROR,
+        ToastType.ERROR
       );
-      console.error(e);
-    }
-  };
-
-  return { download, downloadLoading };
+      console.error(error);
+    },
+  });
 };

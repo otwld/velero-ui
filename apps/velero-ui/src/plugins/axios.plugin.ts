@@ -21,6 +21,10 @@ export const Axios = {
 
     axiosInstance.interceptors.request.use(
       async (onFulfilled: InternalAxiosRequestConfig) => {
+        if (!onFulfilled.url.startsWith('/')) {
+          return onFulfilled;
+        }
+
         const accessToken: string = localStorage.getItem('access_token');
 
         if (accessToken && !hasExpired(accessToken)) {

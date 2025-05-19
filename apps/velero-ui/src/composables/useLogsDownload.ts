@@ -1,44 +1,48 @@
-import type {V1DownloadRequest} from '@velero-ui/velero';
-import {V1DownloadTargetKind} from '@velero-ui/velero';
-import {useAxios} from '@vueuse/integrations/useAxios';
-import {inject} from 'vue';
-import type {AxiosInstance} from 'axios';
-import {ApiRoutes} from '../utils/constants.utils';
-import {ToastType, useToastsStore} from '@velero-ui-app/stores/toasts.store';
-import {useI18n} from "vue-i18n";
+import {
+  Resources,
+  type V1DownloadRequest,
+  V1DownloadTargetKind,
+} from '@velero-ui/velero';
+import { inject } from 'vue';
+import type { AxiosInstance } from 'axios';
+import { ToastType, useToastsStore } from '@velero-ui-app/stores/toasts.store';
+import { useI18n } from 'vue-i18n';
+import { useMutation } from '@tanstack/vue-query';
 
 export const useLogsDownload = (name: string, type: V1DownloadTargetKind) => {
   const toastsStore = useToastsStore();
   const axiosInstance: AxiosInstance = inject('axios') as AxiosInstance;
+  const { t } = useI18n();
 
-  const {t} = useI18n();
-  const {execute, isLoading, data} =
-    useAxios<V1DownloadRequest>(axiosInstance);
+  let route = '';
+  if (type === V1DownloadTargetKind.BackupLog) {
+    route = Resources.BACKUP.route;
+  } else if (type === V1DownloadTargetKind.RestoreLog) {
+    route = Resources.RESTORE.route;
+  }
 
-  const download = async () => {
-    try {
-      if (type === V1DownloadTargetKind.BackupLog) {
-        await execute(`${ApiRoutes.BACKUPS}/${name}/logs/download`, {
-          method: 'POST',
-        });
-      } else if (type === V1DownloadTargetKind.RestoreLog) {
-        await execute(`${ApiRoutes.RESTORES}/${name}/logs/download`, {
-          method: 'POST',
-        });
+  return useMutation({
+    mutationFn: async () =>
+      (
+        await axiosInstance.post<V1DownloadRequest>(
+          `${route}/${name}/logs/download`
+        )
+      ).data,
+    onSuccess: async (data: V1DownloadRequest) => {
+      if (data?.status?.downloadURL) {
+        toastsStore.push(
+          t('global.message.success.downloadStarted'),
+          ToastType.SUCCESS
+        );
+        window.open(data.status.downloadURL);
       }
-
-      if (data?.value?.status?.downloadURL) {
-        toastsStore.push(t('global.message.success.downloadStarted'), ToastType.SUCCESS);
-        window.open(data.value.status.downloadURL);
-      }
-    } catch (e) {
+    },
+    onError: (error) => {
       toastsStore.push(
-      t('global.message.error.unableToDownloadLogs'),
-        ToastType.ERROR,
+        t('global.message.error.unableToDownloadLogs'),
+        ToastType.ERROR
       );
-      console.error(e);
-    }
-  };
-
-  return {download, isLoading};
+      console.error(error);
+    },
+  });
 };

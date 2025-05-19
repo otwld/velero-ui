@@ -54,9 +54,9 @@ const { on, off, data, error } = useKubernetesWatchObject<V1Backup>(
 );
 
 const {
-  get: getLogs,
-  logs,
   isLoading,
+  data: logs,
+  refetch
 } = useLogsGet(
   router.currentRoute.value.params.name as string,
   V1DownloadTargetKind.BackupLog
@@ -65,7 +65,7 @@ const {
 onBeforeMount((): void => on());
 onBeforeUnmount((): void => off());
 onBeforeMount(
-  (): Promise<void> =>
-    can(Action.Logs, Resources.BACKUP.plural) ? getLogs() : void 0
+  () =>
+    can(Action.Logs, Resources.BACKUP.plural) ? refetch() : void 0
 );
 </script>

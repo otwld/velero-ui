@@ -54,9 +54,9 @@ const { on, off, data, error } = useKubernetesWatchObject<V1Restore>(
 );
 
 const {
-  get: getLogs,
-  logs,
+  data: logs,
   isLoading,
+  refetch
 } = useLogsGet(
   router.currentRoute.value.params.name as string,
   V1DownloadTargetKind.RestoreLog
@@ -65,7 +65,7 @@ const {
 onBeforeMount((): void => on());
 onBeforeUnmount((): void => off());
 onBeforeMount(
-  (): Promise<void> =>
-    can(Action.Read, Resources.RESTORE.plural) ? getLogs() : void 0
+  () =>
+    can(Action.Read, Resources.RESTORE.plural) ? refetch() : void 0
 );
 </script>

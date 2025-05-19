@@ -10,7 +10,7 @@
           alt="logo"
           class="w-64 h-§4 mr-2"
           src="/src/assets/images/velero.svg"
-        >
+        />
       </div>
       <div
         class="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700"
@@ -24,7 +24,11 @@
           <Alert :icon="faCircleExclamation" :message="error" color="red" />
           <Alert :icon="faCircleExclamation" :message="success" color="green" />
           <div class="space-y-4 md:space-y-6">
-            <form v-if="basicAuth?.enabled" class="m-0" @submit="classicLogin($event)">
+            <form
+              v-if="basicAuth?.enabled"
+              class="m-0"
+              @submit="classicLogin($event)"
+            >
               <div class="mb-6">
                 <FormKit
                   v-model="username"
@@ -38,7 +42,8 @@
                     <label
                       class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                     >
-                      {{ t('auth.form.username.label') }}</label>
+                      {{ t('auth.form.username.label') }}</label
+                    >
                   </template>
                 </FormKit>
               </div>
@@ -54,7 +59,8 @@
                   <template #label>
                     <label
                       class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                    >{{ t('auth.form.password.label') }}</label>
+                      >{{ t('auth.form.password.label') }}</label
+                    >
                   </template>
                 </FormKit>
               </div>
@@ -93,12 +99,14 @@
       <div class="flex justify-center mt-5">
         <span
           class="inline-flex justify-center text-gray-500 text-xs dark:text-white"
-        >{{ t('global.powered', { version }) }}
+          >{{ t('global.powered', { version }) }}
           <a
             class="ml-1 hover:text-blue-600"
             href="https://otwld.com/"
             target="_blank"
-          >OTWLD</a></span>
+            >OTWLD</a
+          ></span
+        >
       </div>
     </div>
   </section>
@@ -126,7 +134,7 @@ import { useI18n } from 'vue-i18n';
 const { t } = useI18n();
 
 const { basicAuth, google, gitlab, github, microsoft, oauth } = inject(
-  'config',
+  'config'
 ) as AppPublicConfig;
 const route = useRoute();
 
@@ -142,11 +150,11 @@ const isFederatedAuthEnabled = () =>
   microsoft.enabled ||
   oauth.enabled;
 
-const { isLoading: basicLoading, login } = useFormAuth(username, password);
+const { isPending: basicLoading, mutate: login } = useFormAuth();
 
 const classicLogin = ($event) => {
   $event.preventDefault();
-  login();
+  login({ username: username.value, password: password.value });
 };
 
 const error: Ref<string> = ref('');
@@ -167,6 +175,6 @@ watch(
       success.value = t(`auth.message.success.code`);
     }
   },
-  { immediate: true },
+  { immediate: true }
 );
 </script>

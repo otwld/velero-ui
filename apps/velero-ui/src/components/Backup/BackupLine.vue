@@ -217,14 +217,7 @@
 </template>
 
 <script lang="ts" setup>
-import {
-  computed,
-  onMounted,
-  onUnmounted,
-  type PropType,
-  ref,
-  toRef,
-} from 'vue';
+import { computed, onMounted, onUnmounted, type PropType, ref } from 'vue';
 import { Resources, type V1Backup, V1BackupPhase } from '@velero-ui/velero';
 import {
   convertTimestampToDate,
@@ -275,9 +268,8 @@ const forceDeleteContext = useFormKitContextById(
   `force-delete-${props.data?.metadata?.uid}`
 );
 
-const { download, downloadLoading } = useBackupDownloadContent(
-  toRef(() => props.data?.metadata?.name)
-);
+const { mutate: download, isPending: downloadLoading } =
+  useBackupDownloadContent(props.data?.metadata?.name);
 
 const interval = setInterval(
   () =>

@@ -1,36 +1,42 @@
-import { ref } from 'vue';
-import { useAxios } from '@vueuse/integrations/useAxios';
+import { inject } from 'vue';
 import { gtr } from 'semver';
+import type { AxiosInstance } from 'axios';
+import { useMutation } from '@tanstack/vue-query';
+
 
 export const useGithubVersionChecker = (owner: string, repository: string) => {
-  const { execute, isLoading, data, error } = useAxios();
+  const axiosInstance: AxiosInstance = inject('axios') as AxiosInstance;
 
-  const newVersion = ref(null);
+  return useMutation({
+    mutationFn: async (version: string) => {
+      const data = (
+        await axiosInstance.get<
+          [
+            {
+              html_url: string;
+              tag_name: string;
+              draft: boolean;
+              prerelease: boolean;
+            },
+          ]
+        >(`https://api.github.com/repos/${owner}/${repository}/releases`)
+      ).data;
 
-  const get = async (version: string) => {
-    try {
-      await execute(
-        `https://api.github.com/repos/${owner}/${repository}/releases`,
-        {
-          method: 'get',
-        },
-      );
-
-      if (data && data.value.length > 0) {
-        const latestVersion: string = data.value[0].tag_name;
+      if (data && data.length > 0) {
+        const latestVersion: string = data[0].tag_name;
 
         if (
           gtr(latestVersion, version) &&
-          !data.value[0].draft &&
-          !data.value[0].prerelease
+          !data[0].draft &&
+          !data[0].prerelease
         ) {
-          newVersion.value = data.value[0];
+          return data[0];
         }
+        return null;
       }
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
-  return { get, isLoading, error, newVersion };
+    },
+    onError: (error) => {
+      console.error(error);
+    },
+  });
 };

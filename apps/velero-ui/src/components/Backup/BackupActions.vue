@@ -164,7 +164,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, type PropType, ref, toRef } from 'vue';
+import { computed, type PropType, ref } from 'vue';
 import { Resources, type V1Backup, V1BackupPhase } from '@velero-ui/velero';
 import {
   faCircleNotch,
@@ -195,8 +195,8 @@ const props = defineProps({
   },
 });
 
-const { download, downloadLoading } = useBackupDownloadContent(
-  toRef(() => props.backup?.metadata?.name)
+const { mutate: download, isPending: downloadLoading } = useBackupDownloadContent(
+  props.backup?.metadata?.name
 );
 
 const { isPending, mutate: remove } = useDeleteKubernetesObject(

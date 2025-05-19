@@ -1,35 +1,32 @@
-import { useAxios } from '@vueuse/integrations/useAxios';
 import { inject } from 'vue';
 import type { AxiosInstance } from 'axios';
-import { ApiRoutes } from '../../utils/constants.utils';
 import type { Router } from 'vue-router';
 import { useRoute, useRouter } from 'vue-router';
-import { resetSocketIOConnection} from '@velero-ui-app/plugins/socket.plugin';
+import { resetSocketIOConnection } from '@velero-ui-app/plugins/socket.plugin';
+import { useMutation } from '@tanstack/vue-query';
 
 export const useAuth = () => {
   const axiosInstance: AxiosInstance = inject('axios') as AxiosInstance;
   const router: Router = useRouter();
   const route = useRoute();
 
-  const { execute, isLoading, data, error } = useAxios(axiosInstance);
-
-  const login = async (provider: string) => {
-    try {
-      await execute(`${ApiRoutes.AUTH}/${provider}`, {
-        method: 'get',
-        params: route.query,
-      });
-
-      if (data?.value?.access_token) {
-        localStorage.setItem('access_token', data?.value.access_token);
+  return useMutation({
+    mutationFn: async (provider: string) =>
+      (
+        await axiosInstance.get(`/auth/${provider}`, {
+          params: route.query,
+        })
+      ).data,
+    onSuccess: async (data) => {
+      if (data) {
+        localStorage.setItem('access_token', data.access_token);
         resetSocketIOConnection();
         await router.push('/');
       }
-    } catch (e) {
+    },
+    onError: async (error) => {
       await router.push('/?state=error&reason=sso');
-      console.error(e);
-    }
-  };
-
-  return { login, isLoading, error };
+      console.error(error);
+    },
+  });
 };
