@@ -33,7 +33,7 @@ export interface BackupsNextScheduled {
   nextRun: string;
 }
 
-export interface BackupsLasted {
+export interface BackupsLatest {
   name: string;
   date: string;
 }

@@ -30,7 +30,7 @@
     <div class="grid grid-cols-1 px-4 xl:grid-cols-3 xl:gap-3">
       <DashboardUnscheduledNamespaces />
       <DashboardBackupsNextScheduled />
-      <DashboardBackupsLasted/>
+      <DashboardBackupsLatest/>
     </div>
     <div class="px-4 my-2 flex justify-between items-center">
       <h1
@@ -92,7 +92,7 @@ import { Resources } from '@velero-ui/velero';
 import { can } from '@velero-ui-app/utils/policy.utils';
 import DashboardUnscheduledNamespaces from '@velero-ui-app/components/Dashboard/DashboardUnscheduledNamespaces.vue';
 import DashboardBackupsNextScheduled from "@velero-ui-app/components/Dashboard/DashboardBackupsNextScheduled.vue";
-import DashboardBackupsLasted from "@velero-ui-app/components/Dashboard/DashboardBackupsLasted.vue";
+import DashboardBackupsLatest from "@velero-ui-app/components/Dashboard/DashboardBackupsLatest.vue";
 
 const { t } = useI18n();
 const { grafanaUrl } = inject('config') as AppConfig;

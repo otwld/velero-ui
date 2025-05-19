@@ -44,9 +44,9 @@ export class StatsController {
     return this.statsService.getNextScheduledBackups();
   }
 
-  @Get('/backups/lasted')
-  public getBackupLasted() {
-    return this.statsService.getBackupLasted();
+  @Get('/backups/latest')
+  public getBackupLatest() {
+    return this.statsService.getBackupLatest();
   }
 
   @Get('/unscheduled-namespaces')

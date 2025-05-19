@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { forkJoin, from, map, Observable, switchMap } from 'rxjs';
 import { CronExpression, CronExpressionParser } from 'cron-parser';
 import {
-  BackupsLasted,
+  BackupsLatest,
   BackupsNextScheduled,
   BackupsStatusStats,
   BackupsSuccessRateStats,
@@ -222,7 +222,7 @@ export class StatsService {
       );
   }
 
-  public getBackupLasted(): Observable<BackupsLasted[]> {
+  public getBackupLatest(): Observable<BackupsLatest[]> {
     return this.k8sCustomObjectService
       .get<
         V1Backup,

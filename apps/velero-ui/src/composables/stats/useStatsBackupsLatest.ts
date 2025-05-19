@@ -2,17 +2,17 @@ import { inject } from 'vue';
 import type { AxiosInstance } from 'axios';
 import { ApiRoutes } from '@velero-ui-app/utils/constants.utils';
 import { useQuery } from '@tanstack/vue-query';
-import type { BackupsLasted } from '@velero-ui/shared-types';
+import type { BackupsLatest } from '@velero-ui/shared-types';
 
-export const useStatsBackupsLasted = () => {
+export const useStatsBackupsLatest = () => {
   const axiosInstance: AxiosInstance = inject('axios') as AxiosInstance;
 
-  return useQuery<BackupsLasted[]>({
-    queryKey: ['stats', 'backups-lasted'],
+  return useQuery<BackupsLatest[]>({
+    queryKey: ['stats', 'backups-latest'],
     queryFn: async () =>
       (
-        await axiosInstance.get<BackupsLasted[]>(
-          `${ApiRoutes.STATS}/backups/lasted`
+        await axiosInstance.get<BackupsLatest[]>(
+          `${ApiRoutes.STATS}/backups/latest`
         )
       ).data,
     refetchOnWindowFocus: false,

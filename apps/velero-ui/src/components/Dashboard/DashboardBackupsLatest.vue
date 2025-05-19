@@ -8,10 +8,10 @@
           <h1
             class="flex text-xl font-bold leading-none text-gray-900 sm:text-2xl dark:text-white"
           >
-            {{t('dashboard.stats.lasted.title')}}
+            {{t('dashboard.stats.latest.title')}}
           </h1>
           <h3 class="text-base font-light text-gray-500 dark:text-gray-400">
-            {{ t('dashboard.stats.lasted.description')}}
+            {{ t('dashboard.stats.latest.description')}}
           </h3>
         </div>
         <div class="flex mt-4 flex-col h-[200px] overflow-y-auto">
@@ -57,9 +57,9 @@
 import { useI18n } from 'vue-i18n';
 import { getSinceTime } from '@velero-ui-app/utils/date.utils';
 import { Pages } from '@velero-ui-app/utils/constants.utils';
-import { useStatsBackupsLasted } from '@velero-ui-app/composables/stats/useStatsBackupsLasted';
+import { useStatsBackupsLatest } from '@velero-ui-app/composables/stats/useStatsBackupsLatest';
 import { truncate } from '../../utils/string.utils';
 
 const { t } = useI18n();
-const { isFetching, data } = useStatsBackupsLasted();
+const { isFetching, data } = useStatsBackupsLatest();
 </script>

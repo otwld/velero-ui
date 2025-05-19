@@ -531,8 +531,8 @@
         "title": "Next Scheduled Backups",
         "description": "Over all schedules"
       },
-      "lasted": {
-        "title": "Lasted Backups",
+      "latest": {
+        "title": "Latest Backups",
         "description": "Over all backups"
       }
     }
