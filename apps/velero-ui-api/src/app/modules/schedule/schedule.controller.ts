@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, UseInterceptors } from '@nestjs/common';
 import { ScheduleService } from './schedule.service';
 import { Observable } from 'rxjs';
 import { Resources, V1Schedule, V1ScheduleList } from '@velero-ui/velero';
@@ -12,6 +12,7 @@ import { K8sCustomObjectController } from '@velero-ui-api/modules/k8s-custom-obj
 import { CheckPolicies } from '@velero-ui-api/shared/decorators/check-policies.decorator';
 import { AppAbility } from '@velero-ui-api/shared/modules/casl/casl-ability.factory';
 import { Action } from '@velero-ui/shared-types';
+import { CacheInterceptor } from "@nestjs/cache-manager";
 
 @Controller(Resources.SCHEDULE.route)
 @Subject(Resources.SCHEDULE.plural)
@@ -62,6 +63,7 @@ export class ScheduleController extends K8sCustomObjectController<
   }
 
   @Get('/:name/stats')
+  @UseInterceptors(CacheInterceptor)
   @CheckPolicies((ability: AppAbility) =>
     ability.can(Action.Read, Resources.SCHEDULE.plural)
   )

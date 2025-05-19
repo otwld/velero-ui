@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, UseInterceptors } from '@nestjs/common';
 import { StatsService } from '@velero-ui-api/modules/stats/stats.service';
 import { Observable } from 'rxjs';
 import {
@@ -9,8 +9,10 @@ import {
   RestoresStatusStats,
   RestoresSuccessRateStats,
 } from '@velero-ui/shared-types';
+import { CacheInterceptor } from "@nestjs/cache-manager";
 
 @Controller('stats')
+@UseInterceptors(CacheInterceptor)
 export class StatsController {
   constructor(private readonly statsService: StatsService) {}
 

@@ -7,7 +7,7 @@ import {
   Param,
   ParseBoolPipe,
   Post,
-  Query,
+  Query, UseInterceptors,
 } from '@nestjs/common';
 import { BackupService } from './backup.service';
 import { forkJoin, Observable } from 'rxjs';
@@ -28,6 +28,7 @@ import { Action } from '@velero-ui/shared-types';
 import { K8sCustomObjectController } from '@velero-ui-api/modules/k8s-custom-object/k8s-custom-object.controller';
 import { Subject } from '@velero-ui-api/shared/decorators/subject.decorator';
 import { K8sCustomObjectParams } from '@velero-ui-api/shared/dto/k8s-custom-object.dto';
+import { CacheInterceptor } from "@nestjs/cache-manager";
 
 @Controller(Resources.BACKUP.route)
 @Subject(Resources.BACKUP.plural)
@@ -64,6 +65,7 @@ export class BackupController extends K8sCustomObjectController<
   }
 
   @Get('/:name/logs')
+  @UseInterceptors(CacheInterceptor)
   @CheckPolicies((ability: AppAbility) =>
     ability.can(Action.Logs, Resources.BACKUP.plural)
   )

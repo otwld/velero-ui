@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, UseInterceptors } from '@nestjs/common';
 import { SettingsService } from './settings.service';
 import { Observable } from 'rxjs';
 import {
@@ -12,6 +12,7 @@ import { V1PluginInfo } from '@velero-ui/velero';
 import { AddVeleroPluginDTO } from '@velero-ui-api/shared/dto/settings.dto';
 import { CheckPolicies } from '@velero-ui-api/shared/decorators/check-policies.decorator';
 import { AppAbility } from '@velero-ui-api/shared/modules/casl/casl-ability.factory';
+import { CacheInterceptor } from "@nestjs/cache-manager";
 
 @Controller('/settings')
 export class SettingsController {
@@ -40,6 +41,7 @@ export class SettingsController {
   }
 
   @Get('/velero/plugins')
+  @UseInterceptors(CacheInterceptor)
   @CheckPolicies((ability: AppAbility) => ability.can(Action.Manage, 'all'))
   public getVeleroPlugins(): Observable<V1PluginInfo[]> {
     return this.settingsService.getPlugins();

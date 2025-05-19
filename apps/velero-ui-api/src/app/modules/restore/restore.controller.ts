@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseInterceptors } from '@nestjs/common';
 import { RestoreService } from './restore.service';
 import { Observable } from 'rxjs';
 import {
@@ -16,6 +16,7 @@ import { K8sCustomObjectController } from '@velero-ui-api/modules/k8s-custom-obj
 import { CheckPolicies } from "@velero-ui-api/shared/decorators/check-policies.decorator";
 import { AppAbility } from "@velero-ui-api/shared/modules/casl/casl-ability.factory";
 import { Action } from "@velero-ui/shared-types";
+import { CacheInterceptor } from "@nestjs/cache-manager";
 
 @Controller(Resources.RESTORE.route)
 @Subject(Resources.RESTORE.plural)
@@ -40,6 +41,7 @@ export class RestoreController extends K8sCustomObjectController<
   }
 
   @Get('/:name/logs')
+  @UseInterceptors(CacheInterceptor)
   @CheckPolicies((ability: AppAbility) =>
     ability.can(Action.Logs, Resources.RESTORE.plural)
   )

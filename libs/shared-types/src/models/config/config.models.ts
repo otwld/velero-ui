@@ -22,6 +22,7 @@ export interface AppConfig {
   sessionDuration?: string;
   namespace?: string;
   policyPath?: string;
+  cacheTTL: number;
 }
 
 export interface LDAPConfig {
