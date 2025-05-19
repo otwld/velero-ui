@@ -12,5 +12,6 @@ export default registerAs('app', (): AppConfig => {
     sessionDuration: process.env.AUTH_SESSION_DURATION || '1h',
     namespace: process.env.VELERO_UI_NAMESPACE || 'velero-ui',
     policyPath: process.env.POLICY_FILE_PATH,
+    cacheTTL: parseInt(process.env.CACHE_TTL , 10) || 60000,
   };
 });

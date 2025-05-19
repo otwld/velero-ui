@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, UseInterceptors } from '@nestjs/common';
 import { Observable, of } from 'rxjs';
 import type {
   AppConfig,
@@ -9,6 +9,7 @@ import type {
 import { ConfigService } from '@nestjs/config';
 import { Public } from '@velero-ui-api/shared/decorators/public.decorator';
 import { AuthService } from '@velero-ui-api/modules/auth/auth.service';
+import { CacheInterceptor, CacheTTL } from "@nestjs/cache-manager";
 
 @Public()
 @Controller('config')
@@ -19,6 +20,8 @@ export class AppConfigController {
   ) {}
 
   @Get()
+  @UseInterceptors(CacheInterceptor)
+  @CacheTTL(0)
   public getAppConfig(): Observable<Partial<AppPublicConfig>> {
     const { grafanaUrl, baseUrl } = this.configService.get('app') as AppConfig;
     const { enabled: basicAuthEnabled } = this.configService.get(

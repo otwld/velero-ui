@@ -38,6 +38,8 @@ import { PodVolumeRestoreModule } from '@velero-ui-api/modules/pod-volume-restor
 import { KubernetesModule, LoadFrom } from '@otwld/nestjs-kubernetes';
 import { K8S_CONNECTION } from '@velero-ui-api/shared/utils/k8s.utils';
 import { CaslModule } from './shared/modules/casl/casl.module';
+import { CacheModule } from "@nestjs/cache-manager";
+
 
 @Module({
   imports: [
@@ -56,6 +58,13 @@ import { CaslModule } from './shared/modules/casl/casl.module';
         oauth,
       ],
     }),
+    CacheModule.registerAsync({
+      isGlobal: true,
+      useFactory: (configService: ConfigService) => ({
+          ttl: configService.get<number>('app.cacheTTL'),
+      }),
+      inject: [ConfigService]
+    }),
     LoggerModule.forRoot(),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, 'static'),
@@ -69,8 +78,8 @@ import { CaslModule } from './shared/modules/casl/casl.module';
               ? {
                   loadFrom: LoadFrom.FILE,
                   opts: {
-                    file: configService.get('k8s.configPath'),
-                    context: configService.get('k8s.context'),
+                    file: configService.get<string>('k8s.configPath'),
+                    context: configService.get<string>('k8s.context'),
                   },
                 }
               : { loadFrom: LoadFrom.CLUSTER },
