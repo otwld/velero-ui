@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!error" class="h-full bg-gray-50 dark:bg-gray-900">
+  <div v-if="!error" class="min-h-full bg-gray-50 dark:bg-gray-900">
     <div class="grid grid-cols-1 px-4 xl:grid-cols-3 xl:gap-4">
       <div class="col-span-full xl:col-auto">
         <StorageLocationActions :location="data" />

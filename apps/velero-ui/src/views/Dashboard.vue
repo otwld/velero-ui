@@ -1,5 +1,5 @@
 <template>
-  <div class="h-full bg-gray-50 dark:bg-gray-900">
+  <div class="min-h-full bg-gray-50 dark:bg-gray-900">
     <div class="px-4 pb-2 flex justify-between items-center">
       <h1
         class="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white"
@@ -20,6 +20,18 @@
       </a>
     </div>
     <DashboardBasicStats />
+    <div class="px-4 my-2 flex justify-between items-center">
+      <h1
+        class="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white"
+      >
+        {{t('dashboard.stats.title.overall')}}
+      </h1>
+    </div>
+    <div class="grid grid-cols-1 px-4 xl:grid-cols-3 xl:gap-3">
+      <DashboardUnscheduledNamespaces />
+      <DashboardBackupsNextScheduled />
+      <DashboardBackupsLasted/>
+    </div>
     <div class="px-4 my-2 flex justify-between items-center">
       <h1
         class="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white"
@@ -76,8 +88,11 @@ import DashboardRestoresSuccessRateStats from '@velero-ui-app/components/Dashboa
 import { inject } from 'vue';
 import { Action, type AppConfig } from '@velero-ui/shared-types';
 import { useI18n } from 'vue-i18n';
-import { Resources } from "@velero-ui/velero";
-import { can } from "@velero-ui-app/utils/policy.utils";
+import { Resources } from '@velero-ui/velero';
+import { can } from '@velero-ui-app/utils/policy.utils';
+import DashboardUnscheduledNamespaces from '@velero-ui-app/components/Dashboard/DashboardUnscheduledNamespaces.vue';
+import DashboardBackupsNextScheduled from "@velero-ui-app/components/Dashboard/DashboardBackupsNextScheduled.vue";
+import DashboardBackupsLasted from "@velero-ui-app/components/Dashboard/DashboardBackupsLasted.vue";
 
 const { t } = useI18n();
 const { grafanaUrl } = inject('config') as AppConfig;

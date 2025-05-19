@@ -1,7 +1,7 @@
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { K8S_CONNECTION } from '@velero-ui-api/shared/utils/k8s.utils';
 import { KubeConfig, KubernetesObject } from '@kubernetes/client-node';
-import { concatMap, from, map, Observable, of } from 'rxjs';
+import { catchError, concatMap, filter, from, map, Observable, of } from 'rxjs';
 import {
   Resources,
   V1Backup,
@@ -110,10 +110,10 @@ export class BackupService {
     }
   }
 
-
   public delete(names: string[]) {
     return from(names).pipe(
-        concatMap((name: string) => this.deleteByName(name)))
+      concatMap((name: string) => this.deleteByName(name))
+    );
   }
 
   public deleteByName(name: string): Observable<V1DeleteBackupRequest> {
@@ -129,7 +129,49 @@ export class BackupService {
       )
     ).pipe(
       concatMap((body: KubernetesObject) =>
-        this.k8sCustomObjectService.create(Resources.DELETE_BACKUP_REQUEST.plural, body)
+        this.k8sCustomObjectService.create(
+          Resources.DELETE_BACKUP_REQUEST.plural,
+          body
+        )
+      )
+    );
+  }
+
+  public getContentSize(name: string): Observable<number> {
+    return from(
+      this.downloadRequestService.create({
+        name,
+        kind: V1DownloadTargetKind.BackupContents,
+      })
+    ).pipe(
+      filter((request: V1DownloadRequest) => !!request.status?.downloadURL),
+      concatMap((request: V1DownloadRequest) =>
+        this.httpService
+          .get(request.status.downloadURL, {
+            headers: {
+              Range: 'bytes=0-0',
+            },
+            responseType: 'arraybuffer',
+          })
+          .pipe(
+            map((response: AxiosResponse) =>
+              parseInt(response.headers['content-range']?.split('/')[1] || '0', 10)
+            ),
+            catchError(() => of(0)),
+            concatMap((size) =>
+              this.k8sCustomObjectService
+                .deleteByName(
+                  Resources.DOWNLOAD_REQUEST.plural,
+                  request.metadata.name
+                )
+                .pipe(
+                  catchError((err) => {
+                    return of(0);
+                  }),
+                  map(() => size)
+                )
+            )
+          )
       )
     );
   }

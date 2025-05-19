@@ -3,6 +3,7 @@ import { fileURLToPath, URL } from 'url';
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
+import * as process from 'node:process';
 
 export default defineConfig({
   root: __dirname,
@@ -20,7 +21,7 @@ export default defineConfig({
 
   resolve: {
     alias: [
-     {
+      {
         find: '@velero-ui-app',
         replacement: fileURLToPath(new URL('./src', import.meta.url)),
       },
@@ -30,6 +31,12 @@ export default defineConfig({
   define: {
     'import.meta.env.APP_VERSION': `"${
       JSON.parse(fs.readFileSync('./package.json').toString()).version
+    }"`,
+    'import.meta.env.DEFAULT_LANGUAGE': `"${
+      process.env['DEFAULT_LANGUAGE'] || 'en'
+    }"`,
+    'import.meta.env.DEFAULT_TIMEZONE': `"${
+      process.env['DEFAULT_TIMEZONE'] || 'Europe/London'
     }"`,
   },
 

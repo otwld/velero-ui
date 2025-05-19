@@ -1,5 +1,14 @@
 {
   "global": {
+    "date": {
+      "day": "no day | {count} day | {count} days",
+      "hour": "no hour | {count} hour | {count} hours",
+      "minute": "no minute | {count} minute | {count} minutes",
+      "second": "no second | {count} second | {count} seconds",
+      "expired": "Expired",
+      "in": "in {count}",
+      "ago": "{count} ago"
+    },
     "powered": "v{version} - Powered by",
     "nowAvailable": " is now available!",
     "backup": " no backup | backup | backups",
@@ -72,6 +81,15 @@
       },
       "learnMore": {
         "title": "Learn More"
+      },
+      "duration": {
+        "title": "Duration"
+      },
+      "items": {
+        "title": "Items"
+      },
+      "size": {
+        "title": "Size"
       }
     },
     "message": {
@@ -99,6 +117,7 @@
     "error": "Error",
     "noData": "No Data",
     "details": "Details",
+    "stats": "Stats",
     "status": "Status",
     "paused": "Paused",
     "unknown": "Unknown",
@@ -474,6 +493,7 @@
     "stats": {
       "title": {
         "global": "Global",
+        "overall": "Overall",
         "status": "Status",
         "successRate": "Success Rate"
       },
@@ -502,6 +522,18 @@
             "title": "See all restores"
           }
         }
+      },
+      "unscheduled": {
+        "title": "Unscheduled Namespaces",
+        "description": "Over all namespaces"
+      },
+      "nextScheduled": {
+        "title": "Next Scheduled Backups",
+        "description": "Over all schedules"
+      },
+      "lasted": {
+        "title": "Lasted Backups",
+        "description": "Over all backups"
       }
     }
   },

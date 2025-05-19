@@ -1,10 +1,11 @@
 <template>
-  <div v-if="!error" class="h-full bg-gray-50 dark:bg-gray-900">
+  <div v-if="!error" class="min-h-full bg-gray-50 dark:bg-gray-900">
     <div class="grid grid-cols-1 px-4 xl:grid-cols-3 xl:gap-4">
       <div class="col-span-full xl:col-auto">
         <ScheduleActions :schedule="data" />
         <ScheduleStatus :schedule="data" />
         <BackupDetails :spec="data?.spec.template" />
+        <ScheduleStats :name="router.currentRoute.value.params.name"/>
       </div>
       <div class="col-span-2">
         <Describe :data="data" />
@@ -30,6 +31,7 @@ import ResourceNotFound from '@velero-ui-app/components/ResourceNotFound.vue';
 import ScheduleBackupList from '@velero-ui-app/components/Schedule/ScheduleBackupList.vue';
 import { can } from '@velero-ui-app/utils/policy.utils';
 import { Action } from '@velero-ui/shared-types';
+import ScheduleStats from "@velero-ui-app/components/Schedule/ScheduleStats.vue";
 
 const router: Router = useRouter();
 

@@ -9,5 +9,6 @@ import { DownloadRequestModule } from '@velero-ui-api/modules/download-request/d
   imports: [HttpModule, DeleteBackupRequestModule, DownloadRequestModule],
   providers: [BackupService],
   controllers: [BackupController],
+  exports: [BackupService],
 })
 export class BackupModule {}
