@@ -1,5 +1,5 @@
 <template>
-  <div class="h-full bg-gray-50 dark:bg-gray-900">
+  <div class="min-h-full bg-gray-50 dark:bg-gray-900">
     <SettingsCluster />
     <div class="grid grid-cols-1 px-4 pt-4 xl:grid-cols-3 xl:gap-4">
       <div class="col-span-full xl:col-auto">

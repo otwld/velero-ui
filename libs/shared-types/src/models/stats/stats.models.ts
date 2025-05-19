@@ -26,3 +26,35 @@ export interface RestoresStatusStats {
 export interface RestoresSuccessRateStats {
   series: number[];
 }
+
+export interface BackupsNextScheduled {
+  name: string;
+  schedule: string;
+  nextRun: string;
+}
+
+export interface BackupsLatest {
+  name: string;
+  date: string;
+}
+
+export interface ScheduleStats {
+  duration: ScheduleSeriesStats;
+  size: ScheduleSeriesStats;
+  items: ScheduleSeriesStats;
+}
+
+export interface ScheduleSeriesStats {
+  series: ScheduleSeriesDataStats[];
+}
+
+export interface ScheduleSeriesDataStats {
+  name: string;
+  data: ScheduleDataStats[];
+}
+
+export interface ScheduleDataStats {
+  x: string;
+  y: number;
+}
+

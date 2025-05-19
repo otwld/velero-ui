@@ -28,3 +28,27 @@ export const registerConfig = async (app: App): Promise<void> => {
     throw e;
   }
 };
+
+export const getDefaultLocal = (): string => {
+  const lang: string = localStorage.getItem('language');
+  if (lang) {
+    return lang;
+  }
+
+  const defaultLang: string = import.meta.env.DEFAULT_LANGUAGE || 'en';
+  localStorage.setItem('language', defaultLang);
+  return defaultLang;
+};
+
+export const getDefaultTimezone = (): string => {
+  const timezone: string = localStorage.getItem('timezone');
+  if (timezone) {
+    return timezone;
+  }
+
+  const defaultTimezone =
+    import.meta.env.DEFAULT_TIMEZONE ||
+    Intl.DateTimeFormat().resolvedOptions().timeZone;
+  localStorage.setItem('timezone', defaultTimezone);
+  return defaultTimezone;
+};

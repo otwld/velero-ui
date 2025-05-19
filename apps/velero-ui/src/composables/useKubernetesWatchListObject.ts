@@ -134,7 +134,7 @@ export const useKubernetesWatchListObject = <
       },
     ],
     queryFn: async () => {
-      const response = await axiosInstance.get<T>(
+      const response = await axiosInstance.get<T & { total: number}>(
         `${resource.route}`,
         {
           params: {

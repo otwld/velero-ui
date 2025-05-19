@@ -2,6 +2,7 @@ import { Controller, Get } from '@nestjs/common';
 import { StatsService } from '@velero-ui-api/modules/stats/stats.service';
 import { Observable } from 'rxjs';
 import {
+  BackupsNextScheduled,
   BackupsStatusStats,
   BackupsSuccessRateStats,
   BasicStats,
@@ -36,5 +37,20 @@ export class StatsController {
   @Get('/restores/success-rate')
   public getRestoresSuccessRate(): Observable<RestoresSuccessRateStats> {
     return this.statsService.getRestoresSuccessRate();
+  }
+
+  @Get('/backups/next-scheduled')
+  public getNextScheduledBackups(): Observable<BackupsNextScheduled[]> {
+    return this.statsService.getNextScheduledBackups();
+  }
+
+  @Get('/backups/latest')
+  public getBackupLatest() {
+    return this.statsService.getBackupLatest();
+  }
+
+  @Get('/unscheduled-namespaces')
+  public getUnscheduledNamespaces(): Observable<string[]> {
+    return this.statsService.getUnscheduledNamespaces();
   }
 }

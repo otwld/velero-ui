@@ -18,7 +18,7 @@
               alt="Velero Logo"
               class="h-8 mr-3"
               src="/src/assets/images/velero.svg"
-            >
+            />
           </router-link>
         </div>
         <div class="flex items-center">
@@ -46,7 +46,7 @@
                       'dark:bg-gray-600': isCurrentLanguage(lang.code),
                     }"
                     class="w-full block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                    @click="switchLanguage(lang.code)"
+                    @click="appStore.setLanguage(lang.code)"
                   >
                     {{ lang.title }}
                   </button>
@@ -62,7 +62,11 @@
             <FontAwesomeIcon :icon="faSun" class="!w-5 !h-5" />
             <FontAwesomeIcon :icon="faMoon" class="hidden !w-5 !h-5" />
           </button> -->
-          <div v-if="!noAuthRequired" v-click-out="clickOutside" class="flex flex-col items-center">
+          <div
+            v-if="!noAuthRequired"
+            v-click-out="clickOutside"
+            class="flex flex-col items-center"
+          >
             <div class="flex items-center ml-3">
               <button
                 id="user-menu-button-2"
@@ -77,7 +81,7 @@
                   :src="user.picture"
                   alt="user photo"
                   class="w-8 h-8 rounded-full text-gray-900"
-                >
+                />
                 <FontAwesomeIcon
                   v-if="!user.picture"
                   :icon="faUserCircle"
@@ -144,15 +148,16 @@ import { useAppStore } from '@velero-ui-app/stores/app.store';
 import { useI18n } from 'vue-i18n';
 import { getLanguages } from '@velero-ui/i18n';
 import type { SocketIO } from '@velero-ui-app/plugins/socket.plugin';
-import { changeLocale } from '@formkit/vue'
+import { storeToRefs } from 'pinia';
 
-const { t, locale } = useI18n();
+const { t } = useI18n();
 const socket: SocketIO = inject('socketIo');
 
 const { noAuthRequired } = inject('config') as AppPublicConfig;
 
 const router: Router = useRouter();
 const appStore = useAppStore();
+const { language } = storeToRefs(appStore);
 
 const isLoading: Ref<boolean> = ref(false);
 const hiddenDropdown = ref(true);
@@ -179,12 +184,6 @@ const logout = async () => {
   }
 };
 
-const switchLanguage = (code: string) => {
-  localStorage.setItem('language', code);
-  changeLocale(code);
-  locale.value = code;
-};
-
 const isCurrentLanguage = (lang: string) =>
-  localStorage.getItem('language') === lang;
+  language.value === lang;
 </script>

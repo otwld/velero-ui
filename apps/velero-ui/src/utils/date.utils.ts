@@ -1,47 +1,59 @@
-export const getRemainingTime = (timeStamp: string): string => {
-  const total = Date.parse(timeStamp) - Date.parse(new Date());
-  const seconds = Math.floor((total / 1000) % 60);
-  const minutes = Math.floor((total / 1000 / 60) % 60);
-  const hours = Math.floor((total / (1000 * 60 * 60)) % 24);
-  const days = Math.floor(total / (1000 * 60 * 60 * 24));
+import {
+  getDefaultLocal,
+  getDefaultTimezone,
+} from '@velero-ui-app/utils/config.utils';
+import { i18n } from '@velero-ui-app/plugins/i18n.plugin';
 
-  let expireIn = '';
+export const getRemainingTime = (timeStamp: string): string => {
+  const total = Date.parse(timeStamp) - Date.parse(new Date().toISOString());
+
+  return getTime(total) || i18n.global.t('global.date.expired');
+};
+
+export const getSinceTime = (timeStamp: string): string => {
+  const total = Date.parse(new Date().toISOString()) - Date.parse(timeStamp);
+
+  return getTime(total) || i18n.global.t('global.date.expired');
+};
+
+export const getTime = (time: number): string | null => {
+  const seconds = Math.floor((time / 1000) % 60);
+  const minutes = Math.floor((time / 1000 / 60) % 60);
+  const hours = Math.floor((time / (1000 * 60 * 60)) % 24);
+  const days = Math.floor(time / (1000 * 60 * 60 * 24));
 
   if (days > 0) {
-    expireIn += `${days}d`;
+    return i18n.global.t('global.date.day', { count: days });
   }
 
   if (hours > 0) {
-    expireIn += `${hours}h`;
+    return i18n.global.t('global.date.hour', { count: hours });
   }
 
   if (minutes > 0) {
-    expireIn += `${minutes}m`;
+    return i18n.global.t('global.date.minute', { count: minutes });
   }
 
   if (seconds > 0) {
-    expireIn += `${seconds}s`;
+    return i18n.global.t('global.date.second', { count: seconds });
   }
 
-  if (total <= 0 || !total) {
-    expireIn = 'Expired';
-  }
-
-  return expireIn;
-};
+  return null;
+}
 
 export const convertTimestampToDate = (timeStamp: string) => {
   const date: Date = new Date(timeStamp);
-  return date.getTime() ? date.toLocaleString() : '';
+  return date.getTime()
+    ? date.toLocaleString(getDefaultLocal(), { timeZone: getDefaultTimezone() })
+    : '';
 };
 
 export const parseTimeString = (
-  input: string,
+  input: string
 ): {
   value: number;
   unit: string;
 } | null => {
-
   if (!input) {
     return null;
   }
@@ -57,4 +69,19 @@ export const parseTimeString = (
     value: parseInt(value, 10),
     unit,
   };
+};
+
+export const durationToLabel = (duration: number): string => {
+  const mins: number = Math.floor(duration / 60);
+  const secs: number = duration % 60;
+  let label = '';
+
+  if (mins) {
+    label += `${mins}m`;
+  }
+
+  if (secs) {
+    label += `${secs}s`;
+  }
+  return label;
 };

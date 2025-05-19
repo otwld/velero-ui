@@ -62,6 +62,7 @@
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
     "clsx": "^2.1.1",
+    "cron-parser": "^5.2.0",
     "cron-validate": "^1.5.2",
     "docusaurus-lunr-search": "^3.6.0",
     "flowbite": "^3.1.2",

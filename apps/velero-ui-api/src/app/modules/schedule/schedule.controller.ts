@@ -1,4 +1,4 @@
-import { Body, Controller, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
 import { ScheduleService } from './schedule.service';
 import { Observable } from 'rxjs';
 import { Resources, V1Schedule, V1ScheduleList } from '@velero-ui/velero';
@@ -59,5 +59,13 @@ export class ScheduleController extends K8sCustomObjectController<
   )
   public unpause(@Param('name') name: string): Observable<V1Schedule> {
     return this.scheduleService.togglePause(name, false);
+  }
+
+  @Get('/:name/stats')
+  @CheckPolicies((ability: AppAbility) =>
+    ability.can(Action.Read, Resources.SCHEDULE.plural)
+  )
+  public stats(@Param('name') name: string) {
+    return this.scheduleService.stats(name);
   }
 }

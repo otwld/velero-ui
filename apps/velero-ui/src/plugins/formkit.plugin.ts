@@ -3,6 +3,7 @@ import { defaultConfig, type DefaultConfigOptions, plugin } from '@formkit/vue';
 import { en, fr } from '@formkit/i18n';
 import { default as Cron } from 'cron-validate';
 import { REGEX } from '@velero-ui/shared-types';
+import { getDefaultLocal } from "@velero-ui-app/utils/config.utils";
 
 const config: DefaultConfigOptions = {
   rules: {
@@ -45,7 +46,7 @@ const config: DefaultConfigOptions = {
     },
   },
   inputs: {},
-  locale: localStorage.getItem('language') || 'en',
+  locale: getDefaultLocal(),
 };
 
 export const FormKit = {
