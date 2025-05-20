@@ -13,7 +13,7 @@ export const getRemainingTime = (timeStamp: string): string => {
 export const getSinceTime = (timeStamp: string): string => {
   const total = Date.parse(new Date().toISOString()) - Date.parse(timeStamp);
 
-  return getTime(total) || i18n.global.t('global.date.expired');
+  return getTime(total) || i18n.global.t('global.date.now');
 };
 
 export const getTime = (time: number): string | null => {

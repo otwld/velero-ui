@@ -1,131 +1,102 @@
 <template>
-  <div
-    class="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800"
+  <ResourceActions
+    :icon="faClock"
+    :name="schedule?.metadata?.name"
+    :uid="schedule?.metadata?.uid"
   >
-    <div
-      class="items-center sm:flex xl:block 2xl:flex sm:space-x-4 xl:space-x-0 2xl:space-x-4"
-    >
-      <FontAwesomeIcon
-        :icon="faClock"
-        class="!w-16 !h-16 mr-2 dark:text-white"
-      />
-
-      <div class="pl-3">
-        <h3
-          v-if="schedule"
-          class="mb-1 text-lg font-bold text-gray-900 dark:text-white"
-        >
-          {{ schedule?.metadata?.name }}
-        </h3>
-        <div
-          v-else
-          class="h-2.5 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-48 mb-4"
+    <template #buttons>
+      <button
+        v-if="can(Action.Update, Resources.SCHEDULE.plural)"
+        :class="{ 'cursor-not-allowed': isEditing || !schedule }"
+        :disabled="isEditing || !schedule"
+        class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:ring-teal-300 dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
+        type="button"
+        @click="showModalEdit = !showModalEdit"
+      >
+        <FontAwesomeIcon
+          v-if="isEditing"
+          :icon="faCircleNotch"
+          class="!w-4 !h-4 animate-spin mr-2"
         />
-        <div
-          v-if="schedule"
-          class="mb-4 text-xs text-gray-500 dark:text-gray-400"
-        >
-          {{ schedule?.metadata?.uid }}
-        </div>
-        <div
-          v-else
-          class="h-1.5 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-48 mb-4"
+        <FontAwesomeIcon
+          v-if="!isEditing"
+          :icon="faPen"
+          class="!w-4 !h-4 mr-2"
         />
-        <div v-if="schedule" class="flex items-center gap-x-4 gap-y-2">
-          <button
-            v-if="can(Action.Update, Resources.SCHEDULE.plural)"
-            :class="{ 'cursor-not-allowed': isEditing || !schedule }"
-            :disabled="isEditing || !schedule"
-            class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:ring-teal-300 dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
-            type="button"
-            @click="showModalEdit = !showModalEdit"
-          >
-            <FontAwesomeIcon
-              v-if="isEditing"
-              :icon="faCircleNotch"
-              class="!w-4 !h-4 animate-spin mr-2"
-            />
-            <FontAwesomeIcon
-              v-if="!isEditing"
-              :icon="faPen"
-              class="!w-4 !h-4 mr-2"
-            />
-            {{ t('global.button.edit.title') }}
-          </button>
-          <button
-            v-if="
-              can(Action.Update, Resources.SCHEDULE.plural) &&
-              schedule?.status?.phase !== V1SchedulePhase.FailedValidation &&
-              schedule?.spec?.paused
-            "
-            :disabled="togglePauseLoading"
-            class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
-            type="button"
-            @click="togglePause(false)"
-          >
-            <FontAwesomeIcon
-              v-if="!togglePauseLoading"
-              :icon="faPlay"
-              class="!w-4 !h-4 mr-2"
-            />
-            <FontAwesomeIcon
-              v-if="togglePauseLoading"
-              :icon="faCircleNotch"
-              class="!w-4 !h-4 animate-spin mr-2"
-            />
-            {{ t('global.button.enable.title') }}
-          </button>
-          <button
-            v-if="
-              can(Action.Update, Resources.SCHEDULE.plural) &&
-              schedule?.status?.phase !== V1SchedulePhase.FailedValidation &&
-              !schedule?.spec?.paused
-            "
-            :disabled="togglePauseLoading"
-            class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-            type="button"
-            @click="togglePause(true)"
-          >
-            <FontAwesomeIcon
-              v-if="!togglePauseLoading"
-              :icon="faPause"
-              class="!w-4 !h-4 mr-2"
-            />
-            <FontAwesomeIcon
-              v-if="togglePauseLoading"
-              :icon="faCircleNotch"
-              class="!w-4 !h-4 animate-spin mr-2"
-            />
-            {{ t('global.button.pause.title') }}
-          </button>
-          <button
-            v-if="can(Action.Delete, Resources.SCHEDULE.plural)"
-            :class="{ 'cursor-not-allowed': isDeleting || !schedule }"
-            :disabled="isDeleting || !schedule"
-            class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-red-600 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"
-            type="button"
-            @click="showModalDelete = !showModalDelete"
-          >
-            <FontAwesomeIcon
-              v-if="isDeleting"
-              :icon="faCircleNotch"
-              class="!w-4 !h-4 animate-spin mr-2"
-            />
-            <FontAwesomeIcon
-              v-if="!isDeleting"
-              :icon="faTrashCan"
-              class="!w-4 !h-4 mr-2"
-            />
-            {{
-              isDeleting
-                ? t('global.button.delete.loading')
-                : t('global.button.delete.title')
-            }}
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
+        {{ t('global.button.edit.title') }}
+      </button>
+      <button
+        v-if="
+          can(Action.Update, Resources.SCHEDULE.plural) &&
+          schedule?.status?.phase !== V1SchedulePhase.FailedValidation &&
+          schedule?.spec?.paused
+        "
+        :disabled="togglePauseLoading"
+        class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+        type="button"
+        @click="togglePause(false)"
+      >
+        <FontAwesomeIcon
+          v-if="!togglePauseLoading"
+          :icon="faPlay"
+          class="!w-4 !h-4 mr-2"
+        />
+        <FontAwesomeIcon
+          v-if="togglePauseLoading"
+          :icon="faCircleNotch"
+          class="!w-4 !h-4 animate-spin mr-2"
+        />
+        {{ t('global.button.enable.title') }}
+      </button>
+      <button
+        v-if="
+          can(Action.Update, Resources.SCHEDULE.plural) &&
+          schedule?.status?.phase !== V1SchedulePhase.FailedValidation &&
+          !schedule?.spec?.paused
+        "
+        :disabled="togglePauseLoading"
+        class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+        type="button"
+        @click="togglePause(true)"
+      >
+        <FontAwesomeIcon
+          v-if="!togglePauseLoading"
+          :icon="faPause"
+          class="!w-4 !h-4 mr-2"
+        />
+        <FontAwesomeIcon
+          v-if="togglePauseLoading"
+          :icon="faCircleNotch"
+          class="!w-4 !h-4 animate-spin mr-2"
+        />
+        {{ t('global.button.pause.title') }}
+      </button>
+      <button
+        v-if="can(Action.Delete, Resources.SCHEDULE.plural)"
+        :class="{ 'cursor-not-allowed': isDeleting || !schedule }"
+        :disabled="isDeleting || !schedule"
+        class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-red-600 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"
+        type="button"
+        @click="showModalDelete = !showModalDelete"
+      >
+        <FontAwesomeIcon
+          v-if="isDeleting"
+          :icon="faCircleNotch"
+          class="!w-4 !h-4 animate-spin mr-2"
+        />
+        <FontAwesomeIcon
+          v-if="!isDeleting"
+          :icon="faTrashCan"
+          class="!w-4 !h-4 mr-2"
+        />
+        {{
+          isDeleting
+            ? t('global.button.delete.loading')
+            : t('global.button.delete.title')
+        }}
+      </button>
+    </template>
+  </ResourceActions>
   <ModalConfirmation
     v-if="showModalDelete"
     :icon="faExclamationCircle"
@@ -188,6 +159,7 @@ import ScheduleFormEdit from '@velero-ui-app/components/Schedule/forms/ScheduleF
 import { useKubernetesEditObject } from '@velero-ui-app/composables/useKubernetesEditObject';
 import { can } from '@velero-ui-app/utils/policy.utils';
 import { Action } from '@velero-ui/shared-types';
+import ResourceActions from '@velero-ui-app/components/Resource/ResourceActions.vue';
 
 const { t } = useI18n();
 const props = defineProps({
@@ -210,3 +182,4 @@ const { isPending: isEditing } = useKubernetesEditObject(
   props.schedule?.metadata.name
 );
 </script>
+<script lang="ts" setup></script>

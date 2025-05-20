@@ -1,19 +1,6 @@
 <template>
-  <div
-    class="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800"
-  >
-    <div class="flex items-center flex-wrap gap-x-4">
-      <h3 class="text-xl font-semibold dark:text-white">
-        {{ t('global.status') }}
-      </h3>
-      <div
-        v-if="!schedule"
-        class="h-2 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-24"
-      />
-      <div
-        v-if="!schedule"
-        class="h-2 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-24"
-      />
+  <ResourceStatus :is-loading="!schedule">
+    <template #badges>
       <ScheduleStatusPhaseBadge :status="schedule?.status?.phase" />
       <span
         v-if="schedule?.spec?.paused"
@@ -29,24 +16,26 @@
         <FontAwesomeIcon :icon="faCalendar" class="!w-3 !h-3 mr-1.5" />
         {{ schedule.spec.schedule }}
       </span>
-    </div>
-    <div v-if="schedule?.status?.lastBackup" class="mt-4 flex flex-col">
-      <span class="text-base font-medium text-gray-900 dark:text-white">{{
-        t('resource.status.lastBackup')
-      }}</span>
-      <i class="mt-1 text-xs text-gray-500 dark:text-gray-400">{{
-        convertTimestampToDate(schedule.status.lastBackup)
-      }}</i>
-    </div>
-    <div v-if="schedule?.status?.lastSkipped" class="mt-4 flex flex-col">
-      <span class="text-base font-medium text-gray-900 dark:text-white">{{
-        t('resource.status.lastSkipped')
-      }}</span>
-      <i class="mt-1 text-xs text-gray-500 dark:text-gray-400">{{
-        convertTimestampToDate(schedule.status.lastSkipped)
-      }}</i>
-    </div>
-  </div>
+    </template>
+    <template #content>
+      <div v-if="schedule?.status?.lastBackup" class="mt-4 flex flex-col">
+        <span class="text-base font-medium text-gray-900 dark:text-white">{{
+          t('resource.status.lastBackup')
+        }}</span>
+        <i class="mt-1 text-xs text-gray-500 dark:text-gray-400">{{
+          convertTimestampToDate(schedule.status.lastBackup)
+        }}</i>
+      </div>
+      <div v-if="schedule?.status?.lastSkipped" class="mt-4 flex flex-col">
+        <span class="text-base font-medium text-gray-900 dark:text-white">{{
+          t('resource.status.lastSkipped')
+        }}</span>
+        <i class="mt-1 text-xs text-gray-500 dark:text-gray-400">{{
+          convertTimestampToDate(schedule.status.lastSkipped)
+        }}</i>
+      </div>
+    </template>
+  </ResourceStatus>
 </template>
 
 <script lang="ts" setup>
@@ -60,6 +49,7 @@ import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
 defineProps({
-  schedule: {type: Object as PropType<V1Schedule>, required: true },
+  schedule: { type: Object as PropType<V1Schedule>, required: true },
 });
 </script>
+<script lang="ts" setup></script>

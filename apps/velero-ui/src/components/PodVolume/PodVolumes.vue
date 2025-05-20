@@ -7,9 +7,10 @@
         <h3 class="text-xl font-semibold dark:text-white">
           {{ t('podVolumes.title') }}
         </h3>
-        <div
+        <Skeleton
           v-if="data && data.length === 0 && isFetching"
-          class="ml-4 h-2 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-12"
+          class="ml-4"
+          width="12"
         />
         <span
           v-else
@@ -18,9 +19,10 @@
           <FontAwesomeIcon :icon="faCubes" class="!w-3 !h-3 mr-1.5" />
           {{ data.length }}
         </span>
-        <div
+        <Skeleton
           v-if="data && data.length === 0 && isFetching"
-          class="ml-4 h-2 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-12"
+          class="ml-4"
+          width="12"
         />
         <span
           v-else
@@ -33,15 +35,9 @@
       <ul class="overflow-auto mt-2 pr-2 max-h-[300px]">
         <template v-if="data && data.length === 0 && isFetching">
           <div v-for="index of 3" :key="index" class="py-2">
-            <div
-              class="ml-4 h-3 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-96"
-            />
-            <div
-              class="ml-4 mt-2 h-2 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-24"
-            />
-            <div
-              class="ml-4 mt-2 h-3 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-48"
-            />
+            <Skeleton class="ml-4" height="3" width="96" />
+            <Skeleton class="ml-4 mt-2" width="24" />
+            <Skeleton class="ml-4 mt-2" height="3" width="48" />
           </div>
         </template>
         <PodVolumeLine
@@ -71,6 +67,7 @@ import PodVolumeLine from '@velero-ui-app/components/PodVolume/PodVolumeShortLin
 import { faCubes, faSquareBinary } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { convertBytes } from '@velero-ui-app/utils/string.utils';
+import Skeleton from '@velero-ui-app/components/Skeleton.vue';
 
 const { t } = useI18n();
 const router: Router = useRouter();

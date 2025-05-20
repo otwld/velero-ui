@@ -1,21 +1,18 @@
 <template>
-  <div v-if="!error" class="min-h-full bg-gray-50 dark:bg-gray-900">
-    <div class="grid grid-cols-1 px-4 xl:grid-cols-3 xl:gap-4">
-      <div class="col-span-full xl:col-auto">
-        <PodVolumeActions :pod-volume="data" :type="type" />
-        <PodVolumeStatus :pod-volume="data" />
-        <PodVolumeDetails :spec="data?.spec" />
-      </div>
-      <div class="col-span-2">
-        <Describe :data="data" />
-      </div>
-    </div>
-  </div>
-  <ResourceNotFound v-if="error" :page="Pages.POD_VOLUME_BACKUPS" />
+  <Resource :error="!!error" :page="Pages.POD_VOLUME_BACKUPS">
+    <template #left>
+      <PodVolumeActions :pod-volume="data" :type="type" />
+      <PodVolumeStatus :pod-volume="data" />
+      <PodVolumeDetails :spec="data?.spec" />
+    </template>
+    <template #right>
+      <ResourceManifest :data="data" />
+    </template>
+  </Resource>
 </template>
 
 <script lang="ts" setup>
-import Describe from '@velero-ui-app/components/Describe.vue';
+import ResourceManifest from '@velero-ui-app/components/Resource/ResourceManifest.vue';
 import type { Router } from 'vue-router';
 import { useRouter } from 'vue-router';
 import {
@@ -26,10 +23,10 @@ import {
 import { useKubernetesWatchObject } from '@velero-ui-app/composables/useKubernetesWatchObject';
 import { onBeforeMount, onBeforeUnmount } from 'vue';
 import { Pages } from '@velero-ui-app/utils/constants.utils';
-import ResourceNotFound from '@velero-ui-app/components/ResourceNotFound.vue';
 import PodVolumeActions from '@velero-ui-app/components/PodVolume/PodVolumeActions.vue';
 import PodVolumeStatus from '@velero-ui-app/components/PodVolume/PodVolumeStatus.vue';
 import PodVolumeDetails from '@velero-ui-app/components/PodVolume/PodVolumeDetails.vue';
+import Resource from '@velero-ui-app/components/Resource/Resource.vue';
 
 const router: Router = useRouter();
 

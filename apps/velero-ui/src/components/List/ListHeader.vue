@@ -28,7 +28,7 @@
                     :icon="faCircleNotch"
                     class="absolute right-[10px] top-[14px] !w-4 !h-4 animate-spin text-gray-400"
                   />
-                  <button class="absolute right-[10px] top-[10px] cursor-pointer" type="button">
+                  <button class="absolute right-[10px] top-[10px] cursor-pointer dark:text-white" type="button">
                     <FontAwesomeIcon
                       v-if="searchContext.value && !isFetching"
                       :icon="faXmark"

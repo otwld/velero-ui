@@ -16,10 +16,11 @@
         </div>
         <div class="flex mt-4 flex-col h-[200px] overflow-y-auto">
           <ul v-if="isFetching && data.length === 0">
-            <li
+            <Skeleton
               v-for="(i, index) of 8"
               :key="`line-${index}`"
-              class="h-2 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-72 mb-4"
+              class="mb-4"
+              width="72"
             />
           </ul>
           <ul
@@ -63,6 +64,7 @@ import { useStatsBackupsNextScheduled } from '@velero-ui-app/composables/stats/u
 import { getRemainingTime } from '@velero-ui-app/utils/date.utils';
 import { Pages } from '@velero-ui-app/utils/constants.utils';
 import { truncate } from '@velero-ui-app/utils/string.utils';
+import Skeleton from "@velero-ui-app/components/Skeleton.vue";
 
 const { t } = useI18n();
 const { isFetching, data } = useStatsBackupsNextScheduled();

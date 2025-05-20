@@ -7,7 +7,8 @@
       "second": "no second | {count} second | {count} seconds",
       "expired": "Expired",
       "in": "in {count}",
-      "ago": "{count} ago"
+      "ago": "{count} ago",
+      "now": "now"
     },
     "powered": "v{version} - Powered by",
     "nowAvailable": " is now available!",
@@ -90,6 +91,9 @@
       },
       "size": {
         "title": "Size"
+      },
+      "copy": {
+        "title": "Copy"
       }
     },
     "message": {
@@ -103,6 +107,7 @@
         "policyAccessDenied": "Access denied by policy."
       },
       "success": {
+        "copied": "Copied to clipboard!",
         "created": "{resource} created.",
         "edited": "{resource} edited.",
         "deleted": "{resource} deleted.",
@@ -149,7 +154,8 @@
   "manifest": {
     "title": "Manifest",
     "text": {
-      "loading": "Retrieving manifest..."
+      "loading": "Retrieving manifest...",
+      "noResult": "No manifest to show!"
     }
   },
   "log": {

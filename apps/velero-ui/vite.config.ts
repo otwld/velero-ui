@@ -45,6 +45,7 @@ export default defineConfig({
   build: {
     outDir: '../../dist/apps/velero-ui/static',
     reportCompressedSize: true,
+    minify: "esbuild",
     commonjsOptions: {
       transformMixedEsModules: true,
     },

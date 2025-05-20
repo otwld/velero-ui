@@ -7,10 +7,7 @@
         class="flex items-center text-sm font-normal text-gray-500 dark:text-gray-400"
       >
         <p>{{ t('list.text.showing') }}</p>
-        <div
-          v-if="isFetching"
-          class="h-2.5 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-4 ml-1.5"
-        />
+        <Skeleton v-if="isFetching" class="ml-1.5" height="2.5" width="4"/>
         <span
           v-else
           class="ml-1.5 font-semibold text-gray-900 dark:text-white"
@@ -20,10 +17,7 @@
         <p class="ml-1.5 ">
           {{ t('list.text.of') }}
         </p>
-        <div
-          v-if="isFetching"
-          class="h-2.5 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-4 mx-1.5"
-        />
+        <Skeleton v-if="isFetching" class="mx-1.5" height="2.5" width="4"/>
         <span
           v-else
           class="mx-1.5 font-semibold text-gray-900 dark:text-white"
@@ -91,6 +85,7 @@ import { useListStore } from '../../stores/list.store';
 import { storeToRefs } from 'pinia';
 import { useI18n } from 'vue-i18n';
 import { useKubernetesWatchListObject } from '@velero-ui-app/composables/useKubernetesWatchListObject';
+import Skeleton from "@velero-ui-app/components/Skeleton.vue";
 
 const { t } = useI18n();
 

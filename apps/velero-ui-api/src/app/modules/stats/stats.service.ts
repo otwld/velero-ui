@@ -227,13 +227,15 @@ export class StatsService {
       .get<
         V1Backup,
         V1BackupList
-      >(Resources.BACKUP.plural, 0, 8, undefined, 'Date', false)
+      >(Resources.BACKUP.plural, 0, 8, undefined, 'list.header.date', false)
       .pipe(
         map((backupList: V1BackupList) =>
-          backupList.items.map((backup: V1Backup) => ({
-            name: backup.metadata.name,
-            date: backup.status.completionTimestamp,
-          }))
+          backupList.items
+            .map((backup: V1Backup) => ({
+              name: backup.metadata.name,
+              date: backup.status.completionTimestamp,
+            }))
+
         )
       );
   }

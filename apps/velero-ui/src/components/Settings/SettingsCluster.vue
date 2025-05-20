@@ -39,17 +39,11 @@
           </h3>
           <div class="mb-1 text-sm text-gray-500 dark:text-gray-400">
             {{ data?.server }}
-            <div
-              v-if="!data"
-              class="h-2.5 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-48 mb-5"
-            />
+            <Skeleton v-if="!data" class="mb-5" height="2.5" width="48" />
           </div>
           <div class="mb-4 text-xs text-gray-500 dark:text-gray-400">
             {{ data?.version }}
-            <div
-              v-if="!data"
-              class="h-2 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-72 mb-4"
-            />
+            <Skeleton v-if="!data" class="mb-4" width="72" />
           </div>
           <div class="flex items-center space-x-4" />
         </div>
@@ -63,6 +57,7 @@ import { inject } from 'vue';
 import { useSettingsCluster } from '@velero-ui-app/composables/settings/useSettingsCluster';
 import { useI18n } from 'vue-i18n';
 import type { SocketIO } from '@velero-ui-app/plugins/socket.plugin';
+import Skeleton from '@velero-ui-app/components/Skeleton.vue';
 
 const socket: SocketIO = inject('socketIo');
 

@@ -1,4 +1,6 @@
-export const dropdownDirective = {
+import type { Directive } from "vue";
+
+export const dropdownDirective: Directive = {
   mounted: (el, binding) => {
     el.hidden = true;
     el.targetElement = document.getElementById(binding.value);

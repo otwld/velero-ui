@@ -1,94 +1,58 @@
 <template>
-  <div
-    class="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800"
+  <ResourceActions
+    :icon="faServer"
+    :name="location?.metadata?.name"
+    :uid="location?.metadata?.uid"
   >
-    <div
-      class="items-center sm:flex xl:block 2xl:flex sm:space-x-4 xl:space-x-0 2xl:space-x-4"
-    >
-      <FontAwesomeIcon
-        :icon="faServer"
-        class="!w-16 !h-16 mr-2 dark:text-white"
-      />
-
-      <div class="pl-3">
-        <h3
-          v-if="location"
-          class="mb-1 text-lg font-bold text-gray-900 dark:text-white"
-        >
-          {{ location?.metadata?.name }}
-        </h3>
-        <div
-          v-else
-          class="h-2.5 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-48 mb-4"
+    <template #buttons>
+      <button
+        v-if="can(Action.Update, Resources.BACKUP_STORAGE_LOCATION.plural)"
+        :class="{ 'cursor-not-allowed': isEditing || !location }"
+        :disabled="isEditing || !location"
+        class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:ring-teal-300 dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
+        type="button"
+        @click="showModalEdit = !showModalEdit"
+      >
+        <FontAwesomeIcon
+          v-if="isEditing"
+          :icon="faCircleNotch"
+          class="!w-4 !h-4 animate-spin mr-2"
         />
-        <div
-          v-if="location"
-          class="mb-4 text-xs text-gray-500 dark:text-gray-400"
-        >
-          {{ location?.metadata?.uid }}
-        </div>
-        <div
-          v-else
-          class="h-1.5 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-48 mb-4"
+        <FontAwesomeIcon
+          v-if="!isEditing"
+          :icon="faPen"
+          class="!w-4 !h-4 mr-2"
         />
-        <div
-          v-if="location"
-          class="flex items-center gap-x-4 gap-y-2"
-        >
-          <button
-            v-if="can(Action.Update, Resources.BACKUP_STORAGE_LOCATION.plural)"
-            :class="{ 'cursor-not-allowed': isEditing || !location }"
-            :disabled="isEditing || !location"
-            class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:ring-teal-300 dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
-            type="button"
-            @click="showModalEdit = !showModalEdit"
-          >
-            <FontAwesomeIcon
-              v-if="isEditing"
-              :icon="faCircleNotch"
-              class="!w-4 !h-4 animate-spin mr-2"
-            />
-            <FontAwesomeIcon
-              v-if="!isEditing"
-              :icon="faPen"
-              class="!w-4 !h-4 mr-2"
-            />
-            {{ t('global.button.edit.title') }}
-          </button>
-          <button
-            v-if="can(Action.Delete, Resources.BACKUP_STORAGE_LOCATION.plural)"
-            :class="{ 'cursor-not-allowed': isDeleting || !location }"
-            :disabled="isDeleting || !location"
-            class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-red-600 hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"
-            type="button"
-            @click="showModalDelete = !showModalDelete"
-          >
-            <FontAwesomeIcon
-              v-if="isDeleting"
-              :icon="faCircleNotch"
-              class="!w-4 !h-4 animate-spin mr-2"
-            />
-            <FontAwesomeIcon
-              v-else
-              :icon="faTrashCan"
-              class="!w-4 !h-4 mr-2"
-            />
-            {{
-              isDeleting
-                ? t('global.button.delete.loading')
-                : t('global.button.delete.title')
-            }}
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
+        {{ t('global.button.edit.title') }}
+      </button>
+      <button
+        v-if="can(Action.Delete, Resources.BACKUP_STORAGE_LOCATION.plural)"
+        :class="{ 'cursor-not-allowed': isDeleting || !location }"
+        :disabled="isDeleting || !location"
+        class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-red-600 hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"
+        type="button"
+        @click="showModalDelete = !showModalDelete"
+      >
+        <FontAwesomeIcon
+          v-if="isDeleting"
+          :icon="faCircleNotch"
+          class="!w-4 !h-4 animate-spin mr-2"
+        />
+        <FontAwesomeIcon v-else :icon="faTrashCan" class="!w-4 !h-4 mr-2" />
+        {{
+          isDeleting
+            ? t('global.button.delete.loading')
+            : t('global.button.delete.title')
+        }}
+      </button>
+    </template>
+  </ResourceActions>
   <ModalConfirmation
     v-if="showModalDelete"
     :icon="faExclamationCircle"
     :text="t('modal.text.confirmation.delete')"
     @on-close="showModalDelete = false"
-    @on-confirm="remove({ name:location.metadata.name })"
+    @on-confirm="remove({ name: location.metadata.name })"
   >
     <template #content>
       <div class="flex justify-center">
@@ -109,7 +73,9 @@
     <template #header>
       <h3 class="text-lg text-gray-500 dark:text-gray-400">
         {{ t('modal.text.title.editBackupStorageLocation') }}
-        <span class="font-normal text-sm ml-2">{{ location?.metadata?.name }}</span>
+        <span class="font-normal text-sm ml-2">{{
+          location?.metadata?.name
+        }}</span>
       </h3>
     </template>
     <template #content>
@@ -137,23 +103,28 @@ import { useI18n } from 'vue-i18n';
 import VModal from '@velero-ui-app/components/Modals/VModal.vue';
 import StorageLocationFormEdit from '@velero-ui-app/components/StorageLocation/forms/StorageLocationFormEdit.vue';
 import { useKubernetesEditObject } from '@velero-ui-app/composables/useKubernetesEditObject';
-import { can } from "@velero-ui-app/utils/policy.utils";
-import { Action } from "@velero-ui/shared-types";
+import { can } from '@velero-ui-app/utils/policy.utils';
+import { Action } from '@velero-ui/shared-types';
+import ResourceActions from '@velero-ui-app/components/Resource/ResourceActions.vue';
 
 const { t } = useI18n();
 const props = defineProps({
-  location: {type: Object as PropType<V1BackupStorageLocation>, required: true },
+  location: {
+    type: Object as PropType<V1BackupStorageLocation>,
+    required: true,
+  },
 });
 
 const showModalDelete = ref(false);
 const showModalEdit = ref(false);
 
 const { isPending: isDeleting, mutate: remove } = useDeleteKubernetesObject(
-  Resources.BACKUP_STORAGE_LOCATION,
+  Resources.BACKUP_STORAGE_LOCATION
 );
 
 const { isPending: isEditing } = useKubernetesEditObject(
   Resources.BACKUP_STORAGE_LOCATION,
-  props.location?.metadata.name,
+  props.location?.metadata.name
 );
 </script>
+<script lang="ts" setup></script>

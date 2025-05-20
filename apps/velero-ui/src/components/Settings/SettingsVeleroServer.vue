@@ -25,17 +25,11 @@
         </h3>
         <div class="mb-1 text-sm text-gray-500 dark:text-gray-400">
           {{ data?.name }}
-          <div
-            v-if="!data"
-            class="h-2.5 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-48 mb-4"
-          />
+          <Skeleton v-if="!data" class="mb-4" height="2.5" width="48" />
         </div>
         <div class="mb-1 text-xs text-gray-500 dark:text-gray-400">
           {{ data?.version }}
-          <div
-            v-if="!data"
-            class="h-2 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-72 mb-4"
-          />
+          <Skeleton v-if="!data" class="mb-4" width="72" />
         </div>
       </div>
       <div class="inline-flex items-center">
@@ -85,6 +79,7 @@ import SettingsLogs from '@velero-ui-app/components/Settings/SettingsLogs.vue';
 import { useSettingsServer } from '@velero-ui-app/composables/settings/useSettingsServer';
 import { useI18n } from 'vue-i18n';
 import type { SocketIO } from '@velero-ui-app/plugins/socket.plugin';
+import Skeleton from "@velero-ui-app/components/Skeleton.vue";
 
 const showModal = ref(false);
 const { data } = useSettingsServer();

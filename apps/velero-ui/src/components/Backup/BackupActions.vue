@@ -1,98 +1,69 @@
 <template>
-  <div
-    class="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800"
+  <ResourceActions
+    :icon="faFloppyDisk"
+    :name="backup?.metadata?.name"
+    :uid="backup?.metadata?.uid"
   >
-    <div
-      class="items-center sm:flex xl:block 2xl:flex sm:space-x-4 xl:space-x-0 2xl:space-x-4"
-    >
-      <FontAwesomeIcon
-        :icon="faFloppyDisk"
-        class="!w-16 !h-16 mr-2 dark:text-white"
-      />
-
-      <div class="pl-3">
-        <h3
-          v-if="backup"
-          class="mb-1 text-lg font-bold text-gray-900 dark:text-white"
-        >
-          {{ backup?.metadata?.name }}
-        </h3>
-        <div
-          v-else
-          class="h-2.5 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-48 mb-4"
+    <template #buttons>
+      <button
+        v-if="can(Action.Create, Resources.RESTORE.plural)"
+        :class="{ 'cursor-not-allowed': isDisabled || !backup }"
+        :disabled="!backup"
+        class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:ring-teal-300 dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
+        type="button"
+        @click="showModalRestore = !showModalRestore"
+      >
+        <FontAwesomeIcon :icon="faClockRotateLeft" class="!w-4 !h-4 mr-2" />
+        {{ t('global.button.restore.title') }}
+      </button>
+      <button
+        v-if="can(Action.Download, Resources.BACKUP.plural)"
+        :class="{
+          'cursor-not-allowed': downloadLoading || isDisabled || !backup,
+        }"
+        :disabled="downloadLoading || isDisabled || !backup"
+        class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+        type="button"
+        @click="download()"
+      >
+        <FontAwesomeIcon
+          v-if="!downloadLoading"
+          :icon="faDownload"
+          class="!w-4 !h-4 mr-2"
         />
-        <div
-          v-if="backup"
-          class="mb-4 text-xs text-gray-500 dark:text-gray-400"
-        >
-          {{ backup?.metadata?.uid }}
-        </div>
-        <div
+        <FontAwesomeIcon
           v-else
-          class="bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-48 mb-4"
+          :icon="faCircleNotch"
+          class="!w-4 !h-4 animate-spin mr-2"
         />
-        <div class="flex items-center gap-x-4 gap-y-2 flex-wrap">
-          <button
-            v-if="can(Action.Create, Resources.RESTORE.plural)"
-            :class="{ 'cursor-not-allowed': isDisabled || !backup }"
-            :disabled="!backup"
-            class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:ring-teal-300 dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
-            type="button"
-            @click="showModalRestore = !showModalRestore"
-          >
-            <FontAwesomeIcon :icon="faClockRotateLeft" class="!w-4 !h-4 mr-2" />
-            {{ t('global.button.restore.title') }}
-          </button>
-          <button
-            v-if="can(Action.Download, Resources.BACKUP.plural)"
-            :class="{
-              'cursor-not-allowed': downloadLoading || isDisabled || !backup,
-            }"
-            :disabled="downloadLoading || isDisabled || !backup"
-            class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-            type="button"
-            @click="download()"
-          >
-            <FontAwesomeIcon
-              v-if="!downloadLoading"
-              :icon="faDownload"
-              class="!w-4 !h-4 mr-2"
-            />
-            <FontAwesomeIcon
-              v-else
-              :icon="faCircleNotch"
-              class="!w-4 !h-4 animate-spin mr-2"
-            />
-            {{
-              downloadLoading
-                ? t('global.button.download.loading')
-                : t('global.button.download.title')
-            }}
-          </button>
-          <button
-            v-if="can(Action.Delete, Resources.BACKUP.plural)"
-            :class="{ 'cursor-not-allowed': isDeleteDisabled || !backup }"
-            :disabled="isDeleteDisabled || !backup"
-            class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"
-            type="button"
-            @click="showModalDelete = !showModalDelete"
-          >
-            <FontAwesomeIcon
-              v-if="isDeleting"
-              :icon="faCircleNotch"
-              class="!w-4 !h-4 animate-spin mr-2"
-            />
-            <FontAwesomeIcon v-else :icon="faTrashCan" class="!w-4 !h-4 mr-2" />
-            {{
-              isDeleting
-                ? t('global.button.delete.loading')
-                : t('global.button.delete.title')
-            }}
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
+        {{
+          downloadLoading
+            ? t('global.button.download.loading')
+            : t('global.button.download.title')
+        }}
+      </button>
+      <button
+        v-if="can(Action.Delete, Resources.BACKUP.plural)"
+        :class="{ 'cursor-not-allowed': isDeleteDisabled || !backup }"
+        :disabled="isDeleteDisabled || !backup"
+        class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"
+        type="button"
+        @click="showModalDelete = !showModalDelete"
+      >
+        <FontAwesomeIcon
+          v-if="isDeleting"
+          :icon="faCircleNotch"
+          class="!w-4 !h-4 animate-spin mr-2"
+        />
+        <FontAwesomeIcon v-else :icon="faTrashCan" class="!w-4 !h-4 mr-2" />
+        {{
+          isDeleting
+            ? t('global.button.delete.loading')
+            : t('global.button.delete.title')
+        }}
+      </button>
+    </template>
+  </ResourceActions>
   <ModalConfirmation
     v-if="showModalDelete"
     :icon="faExclamationCircle"
@@ -185,6 +156,7 @@ import BackupFormRestore from '@velero-ui-app/components/Backup/forms/BackupForm
 import { Action } from '@velero-ui/shared-types';
 import { can } from '@velero-ui-app/utils/policy.utils';
 import { useFormKitContextById } from '@formkit/vue';
+import ResourceActions from '@velero-ui-app/components/Resource/ResourceActions.vue';
 
 const { t } = useI18n();
 
@@ -195,9 +167,8 @@ const props = defineProps({
   },
 });
 
-const { mutate: download, isPending: downloadLoading } = useBackupDownloadContent(
-  props.backup?.metadata?.name
-);
+const { mutate: download, isPending: downloadLoading } =
+  useBackupDownloadContent(props.backup?.metadata?.name);
 
 const { isPending, mutate: remove } = useDeleteKubernetesObject(
   Resources.BACKUP
