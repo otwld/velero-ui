@@ -8,18 +8,19 @@
           <h1
             class="flex text-xl font-bold leading-none text-gray-900 sm:text-2xl dark:text-white"
           >
-            {{t('dashboard.stats.latest.title')}}
+            {{ t('dashboard.stats.latest.title') }}
           </h1>
           <h3 class="text-base font-light text-gray-500 dark:text-gray-400">
-            {{ t('dashboard.stats.latest.description')}}
+            {{ t('dashboard.stats.latest.description') }}
           </h3>
         </div>
         <div class="flex mt-4 flex-col h-[200px] overflow-y-auto">
           <ul v-if="isFetching && data.length === 0">
-            <li
+            <Skeleton
               v-for="(i, index) of 8"
               :key="`line-${index}`"
-              class="h-2 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-72 mb-4"
+              class="mb-4"
+              width="72"
             />
           </ul>
           <ul
@@ -44,7 +45,7 @@
               </li>
             </dt>
             <dd class="italic">
-              {{ t('global.date.in', { count: getSinceTime(backup.date) }) }}
+              {{ t('global.date.ago', { count: getSinceTime(backup.date) }) }}
             </dd>
           </ul>
         </div>
@@ -56,9 +57,10 @@
 <script lang="ts" setup>
 import { useI18n } from 'vue-i18n';
 import { getSinceTime } from '@velero-ui-app/utils/date.utils';
-import { Pages } from '@velero-ui-app/utils/constants.utils';
 import { useStatsBackupsLatest } from '@velero-ui-app/composables/stats/useStatsBackupsLatest';
 import { truncate } from '../../utils/string.utils';
+import { Pages } from '@velero-ui-app/utils/constants.utils';
+import Skeleton from '@velero-ui-app/components/Skeleton.vue';
 
 const { t } = useI18n();
 const { isFetching, data } = useStatsBackupsLatest();

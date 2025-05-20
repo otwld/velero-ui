@@ -1,26 +1,25 @@
 <template>
-  <div v-if="!error" class="min-h-full bg-gray-50 dark:bg-gray-900">
-    <div class="grid grid-cols-1 px-4 xl:grid-cols-3 xl:gap-4">
-      <div class="col-span-full xl:col-auto">
-        <RestoreActions :restore="data" />
-        <RestoreStatus :restore="data" />
-        <RestoreDetails :spec="data?.spec" />
-      </div>
-      <div class="col-span-2">
-        <Describe :data="data" />
-      </div>
-    </div>
-    <PodVolumes v-if="can(Action.Read, Resources.RESTORE.plural)" />
-    <Logs
-      v-if="can(Action.Logs, Resources.RESTORE.plural)"
-      :data="logs"
-      :loading="isLoading"
-      :name="data?.metadata?.name"
-      :type="V1DownloadTargetKind.RestoreLog"
-      class="pb-6"
-    />
-  </div>
-  <ResourceNotFound v-if="error" :page="Pages.RESTORES" />
+  <Resource :error="!!error" :page="Pages.RESTORES">
+    <template #left>
+      <RestoreActions :restore="data" />
+      <RestoreStatus :restore="data" />
+      <RestoreDetails :spec="data?.spec" />
+    </template>
+    <template #right>
+      <ResourceManifest :data="data" />
+    </template>
+    <template #bottom>
+      <PodVolumes v-if="can(Action.Read, Resources.RESTORE.plural)" />
+      <Logs
+        v-if="can(Action.Logs, Resources.RESTORE.plural)"
+        :data="logs"
+        :loading="isLoading"
+        :name="data?.metadata?.name"
+        :type="V1DownloadTargetKind.RestoreLog"
+        class="pb-6"
+      />
+    </template>
+  </Resource>
 </template>
 
 <script lang="ts" setup>
@@ -33,7 +32,7 @@ import {
   type V1Restore,
 } from '@velero-ui/velero';
 import { onBeforeMount, onBeforeUnmount } from 'vue';
-import Describe from '@velero-ui-app/components/Describe.vue';
+import ResourceManifest from '@velero-ui-app/components/Resource/ResourceManifest.vue';
 import Logs from '@velero-ui-app/components/Logs.vue';
 import { useLogsGet } from '@velero-ui-app/composables/useLogsGet';
 import RestoreActions from '@velero-ui-app/components/Restore/RestoreActions.vue';
@@ -41,10 +40,11 @@ import RestoreStatus from '@velero-ui-app/components/Restore/RestoreStatus.vue';
 import RestoreDetails from '@velero-ui-app/components/Restore/RestoreDetails.vue';
 import { useKubernetesWatchObject } from '@velero-ui-app/composables/useKubernetesWatchObject';
 import { Pages } from '@velero-ui-app/utils/constants.utils';
-import ResourceNotFound from '@velero-ui-app/components/ResourceNotFound.vue';
+import ResourceNotFound from '@velero-ui-app/components/Resource/ResourceNotFound.vue';
 import PodVolumes from '@velero-ui-app/components/PodVolume/PodVolumes.vue';
 import { can } from '@velero-ui-app/utils/policy.utils';
 import { Action } from '@velero-ui/shared-types';
+import Resource from '@velero-ui-app/components/Resource/Resource.vue';
 
 const router: Router = useRouter();
 
@@ -56,7 +56,7 @@ const { on, off, data, error } = useKubernetesWatchObject<V1Restore>(
 const {
   data: logs,
   isLoading,
-  refetch
+  refetch,
 } = useLogsGet(
   router.currentRoute.value.params.name as string,
   V1DownloadTargetKind.RestoreLog
@@ -64,8 +64,7 @@ const {
 
 onBeforeMount((): void => on());
 onBeforeUnmount((): void => off());
-onBeforeMount(
-  () =>
-    can(Action.Read, Resources.RESTORE.plural) ? refetch() : void 0
+onBeforeMount(() =>
+  can(Action.Read, Resources.RESTORE.plural) ? refetch() : void 0
 );
 </script>

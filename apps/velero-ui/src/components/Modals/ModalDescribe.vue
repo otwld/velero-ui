@@ -29,22 +29,31 @@
                 <FontAwesomeIcon :icon="faXmark" class="!w-5 !h-5" />
               </button>
             </div>
-            <div class="p-4 md:p-5">
-              <div
-                class="p-4 text-sm w-full bg-gray-50 border border-gray-300 text-gray-900 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white h-[600px] overflow-auto"
-              >
-                <div v-if="data">
-                  <p
-                    v-for="(line, index) of parseYaml(data)"
-                    :key="`line-${index}`"
-                    :style="indentYaml(line)"
-                  >
-                    {{ line }}
-                  </p>
-                </div>
+            <div class="flex items-center justify-end flex-wrap gap-x-4 m-4">
+              <div class="inline-flex rounded-md shadow-xs">
+                <button
+                  v-copy-to-clipboard="stringify(data)"
+                  class="inline-flex items-center px-4 py-1 text-sm font-medium bg-white border border-gray-200 rounded-s-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white"
+                  type="button"
+                >
+                  <FontAwesomeIcon :icon="faCopy" class="!w-4 !h-4 mr-1.5" />
+                  {{ t('global.button.copy.title') }}
+                </button>
+                <button
+                  v-download="{
+                    content: stringify(data),
+                    filename: `${data?.metadata?.name}.yaml`,
+                    type: 'text/yaml',
+                  }"
+                  class="inline-flex items-center px-4 py-1 text-sm font-medium bg-white border border-gray-200 rounded-e-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white"
+                  type="button"
+                >
+                  <FontAwesomeIcon :icon="faFileArrowDown" class="!w-4 !h-4 mr-1.5" />
+                  {{ t('global.button.download.title') }}
+                </button>
               </div>
             </div>
-
+            <CodeBlock :data="parseYaml(data)" class="m-4"/>
             <div
               class="flex items-center justify-end p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600"
             >
@@ -66,11 +75,13 @@
 </template>
 
 <script lang="ts" setup>
-import { faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faCopy, faFileArrowDown, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import type { PropType } from 'vue';
-import { indentYaml, parseYaml } from '@velero-ui-app/utils/yaml.utils';
+import { parseYaml } from '@velero-ui-app/utils/yaml.utils';
 import { useI18n } from 'vue-i18n';
+import CodeBlock from "@velero-ui-app/components/CodeBlock.vue";
+import { stringify } from "yaml";
 
 const { t } = useI18n();
 defineProps({

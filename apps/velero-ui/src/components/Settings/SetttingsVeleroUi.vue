@@ -5,7 +5,10 @@
     <div
       class="items-center sm:flex xl:block 2xl:flex sm:space-x-4 xl:space-x-0 2xl:space-x-4"
     >
-      <FontAwesomeIcon :icon="faHardDrive" class="!w-16 !h-16 dark:text-white" />
+      <FontAwesomeIcon
+        :icon="faHardDrive"
+        class="!w-16 !h-16 dark:text-white"
+      />
       <div class="flex-1 min-w-0">
         <div>
           <h3
@@ -25,17 +28,11 @@
           </h3>
           <div class="mb-1 text-sm text-gray-500 dark:text-gray-400">
             {{ data?.mode }}
-            <div
-              v-if="!data"
-              class="h-2.5 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-48 mb-4"
-            />
+            <Skeleton v-if="!data" class="mb-4" height="2.5" width="48" />
           </div>
           <div class="mb-1 text-xs text-gray-500 dark:text-gray-400">
             {{ data?.version }}
-            <div
-              v-if="!data"
-              class="h-2 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-72 mb-4"
-            />
+            <Skeleton v-if="!data" class="mb-4" width="72" />
           </div>
         </div>
       </div>
@@ -92,6 +89,7 @@ import VModal from '@velero-ui-app/components/Modals/VModal.vue';
 import SettingsLogs from '@velero-ui-app/components/Settings/SettingsLogs.vue';
 import { useI18n } from 'vue-i18n';
 import type { SocketIO } from '@velero-ui-app/plugins/socket.plugin';
+import Skeleton from '@velero-ui-app/components/Skeleton.vue';
 
 const showModal = ref(false);
 const { data } = useSettingsUI();

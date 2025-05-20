@@ -2,8 +2,6 @@ import {
   HttpException,
   Inject,
   Injectable,
-  InternalServerErrorException,
-  NotFoundException,
 } from '@nestjs/common';
 import {
   ApiException,

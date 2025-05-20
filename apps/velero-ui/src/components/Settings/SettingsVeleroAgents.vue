@@ -5,56 +5,41 @@
     >
       <div class="flow-root">
         <div class="flex items-center">
-            <h3 class="text-xl font-semibold dark:text-white">
+          <h3 class="text-xl font-semibold dark:text-white">
             {{ t('settings.agents.title') }}
           </h3>
-          <div
-            v-if="data && data.length === 0"
-            class="ml-4 h-2 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-12"
-          />
+          <Skeleton v-if="data && data.length === 0" class="ml-4" width="12" />
           <span
             v-if="data && data.length >= 0"
             class="ml-4 bg-blue-100 text-blue-800 text-xs font-medium inline-flex items-center me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300"
           >
             <FontAwesomeIcon :icon="faMicrochip" class="!w-3 !h-3 mr-1.5" />
-            {{ data.length }}</span>
+            {{ data.length }}</span
+          >
         </div>
-        <ul class="divide-y divide-gray-200 dark:divide-gray-700 overflow-auto max-h-[250px] mt-2 pr-2">
-          <li v-if="!data || data?.length === 0"  class="py-4">
-            <div class="flex items-center space-x-4">
-              <div class="flex-shrink-0">
-                <svg
-                  class="!w-6 !h-6 dark:text-white"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path d="M16.5 7.5h-9v9h9v-9Z" />
-                  <path
-                    clip-rule="evenodd"
-                    d="M8.25 2.25A.75.75 0 0 1 9 3v.75h2.25V3a.75.75 0 0 1 1.5 0v.75H15V3a.75.75 0 0 1 1.5 0v.75h.75a3 3 0 0 1 3 3v.75H21A.75.75 0 0 1 21 9h-.75v2.25H21a.75.75 0 0 1 0 1.5h-.75V15H21a.75.75 0 0 1 0 1.5h-.75v.75a3 3 0 0 1-3 3h-.75V21a.75.75 0 0 1-1.5 0v-.75h-2.25V21a.75.75 0 0 1-1.5 0v-.75H9V21a.75.75 0 0 1-1.5 0v-.75h-.75a3 3 0 0 1-3-3v-.75H3A.75.75 0 0 1 3 15h.75v-2.25H3a.75.75 0 0 1 0-1.5h.75V9H3a.75.75 0 0 1 0-1.5h.75v-.75a3 3 0 0 1 3-3h.75V3a.75.75 0 0 1 .75-.75ZM6 6.75A.75.75 0 0 1 6.75 6h10.5a.75.75 0 0 1 .75.75v10.5a.75.75 0 0 1-.75.75H6.75a.75.75 0 0 1-.75-.75V6.75Z"
-                    fill-rule="evenodd"
+        <ul
+          class="divide-y divide-gray-200 dark:divide-gray-700 overflow-auto max-h-[250px] mt-2 pr-2"
+        >
+          <template v-if="!data || data?.length === 0">
+            <li v-for="index of 2" :key="index" class="py-4">
+              <div class="flex items-center space-x-4">
+                <div class="flex-shrink-0">
+                  <FontAwesomeIcon
+                    :icon="faMicrochip"
+                    class="!w-6 !h-6 dark:text-white"
                   />
-                </svg>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <Skeleton class="mb-4" height="2.5" width="48" />
+                  <Skeleton class="mb-2" width="72" />
+                  <Skeleton class="mb-2" height="1.5" width="24" />
+                </div>
+                <div class="inline-flex items-center">
+                  <Skeleton class="mb-4" width="32" />
+                </div>
               </div>
-              <div class="flex-1 min-w-0">
-                <div
-                  class="h-2.5 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-48 mb-4"
-                />
-                <div
-                  class="h-2 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-72 mb-2"
-                />
-                <div
-                  class="h-1.5 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-24 mb-2"
-                />
-              </div>
-              <div class="inline-flex items-center">
-                <p
-                  class="h-2 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-32 mb-4"
-                />
-              </div>
-            </div>
-          </li>
+            </li>
+          </template>
           <li
             v-for="(agent, index) of data"
             :key="`agent-${index}`"
@@ -72,8 +57,9 @@
 import { useSettingsAgents } from '@velero-ui-app/composables/settings/useSettingsAgents';
 import SettingsVeleroAgentLine from '@velero-ui-app/components/Settings/SettingsVeleroAgentLine.vue';
 import { useI18n } from 'vue-i18n';
-import { faMicrochip } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { faMicrochip } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import Skeleton from '@velero-ui-app/components/Skeleton.vue';
 
 const { t } = useI18n();
 const { data } = useSettingsAgents();

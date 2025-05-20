@@ -10,9 +10,11 @@
             class="!w-16 !h-16 mr-2 dark:text-white"
           />
           <div class="flex-col pl-2">
-            <div
+            <Skeleton
               v-if="isFetching && !data"
-              class="h-2.5 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-16 mb-4"
+              class="mb-4"
+              height="2.5"
+              width="16"
             />
             <h3
               v-if="data"
@@ -25,7 +27,10 @@
             </div>
           </div>
         </div>
-        <div v-can="{ action: Action.Read, subject: Resources.BACKUP.plural }" class="flex self-center">
+        <div
+          v-can="{ action: Action.Read, subject: Resources.BACKUP.plural }"
+          class="flex self-center"
+        >
           <router-link
             :to="Pages.BACKUPS.path"
             class="inline-flex text-gray-500 p-2 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
@@ -47,9 +52,11 @@
             class="!w-16 !h-16 mr-2 dark:text-white"
           />
           <div class="flex-col pl-2">
-            <div
+            <Skeleton
               v-if="isFetching && !data"
-              class="h-2.5 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-16 mb-4"
+              class="mb-4"
+              height="2.5"
+              width="16"
             />
             <h3
               v-if="data"
@@ -62,7 +69,10 @@
             </div>
           </div>
         </div>
-        <div v-can="{ action: Action.Read, subject: Resources.SCHEDULE.plural }" class="flex self-center">
+        <div
+          v-can="{ action: Action.Read, subject: Resources.SCHEDULE.plural }"
+          class="flex self-center"
+        >
           <router-link
             :to="Pages.SCHEDULES.path"
             class="inline-flex text-gray-500 p-2 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
@@ -84,9 +94,11 @@
             class="!w-16 !h-16 mr-2 dark:text-white"
           />
           <div class="flex-col pl-2">
-            <div
+            <Skeleton
               v-if="isFetching && !data"
-              class="h-2.5 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-16 mb-4"
+              class="mb-4"
+              height="2.5"
+              width="16"
             />
             <h3
               v-if="data"
@@ -99,7 +111,10 @@
             </div>
           </div>
         </div>
-        <div v-can="{ action: Action.Read, subject: Resources.RESTORE.plural }" class="flex self-center">
+        <div
+          v-can="{ action: Action.Read, subject: Resources.RESTORE.plural }"
+          class="flex self-center"
+        >
           <router-link
             :to="Pages.RESTORES.path"
             class="inline-flex text-gray-500 p-2 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
@@ -121,9 +136,11 @@
             class="!w-16 !h-16 mr-2 dark:text-white"
           />
           <div class="flex-col pl-2">
-            <div
+            <Skeleton
               v-if="isFetching && !data"
-              class="h-2.5 bg-gray-200 rounded-full animate-pulse dark:bg-gray-700 w-16 mb-4"
+              class="mb-4"
+              height="2.5"
+              width="16"
             />
             <h3
               v-if="data"
@@ -136,7 +153,13 @@
             </div>
           </div>
         </div>
-        <div v-can="{ action: Action.Read, subject: Resources.BACKUP_STORAGE_LOCATION.plural }" class="flex self-center">
+        <div
+          v-can="{
+            action: Action.Read,
+            subject: Resources.BACKUP_STORAGE_LOCATION.plural,
+          }"
+          class="flex self-center"
+        >
           <router-link
             :to="Pages.STORAGE_LOCATIONS.path"
             class="inline-flex text-gray-500 p-2 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
@@ -162,8 +185,9 @@ import { Pages } from '@velero-ui-app/utils/constants.utils';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { useStatsBasic } from '@velero-ui-app/composables/stats/useStatsBasic';
 import { useI18n } from 'vue-i18n';
-import { Action } from "@velero-ui/shared-types";
-import { Resources } from "@velero-ui/velero";
+import { Action } from '@velero-ui/shared-types';
+import { Resources } from '@velero-ui/velero';
+import Skeleton from '@velero-ui-app/components/Skeleton.vue';
 
 const { t } = useI18n();
 const { isFetching, data } = useStatsBasic();
