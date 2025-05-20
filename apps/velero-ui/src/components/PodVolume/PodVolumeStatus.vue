@@ -29,9 +29,9 @@
             t('resource.status.bytes')
           }}</span>
           <span class="text-xs font-medium text-gray-900 dark:text-white"
-            >{{ convertBytes(podVolume.status.progress?.bytesDone) || '0' }} /
+            >{{ convertBytes(podVolume.status.progress.bytesDone) || '0' }} /
             {{
-              convertBytes(podVolume.status.progress?.totalBytes) || '0'
+              convertBytes(podVolume.status.progress.totalBytes) || '0'
             }}</span
           >
         </div>

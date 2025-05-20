@@ -8,12 +8,12 @@
           <h3 class="text-xl font-semibold dark:text-white">
             {{ t('backups.title') }}
           </h3>
-          <span
-            class="ml-4 bg-blue-100 text-blue-800 text-xs font-medium inline-flex items-center me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300"
-          >
-            <FontAwesomeIcon :icon="faFloppyDisk" class="!w-3 !h-3 mr-1.5" />
-            {{ total }}</span
-          >
+          <Badge
+            :prefix-icon="faFloppyDisk"
+            :text="total.toString()"
+            class="ml-4"
+            color="blue"
+          />
         </div>
         <BackupList />
       </div>
@@ -28,8 +28,8 @@ import BackupList from '@velero-ui-app/views/list/BackupList.vue';
 import { useListStore } from '@velero-ui-app/stores/list.store';
 import { type Router, useRouter } from 'vue-router';
 import { faFloppyDisk } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { storeToRefs } from 'pinia';
+import Badge from '@velero-ui-app/components/Badge.vue';
 
 const { t } = useI18n();
 

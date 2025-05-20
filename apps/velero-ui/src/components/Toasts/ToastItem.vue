@@ -37,7 +37,7 @@
     </div>
     <button
       type="button"
-      class="ml-auto m-1 bg-white text-gray-400 hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-gray-100 inline-flex items-center justify-center h-8 w-8 dark:text-gray-400 dark:hover:text-white dark:bg-gray-700 dark:hover:bg-gray-600"
+      class="ml-auto m-1 bg-white transition duration-200 text-gray-400 hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-gray-100 inline-flex items-center justify-center h-8 w-8 dark:text-gray-400 dark:hover:text-white dark:bg-gray-700 dark:hover:bg-gray-600"
       aria-label="Close"
       @click="emit('onDismiss')"
     >

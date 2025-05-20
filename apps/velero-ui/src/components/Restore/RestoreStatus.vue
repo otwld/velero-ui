@@ -2,24 +2,18 @@
   <ResourceStatus :is-loading="!restore">
     <template #badges>
       <RestoreStatusPhaseBadge :status="restore?.status?.phase" />
-      <span
+      <Badge
         v-if="restore?.status?.errors"
-        class="bg-red-100 text-red-800 text-xs font-medium inline-flex items-center me-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300"
-      >
-        <FontAwesomeIcon :icon="faCircleExclamation" class="!w-3 !h-3 mr-1.5" />
-        {{ restore.status.errors }}</span
-      >
-      <span
+        :prefix-icon="faCircleExclamation"
+        :text="restore.status.errors.toString()"
+        color="red"
+      />
+      <Badge
         v-if="restore?.status?.warnings"
-        class="bg-orange-100 text-orange-800 text-xs font-medium inline-flex items-center me-2 px-2.5 py-0.5 rounded dark:bg-orange-900 dark:text-orange-300"
-      >
-        <FontAwesomeIcon
-          :icon="faTriangleExclamation"
-          class="!w-3 !h-3 mr-1.5"
-        />
-
-        {{ restore.status.warnings }}</span
-      >
+        :prefix-icon="faTriangleExclamation"
+        :text="restore.status.warnings.toString()"
+        color="orange"
+      />
     </template>
     <template #content>
       <div v-if="restore?.status?.progress" class="mt-4">
@@ -29,8 +23,8 @@
           }}</span>
           <Skeleton v-if="!restore" class="ml-4" width="24" />
           <span class="text-xs font-medium text-gray-900 dark:text-white"
-            >{{ restore.status.progress?.itemsRestored || '0' }} /
-            {{ restore.status.progress?.totalItems }}</span
+            >{{ restore.status.progress.itemsRestored || '0' }} /
+            {{ restore.status.progress.totalItems }}</span
           >
         </div>
         <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
@@ -72,7 +66,6 @@
 import type { PropType } from 'vue';
 import type { V1Restore } from '@velero-ui/velero';
 import RestoreStatusPhaseBadge from './RestoreStatusPhaseBadge.vue';
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import {
   faCircleExclamation,
   faTriangleExclamation,
@@ -80,6 +73,7 @@ import {
 import { useI18n } from 'vue-i18n';
 import ResourceStatus from '@velero-ui-app/components/Resource/ResourceStatus.vue';
 import Skeleton from '@velero-ui-app/components/Skeleton.vue';
+import Badge from '@velero-ui-app/components/Badge.vue';
 
 const { t } = useI18n();
 const props = defineProps({

@@ -48,13 +48,13 @@
             name: data.spec.template.storageLocation,
           },
         }"
-        class="inline-flex items-center bg-gray-100 hover:bg-gray-200 text-gray-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-300"
       >
-        <FontAwesomeIcon :icon="faServer" class="!w-3 !h-3 mr-1.5" />
-        {{ data.spec.template.storageLocation }}
-        <FontAwesomeIcon
-          :icon="faArrowUpRightFromSquare"
-          class="!w-2 !h-2 ml-1.5"
+        <Badge
+          :hover="true"
+          :prefix-icon="faServer"
+          :suffix-icon="faArrowUpRightFromSquare"
+          :text="data.spec.template.storageLocation"
+          color="gray"
         />
       </router-link>
     </td>
@@ -73,12 +73,12 @@
     >
       <div class="flex items-start flex-col">
         <ScheduleStatusPhaseBadge :status="data.status?.phase" />
-        <span
+        <Badge
           v-if="data?.spec?.paused"
-          class="mt-2 bg-yellow-100 text-yellow-800 text-xs font-medium inline-flex items-center me-2 px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300"
-        >
-          Paused
-        </span>
+          :text="t('global.paused')"
+          class="mt-2"
+          color="yellow"
+        />
       </div>
     </td>
     <td class="p-4 space-x-2 whitespace-nowrap">
@@ -254,7 +254,6 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import ScheduleStatusPhaseBadge from './ScheduleStatusPhaseBadge.vue';
 import { initTooltips } from 'flowbite';
 import ModalConfirmation from '@velero-ui-app/components/Modals/ModalConfirmation.vue';
-import { Pages } from '@velero-ui-app/utils/constants.utils';
 import { truncate } from '../../utils/string.utils';
 import { useDeleteKubernetesObject } from '@velero-ui-app/composables/useDeleteKubernetesObject';
 import { usePauseSchedule } from '@velero-ui-app/composables/schedule/usePauseSchedule';
@@ -264,6 +263,8 @@ import { useKubernetesEditObject } from '@velero-ui-app/composables/useKubernete
 import ScheduleFormEdit from '@velero-ui-app/components/Schedule/forms/ScheduleFormEdit.vue';
 import { can } from '@velero-ui-app/utils/policy.utils';
 import { Action } from '@velero-ui/shared-types';
+import Badge from '@velero-ui-app/components/Badge.vue';
+import { Pages } from '@velero-ui-app/utils/constants.utils';
 
 const { t } = useI18n();
 const props = defineProps({

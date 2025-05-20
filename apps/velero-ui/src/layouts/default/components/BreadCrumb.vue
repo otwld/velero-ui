@@ -7,7 +7,7 @@
         <li class="inline-flex items-center">
           <router-link
             :to="Pages.HOME.path"
-            class="inline-flex items-center text-gray-700 hover:text-blue-600 dark:text-gray-300 dark:hover:text-white"
+            class="inline-flex items-center transition duration-200 text-gray-700 hover:text-blue-600 dark:text-gray-300 dark:hover:text-white"
           >
             <FontAwesomeIcon :icon="faHouse" class="!w-5 !h-5" />
           </router-link>
@@ -25,7 +25,7 @@
           <router-link
             v-if="index > 0 && index < matchedRoutes.length - 1 && route.name"
             :to="route.path"
-            class="inline-flex items-center text-gray-700 hover:text-blue-600 dark:text-gray-300 dark:hover:text-white"
+            class="inline-flex items-center transition duration-200 text-gray-700 hover:text-blue-600 dark:text-gray-300 dark:hover:text-white"
           >
             <span>{{
               route.path.includes(':name') ? getName() : route.name
@@ -43,7 +43,7 @@
         v-if="getDocumentationURL()"
         :href="getDocumentationURL()"
         :title="t('global.documentation')"
-        class="inline-flex text-sm items-center hover:text-blue-700 dark:text-gray-400 dark:hover:text-white"
+        class="inline-flex text-sm items-center transition duration-200 hover:text-blue-700 dark:text-gray-400 dark:hover:text-white"
         target="_blank"
       >
         <FontAwesomeIcon

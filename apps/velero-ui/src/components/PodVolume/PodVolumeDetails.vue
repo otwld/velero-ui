@@ -3,15 +3,15 @@
     <template #badges>
       <img
         v-if="spec?.uploaderType === V1BackupRepositoryType.Kopia"
-        :alt="spec?.uploaderType"
-        :title="spec?.uploaderType"
+        :alt="spec.uploaderType"
+        :title="spec.uploaderType"
         class="h-5 w-5"
         src="/src/assets/images/kopia.svg"
       />
       <img
         v-if="spec?.uploaderType === V1BackupRepositoryType.Restic"
-        :alt="spec?.uploaderType"
-        :title="spec?.uploaderType"
+        :alt="spec.uploaderType"
+        :title="spec.uploaderType"
         class="h-5 w-5"
         src="/src/assets/images/restic.png"
       />
@@ -20,16 +20,16 @@
         :to="{
           name: Pages.STORAGE_LOCATION.name,
           params: {
-            name: spec?.backupStorageLocation,
+            name: spec.backupStorageLocation,
           },
         }"
-        class="bg-blue-100 hover:bg-blue-200 text-blue-800 text-xs font-medium inline-flex items-center me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:hover:bg-blue-800 dark:text-blue-300"
       >
-        <FontAwesomeIcon :icon="faServer" class="!w-3 !h-3 mr-1.5" />
-        {{ spec.backupStorageLocation }}
-        <FontAwesomeIcon
-          :icon="faArrowUpRightFromSquare"
-          class="!w-2 !h-2 ml-1.5"
+        <Badge
+          :hover="true"
+          :prefix-icon="faServer"
+          :suffix-icon="faArrowUpRightFromSquare"
+          :text="spec.backupStorageLocation"
+          color="blue"
         />
       </router-link>
     </template>
@@ -46,13 +46,13 @@
                 name: spec.tags.backup,
               },
             }"
-            class="inline-flex items-center bg-gray-100 hover:bg-gray-200 text-gray-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-300"
           >
-            <FontAwesomeIcon :icon="faFloppyDisk" class="!w-3 !h-3 mr-1.5" />
-            {{ spec.tags.backup }}
-            <FontAwesomeIcon
-              :icon="faArrowUpRightFromSquare"
-              class="!w-2 !h-2 ml-1.5"
+            <Badge
+              :hover="true"
+              :prefix-icon="faFloppyDisk"
+              :suffix-icon="faArrowUpRightFromSquare"
+              :text="spec.tags.backup"
+              color="gray"
             />
           </router-link>
         </div>
@@ -96,10 +96,10 @@ import {
   faFloppyDisk,
   faServer,
 } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { Pages } from '../../utils/constants.utils';
 import { useI18n } from 'vue-i18n';
 import ResourceDetails from '@velero-ui-app/components/Resource/ResourceDetails.vue';
+import Badge from '@velero-ui-app/components/Badge.vue';
 
 const { t } = useI18n();
 defineProps({

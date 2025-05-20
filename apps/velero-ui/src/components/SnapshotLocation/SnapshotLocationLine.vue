@@ -60,7 +60,7 @@
           v-if="!data?.status?.phase"
           class="h-2.5 w-2.5 rounded-full bg-gray-500 mr-2"
         />
-        {{ data?.status?.phase ? t(`resource.phase.${data?.status?.phase}`) : t('global.unknown') }}
+        {{ data?.status?.phase ? t(`resource.phase.${data.status.phase}`) : t('global.unknown') }}
       </div>
     </td>
     <td class="p-4 space-x-2 whitespace-nowrap">

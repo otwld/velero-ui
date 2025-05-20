@@ -9,7 +9,7 @@
       <a
         v-if="grafanaUrl"
         :href="grafanaUrl"
-        class="inline-flex items-center p-2 text-xs font-medium uppercase rounded-lg text-blue-700 sm:text-sm hover:bg-gray-100 dark:text-blue-500 dark:hover:bg-gray-700"
+        class="inline-flex items-center transition duration-200 p-2 text-xs font-medium uppercase rounded-lg text-blue-700 sm:text-sm hover:bg-gray-100 dark:text-blue-500 dark:hover:bg-gray-700"
         target="_blank"
       >
         {{ t('dashboard.stats.global.button.grafana.title') }}
@@ -41,7 +41,7 @@
       <router-link
         v-if="can(Action.Read, Resources.BACKUP.plural)"
         :to="Pages.BACKUPS.path"
-        class="inline-flex items-center p-2 text-xs font-medium uppercase rounded-lg text-blue-700 sm:text-sm hover:bg-gray-100 dark:text-blue-500 dark:hover:bg-gray-700"
+        class="inline-flex items-center transition duration-200 p-2 text-xs font-medium uppercase rounded-lg text-blue-700 sm:text-sm hover:bg-gray-100 dark:text-blue-500 dark:hover:bg-gray-700"
       >
         {{ t('dashboard.stats.backups.button.see.title') }}
         <FontAwesomeIcon :icon="faChevronRight" class="!w-3 !h-3 ml-2" />
@@ -60,7 +60,7 @@
       <router-link
         v-if="can(Action.Read, Resources.RESTORE.plural)"
         :to="Pages.RESTORES.path"
-        class="inline-flex items-center p-2 text-xs font-medium uppercase rounded-lg text-blue-700 sm:text-sm hover:bg-gray-100 dark:text-blue-500 dark:hover:bg-gray-700"
+        class="inline-flex items-center transition duration-200 p-2 text-xs font-medium uppercase rounded-lg text-blue-700 sm:text-sm hover:bg-gray-100 dark:text-blue-500 dark:hover:bg-gray-700"
       >
         {{ t('dashboard.stats.restores.button.see.title') }}
         <FontAwesomeIcon :icon="faChevronRight" class="!w-3 !h-3 ml-2" />

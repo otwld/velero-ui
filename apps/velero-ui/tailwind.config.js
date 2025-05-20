@@ -11,6 +11,24 @@ module.exports = {
   ],
   purge: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
   darkMode: 'media',
+  safelist: [
+    'h-2',
+    'h-2.5',
+    'h-3',
+    'h-4',
+    'h-5',
+    'h-6',
+    'w-2',
+    'w-4',
+    'w-8',
+    'w-12',
+    'w-24',
+    'w-32',
+    'w-48',
+    'w-72',
+    'w-96',
+    'w-full',
+  ],
   theme: {
     extend: {
       keyframes: {
@@ -29,7 +47,5 @@ module.exports = {
       },
     },
   },
-  plugins: [
-    require('flowbite/plugin')
-  ],
+  plugins: [require('flowbite/plugin')],
 };

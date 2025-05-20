@@ -54,7 +54,7 @@
       <button
         :class="{ 'cursor-not-allowed': disablePrev() }"
         :disabled="disablePrev()"
-        class="inline-flex items-center justify-center flex-1 px-3 py-2 text-sm font-medium text-center rounded-l-lg text-gray-900 bg-white border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white"
+        class="inline-flex items-center transition duration-200 justify-center flex-1 px-3 py-2 text-sm font-medium text-center rounded-l-lg text-gray-900 bg-white border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white"
         type="button"
         @click="listStore.previous()"
       >
@@ -64,7 +64,7 @@
       <button
         :class="{ 'cursor-not-allowed': disableNext() }"
         :disabled="disableNext()"
-        class="inline-flex items-center justify-center flex-1 px-3 py-2 text-sm font-medium text-center rounded-r-lg text-gray-900 bg-white border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white"
+        class="inline-flex items-center transition duration-200 justify-center flex-1 px-3 py-2 text-sm font-medium text-center rounded-r-lg text-gray-900 bg-white border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white"
         type="button"
         @click="listStore.next()"
       >

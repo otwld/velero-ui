@@ -13,7 +13,7 @@ export interface V1BackupRepositorySpec {
   backupStorageLocation: string;
   repositoryType?: V1BackupRepositoryType;
   resticIdentifier: string;
-  maintenanceFrequency: Date;
+  maintenanceFrequency: string;
   repositoryConfig?: object;
 }
 

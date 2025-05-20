@@ -1,24 +1,21 @@
 <template>
   <ResourceStatus :is-loading="!repository">
     <template #badges>
-      <span
+      <Badge
         v-if="repository?.status?.phase === V1BackupRepositoryPhase.Ready"
-        class="ml-4 bg-green-100 text-green-800 text-xs font-medium inline-flex items-center me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300"
-      >
-        {{ t('resource.phase.Ready') }}
-      </span>
-      <span
+        :text="t('resource.phase.Ready')"
+        color="green"
+      />
+      <Badge
         v-if="repository?.status?.phase === V1BackupRepositoryPhase.NotReady"
-        class="ml-4 bg-red-100 text-red-800 text-xs font-medium inline-flex items-center me-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300"
-      >
-        {{ t('resource.phase.NotReady') }}
-      </span>
-      <span
+        :text="t('resource.phase.NotReady')"
+        color="red"
+      />
+      <Badge
         v-if="repository?.status?.phase === V1BackupRepositoryPhase.New"
-        class="ml-4 bg-red-100 text-blue-800 text-xs font-medium inline-flex items-center me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300"
-      >
-        {{ t('resource.phase.New') }}
-      </span>
+        :text="t('resource.phase.New')"
+        color="blue"
+      />
     </template>
     <template #content>
       <div
@@ -51,6 +48,8 @@ import { V1BackupRepositoryPhase } from '@velero-ui/velero';
 import { convertTimestampToDate } from '../../utils/date.utils';
 import { useI18n } from 'vue-i18n';
 import ResourceStatus from '@velero-ui-app/components/Resource/ResourceStatus.vue';
+import { faClock } from "@fortawesome/free-solid-svg-icons";
+import Badge from "@velero-ui-app/components/Badge.vue";
 
 const { t } = useI18n();
 defineProps({

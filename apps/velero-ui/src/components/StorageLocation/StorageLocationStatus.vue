@@ -1,22 +1,20 @@
 <template>
   <ResourceStatus :is-loading="!location">
     <template #badges>
-      <span
+      <Badge
         v-if="
           location?.status?.phase === V1BackupStorageLocationPhase.Available
         "
-        class="bg-green-100 text-green-800 text-xs font-medium inline-flex items-center me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300"
-      >
-        {{ location.status.phase }}
-      </span>
-      <span
+        :text="location.status.phase"
+        color="green"
+      />
+      <Badge
         v-if="
           location?.status?.phase === V1BackupStorageLocationPhase.Unavailable
         "
-        class="bg-red-100 text-red-800 text-xs font-medium inline-flex items-center me-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300"
-      >
-        {{ location.status.phase }}
-      </span>
+        :text="location.status.phase"
+        color="red"
+      />
     </template>
     <template #content>
       <div v-if="location?.status?.lastSyncedTime" class="mt-4 flex flex-col">
@@ -57,6 +55,7 @@ import { V1BackupStorageLocationPhase } from '@velero-ui/velero';
 import { convertTimestampToDate } from '../../utils/date.utils';
 import { useI18n } from 'vue-i18n';
 import ResourceStatus from '@velero-ui-app/components/Resource/ResourceStatus.vue';
+import Badge from '@velero-ui-app/components/Badge.vue';
 
 const { t } = useI18n();
 defineProps({

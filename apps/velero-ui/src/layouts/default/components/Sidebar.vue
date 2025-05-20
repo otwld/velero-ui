@@ -21,7 +21,7 @@
               <router-link
                 :to="Pages.HOME.path"
                 active-class="bg-gray-100 dark:bg-gray-700"
-                class="flex items-center p-2 text-base text-gray-900 rounded-lg hover:bg-gray-100 group dark:text-gray-200 dark:hover:bg-gray-700"
+                class="flex items-center transition duration-200 p-2 text-base text-gray-900 rounded-lg hover:bg-gray-100 group dark:text-gray-200 dark:hover:bg-gray-700"
               >
                 <FontAwesomeIcon
                   :icon="faChartPie"
@@ -34,7 +34,7 @@
               <router-link
                 :to="Pages.BACKUPS.path"
                 active-class="bg-gray-100 dark:bg-gray-700"
-                class="flex items-center p-2 text-base text-gray-900 rounded-lg hover:bg-gray-100 group dark:text-gray-200 dark:hover:bg-gray-700"
+                class="flex items-center transition duration-200 p-2 text-base text-gray-900 rounded-lg hover:bg-gray-100 group dark:text-gray-200 dark:hover:bg-gray-700"
               >
                 <FontAwesomeIcon
                   :icon="faFloppyDisk"
@@ -47,7 +47,7 @@
               <router-link
                 :to="Pages.SCHEDULES.path"
                 active-class="bg-gray-100 dark:bg-gray-700"
-                class="flex items-center p-2 text-base text-gray-900 rounded-lg hover:bg-gray-100 group dark:text-gray-200 dark:hover:bg-gray-700"
+                class="flex items-center transition duration-200 p-2 text-base text-gray-900 rounded-lg hover:bg-gray-100 group dark:text-gray-200 dark:hover:bg-gray-700"
               >
                 <FontAwesomeIcon
                   :icon="faClock"
@@ -60,7 +60,7 @@
               <router-link
                 :to="Pages.RESTORES.path"
                 active-class="bg-gray-100 dark:bg-gray-700"
-                class="flex items-center p-2 text-base text-gray-900 rounded-lg hover:bg-gray-100 group dark:text-gray-200 dark:hover:bg-gray-700"
+                class="flex items-center transition duration-200 p-2 text-base text-gray-900 rounded-lg hover:bg-gray-100 group dark:text-gray-200 dark:hover:bg-gray-700"
               >
                 <FontAwesomeIcon
                   :icon="faClockRotateLeft"
@@ -75,7 +75,7 @@
               <router-link
                 :to="Pages.BACKUP_REPOSITORIES.path"
                 active-class="bg-gray-100 dark:bg-gray-700"
-                class="flex items-center p-2 text-base text-gray-900 rounded-lg hover:bg-gray-100 group dark:text-gray-200 dark:hover:bg-gray-700"
+                class="flex items-center transition duration-200 p-2 text-base text-gray-900 rounded-lg hover:bg-gray-100 group dark:text-gray-200 dark:hover:bg-gray-700"
               >
                 <FontAwesomeIcon
                   :icon="faFolderTree"
@@ -90,7 +90,7 @@
               <router-link
                 :to="Pages.STORAGE_LOCATIONS.path"
                 active-class="bg-gray-100 dark:bg-gray-700"
-                class="flex items-center p-2 text-base text-gray-900 rounded-lg hover:bg-gray-100 group dark:text-gray-200 dark:hover:bg-gray-700"
+                class="flex items-center transition duration-200 p-2 text-base text-gray-900 rounded-lg hover:bg-gray-100 group dark:text-gray-200 dark:hover:bg-gray-700"
               >
                 <FontAwesomeIcon
                   :icon="faServer"
@@ -105,7 +105,7 @@
               <router-link
                 :to="Pages.SNAPSHOT_LOCATIONS.path"
                 active-class="bg-gray-100 dark:bg-gray-700"
-                class="flex items-center p-2 text-base text-gray-900 rounded-lg hover:bg-gray-100 group dark:text-gray-200 dark:hover:bg-gray-700"
+                class="flex items-center transition duration-200 p-2 text-base text-gray-900 rounded-lg hover:bg-gray-100 group dark:text-gray-200 dark:hover:bg-gray-700"
               >
                 <FontAwesomeIcon
                   :icon="faDatabase"
@@ -130,7 +130,7 @@
             >
               <button
                 aria-controls="dropdown-pod-volumes"
-                class="flex w-full items-center p-2 text-base text-gray-900 rounded-lg transition duration-75 hover:bg-gray-100 group dark:text-gray-200 dark:hover:bg-gray-700"
+                class="flex w-full items-center transition duration-200 p-2 text-base text-gray-900 rounded-lg transition duration-75 hover:bg-gray-100 group dark:text-gray-200 dark:hover:bg-gray-700"
                 data-collapse-toggle="dropdown-pod-volumes"
                 type="button"
                 @click="toggleDropdownPodVolumes()"
@@ -160,7 +160,7 @@
                   <router-link
                     :to="Pages.POD_VOLUME_BACKUPS.path"
                     active-class="bg-gray-100 dark:bg-gray-700"
-                    class="flex items-center p-2 text-base text-gray-900 transition duration-75 rounded-lg pl-6 group hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700"
+                    class="flex items-center transition duration-200 p-2 text-base text-gray-900 transition duration-75 rounded-lg pl-6 group hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700"
                   >
                     <FontAwesomeIcon
                       :icon="faCube"
@@ -175,7 +175,7 @@
                   <router-link
                     :to="Pages.POD_VOLUME_RESTORES.path"
                     active-class="bg-gray-100 dark:bg-gray-700"
-                    class="flex items-center p-2 text-base text-gray-900 transition duration-75 rounded-lg pl-6 group hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700"
+                    class="flex items-center transition duration-200 p-2 text-base text-gray-900 transition duration-75 rounded-lg pl-6 group hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700"
                   >
                     <FontAwesomeIcon
                       :icon="faCube"
@@ -206,7 +206,7 @@
             >
               <button
                 aria-controls="dropdown-requests"
-                class="flex w-full items-center p-2 text-base text-gray-900 rounded-lg transition duration-75 hover:bg-gray-100 group dark:text-gray-200 dark:hover:bg-gray-700"
+                class="flex w-full items-center transition duration-200 p-2 text-base text-gray-900 rounded-lg transition duration-75 hover:bg-gray-100 group dark:text-gray-200 dark:hover:bg-gray-700"
                 data-collapse-toggle="dropdown-requests"
                 type="button"
                 @click="toggleDropdown()"
@@ -242,7 +242,7 @@
                   <router-link
                     :to="Pages.DELETE_BACKUP_REQUESTS.path"
                     active-class="bg-gray-100 dark:bg-gray-700"
-                    class="flex items-center p-2 text-base text-gray-900 transition duration-75 rounded-lg pl-6 group hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700"
+                    class="flex items-center transition duration-200 p-2 text-base text-gray-900 transition duration-75 rounded-lg pl-6 group hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700"
                   >
                     <FontAwesomeIcon
                       :icon="faFileExcel"
@@ -257,7 +257,7 @@
                   <router-link
                     :to="Pages.DOWNLOAD_REQUESTS.path"
                     active-class="bg-gray-100 dark:bg-gray-700"
-                    class="flex items-center p-2 text-base text-gray-900 transition duration-75 rounded-lg pl-6 group hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700"
+                    class="flex items-center transition duration-200 p-2 text-base text-gray-900 transition duration-75 rounded-lg pl-6 group hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700"
                   >
                     <FontAwesomeIcon
                       :icon="faFileArrowDown"
@@ -274,7 +274,7 @@
                   <router-link
                     :to="Pages.SERVER_STATUS_REQUESTS.path"
                     active-class="bg-gray-100 dark:bg-gray-700"
-                    class="flex items-center p-2 text-base text-gray-900 transition duration-75 rounded-lg pl-6 group hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700"
+                    class="flex items-center transition duration-200 p-2 text-base text-gray-900 transition duration-75 rounded-lg pl-6 group hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700"
                   >
                     <FontAwesomeIcon
                       :icon="faFileWaveform"
@@ -292,7 +292,7 @@
             <router-link
               :to="Pages.SETTINGS.path"
               active-class="bg-gray-100 dark:bg-gray-700"
-              class="flex items-center p-2 text-base text-gray-900 transition duration-75 rounded-lg hover:bg-gray-100 group dark:text-gray-200 dark:hover:bg-gray-700"
+              class="flex items-center transition duration-200 p-2 text-base text-gray-900 transition duration-75 rounded-lg hover:bg-gray-100 group dark:text-gray-200 dark:hover:bg-gray-700"
             >
               <FontAwesomeIcon
                 :icon="faGear"
@@ -309,7 +309,7 @@
         <div class="flex flex-col">
           <div class="flex justify-center">
             <a
-              class="inline-flex justify-center p-2 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
+              class="inline-flex justify-center transition duration-200 p-2 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
               href="https://github.com/otwld/velero-ui"
               target="_blank"
             >
@@ -323,7 +323,7 @@
             class="inline-flex justify-center text-gray-500 text-xs dark:text-white"
             >{{ t('global.powered', { version }) }}
             <a
-              class="ml-1 hover:text-blue-600"
+              class="ml-1 hover:text-blue-600 transition duration-200"
               href="https://otwld.com/"
               target="_blank"
               >OTWLD</a

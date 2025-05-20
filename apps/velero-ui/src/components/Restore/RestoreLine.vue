@@ -7,7 +7,7 @@
           class="!w-4 !h-4 border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600"
           type="checkbox"
           @click="emit('onChecked')"
-        >
+        />
         <label class="sr-only" for="checkbox-">checkbox</label>
       </div>
     </td>
@@ -45,16 +45,16 @@
         :to="{
           name: Pages.BACKUP.name,
           params: {
-            name: data.spec?.backupName,
+            name: data.spec.backupName,
           },
         }"
-        class="inline-flex items-center bg-gray-100 hover:bg-gray-200 text-gray-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-300"
       >
-        <FontAwesomeIcon :icon="faFloppyDisk" class="!w-3 !h-3 mr-1.5" />
-        {{ data.spec?.backupName }}
-        <FontAwesomeIcon
-          :icon="faArrowUpRightFromSquare"
-          class="!w-2 !h-2 ml-1.5"
+        <Badge
+          :hover="true"
+          :prefix-icon="faFloppyDisk"
+          :suffix-icon="faArrowUpRightFromSquare"
+          :text="data.spec.backupName"
+          color="gray"
         />
       </router-link>
     </td>
@@ -66,16 +66,16 @@
         :to="{
           name: Pages.SCHEDULE.name,
           params: {
-            name: data.spec?.scheduleName,
+            name: data.spec.scheduleName,
           },
         }"
-        class="inline-flex items-center bg-gray-100 hover:bg-gray-200 text-gray-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-300"
       >
-        <FontAwesomeIcon :icon="faClock" class="!w-3 !h-3 mr-1.5" />
-        {{ data.spec?.scheduleName }}
-        <FontAwesomeIcon
-          :icon="faArrowUpRightFromSquare"
-          class="!w-2 !h-2 ml-1.5"
+        <Badge
+          :hover="true"
+          :prefix-icon="faClock"
+          :suffix-icon="faArrowUpRightFromSquare"
+          :text="data.spec.scheduleName"
+          color="gray"
         />
       </router-link>
     </td>
@@ -106,11 +106,7 @@
             :icon="faCircleNotch"
             class="!w-4 !h-4 animate-spin"
           />
-          <FontAwesomeIcon
-            v-else
-            :icon="faTrashCan"
-            class="!w-4 !h-4"
-          />
+          <FontAwesomeIcon v-else :icon="faTrashCan" class="!w-4 !h-4" />
         </button>
       </div>
     </td>
@@ -156,19 +152,20 @@ import {
   faTrashCan,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { Pages } from '@velero-ui-app/utils/constants.utils';
 import { truncate } from '../../utils/string.utils';
 import ModalConfirmation from '@velero-ui-app/components/Modals/ModalConfirmation.vue';
 import { useDeleteKubernetesObject } from '@velero-ui-app/composables/useDeleteKubernetesObject';
 import { useI18n } from 'vue-i18n';
 import RestoreStatusPhaseBadge from '@velero-ui-app/components/Restore/RestoreStatusPhaseBadge.vue';
 import { initTooltips } from 'flowbite';
-import { can } from "@velero-ui-app/utils/policy.utils";
-import { Action } from "@velero-ui/shared-types";
+import { can } from '@velero-ui-app/utils/policy.utils';
+import { Action } from '@velero-ui/shared-types';
+import Badge from '@velero-ui-app/components/Badge.vue';
+import { Pages } from '@velero-ui-app/utils/constants.utils';
 
 const { t } = useI18n();
 defineProps({
-  data: {type: Object as PropType<V1Restore>, required: true },
+  data: { type: Object as PropType<V1Restore>, required: true },
   checked: Boolean,
 });
 
@@ -177,7 +174,7 @@ const showModalDelete = ref(false);
 const emit = defineEmits(['onChecked']);
 
 const { isPending: isDeleting, mutate: remove } = useDeleteKubernetesObject(
-  Resources.RESTORE,
+  Resources.RESTORE
 );
 
 onMounted(() => initTooltips());

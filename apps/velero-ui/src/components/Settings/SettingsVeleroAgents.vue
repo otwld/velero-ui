@@ -9,13 +9,13 @@
             {{ t('settings.agents.title') }}
           </h3>
           <Skeleton v-if="data && data.length === 0" class="ml-4" width="12" />
-          <span
+          <Badge
             v-if="data && data.length >= 0"
-            class="ml-4 bg-blue-100 text-blue-800 text-xs font-medium inline-flex items-center me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300"
-          >
-            <FontAwesomeIcon :icon="faMicrochip" class="!w-3 !h-3 mr-1.5" />
-            {{ data.length }}</span
-          >
+            :prefix-icon="faMicrochip"
+            :text="data.length.toString()"
+            class="ml-4"
+            color="blue"
+          />
         </div>
         <ul
           class="divide-y divide-gray-200 dark:divide-gray-700 overflow-auto max-h-[250px] mt-2 pr-2"
@@ -60,6 +60,7 @@ import { useI18n } from 'vue-i18n';
 import { faMicrochip } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import Skeleton from '@velero-ui-app/components/Skeleton.vue';
+import Badge from '@velero-ui-app/components/Badge.vue';
 
 const { t } = useI18n();
 const { data } = useSettingsAgents();

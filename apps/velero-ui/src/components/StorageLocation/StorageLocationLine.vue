@@ -66,7 +66,7 @@
         />
         {{
           data?.status?.phase
-            ? t(`resource.phase.${data?.status?.phase}`)
+            ? t(`resource.phase.${data.status.phase}`)
             : t('global.unknown')
         }}
       </div>

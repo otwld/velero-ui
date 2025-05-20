@@ -2,31 +2,24 @@
   <ResourceStatus :is-loading="!backup">
     <template #badges>
       <BackupStatusPhaseBadge :status="backup?.status?.phase" />
-      <span
+      <Badge
         v-if="backup?.status?.errors"
-        class="bg-red-100 text-red-800 text-xs font-medium inline-flex items-center me-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300"
-      >
-        <FontAwesomeIcon :icon="faCircleExclamation" class="!w-3 !h-3 mr-1.5" />
-        {{ backup.status.errors }}</span
-      >
-      <span
+        :prefix-icon="faCircleExclamation"
+        :text="backup.status.errors.toString()"
+        color="red"
+      />
+      <Badge
         v-if="backup?.status?.warnings"
-        class="bg-orange-100 text-orange-800 text-xs font-medium inline-flex items-center me-2 px-2.5 py-0.5 rounded dark:bg-orange-900 dark:text-orange-300"
-      >
-        <FontAwesomeIcon
-          :icon="faTriangleExclamation"
-          class="!w-3 !h-3 mr-1.5"
-        />
-
-        {{ backup.status.warnings }}</span
-      >
-      <span
+        :prefix-icon="faTriangleExclamation"
+        :text="backup.status.warnings.toString()"
+        color="orange"
+      />
+      <Badge
         v-if="backup?.status?.expiration"
-        class="bg-blue-100 text-blue-800 text-xs font-medium inline-flex items-center me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300"
-      >
-        <FontAwesomeIcon :icon="faHourglass" class="!w-3 !h-3 mr-1.5" />
-        {{ getRemainingTime(backup.status.expiration) }}</span
-      >
+        :prefix-icon="faHourglass"
+        :text="getRemainingTime(backup.status.expiration)"
+        color="blue"
+      />
     </template>
     <template #content>
       <div v-if="backup?.status?.progress" class="mt-4">
@@ -34,7 +27,6 @@
           <span class="text-base font-medium text-gray-900 dark:text-white">{{
             t('resource.status.items')
           }}</span>
-          <Skeleton v-if="!backup" />
           <span class="text-xs font-medium text-gray-900 dark:text-white"
             >{{ backup.status.progress.itemsBackedUp || '0' }} /
             {{ backup.status.progress.totalItems }}</span
@@ -64,7 +56,7 @@
           t('resource.status.validationErrors')
         }}</span>
         <i
-          v-for="(error, index) of backup?.status.validationErrors"
+          v-for="(error, index) of backup.status.validationErrors"
           :key="index"
           class="mt-1 text-xs text-gray-500 dark:text-gray-400"
         >
@@ -82,13 +74,14 @@ import { getRemainingTime } from '../../utils/date.utils';
 import BackupStatusPhaseBadge from './BackupStatusPhaseBadge.vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import {
-  faCircleExclamation,
+  faCircleExclamation, faClock,
   faHourglass,
   faTriangleExclamation,
 } from '@fortawesome/free-solid-svg-icons';
 import { useI18n } from 'vue-i18n';
 import ResourceStatus from '@velero-ui-app/components/Resource/ResourceStatus.vue';
 import Skeleton from '@velero-ui-app/components/Skeleton.vue';
+import Badge from "@velero-ui-app/components/Badge.vue";
 
 const { t } = useI18n();
 const props = defineProps({

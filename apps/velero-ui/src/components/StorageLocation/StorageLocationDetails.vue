@@ -1,19 +1,17 @@
 <template>
   <ResourceDetails :is-loading="!location">
     <template #badges>
-      <span
+      <Badge
         v-if="location?.spec?.default"
-        class="bg-green-100 text-green-800 text-xs font-medium inline-flex items-center me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300"
-      >
-        <FontAwesomeIcon :icon="faStar" class="!w-3 !h-3 mr-1.5" />
-        {{ t('resource.spec.default') }}</span
-      >
-      <span
+        :prefix-icon="faStar"
+        :text="t('resource.spec.default')"
+        color="green"
+      />
+      <Badge
         v-if="location?.spec?.accessMode"
-        class="bg-blue-100 text-blue-800 text-xs font-medium inline-flex items-center me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300"
-      >
-        {{ location.spec.accessMode }}</span
-      >
+        :text="location.spec.accessMode"
+        color="blue"
+      />
     </template>
     <template #content>
       <div v-if="location?.spec?.provider" class="mt-4 flex flex-col">
@@ -61,9 +59,9 @@
 import type { PropType } from 'vue';
 import type { V1BackupStorageLocation } from '@velero-ui/velero';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { useI18n } from 'vue-i18n';
 import ResourceDetails from '@velero-ui-app/components/Resource/ResourceDetails.vue';
+import Badge from '@velero-ui-app/components/Badge.vue';
 
 const { t } = useI18n();
 defineProps({
@@ -72,5 +70,4 @@ defineProps({
     required: true,
   },
 });
-
 </script>

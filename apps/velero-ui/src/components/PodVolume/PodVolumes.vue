@@ -12,27 +12,27 @@
           class="ml-4"
           width="12"
         />
-        <span
+        <Badge
           v-else
-          class="ml-4 bg-blue-100 text-blue-800 text-xs font-medium inline-flex items-center me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300"
-        >
-          <FontAwesomeIcon :icon="faCubes" class="!w-3 !h-3 mr-1.5" />
-          {{ data.length }}
-        </span>
+          :prefix-icon="faCubes"
+          :text="data.length.toString()"
+          class="ml-4"
+          color="blue"
+        />
         <Skeleton
           v-if="data && data.length === 0 && isFetching"
           class="ml-4"
           width="12"
         />
-        <span
+        <Badge
           v-else
-          class="ml-4 bg-blue-100 text-blue-800 text-xs font-medium inline-flex items-center me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300"
-        >
-          <FontAwesomeIcon :icon="faSquareBinary" class="!w-3 !h-3 mr-1.5" />
-          {{ convertBytes(totalPodVolumesSize || 0) }}
-        </span>
+          :prefix-icon="faSquareBinary"
+          :text="convertBytes(totalPodVolumesSize || 0)"
+          class="ml-4"
+          color="blue"
+        />
       </div>
-      <ul class="overflow-auto mt-2 pr-2 max-h-[300px]">
+      <div class="overflow-auto mt-2 pr-2 max-h-[300px]">
         <template v-if="data && data.length === 0 && isFetching">
           <div v-for="index of 3" :key="index" class="py-2">
             <Skeleton class="ml-4" height="3" width="96" />
@@ -45,7 +45,7 @@
           :key="index"
           :pod-volume="pod"
         />
-      </ul>
+      </div>
     </div>
   </div>
 </template>
@@ -65,9 +65,9 @@ import { computed, onBeforeMount, onBeforeUnmount } from 'vue';
 import { useListStore } from '@velero-ui-app/stores/list.store';
 import PodVolumeLine from '@velero-ui-app/components/PodVolume/PodVolumeShortLine.vue';
 import { faCubes, faSquareBinary } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { convertBytes } from '@velero-ui-app/utils/string.utils';
 import Skeleton from '@velero-ui-app/components/Skeleton.vue';
+import Badge from '@velero-ui-app/components/Badge.vue';
 
 const { t } = useI18n();
 const router: Router = useRouter();

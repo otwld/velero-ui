@@ -3,15 +3,15 @@
     <template #badges>
       <img
         v-if="spec?.repositoryType === V1BackupRepositoryType.Kopia"
-        :alt="spec?.repositoryType"
-        :title="spec?.repositoryType"
+        :alt="spec.repositoryType"
+        :title="spec.repositoryType"
         class="h-5 w-5"
         src="/src/assets/images/kopia.svg"
       />
       <img
         v-if="spec?.repositoryType === V1BackupRepositoryType.Restic"
-        :alt="spec?.repositoryType"
-        :title="spec?.repositoryType"
+        :alt="spec.repositoryType"
+        :title="spec.repositoryType"
         class="h-5 w-5"
         src="/src/assets/images/restic.png"
       />
@@ -20,25 +20,24 @@
         :to="{
           name: Pages.STORAGE_LOCATION.name,
           params: {
-            name: spec?.backupStorageLocation,
+            name: spec.backupStorageLocation,
           },
         }"
-        class="bg-blue-100 hover:bg-blue-200 text-blue-800 text-xs font-medium inline-flex items-center me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:hover:bg-blue-800 dark:text-blue-300"
       >
-        <FontAwesomeIcon :icon="faServer" class="!w-3 !h-3 mr-1.5" />
-        {{ spec.backupStorageLocation }}
-        <FontAwesomeIcon
-          :icon="faArrowUpRightFromSquare"
-          class="!w-2 !h-2 ml-1.5"
+        <Badge
+          :hover="true"
+          :prefix-icon="faServer"
+          :suffix-icon="faArrowUpRightFromSquare"
+          :text="spec.backupStorageLocation"
+          color="blue"
         />
       </router-link>
-      <span
+      <Badge
         v-if="spec?.maintenanceFrequency"
-        class="bg-blue-100 text-blue-800 text-xs font-medium inline-flex items-center me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300"
-      >
-        <FontAwesomeIcon :icon="faClock" class="!w-3 !h-3 mr-1.5" />
-        {{ spec.maintenanceFrequency }}</span
-      >
+        :prefix-icon="faClock"
+        :text="spec.maintenanceFrequency"
+        color="blue"
+      />
     </template>
     <template #content>
       <div v-if="spec?.volumeNamespace" class="mt-4 flex flex-col">
@@ -73,6 +72,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { Pages } from '../../utils/constants.utils';
 import { useI18n } from 'vue-i18n';
 import ResourceDetails from '@velero-ui-app/components/Resource/ResourceDetails.vue';
+import Badge from '@velero-ui-app/components/Badge.vue';
 
 const { t } = useI18n();
 defineProps({

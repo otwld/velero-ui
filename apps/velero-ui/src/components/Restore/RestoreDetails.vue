@@ -9,13 +9,13 @@
             name: spec?.backupName,
           },
         }"
-        class="bg-blue-100 hover:bg-blue-200 text-blue-800 text-xs font-medium inline-flex items-center me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:hover:bg-blue-800 dark:text-blue-300"
       >
-        <FontAwesomeIcon :icon="faFloppyDisk" class="!w-3 !h-3 mr-1.5" />
-        {{ spec?.backupName }}
-        <FontAwesomeIcon
-          :icon="faArrowUpRightFromSquare"
-          class="!w-2 !h-2 ml-1.5"
+        <Badge
+          :hover="true"
+          :prefix-icon="faFloppyDisk"
+          :suffix-icon="faArrowUpRightFromSquare"
+          :text="spec.backupName"
+          color="blue"
         />
       </router-link>
       <span
@@ -23,7 +23,7 @@
         class="bg-blue-100 text-blue-800 text-xs font-medium inline-flex items-center me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300"
       >
         <FontAwesomeIcon :icon="faClock" class="!w-3 !h-3 mr-1.5" />
-        {{ spec?.itemOperationTimeout }}</span
+        {{ spec.itemOperationTimeout }}</span
       >
     </template>
     <template #content>
@@ -74,6 +74,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { Pages } from '../../utils/constants.utils';
 import { useI18n } from 'vue-i18n';
 import ResourceDetails from '@velero-ui-app/components/Resource/ResourceDetails.vue';
+import Badge from '@velero-ui-app/components/Badge.vue';
 
 const { t } = useI18n();
 

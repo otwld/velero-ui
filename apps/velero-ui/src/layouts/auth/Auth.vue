@@ -67,7 +67,7 @@
 
               <button
                 :disabled="basicLoading"
-                class="flex justify-center items-center w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                class="flex justify-center items-center transition duration-200 w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                 type="submit"
               >
                 <FontAwesomeIcon
@@ -83,7 +83,7 @@
               class="flex items-center my-3"
             >
               <div class="w-full bg-gray-300 h-0.5" />
-              <div class="px-3 text-gray-600 text-center">
+              <div class="px-3 text-gray-300 text-center">
                 {{ t('auth.divider') }}
               </div>
               <div class="w-full bg-gray-300 h-0.5" />
@@ -101,7 +101,7 @@
           class="inline-flex justify-center text-gray-500 text-xs dark:text-white"
           >{{ t('global.powered', { version }) }}
           <a
-            class="ml-1 hover:text-blue-600"
+            class="ml-1 transition duration-200 hover:text-blue-600"
             href="https://otwld.com/"
             target="_blank"
             >OTWLD</a

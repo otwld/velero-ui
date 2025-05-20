@@ -8,7 +8,7 @@
           <button
             aria-controls="sidebar"
             aria-expanded="true"
-            class="flex p-2 text-gray-600 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 focus:bg-gray-100 dark:focus:bg-gray-700 focus:ring-2 focus:ring-gray-100 dark:focus:ring-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+            class="flex p-2 text-gray-600 transition duration-200 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 focus:bg-gray-100 dark:focus:bg-gray-700 focus:ring-2 focus:ring-gray-100 dark:focus:ring-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
             @click="appStore.toggleSidebar()"
           >
             <FontAwesomeIcon :icon="faBars" class="!w-5 !h-5" />
@@ -24,7 +24,7 @@
         <div class="flex items-center">
           <div v-click-out="clickOutsideLanguageDropdown">
             <button
-              class="flex ml-3 text-gray-600 rounded dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 text-sm p-2"
+              class="flex ml-3 text-gray-600 transition duration-200 rounded dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 text-sm p-2"
               type="button"
               @click="toggleLanguageDropdown()"
             >
@@ -45,7 +45,7 @@
                       'bg-gray-100': isCurrentLanguage(lang.code),
                       'dark:bg-gray-600': isCurrentLanguage(lang.code),
                     }"
-                    class="w-full block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                    class="w-full transition duration-200 block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                     @click="appStore.setLanguage(lang.code)"
                   >
                     {{ lang.title }}
@@ -71,7 +71,7 @@
               <button
                 id="user-menu-button-2"
                 aria-expanded="false"
-                class="flex items-center text-sm pe-1 font-medium text-gray-900 rounded-full hover:text-blue-600 dark:hover:text-blue-500 md:me-0 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:text-white"
+                class="flex items-center text-sm transition duration-200 pe-1 font-medium text-gray-900 rounded-full hover:text-blue-600 dark:hover:text-blue-500 md:me-0 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:text-white"
                 type="button"
                 @click="toggleDropdown()"
               >
@@ -115,7 +115,7 @@
               <ul class="py-1" role="none">
                 <li>
                   <button
-                    class="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                    class="block w-full transition duration-200 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
                     role="menuitem"
                     type="button"
                     @click="logout()"

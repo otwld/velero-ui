@@ -43,32 +43,27 @@
     >
       <router-link
         v-if="data?.metadata?.labels?.['velero.io/schedule-name']"
-        :title="data?.metadata?.labels?.['velero.io/schedule-name']"
+        :title="data.metadata.labels['velero.io/schedule-name']"
         :to="{
           name: Pages.SCHEDULE.name,
           params: {
-            name: data?.metadata?.labels?.['velero.io/schedule-name'],
+            name: data.metadata.labels['velero.io/schedule-name'],
           },
         }"
-        class="inline-flex items-center bg-gray-100 hover:bg-gray-200 text-gray-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-300"
       >
-        <FontAwesomeIcon :icon="faClockRotateLeft" class="!w-3 !h-3 mr-1.5" />
-        {{
-          truncate(
-            data?.metadata?.labels?.['velero.io/schedule-name'] || '',
-            30
-          )
-        }}
-        <FontAwesomeIcon
-          :icon="faArrowUpRightFromSquare"
-          class="!w-2 !h-2 ml-1.5"
+        <Badge
+          :hover="true"
+          :prefix-icon="faClockRotateLeft"
+          :suffix-icon="faArrowUpRightFromSquare"
+          :text="truncate(data.metadata.labels['velero.io/schedule-name'], 30)"
+          color="gray"
         />
       </router-link>
     </td>
     <td class="p-4 text-base text-gray-900 whitespace-nowrap dark:text-white">
       {{
         data?.status?.startTimestamp
-          ? convertTimestampToDate(data?.status?.startTimestamp)
+          ? convertTimestampToDate(data.status.startTimestamp)
           : ''
       }}
     </td>
@@ -246,6 +241,7 @@ import BackupFormRestore from '@velero-ui-app/components/Backup/forms/BackupForm
 import { can } from '@velero-ui-app/utils/policy.utils';
 import { Action } from '@velero-ui/shared-types';
 import { useFormKitContextById } from '@formkit/vue';
+import Badge from '@velero-ui-app/components/Badge.vue';
 
 const { t } = useI18n();
 const props = defineProps({

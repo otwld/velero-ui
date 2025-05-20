@@ -33,7 +33,7 @@
         >
           <router-link
             :to="Pages.BACKUPS.path"
-            class="inline-flex text-gray-500 p-2 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
+            class="inline-flex text-gray-500 transition duration-200 p-2 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
             title="See"
             type="button"
           >
@@ -75,7 +75,7 @@
         >
           <router-link
             :to="Pages.SCHEDULES.path"
-            class="inline-flex text-gray-500 p-2 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
+            class="inline-flex text-gray-500 transition duration-200 p-2 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
             title="See"
             type="button"
           >
@@ -117,7 +117,7 @@
         >
           <router-link
             :to="Pages.RESTORES.path"
-            class="inline-flex text-gray-500 p-2 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
+            class="inline-flex text-gray-500 transition duration-200 p-2 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
             title="See"
             type="button"
           >
@@ -162,7 +162,7 @@
         >
           <router-link
             :to="Pages.STORAGE_LOCATIONS.path"
-            class="inline-flex text-gray-500 p-2 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
+            class="inline-flex text-gray-500 transition duration-200 p-2 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
             title="See"
             type="button"
           >

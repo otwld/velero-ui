@@ -38,7 +38,7 @@
                       name: schedule.name,
                     },
                   }"
-                  class="hover:text-blue-500"
+                  class="hover:text-blue-500 transition duration-200"
                   router-link
                   >{{ truncate(schedule.name, 32) }}
                 </router-link>

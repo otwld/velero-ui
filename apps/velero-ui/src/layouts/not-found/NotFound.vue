@@ -17,7 +17,7 @@
         </p>
         <router-link
           :to="Pages.HOME.path"
-          class="inline-flex text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:focus:ring-blue-900 my-4"
+          class="inline-flex text-white transition duration-200 bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:focus:ring-blue-900 my-4"
         >
           {{ t('notFound.button.title') }}
         </router-link>
