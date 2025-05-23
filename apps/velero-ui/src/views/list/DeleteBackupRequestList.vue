@@ -26,6 +26,9 @@
         />
       </button>
     </template>
+    <template #filters>
+      <SearchFilter :type="Filter.Backup" />
+    </template>
   </ListHeader>
   <ListContent ref="childListRef" :component="DeleteBackupRequestLine" />
   <ListFooter />
@@ -46,7 +49,8 @@
           v-for="(item, index) in childListRef?.getCheckedItems()"
           :key="index"
           class="mt-2 px-1 text-sm rounded bg-gray-200 text-gray-600 dark:bg-gray-600 dark:text-gray-200"
-        >{{ item }}</span>
+          >{{ item }}</span
+        >
       </div>
     </template>
   </ModalConfirmation>
@@ -68,8 +72,9 @@ import { useDeleteManyKubernetesObjects } from '@velero-ui-app/composables/useDe
 import { Resources } from '@velero-ui/velero';
 import ModalConfirmation from '@velero-ui-app/components/Modals/ModalConfirmation.vue';
 import { useI18n } from 'vue-i18n';
-import { can } from "@velero-ui-app/utils/policy.utils";
-import { Action } from "@velero-ui/shared-types";
+import { can } from '@velero-ui-app/utils/policy.utils';
+import { Action, Filter, SortBy, SortDirection } from '@velero-ui/shared-types';
+import SearchFilter from "@velero-ui-app/components/Search/SearchFilter.vue";
 
 const { t } = useI18n();
 
@@ -85,31 +90,21 @@ onBeforeMount(() =>
     {
       name: 'list.header.name',
       sort: {
-        enabled: true,
+        type: SortBy.Name,
         selected: true,
-        ascending: true,
+        direction: SortDirection.Ascending,
       },
     },
     {
       name: 'list.header.target',
-      sort: {
-        enabled: true,
-        selected: false,
-      },
     },
     {
       name: 'list.header.status',
-      sort: {
-        enabled: false,
-      },
     },
     {
       name: 'list.header.actions',
-      sort: {
-        enabled: false,
-      },
     },
-  ]),
+  ])
 );
 
 const showModalBulkRemove = ref(false);

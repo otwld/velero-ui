@@ -24,7 +24,7 @@ export interface V2alpha1DataUploadSpec {
   operationTimeout: Date;
 }
 
-export const enum V2alpha1DataUploadSnapshotType {
+export enum V2alpha1DataUploadSnapshotType {
   CSI = 'CSI',
 }
 
@@ -34,7 +34,7 @@ export interface V2alpha1DataUploadCSISnapshotSpec {
   snapshotClass: string;
 }
 
-export const enum V2alpha1DataUploadPhase {
+export enum V2alpha1DataUploadPhase {
   New = 'New',
   Accepted = 'Accepted',
   Prepared = 'Prepared',

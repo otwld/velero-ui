@@ -26,7 +26,7 @@ export interface V1PodVolumeBackupSpec {
   uploaderSettings?: Record<string, string>;
 }
 
-export const enum V1PodVolumeBackupPhase {
+export enum V1PodVolumeBackupPhase {
   New = 'New',
   InProgress = 'InProgress',
   Completed = 'Completed',

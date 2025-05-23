@@ -18,7 +18,7 @@
                         class="peer w-4 h-4 border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600"
                         type="checkbox"
                         @click="globalCheck($event)"
-                      >
+                      />
 
                       <span
                         v-if="checked === 'partial'"
@@ -36,25 +36,29 @@
                   scope="col"
                 >
                   <button
-                    v-if="header.sort.enabled"
+                    v-if="header.sort"
                     :class="{ 'font-bold': header.sort.selected }"
                     class="flex items-center uppercase"
                     type="button"
-                    @click="listStore.applyHeaderSort(header.name)"
+                    @click="listStore.applyHeaderSort(header.sort)"
                   >
                     {{ t(header.name) }}
-                    <FontAwesomeIcon
-                      v-if="header.sort.selected && header.sort?.ascending"
-                      :icon="faSortDown"
-                      class="!w-4 !h-4 pb-2 pl-2"
-                    />
-                    <FontAwesomeIcon
-                      v-if="header.sort.selected && !header.sort?.ascending"
-                      :icon="faSortUp"
-                      class="!w-4 !h-4 pt-2 pl-2"
-                    />
+                    <template v-if="header.sort.selected">
+                      <FontAwesomeIcon
+                        v-if="
+                          header.sort.direction === SortDirection.Descending
+                        "
+                        :icon="faSortDown"
+                        class="!w-4 !h-4 pb-2 pl-2"
+                      />
+                      <FontAwesomeIcon
+                        v-else
+                        :icon="faSortUp"
+                        class="!w-4 !h-4 pt-2 pl-2"
+                      />
+                    </template>
                   </button>
-                  <span v-if="!header.sort.enabled">{{ t(header.name) }}</span>
+                  <span v-else>{{ t(header.name) }}</span>
                 </th>
               </tr>
             </thead>
@@ -112,13 +116,14 @@ import { useListStore } from '@velero-ui-app/stores/list.store';
 import { storeToRefs } from 'pinia';
 import { useI18n } from 'vue-i18n';
 import { useKubernetesWatchListObject } from '@velero-ui-app/composables/useKubernetesWatchListObject';
+import { SortDirection } from '@velero-ui/shared-types';
 
 const { t } = useI18n();
 const listStore = useListStore();
 const { headers, objectType } = storeToRefs(listStore);
 
 const { on, off, data, isFetching } = useKubernetesWatchListObject(
-  objectType.value,
+  objectType.value
 );
 
 defineProps({
@@ -158,7 +163,7 @@ const setCheckedItem = (index: number) => {
   initCheckedItems();
   checkedItems.value[`${index}`] = !checkedItems.value[`${index}`];
   const totalChecked = Object.values(checkedItems.value).filter(
-    (i) => i,
+    (i) => i
   ).length;
   if (!totalChecked) {
     checked.value = 'false';

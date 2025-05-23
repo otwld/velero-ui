@@ -69,7 +69,7 @@ import { useDeleteManyKubernetesObjects } from '@velero-ui-app/composables/useDe
 import { Resources } from '@velero-ui/velero';
 import { useI18n } from 'vue-i18n';
 import { can } from "@velero-ui-app/utils/policy.utils";
-import { Action } from "@velero-ui/shared-types";
+import { Action, SortBy, SortDirection } from "@velero-ui/shared-types";
 
 const { t } = useI18n();
 
@@ -85,43 +85,29 @@ onBeforeMount(() =>
     {
       name: 'list.header.name',
       sort: {
-        enabled: true,
+        type: SortBy.Name,
         selected: true,
-        ascending: true,
+        direction: SortDirection.Ascending,
       },
     },
     {
       name: 'list.header.target',
-      sort: {
-        enabled: true,
-        selected: false,
-      },
     },
     {
       name: 'list.header.kind',
-      sort: {
-        enabled: true,
-        selected: false,
-      },
     },
     {
       name: 'list.header.expireIn',
       sort: {
-        enabled: true,
+        type: SortBy.Expiration,
         selected: false,
       },
     },
     {
       name: 'list.header.status',
-      sort: {
-        enabled: false,
-      },
     },
     {
       name: 'list.header.actions',
-      sort: {
-        enabled: false,
-      },
     },
   ]),
 );

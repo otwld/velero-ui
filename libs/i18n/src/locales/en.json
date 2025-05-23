@@ -47,8 +47,14 @@
       "pause": {
         "title": "Pause"
       },
+      "filters": {
+        "title": "Filters"
+      },
       "resume": {
         "title": "Resume"
+      },
+      "reset": {
+        "title": "Reset"
       },
       "close": {
         "title": "Close"
@@ -411,6 +417,40 @@
       "name": "Search",
       "label": "Search",
       "placeholder": "Search..."
+    },
+    "filter": {
+      "storageLocation": {
+        "label": "Storage Location",
+        "placeholder": "Select a storage location"
+      },
+      "schedule": {
+        "label": "Schedule",
+        "placeholder": "Select a schedule"
+      },
+      "backup": {
+        "label": "Backup",
+        "placeholder": "Select a backup"
+      },
+      "status": {
+        "label": "Status",
+        "placeholder": "Select a status"
+      },
+      "provider": {
+        "label": "Provider",
+        "placeholder": "Select a provider"
+      },
+      "accessMode": {
+        "label": "Access Mode",
+        "placeholder": "Select an access mode"
+      },
+      "repositoryType": {
+        "label": "Repository Type",
+        "placeholder": "Select a repository type"
+      },
+      "paused": {
+        "label": "Paused",
+        "placeholder": "Select a paused status"
+      }
     },
     "header": {
       "name": "Name",

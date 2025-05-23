@@ -1,8 +1,4 @@
-import {
-  HttpException,
-  Inject,
-  Injectable,
-} from '@nestjs/common';
+import { HttpException, Inject, Injectable } from '@nestjs/common';
 import {
   ApiException,
   CustomObjectsApi,
@@ -26,9 +22,11 @@ import {
   throwError,
 } from 'rxjs';
 import { VELERO } from '@velero-ui-api/shared/modules/velero/velero.constants';
-import { sortObjects } from '@velero-ui-api/shared/utils/sorts.utils';
 import { AppLogger } from '@velero-ui-api/shared/modules/logger/logger.service';
 import { Socket } from 'socket.io';
+import { KubernetesListObjectWithFilters } from '@velero-ui/shared-types';
+import { filters, slice, sort } from '@velero-ui-api/shared/utils/search.utils';
+import { SearchDto } from '@velero-ui-api/shared/dto/search.dto';
 
 @Injectable()
 export class K8sCustomObjectService {
@@ -49,16 +47,12 @@ export class K8sCustomObjectService {
     this.k8sWatcher = new Watch(this.k8s);
   }
 
-  public get<R extends KubernetesObject, T extends KubernetesListObject<R>>(
+  public get<T extends KubernetesObject>(
     plural: string,
-    offset = 0,
-    limit?: number,
-    search?: string,
-    sortColumnName?: string,
-    sortColumnAscending?: boolean
-  ): Observable<T> {
+    search?: SearchDto
+  ): Observable<KubernetesListObjectWithFilters<T>> {
     this.logger.debug(
-      `Fetching resources in "${plural}" (offset: ${offset}, limit: ${limit}, search: ${search}, sortColumnName: ${sortColumnName}, sortColumnAscending: ${sortColumnAscending})...`,
+      `Fetching resources in "${plural}" (offset: ${search?.offset}, limit: ${search?.limit}, search: ${search?.search}, sortBy: ${search?.sortBy}, sortDirection: ${search?.sortDirection})...`,
       K8sCustomObjectService.name
     );
     return from(
@@ -70,42 +64,28 @@ export class K8sCustomObjectService {
       })
     ).pipe(
       map(
-        (r: T): T => ({
-          ...r,
-          total: r.items.length,
-          items: (r.items = r.items.filter((i: R) =>
-            search ? i.metadata.name.includes(search) : i
-          )),
-        })
+        (r: KubernetesListObject<T>): KubernetesListObjectWithFilters<T> =>
+          filters(r, search)
       ),
       map(
-        (r: T): T => ({
-          ...r,
-          total: r.items.length,
-          items: (r.items = sortObjects(
-            r.items,
-            sortColumnName,
-            sortColumnAscending
-          )),
-        })
+        (
+          r: KubernetesListObjectWithFilters<T>
+        ): KubernetesListObjectWithFilters<T> =>
+          sort(r, search?.sortBy, search?.sortDirection)
       ),
       map(
-        (r: T): T => ({
-          ...r,
-          total: r.items.length,
-          items: limit
-            ? (r.items = r.items.slice(offset, offset + limit))
-            : r.items,
-        })
+        (
+          r: KubernetesListObjectWithFilters<T>
+        ): KubernetesListObjectWithFilters<T> =>
+          slice(r, search?.offset, search?.limit)
       ),
       catchError((err: ApiException<T>) => {
+        console.error(err);
         this.logger.error(
           `Error while fetching "${plural}": ${err.message}`,
           K8sCustomObjectService.name
         );
-        return throwError(
-            () => new HttpException(err.message, err.code)
-          );
+        return throwError(() => new HttpException(err.message, err.code));
       })
     );
   }
@@ -133,9 +113,7 @@ export class K8sCustomObjectService {
           `Error while fetching "${name}" in "${plural}": ${err.message}`,
           K8sCustomObjectService.name
         );
-        return throwError(
-            () => new HttpException(err.message, err.code)
-          );
+        return throwError(() => new HttpException(err.message, err.code));
       })
     );
   }

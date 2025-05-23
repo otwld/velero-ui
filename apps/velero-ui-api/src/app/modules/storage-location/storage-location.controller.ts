@@ -1,10 +1,6 @@
 import { Body, Controller, Param, Post, Put } from '@nestjs/common';
 import { StorageLocationService } from './storage-location.service';
-import {
-  Resources,
-  V1BackupStorageLocation,
-  V1BackupStorageLocationList,
-} from '@velero-ui/velero';
+import { Resources, V1BackupStorageLocation } from '@velero-ui/velero';
 import { K8sCustomObjectService } from '@velero-ui-api/modules/k8s-custom-object/k8s-custom-object.service';
 import {
   CreateStorageLocationDto,
@@ -18,10 +14,7 @@ import { Action } from '@velero-ui/shared-types';
 
 @Controller(Resources.BACKUP_STORAGE_LOCATION.route)
 @Subject(Resources.BACKUP_STORAGE_LOCATION.plural)
-export class StorageLocationController extends K8sCustomObjectController<
-  V1BackupStorageLocation,
-  V1BackupStorageLocationList
-> {
+export class StorageLocationController extends K8sCustomObjectController<V1BackupStorageLocation> {
   constructor(
     private readonly storageLocationService: StorageLocationService,
     readonly k8sCustomObjectService: K8sCustomObjectService

@@ -63,7 +63,7 @@ export interface V1BackupResourceHook {
   exec: V1ExecHook;
 }
 
-export const enum V1HookErrorMode {
+export enum V1HookErrorMode {
   Continue = 'Continue',
   Fail = 'Fail',
 }
@@ -75,7 +75,7 @@ export interface V1ExecHook {
   timeout?: string;
 }
 
-export const enum V1BackupPhase {
+export enum V1BackupPhase {
   New = 'New',
   FailedValidation = 'FailedValidation',
   InProgress = 'InProgress',

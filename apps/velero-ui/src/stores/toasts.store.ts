@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import type { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 
-export const enum ToastType {
+export enum ToastType {
   ERROR = 'error',
   SUCCESS = 'success',
   WARNING = 'warning',

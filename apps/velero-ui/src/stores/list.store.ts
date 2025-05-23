@@ -1,17 +1,23 @@
 import { defineStore } from 'pinia';
 import type { Resource } from '@velero-ui/velero';
-import type {
-  ListHeader,
-  ListSearchFilters,
-  ListSort,
+import {
+  Filter,
+  type FilterSelect,
+  type ListHeader,
+  type ListSort,
+  type SearchFilters,
+  type SearchPagination,
+  type SearchSort,
+  SortBy,
+  SortDirection,
 } from '@velero-ui/shared-types';
+import { type LocationQuery, useRoute, useRouter } from 'vue-router';
 
-export interface ListStore {
+export interface ListStore extends SearchPagination {
   total: number;
-  offset: number;
-  limit: number;
-  filters: ListSearchFilters;
-  sort: ListSort;
+  filters: SearchFilters<string>;
+  availableFilters: SearchFilters<FilterSelect[]>;
+  sort: SearchSort;
   headers: ListHeader[];
   objectType: Resource;
 }
@@ -22,14 +28,11 @@ export const useListStore = defineStore('list', {
       total: 0,
       offset: 0,
       limit: parseInt(localStorage.getItem('list.limit')) || 20,
-      filters: {
-        startWith: '',
-      },
+      filters: {},
+      availableFilters: {},
       sort: {
-        column: {
-          name: 'Name',
-          ascending: true,
-        },
+        sortBy: SortBy.Name,
+        sortDirection: SortDirection.Ascending,
       },
       headers: [],
       objectType: null,
@@ -43,28 +46,40 @@ export const useListStore = defineStore('list', {
       this.resetSort();
     },
     resetSearch(): void {
-      this.filters.startWith = '';
+      this.filters = {};
+      this.availableFilters = {};
       this.offset = 0;
     },
     resetSort(): void {
-      this.sort.column.name = 'Name';
-      this.sort.column.ascending = true;
+      this.sort.sortBy = SortBy.Name;
+      this.sort.sortDirection = SortDirection.Ascending;
     },
-    resetChecked(): void {
-      this.checked = {};
+    resetFilters(): void {
+      this.filters = {};
     },
     setTotal(total: number): void {
       this.total = total;
-    },
-    setOffset(offset: number): void {
-      this.offset = offset;
     },
     setLimit(limit: number): void {
       this.limit = limit;
       localStorage.setItem('list.limit', limit.toString());
     },
+    setAvailableFilters(filters: SearchFilters<FilterSelect[]>): void {
+      this.availableFilters = filters;
+    },
+    setFilter(key: Filter, value: string): void {
+      if (value) {
+        this.filters[key] = value;
+      } else {
+        delete this.filters[key];
+      }
+      this.offset = 0;
+    },
+    setFilters(filters: SearchFilters): void {
+      this.filters = filters;
+    },
     setObjectType(type: Resource): void {
-      this.reset();
+      //this.reset();
       this.objectType = type;
     },
     next(): void {
@@ -79,31 +94,34 @@ export const useListStore = defineStore('list', {
         this.offset = 0;
       }
     },
-    applyNameFilter(name: string): void {
-      this.filters.startWith = name;
-    },
     setHeaders(headers: ListHeader[]): void {
       this.headers = headers;
     },
-    applyHeaderSort(name: string): void {
-      const index = this.headers.findIndex((h) => h.name === name);
+    applyHeaderSort(sort: ListSort): void {
+      const header = this.headers.find((h) => h.sort?.type === sort.type);
 
-      if (index !== -1 && this.headers[index].sort.selected) {
-        this.headers[index].sort.ascending =
-          !this.headers[index].sort.ascending;
-        this.sort.column.ascending = this.headers[index].sort.ascending;
-      } else if (index !== -1 && this.headers[index]?.sort.enabled) {
-        this.headers.forEach((h) => {
-          if (h.sort.selected) {
+      const newSort = {
+        type: header.sort.type,
+        selected: true,
+        direction:
+          header.sort?.direction === SortDirection.Ascending
+            ? SortDirection.Descending
+            : SortDirection.Ascending,
+      };
+
+      this.headers.forEach((h) => {
+        if (h.sort) {
+          if (h.sort.type === sort.type) {
+            h.sort = newSort;
+          } else {
             h.sort.selected = false;
+            h.sort.direction = undefined;
           }
-        });
+        }
+      });
 
-        this.headers[index].sort.selected = true;
-        this.headers[index].sort.ascending = true;
-        this.sort.column.name = this.headers[index].name;
-        this.sort.column.ascending = true;
-      }
+      this.sort.sortBy = newSort.type;
+      this.sort.sortDirection = newSort.direction;
     },
   },
 });

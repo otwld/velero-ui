@@ -1,21 +1,16 @@
 import { inject } from 'vue';
 import { useListStore } from '@velero-ui-app/stores/list.store';
 import { storeToRefs } from 'pinia';
-import type {
-  KubernetesListObject,
-  KubernetesObject,
-} from '@kubernetes/client-node';
+import type { KubernetesObject } from '@kubernetes/client-node';
 import type { Resource } from '@velero-ui/velero';
 import { QueryClient, useQuery, useQueryClient } from '@tanstack/vue-query';
 import { debounce } from 'lodash';
 import type { AxiosInstance } from 'axios';
 import type { SocketIO } from '@velero-ui-app/plugins/socket.plugin';
+import type { KubernetesListObjectWithFilters } from '@velero-ui/shared-types';
 
-export const useKubernetesWatchListObject = <
-  R extends KubernetesObject,
-  T extends KubernetesListObject<R>,
->(
-  resource: Resource,
+export const useKubernetesWatchListObject = <T extends KubernetesObject>(
+  resource: Resource
 ) => {
   const axiosInstance: AxiosInstance = inject('axios') as AxiosInstance;
 
@@ -28,8 +23,8 @@ export const useKubernetesWatchListObject = <
   const on = () => {
     socket.io.on(
       `watch:${resource.plural}:ADDED`,
-      debounce((addedObject: R) => {
-        queryClient.setQueryData<R[]>(
+      debounce((addedObject: T) => {
+        queryClient.setQueryData<T[]>(
           [
             resource.plural,
             {
@@ -39,13 +34,13 @@ export const useKubernetesWatchListObject = <
               sort,
             },
           ],
-          (oldData: R[] | undefined) => {
+          (oldData: T[] | undefined) => {
             if (!oldData) {
               return [addedObject];
             }
 
-            const exists: R = oldData.find(
-              (obj: R) => obj.metadata.name === addedObject.metadata.name,
+            const exists: T = oldData.find(
+              (obj: T) => obj.metadata.name === addedObject.metadata.name
             );
 
             if (exists) {
@@ -56,15 +51,15 @@ export const useKubernetesWatchListObject = <
 
             listStore.setTotal(updatedData.length);
             return updatedData;
-          },
+          }
         );
-      }, 300),
+      }, 300)
     );
 
     socket.io.on(
       `watch:${resource.plural}:MODIFIED`,
-      debounce((modifiedObject: R) => {
-        queryClient.setQueryData<R[]>(
+      debounce((modifiedObject: T) => {
+        queryClient.setQueryData<T[]>(
           [
             resource.plural,
             {
@@ -74,23 +69,23 @@ export const useKubernetesWatchListObject = <
               sort,
             },
           ],
-          (oldData: R[]) => {
+          (oldData: T[]) => {
             if (!oldData) {
               return [];
             }
 
-            return oldData.map((obj: R) =>
+            return oldData.map((obj: T) =>
               obj.metadata.name === modifiedObject.metadata.name
                 ? modifiedObject
-                : obj,
+                : obj
             );
-          },
+          }
         );
-      }, 300),
+      }, 300)
     );
 
-    socket.io.on(`watch:${resource.plural}:DELETED`, (deletedObject: R) => {
-      queryClient.setQueryData<R[]>(
+    socket.io.on(`watch:${resource.plural}:DELETED`, (deletedObject: T) => {
+      queryClient.setQueryData<T[]>(
         [
           resource.plural,
           {
@@ -100,18 +95,18 @@ export const useKubernetesWatchListObject = <
             sort,
           },
         ],
-        (oldData: R[]) => {
+        (oldData: T[]) => {
           if (!oldData) {
             return [];
           }
 
-          const data: R[] = oldData.filter(
-            (obj: R) => obj.metadata.name !== deletedObject.metadata.name,
+          const data: T[] = oldData.filter(
+            (obj: T) => obj.metadata.name !== deletedObject.metadata.name
           );
 
           listStore.setTotal(data.length);
           return data;
-        },
+        }
       );
     });
   };
@@ -123,7 +118,7 @@ export const useKubernetesWatchListObject = <
     socket.io.emit(`watch:off`);
   };
 
-  const { data, isLoading, error, isFetching, refetch } = useQuery<R[]>({
+  const { data, isLoading, error, isFetching, refetch } = useQuery<T[]>({
     queryKey: [
       resource.plural,
       {
@@ -134,19 +129,19 @@ export const useKubernetesWatchListObject = <
       },
     ],
     queryFn: async () => {
-      const response = await axiosInstance.get<T & { total: number}>(
-        `${resource.route}`,
-        {
-          params: {
-            limit: limit.value,
-            offset: offset.value,
-            search: filters.value.startWith,
-            sortColumnName: sort.value.column.name,
-            sortColumnAscending: sort.value.column.ascending,
-          },
+      const response = await axiosInstance.get<
+        KubernetesListObjectWithFilters<T>
+      >(`${resource.route}`, {
+        params: {
+          limit: limit.value,
+          offset: offset.value,
+          ...filters.value,
+          ...sort.value,
         },
-      );
-      listStore.setTotal(response.data?.total);
+      });
+      listStore.setTotal(response.data.total);
+
+      listStore.setAvailableFilters(response.data.filters);
 
       socket.io.emit(`watch:on`, {
         plural: resource.plural,

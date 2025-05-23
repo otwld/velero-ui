@@ -26,6 +26,11 @@
         />
       </button>
     </template>
+    <template #filters>
+      <SearchFilter :type="Filter.StorageLocation" />
+      <SearchFilter :type="Filter.RepositoryType" />
+      <SearchFilter :type="Filter.Status" />
+    </template>
   </ListHeader>
   <ListContent ref="childListRef" :component="BackupRepositoryLine" />
   <ListFooter />
@@ -69,10 +74,11 @@ import { Resources } from '@velero-ui/velero';
 import ModalConfirmation from '@velero-ui-app/components/Modals/ModalConfirmation.vue';
 import { useI18n } from 'vue-i18n';
 import { can } from "@velero-ui-app/utils/policy.utils";
-import { Action } from "@velero-ui/shared-types";
+import { Action, Filter, SortBy, SortDirection } from "@velero-ui/shared-types";
+import SearchFilter from "@velero-ui-app/components/Search/SearchFilter.vue";
+import { useFilters } from "@velero-ui-app/composables/search/useFilters";
 
 const { t } = useI18n();
-
 const listStore = useListStore();
 
 const { mutate: remove, isPending: isLoadingDeleting } =
@@ -84,43 +90,37 @@ onBeforeMount(() =>
     {
       name: 'list.header.name',
       sort: {
-        enabled: true,
+        type: SortBy.Name,
         selected: true,
-        ascending: true,
+        direction: SortDirection.Ascending,
       },
     },
     {
       name: 'storageLocations.title',
       sort: {
-        enabled: true,
+        type: SortBy.StorageLocation,
         selected: false,
       },
     },
     {
       name: 'list.header.type',
       sort: {
-        enabled: true,
+        type: SortBy.RepositoryType,
         selected: false,
       },
     },
     {
       name: 'list.header.lastMaintenanceTime',
       sort: {
-        enabled: true,
+        type: SortBy.LastMaintenanceTime,
         selected: false,
       },
     },
     {
       name: 'list.header.status',
-      sort: {
-        enabled: false,
-      },
     },
     {
       name: 'list.header.actions',
-      sort: {
-        enabled: false,
-      },
     },
   ]),
 );

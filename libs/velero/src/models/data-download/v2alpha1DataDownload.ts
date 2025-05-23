@@ -29,7 +29,7 @@ export interface V2Alpha1DataDownloadTargetVolumeSpec {
   namespace: string;
 }
 
-export const enum V2alpha1DataDownloadPhase {
+export enum V2alpha1DataDownloadPhase {
   New = 'New',
   Accepted = 'Accepted',
   Prepared = 'Prepared',

@@ -24,7 +24,7 @@ import {
   V1VolumeSnapshotLocation,
   V1VolumeSnapshotLocationList,
 } from '@velero-ui/velero';
-import { FormList } from '@velero-ui/shared-types';
+import { FormList, KubernetesListObjectWithFilters } from '@velero-ui/shared-types';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()
@@ -52,12 +52,12 @@ export class FormService {
 
   public getSchedules(): Observable<FormList<string>> {
     return from(
-      this.k8sCustomObjectService.get<V1Schedule, V1ScheduleList>(
+      this.k8sCustomObjectService.get<V1Schedule>(
         Resources.SCHEDULE.plural,
       ),
     ).pipe(
       map(
-        (r: KubernetesListObject<V1Schedule>): FormList<string> => ({
+        (r: KubernetesListObjectWithFilters<V1Schedule>): FormList<string> => ({
           total: r.items.length,
           items: r.items.map((n: V1Schedule): string => n.metadata.name),
         }),
@@ -67,12 +67,12 @@ export class FormService {
 
   public getBackups(): Observable<FormList<string>> {
     return from(
-      this.k8sCustomObjectService.get<V1Backup, V1BackupList>(
+      this.k8sCustomObjectService.get<V1Backup>(
         Resources.BACKUP.plural,
       ),
     ).pipe(
       map(
-        (r: KubernetesListObject<V1Backup>): FormList<string> => ({
+        (r: KubernetesListObjectWithFilters<V1Backup>): FormList<string> => ({
           items: r.items
             .filter(
               (b) =>
@@ -95,13 +95,12 @@ export class FormService {
   public getStorageLocations(): Observable<FormList<string>> {
     return from(
       this.k8sCustomObjectService.get<
-        V1BackupStorageLocation,
-        V1BackupStorageLocationList
+        V1BackupStorageLocation
       >(Resources.BACKUP_STORAGE_LOCATION.plural),
     ).pipe(
       map(
         (
-          r: KubernetesListObject<V1BackupStorageLocation>,
+          r: KubernetesListObjectWithFilters<V1BackupStorageLocation>,
         ): FormList<string> => ({
           total: r.items.length,
           items: r.items.map(
@@ -115,13 +114,12 @@ export class FormService {
   public getSnapshotLocations(): Observable<FormList<string>> {
     return from(
       this.k8sCustomObjectService.get<
-        V1VolumeSnapshotLocation,
-        V1VolumeSnapshotLocationList
+        V1VolumeSnapshotLocation
       >(Resources.VOLUME_SNAPSHOT_LOCATION.plural),
     ).pipe(
       map(
         (
-          r: KubernetesListObject<V1VolumeSnapshotLocation>,
+          r: KubernetesListObjectWithFilters<V1VolumeSnapshotLocation>,
         ): FormList<string> => ({
           total: r.items.length,
           items: r.items.map(

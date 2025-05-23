@@ -77,7 +77,7 @@ export enum V1PolicyType {
   update = 'update',
 }
 
-export const enum V1RestorePhase {
+export enum V1RestorePhase {
   New = 'New',
   FailedValidation = 'FailedValidation',
   InProgress = 'InProgress',

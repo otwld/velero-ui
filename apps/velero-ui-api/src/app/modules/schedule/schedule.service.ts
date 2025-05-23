@@ -13,16 +13,14 @@ import {
   forkJoin,
   map,
   Observable,
-  of, switchMap,
+  of,
+  switchMap,
   tap,
 } from 'rxjs';
 import {
   Resources,
   V1Backup,
-  V1BackupList,
   V1PodVolumeBackup,
-  V1PodVolumeBackupList,
-  type V1PodVolumeRestore,
   V1Schedule,
 } from '@velero-ui/velero';
 import { ConfigService } from '@nestjs/config';
@@ -38,7 +36,12 @@ import {
   patchK8sCustomObjectSpec,
 } from '@velero-ui-api/modules/k8s-custom-object/k8s-custom-object.utils';
 import { VELERO } from '@velero-ui-api/shared/modules/velero/velero.constants';
-import { ScheduleStats } from '@velero-ui/shared-types';
+import {
+  KubernetesListObjectWithFilters,
+  ScheduleStats,
+  SortBy,
+  SortDirection,
+} from '@velero-ui/shared-types';
 import { BackupService } from '@velero-ui-api/modules/backup/backup.service';
 
 @Injectable()
@@ -112,19 +115,21 @@ export class ScheduleService {
   }
 
   public stats(name: string): Observable<ScheduleStats> {
-    const backups: Observable<V1BackupList> = this.k8sCustomObjectService.get<V1Backup, V1BackupList>(
-      Resources.BACKUP.plural,
-      0,
-      0,
-      name,
-      'Date',
-      true
-    );
+    const backups: Observable<KubernetesListObjectWithFilters<V1Backup>> =
+      this.k8sCustomObjectService.get<V1Backup>(Resources.BACKUP.plural, {
+        search: name,
+        sortBy: SortBy.CompletionTimestamp,
+        sortDirection: SortDirection.Ascending,
+      });
 
-    const podVolumes: Observable<V1PodVolumeBackupList> = this.k8sCustomObjectService.get<
-      V1PodVolumeBackup,
-      V1PodVolumeBackupList
-    >(Resources.POD_VOLUME_BACKUP.plural, 0, 0, name);
+    const podVolumes: Observable<
+      KubernetesListObjectWithFilters<V1PodVolumeBackup>
+    > = this.k8sCustomObjectService.get<V1PodVolumeBackup>(
+      Resources.POD_VOLUME_BACKUP.plural,
+      {
+        search: name,
+      }
+    );
 
     return forkJoin([backups, podVolumes]).pipe(
       switchMap(([backups, podVolumes]) => {
@@ -171,9 +176,12 @@ export class ScheduleService {
               });
 
               const podVolumeSize: number = podVolumes.items
-                .filter((pv: V1PodVolumeBackup) => pv.metadata.name.includes(backup.metadata.name))
+                .filter((pv: V1PodVolumeBackup) =>
+                  pv.metadata.name.includes(backup.metadata.name)
+                )
                 .reduce(
-                  (acc: number, pv: V1PodVolumeBackup) => acc + (pv.status?.progress?.bytesDone || 0),
+                  (acc: number, pv: V1PodVolumeBackup) =>
+                    acc + (pv.status?.progress?.bytesDone || 0),
                   0
                 );
 
