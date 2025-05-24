@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import {
   CoreV1Api,
   KubeConfig,
+  V1Container,
   V1Pod,
   V1PodList,
   V1PodStatus,
@@ -19,7 +20,7 @@ export class VeleroService {
 
   constructor(
     @Inject(K8S_CONNECTION) private readonly k8s: KubeConfig,
-    private configService: ConfigService,
+    private configService: ConfigService
   ) {
     this.k8sCoreV1Api = this.k8s.makeApiClient(CoreV1Api);
 
@@ -43,7 +44,7 @@ export class VeleroService {
       this.k8sCoreV1Api.readNamespacedPodStatus({
         name: this.podServerName,
         namespace: this.configService.get('velero.namespace'),
-      }),
+      })
     ).pipe(map((r: V1Pod) => r.status));
   }
 
@@ -52,7 +53,7 @@ export class VeleroService {
       this.k8sCoreV1Api.readNamespacedPodStatus({
         name: this.podVeleroUIName,
         namespace: this.configService.get('app.namespace'),
-      }),
+      })
     ).pipe(map((r: V1Pod) => r.status));
   }
 
@@ -61,7 +62,7 @@ export class VeleroService {
       this.k8sCoreV1Api.readNamespacedPod({
         name: this.podVeleroUIName,
         namespace: this.configService.get('app.namespace'),
-      }),
+      })
     );
   }
 
@@ -70,7 +71,7 @@ export class VeleroService {
       this.k8sCoreV1Api.readNamespacedPod({
         name: this.podServerName,
         namespace: this.configService.get('velero.namespace'),
-      }),
+      })
     );
   }
 
@@ -78,7 +79,7 @@ export class VeleroService {
     return from(
       this.k8sCoreV1Api.listNamespacedPod({
         namespace: this.configService.get('velero.namespace'),
-      }),
+      })
     )
       .pipe(map((r: V1PodList) => r.items))
       .pipe(
@@ -86,9 +87,9 @@ export class VeleroService {
           pods.filter(
             (pod: V1Pod) =>
               pod.metadata.name.startsWith('restic') ||
-              pod.metadata.name.startsWith('node-agent'),
-          ),
-        ),
+              pod.metadata.name.startsWith('node-agent')
+          )
+        )
       );
   }
 
@@ -96,16 +97,19 @@ export class VeleroService {
     return from(
       this.k8sCoreV1Api.listNamespacedPod({
         namespace: this.configService.get('velero.namespace'),
-      }),
+      })
     )
       .pipe(map((r: V1PodList) => r.items))
       .pipe(
         map(
           (pods: V1Pod[]): V1Pod =>
             pods.find((pod: V1Pod) =>
-              pod?.metadata?.name.startsWith(VELERO.SERVER_PREFIX) && !pod?.metadata?.name.startsWith(VELERO.UI_PREFIX),
-            ),
-        ),
+              pod.spec?.containers?.find(
+                (container: V1Container) =>
+                  container.name === VELERO.SERVER_CONTAINER_NAME
+              )
+            )
+        )
       )
       .pipe(
         tap((pod: V1Pod): void => {
@@ -114,7 +118,7 @@ export class VeleroService {
           } else {
             throw new Error('Cannot find Velero server!');
           }
-        }),
+        })
       );
   }
 
@@ -122,16 +126,19 @@ export class VeleroService {
     return from(
       this.k8sCoreV1Api.listNamespacedPod({
         namespace: this.configService.get('app.namespace'),
-      }),
+      })
     )
       .pipe(map((r: V1PodList) => r.items))
       .pipe(
         map(
           (pods: V1Pod[]): V1Pod =>
             pods.find((pod: V1Pod) =>
-              pod?.metadata?.name.startsWith(VELERO.UI_PREFIX),
-            ),
-        ),
+              pod.spec?.containers?.find(
+                (container: V1Container) =>
+                  container.name === VELERO.UI_CONTAINER_NAME
+              )
+            )
+        )
       )
       .pipe(
         tap((pod: V1Pod): void => {
@@ -140,7 +147,7 @@ export class VeleroService {
           } else {
             throw new Error('Cannot find Velero UI!');
           }
-        }),
+        })
       );
   }
 }

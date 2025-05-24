@@ -1,7 +1,7 @@
 export const VELERO = {
   GROUP: 'velero.io',
   VERSION: 'v1',
-  SERVER_PREFIX: 'velero-',
-  UI_PREFIX: 'velero-ui-',
   IMAGE: 'velero/velero',
+  SERVER_CONTAINER_NAME: 'velero',
+  UI_CONTAINER_NAME: 'velero-ui',
 };
