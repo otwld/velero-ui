@@ -47,7 +47,7 @@ export interface V1LabelsAnnotations {
 }
 
 
-export const enum NodeOS {
+export enum NodeOS {
   Linux = 'linux',
   Windows = 'windows',
   auto = 'auto',

@@ -12,7 +12,7 @@ export interface V1DownloadRequestSpec {
   target: V1DownloadTarget;
 }
 
-export const enum V1DownloadTargetKind {
+export enum V1DownloadTargetKind {
   BackupLog = 'BackupLog',
   BackupContents = 'BackupContents',
   BackupVolumeSnapshots = 'BackupVolumeSnapshots',
@@ -28,7 +28,7 @@ export const enum V1DownloadTargetKind {
   BackupVolumeInfos = 'BackupVolumeInfos',
 }
 
-export const enum V1DownloadRequestPhase {
+export enum V1DownloadRequestPhase {
   New = 'New',
   Processed = 'Processed',
 }

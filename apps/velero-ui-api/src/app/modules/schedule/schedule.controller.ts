@@ -1,7 +1,15 @@
-import { Body, Controller, Get, Param, Post, Put, UseInterceptors } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Put,
+  UseInterceptors,
+} from '@nestjs/common';
 import { ScheduleService } from './schedule.service';
 import { Observable } from 'rxjs';
-import { Resources, V1Schedule, V1ScheduleList } from '@velero-ui/velero';
+import { Resources, V1Schedule } from '@velero-ui/velero';
 import { K8sCustomObjectService } from '@velero-ui-api/modules/k8s-custom-object/k8s-custom-object.service';
 import {
   CreateScheduleDto,
@@ -12,14 +20,11 @@ import { K8sCustomObjectController } from '@velero-ui-api/modules/k8s-custom-obj
 import { CheckPolicies } from '@velero-ui-api/shared/decorators/check-policies.decorator';
 import { AppAbility } from '@velero-ui-api/shared/modules/casl/casl-ability.factory';
 import { Action } from '@velero-ui/shared-types';
-import { CacheInterceptor } from "@nestjs/cache-manager";
+import { CacheInterceptor } from '@nestjs/cache-manager';
 
 @Controller(Resources.SCHEDULE.route)
 @Subject(Resources.SCHEDULE.plural)
-export class ScheduleController extends K8sCustomObjectController<
-  V1Schedule,
-  V1ScheduleList
-> {
+export class ScheduleController extends K8sCustomObjectController<V1Schedule> {
   constructor(
     private readonly scheduleService: ScheduleService,
     readonly k8sCustomObjectService: K8sCustomObjectService

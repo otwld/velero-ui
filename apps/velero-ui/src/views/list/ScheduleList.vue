@@ -26,6 +26,11 @@
         />
       </button>
     </template>
+    <template #filters>
+      <SearchFilter :type="Filter.StorageLocation" />
+      <SearchFilter :type="Filter.Paused" />
+      <SearchFilter :type="Filter.Status" />
+    </template>
     <template #buttons>
       <button v-if="can(Action.Create, Resources.SCHEDULE.plural)"
         class="inline-flex items-center justify-center w-1/2 px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 sm:w-auto dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
@@ -92,7 +97,9 @@ import ModalConfirmation from "@velero-ui-app/components/Modals/ModalConfirmatio
 import {useDeleteManyKubernetesObjects} from "@velero-ui-app/composables/useDeleteManyKubernetesObjects";
 import {Resources} from "@velero-ui/velero";
 import { can } from "@velero-ui-app/utils/policy.utils";
-import { Action } from "@velero-ui/shared-types";
+import { Action, Filter, SortBy, SortDirection } from "@velero-ui/shared-types";
+import SearchFilter from "@velero-ui-app/components/Search/SearchFilter.vue";
+import { useFilters } from "@velero-ui-app/composables/search/useFilters";
 
 const { t } = useI18n();
 const listStore = useListStore();
@@ -107,42 +114,33 @@ onBeforeMount(() =>
     {
       name: 'list.header.name',
       sort: {
-        enabled: true,
+        type: SortBy.Name,
         selected: true,
-        ascending: true,
+        direction: SortDirection.Ascending,
       },
     },
     {
       name: 'storageLocations.title',
       sort: {
-        enabled: true,
+        type: SortBy.StorageLocation,
         selected: false,
       },
     },
     {
       name: 'list.header.cron',
-      sort: {
-        enabled: false,
-      },
     },
     {
       name: 'list.header.lastBackup',
       sort: {
-        enabled: true,
+        type: SortBy.LastBackup,
         selected: false,
       },
     },
     {
       name: 'list.header.status',
-      sort: {
-        enabled: false,
-      },
     },
     {
       name: 'list.header.actions',
-      sort: {
-        enabled: false,
-      },
     },
   ]),
 );

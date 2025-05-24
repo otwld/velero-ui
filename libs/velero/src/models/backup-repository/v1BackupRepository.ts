@@ -17,18 +17,18 @@ export interface V1BackupRepositorySpec {
   repositoryConfig?: object;
 }
 
-export const enum V1BackupRepositoryPhase {
+export enum V1BackupRepositoryPhase {
   New = 'New',
   Ready = 'Ready',
   NotReady = 'NotReady',
 }
 
-export const enum V1BackupRepositoryType {
+export enum V1BackupRepositoryType {
   Restic = 'restic',
   Kopia = 'kopia',
 }
 
-export const enum V1BackupRepositoryMaintenanceResult {
+export enum V1BackupRepositoryMaintenanceResult {
   Succeeded = 'Succeeded',
   Failed = 'Failed',
 }

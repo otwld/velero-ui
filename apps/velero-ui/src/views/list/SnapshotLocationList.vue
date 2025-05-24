@@ -26,6 +26,10 @@
         />
       </button>
     </template>
+    <template #filters>
+      <SearchFilter :type="Filter.Provider" />
+      <SearchFilter :type="Filter.Status" />
+    </template>
     <template #buttons>
       <button
         v-if="can(Action.Create, Resources.VOLUME_SNAPSHOT_LOCATION.plural)"
@@ -94,7 +98,9 @@ import ModalConfirmation from "@velero-ui-app/components/Modals/ModalConfirmatio
 import {useDeleteManyKubernetesObjects} from "@velero-ui-app/composables/useDeleteManyKubernetesObjects";
 import {Resources} from "@velero-ui/velero";
 import { can } from "@velero-ui-app/utils/policy.utils";
-import { Action } from "@velero-ui/shared-types";
+import { Action, Filter, SortBy, SortDirection } from "@velero-ui/shared-types";
+import SearchFilter from "@velero-ui-app/components/Search/SearchFilter.vue";
+import { useFilters } from "@velero-ui-app/composables/search/useFilters";
 
 const { t } = useI18n();
 const listStore = useListStore();
@@ -109,29 +115,23 @@ onBeforeMount(() =>
     {
       name: 'list.header.name',
       sort: {
-        enabled: true,
+        type: SortBy.Name,
         selected: true,
-        ascending: true,
+        direction: SortDirection.Ascending,
       },
     },
     {
       name: 'list.header.provider',
       sort: {
-        enabled: true,
+        type: SortBy.Provider,
         selected: false,
       },
     },
     {
       name: 'list.header.status',
-      sort: {
-        enabled: false,
-      },
     },
     {
       name: 'list.header.actions',
-      sort: {
-        enabled: false,
-      },
     },
   ]),
 );

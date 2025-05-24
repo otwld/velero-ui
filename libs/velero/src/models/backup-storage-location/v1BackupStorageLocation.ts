@@ -35,7 +35,7 @@ export interface V1BackupStorageLocationObjectStorageLocation {
   caCert?: string;
 }
 
-export const enum V1BackupStorageLocationPhase {
+export enum V1BackupStorageLocationPhase {
   Available = 'Available',
   Unavailable = 'Unavailable',
 }

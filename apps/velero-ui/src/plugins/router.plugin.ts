@@ -4,7 +4,7 @@ import { guard, resourceGuard } from '../utils/guard.utils';
 import { Pages } from '../utils/constants.utils';
 import { useListStore } from '../stores/list.store';
 import { Resources } from '@velero-ui/velero';
-import { Action } from '@velero-ui/shared-types';
+import { Action, Filter, type SearchFilters } from '@velero-ui/shared-types';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -220,5 +220,18 @@ const router: Router = createRouter({
 });
 
 router.beforeEach(guard);
+
+router.afterEach((to) => {
+  const listStore = useListStore();
+
+  const filters: SearchFilters = {};
+  for (const key of Object.keys(to.query)) {
+    if (Object.values(Filter).includes(key as Filter)) {
+      filters[key] = to.query[key] as string;
+    }
+  }
+
+  listStore.setFilters(filters);
+});
 
 export default router;

@@ -26,6 +26,11 @@
         />
       </button>
     </template>
+    <template #filters>
+      <SearchFilter :type="Filter.Backup" />
+      <SearchFilter :type="Filter.StorageLocation" />
+      <SearchFilter :type="Filter.Status" />
+    </template>
   </ListHeader>
   <ListContent ref="childListRef" :component="PodVolumeLine" />
   <ListFooter />
@@ -69,12 +74,13 @@ import { useDeleteManyKubernetesObjects } from '@velero-ui-app/composables/useDe
 import { Resources } from '@velero-ui/velero';
 import { useI18n } from 'vue-i18n';
 import { can } from "@velero-ui-app/utils/policy.utils";
-import { Action } from "@velero-ui/shared-types";
+import { Action, Filter, SortBy, SortDirection } from "@velero-ui/shared-types";
+import SearchFilter from "@velero-ui-app/components/Search/SearchFilter.vue";
+import { useFilters } from "@velero-ui-app/composables/search/useFilters";
 
 const { t } = useI18n();
 
 const listStore = useListStore();
-
 const { mutate: remove, isPending: isLoadingDeleting } =
   useDeleteManyKubernetesObjects(Resources.POD_VOLUME_RESTORE);
 
@@ -85,43 +91,29 @@ onBeforeMount(() =>
     {
       name: 'list.header.name',
       sort: {
-        enabled: true,
+        type: SortBy.Name,
         selected: true,
-        ascending: true,
+        direction: SortDirection.Ascending,
       },
     },
     {
       name: 'list.header.fromBackup',
-      sort: {
-        enabled: true,
-        selected: false,
-      },
     },
     {
       name: 'storageLocations.title',
       sort: {
-        enabled: true,
+        type: SortBy.StorageLocation,
         selected: false,
       },
     },
     {
       name: 'list.header.volume',
-      sort: {
-        enabled: true,
-        selected: false,
-      },
     },
     {
       name: 'list.header.status',
-      sort: {
-        enabled: false,
-      },
     },
     {
       name: 'list.header.actions',
-      sort: {
-        enabled: false,
-      },
     },
   ]),
 );

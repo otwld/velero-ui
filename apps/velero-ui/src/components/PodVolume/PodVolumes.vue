@@ -54,9 +54,7 @@ import { useI18n } from 'vue-i18n';
 import {
   Resources,
   type V1PodVolumeBackup,
-  type V1PodVolumeBackupList,
   type V1PodVolumeRestore,
-  type V1PodVolumeRestoreList,
 } from '@velero-ui/velero';
 import { type Router, useRouter } from 'vue-router';
 import { useKubernetesWatchListObject } from '@velero-ui-app/composables/useKubernetesWatchListObject';
@@ -68,9 +66,12 @@ import { faCubes, faSquareBinary } from '@fortawesome/free-solid-svg-icons';
 import { convertBytes } from '@velero-ui-app/utils/string.utils';
 import Skeleton from '@velero-ui-app/components/Skeleton.vue';
 import Badge from '@velero-ui-app/components/Badge.vue';
+import { useFilters } from '@velero-ui-app/composables/search/useFilters';
+import { Filter } from '@velero-ui/shared-types';
 
 const { t } = useI18n();
 const router: Router = useRouter();
+const { set } = useFilters();
 
 const type =
   router.currentRoute.value.name === Pages.BACKUP.name
@@ -79,11 +80,10 @@ const type =
 
 const listStore = useListStore();
 listStore.setObjectType(type);
-listStore.applyNameFilter(router.currentRoute.value.params.name as string);
+set(Filter.Search, router.currentRoute.value.params.name as string, true);
 
 const { on, off, data, error, isFetching } = useKubernetesWatchListObject<
-  V1PodVolumeBackup | V1PodVolumeRestore,
-  V1PodVolumeBackupList | V1PodVolumeRestoreList
+  V1PodVolumeBackup | V1PodVolumeRestore
 >(type);
 
 onBeforeMount((): void => on());

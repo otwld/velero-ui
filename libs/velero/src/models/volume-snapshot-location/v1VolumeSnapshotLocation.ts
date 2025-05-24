@@ -8,7 +8,7 @@ export interface V1VolumeSnapshotLocation extends KubernetesObject {
   status?: V1VolumeSnapshotLocationStatus;
 }
 
-export const enum V1VolumeSnapshotLocationPhase {
+export enum V1VolumeSnapshotLocationPhase {
   Available = 'Available',
   Unavailable = 'Unavailable',
 }

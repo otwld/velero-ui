@@ -10,7 +10,7 @@ export interface V1ServerStatusRequest extends KubernetesObject {
 
 export type V1ServerStatusRequestSpec = object;
 
-export const enum V1ServerStatusRequestPhase {
+export enum V1ServerStatusRequestPhase {
   New = 'New',
   Processed = 'Processed',
 }

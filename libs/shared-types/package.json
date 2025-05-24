@@ -5,7 +5,8 @@
     "tslib": "^2.3.0"
   },
   "peerDependencies": {
-    "@velero-ui/velero": "*"
+    "@velero-ui/velero": "*",
+    "@kubernetes/client-node": "*"
   },
   "type": "commonjs",
   "main": "./src/index.js",

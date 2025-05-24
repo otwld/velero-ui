@@ -171,6 +171,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { convertTimestampToDate } from '../../utils/date.utils';
 import { truncate } from '../../utils/string.utils';
+import { Pages } from '@velero-ui-app/utils/constants.utils';
 import { useDeleteKubernetesObject } from '@velero-ui-app/composables/useDeleteKubernetesObject';
 import ModalConfirmation from '@velero-ui-app/components/Modals/ModalConfirmation.vue';
 import { useI18n } from 'vue-i18n';

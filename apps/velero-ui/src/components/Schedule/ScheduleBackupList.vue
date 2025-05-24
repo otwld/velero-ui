@@ -30,8 +30,11 @@ import { type Router, useRouter } from 'vue-router';
 import { faFloppyDisk } from '@fortawesome/free-solid-svg-icons';
 import { storeToRefs } from 'pinia';
 import Badge from '@velero-ui-app/components/Badge.vue';
+import { useFilters } from '@velero-ui-app/composables/search/useFilters';
+import { Filter } from '@velero-ui/shared-types';
 
 const { t } = useI18n();
+const { set } = useFilters();
 
 const router: Router = useRouter();
 
@@ -39,5 +42,5 @@ const listStore = useListStore();
 const { total } = storeToRefs(listStore);
 
 listStore.setObjectType(Resources.BACKUP);
-listStore.applyNameFilter(router.currentRoute.value.params.name as string);
+set(Filter.Search, router.currentRoute.value.params.name as string, true);
 </script>

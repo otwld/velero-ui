@@ -16,7 +16,7 @@ export interface V1ScheduleSpec {
   skipImmediately?: boolean;
 }
 
-export const enum V1SchedulePhase {
+export enum V1SchedulePhase {
   New = 'New',
   Enabled = 'Enabled',
   FailedValidation = 'FailedValidation',

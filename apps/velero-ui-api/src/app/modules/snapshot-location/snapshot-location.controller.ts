@@ -1,10 +1,6 @@
 import { Body, Controller, Param, Post, Put } from '@nestjs/common';
 import { SnapshotLocationService } from './snapshot-location.service';
-import {
-  Resources,
-  V1VolumeSnapshotLocation,
-  V1VolumeSnapshotLocationList,
-} from '@velero-ui/velero';
+import { Resources, V1VolumeSnapshotLocation } from '@velero-ui/velero';
 import { K8sCustomObjectService } from '@velero-ui-api/modules/k8s-custom-object/k8s-custom-object.service';
 import {
   CreateVolumeSnapshotLocationDto,
@@ -18,10 +14,7 @@ import { Action } from '@velero-ui/shared-types';
 
 @Controller(Resources.VOLUME_SNAPSHOT_LOCATION.route)
 @Subject(Resources.VOLUME_SNAPSHOT_LOCATION.plural)
-export class SnapshotLocationController extends K8sCustomObjectController<
-  V1VolumeSnapshotLocation,
-  V1VolumeSnapshotLocationList
-> {
+export class SnapshotLocationController extends K8sCustomObjectController<V1VolumeSnapshotLocation> {
   constructor(
     private readonly snapshotLocationService: SnapshotLocationService,
     readonly k8sCustomObjectService: K8sCustomObjectService

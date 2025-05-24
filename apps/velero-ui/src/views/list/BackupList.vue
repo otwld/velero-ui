@@ -50,6 +50,10 @@
         />
       </button>
     </template>
+    <template #filters>
+      <SearchFilter :type="Filter.Schedule" />
+      <SearchFilter :type="Filter.Status" />
+    </template>
     <template #buttons>
       <button
         v-if="can(Action.Create, Resources.BACKUP.plural)"
@@ -100,25 +104,25 @@
         >
       </div>
       <FormKit
-          id="force-delete"
-          :name="t('form.field.forceDelete')"
-          outer-class="mb-2"
-          type="checkbox"
-          wrapper-class="flex items-center justify-center"
-        >
-          <template #label>
-            <label
-              class="flex ml-2 text-sm font-medium text-gray-900 dark:text-white items-center"
-              >{{ t('form.field.forceDelete') }}
-              <FontAwesomeIcon
-                :icon="faQuestionCircle"
-                class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
-                data-tooltip-style="light"
-                data-tooltip-target="tooltip-force-delete"
-              />
-            </label>
-          </template>
-        </FormKit>
+        id="force-delete"
+        :name="t('form.field.forceDelete')"
+        outer-class="mb-2"
+        type="checkbox"
+        wrapper-class="flex items-center justify-center"
+      >
+        <template #label>
+          <label
+            class="flex ml-2 text-sm font-medium text-gray-900 dark:text-white items-center"
+            >{{ t('form.field.forceDelete') }}
+            <FontAwesomeIcon
+              :icon="faQuestionCircle"
+              class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
+              data-tooltip-style="light"
+              data-tooltip-target="tooltip-force-delete"
+            />
+          </label>
+        </template>
+      </FormKit>
     </template>
   </ModalConfirmation>
   <ModalConfirmation
@@ -150,7 +154,8 @@ import {
   faCircleNotch,
   faDownload,
   faExclamationCircle,
-  faPlus, faQuestionCircle,
+  faPlus,
+  faQuestionCircle,
   faTrashCan,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
@@ -166,9 +171,12 @@ import ModalConfirmation from '@velero-ui-app/components/Modals/ModalConfirmatio
 import { Resources } from '@velero-ui/velero';
 import { useDeleteManyKubernetesObjects } from '@velero-ui-app/composables/useDeleteManyKubernetesObjects';
 import { useBackupManyDownloadContent } from '@velero-ui-app/composables/backup/useBackupManyDownloadContent';
-import { Action } from '@velero-ui/shared-types';
+import { Action, Filter, SortBy, SortDirection } from '@velero-ui/shared-types';
 import { can } from '@velero-ui-app/utils/policy.utils';
-import { useFormKitContextById } from "@formkit/vue";
+import { useFormKitContextById } from '@formkit/vue';
+import SearchFilter from '@velero-ui-app/components/Search/SearchFilter.vue';
+
+import { useFilters } from '@velero-ui-app/composables/search/useFilters';
 
 const { t } = useI18n();
 const listStore = useListStore();
@@ -176,7 +184,8 @@ const listStore = useListStore();
 const { mutate: remove, isPending: isLoadingDeleting } =
   useDeleteManyKubernetesObjects(Resources.BACKUP);
 
-const { mutate: download, isPending: downloadLoading } = useBackupManyDownloadContent();
+const { mutate: download, isPending: downloadLoading } =
+  useBackupManyDownloadContent();
 
 const childListRef = ref(null);
 
@@ -185,43 +194,37 @@ onBeforeMount(() =>
     {
       name: 'list.header.name',
       sort: {
-        enabled: true,
+        type: SortBy.Name,
         selected: true,
-        ascending: true,
+        direction: SortDirection.Ascending,
       },
     },
     {
       name: 'schedules.title',
       sort: {
-        enabled: true,
+        type: SortBy.Schedule,
         selected: false,
       },
     },
     {
       name: 'list.header.date',
       sort: {
-        enabled: true,
+        type: SortBy.StartTimestamp,
         selected: false,
       },
     },
     {
       name: 'list.header.expireIn',
       sort: {
-        enabled: true,
+        type: SortBy.Expiration,
         selected: false,
       },
     },
     {
       name: 'list.header.status',
-      sort: {
-        enabled: false,
-      },
     },
     {
       name: 'list.header.actions',
-      sort: {
-        enabled: false,
-      },
     },
   ])
 );
@@ -238,7 +241,10 @@ const bulkDownload = () => {
 };
 
 const bulkRemove = () => {
-  remove({ names: childListRef?.value.getCheckedItems(), forced: forceDeleteContext.value.value });
+  remove({
+    names: childListRef?.value.getCheckedItems(),
+    forced: forceDeleteContext.value.value,
+  });
   childListRef?.value.resetCheckedItems();
 };
 </script>
