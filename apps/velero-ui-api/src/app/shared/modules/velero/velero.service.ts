@@ -84,10 +84,11 @@ export class VeleroService {
       .pipe(map((r: V1PodList) => r.items))
       .pipe(
         map((pods: V1Pod[]) =>
-          pods.filter(
-            (pod: V1Pod) =>
-              pod.metadata.name.startsWith('restic') ||
-              pod.metadata.name.startsWith('node-agent')
+          pods.filter((pod: V1Pod) =>
+            pod.spec?.containers?.find(
+              (container: V1Container) =>
+                container.name === VELERO.AGENT_CONTAINER_NAME
+            )
           )
         )
       );
