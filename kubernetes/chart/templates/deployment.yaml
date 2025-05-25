@@ -34,7 +34,7 @@ spec:
       runtimeClassName: {{ .Values.runtimeClassName | quote }}
       {{- end }}
       containers:
-        - name: {{ .Chart.Name }}
+        - name: velero-ui
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
