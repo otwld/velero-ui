@@ -2,7 +2,7 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: {{ include "velero-ui.fullname" . }}
+  name: {{ include "velero-ui.fullname" . }}-permissions
   namespace: {{ .Release.Namespace }}
   labels:
       {{- include "velero-ui.labels" . | nindent 4 }}
@@ -19,7 +19,7 @@ roleRef:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: {{ include "velero-ui.fullname" . }}
+  name: {{ include "velero-ui.fullname" . }}-velero-permissions
   namespace: {{ .Values.configuration.general.veleroNamespace }}
 subjects:
   - kind: ServiceAccount
