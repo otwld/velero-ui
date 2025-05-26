@@ -12,7 +12,7 @@ subjects:
     name: {{ include "velero-ui.serviceAccountName" . }}
 roleRef:
   kind: Role
-  name: {{ include "velero-ui.fullname" . }}
+  name: {{ include "velero-ui.fullname" . }}-permissions
   apiGroup: rbac.authorization.k8s.io
 
 ---
@@ -27,6 +27,6 @@ subjects:
     name: {{ include "velero-ui.serviceAccountName" . }}
 roleRef:
   kind: Role
-  name: {{ include "velero-ui.fullname" . }}
+  name: {{ include "velero-ui.fullname" . }}-velero-permissions
   apiGroup: rbac.authorization.k8s.io
 {{- end }}

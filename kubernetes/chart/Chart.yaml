@@ -3,7 +3,7 @@ name: velero-ui
 description: A Helm chart for Velero UI
 type: application
 
-version: 0.12.0
+version: 0.12.1
 
 appVersion: "0.8.0"
 
@@ -12,8 +12,8 @@ kubeVersion: "^1.16.0-0"
 annotations:
   artifacthub.io/category: monitoring-logging
   artifacthub.io/changes: |
-    - kind: changed
-      description: upgrade app version to 0.8.0
+    - kind: fixed
+      description: invalid roleRef name
 
 home: https://velero-ui.docs.otwld.com/
 icon: https://velero.io/img/Velero.svg
