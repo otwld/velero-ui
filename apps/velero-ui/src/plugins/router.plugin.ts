@@ -1,20 +1,43 @@
 import type { Router, RouteRecordRaw } from 'vue-router';
 import { createRouter, createWebHistory } from 'vue-router';
+import Default from '../layouts/default/Default.vue';
+import Auth from '../layouts/auth/Auth.vue';
 import { guard, resourceGuard } from '../utils/guard.utils';
+import BackupList from '@velero-ui-app/views/list/BackupList.vue';
+import NotFound from '../layouts/not-found/NotFound.vue';
+import ScheduleList from '@velero-ui-app/views/list/ScheduleList.vue';
+import RestoreList from '@velero-ui-app/views/list/RestoreList.vue';
+import StorageLocationList from '@velero-ui-app/views/list/StorageLocationList.vue';
+import Backup from '@velero-ui-app/views/resources/Backup.vue';
 import { Pages } from '../utils/constants.utils';
+import SnapshotLocationList from '@velero-ui-app/views/list/SnapshotLocationList.vue';
+import Settings from '../views/Settings.vue';
+import Schedule from '@velero-ui-app/views/resources/Schedule.vue';
+import StorageLocation from '@velero-ui-app/views/resources/StorageLocation.vue';
+import SnapshotLocation from '@velero-ui-app/views/resources/SnapshotLocation.vue';
 import { useListStore } from '../stores/list.store';
+import Dashboard from '@velero-ui-app/views/Dashboard.vue';
+import Restore from '@velero-ui-app/views/resources/Restore.vue';
+import DownloadRequestList from '@velero-ui-app/views/list/DownloadRequestList.vue';
+import ServerStatusRequestList from '@velero-ui-app/views/list/ServerStatusRequestList.vue';
+import DeleteBackupRequestList from '@velero-ui-app/views/list/DeleteBackupRequestList.vue';
+import BackupRepositoryList from '@velero-ui-app/views/list/BackupRepositoryList.vue';
+import BackupRepository from '@velero-ui-app/views/resources/BackupRepository.vue';
+import PodVolumeRestoreList from '@velero-ui-app/views/list/PodVolumeRestoreList.vue';
+import PodVolumeBackupList from '@velero-ui-app/views/list/PodVolumeBackupList.vue';
+import PodVolume from '@velero-ui-app/views/resources/PodVolume.vue';
 import { Resources } from '@velero-ui/velero';
 import { Action, Filter, type SearchFilters } from '@velero-ui/shared-types';
 
 const routes: Array<RouteRecordRaw> = [
   {
-    component: import('@velero-ui-app/layouts/default/Default.vue'),
+    component: Default,
     redirect: Pages.LOGIN.path,
     path: '/',
     children: [
       {
         ...Pages.HOME,
-        component: import('@velero-ui-app/views/Dashboard.vue'),
+        component: Dashboard,
       },
       {
         ...Pages.BACKUPS,
@@ -22,12 +45,12 @@ const routes: Array<RouteRecordRaw> = [
         children: [
           {
             path: '',
-            component: import('@velero-ui-app/views/list/BackupList.vue'),
+            component: BackupList,
             beforeEnter: () => useListStore().setObjectType(Resources.BACKUP),
           },
           {
             ...Pages.BACKUP,
-            component: import('@velero-ui-app/views/resources/Backup.vue'),
+            component: Backup,
           },
         ],
       },
@@ -38,17 +61,13 @@ const routes: Array<RouteRecordRaw> = [
         children: [
           {
             path: '',
-            component: import(
-              '@velero-ui-app/views/list/StorageLocationList.vue'
-            ),
+            component: StorageLocationList,
             beforeEnter: () =>
               useListStore().setObjectType(Resources.BACKUP_STORAGE_LOCATION),
           },
           {
             ...Pages.STORAGE_LOCATION,
-            component: import(
-              '@velero-ui-app/views/resources/StorageLocation.vue'
-            ),
+            component: StorageLocation,
           },
         ],
       },
@@ -58,12 +77,12 @@ const routes: Array<RouteRecordRaw> = [
         children: [
           {
             path: '',
-            component: import('@velero-ui-app/views/list/RestoreList.vue'),
+            component: RestoreList,
             beforeEnter: () => useListStore().setObjectType(Resources.RESTORE),
           },
           {
             ...Pages.RESTORE,
-            component: import('@velero-ui-app/views/resources/Restore.vue'),
+            component: Restore,
           },
         ],
       },
@@ -74,12 +93,12 @@ const routes: Array<RouteRecordRaw> = [
         children: [
           {
             path: '',
-            component: import('@velero-ui-app/views/list/ScheduleList.vue'),
+            component: ScheduleList,
             beforeEnter: () => useListStore().setObjectType(Resources.SCHEDULE),
           },
           {
             ...Pages.SCHEDULE,
-            component: import('@velero-ui-app/views/resources/Schedule.vue'),
+            component: Schedule,
           },
         ],
       },
@@ -90,17 +109,13 @@ const routes: Array<RouteRecordRaw> = [
         children: [
           {
             path: '',
-            component: import(
-              '@velero-ui-app/views/list/SnapshotLocationList.vue'
-            ),
+            component: SnapshotLocationList,
             beforeEnter: () =>
               useListStore().setObjectType(Resources.VOLUME_SNAPSHOT_LOCATION),
           },
           {
             ...Pages.SNAPSHOT_LOCATION,
-            component: import(
-              '@velero-ui-app/views/resources/SnapshotLocation.vue'
-            ),
+            component: SnapshotLocation,
           },
         ],
       },
@@ -111,17 +126,13 @@ const routes: Array<RouteRecordRaw> = [
         children: [
           {
             path: '',
-            component: import(
-              '@velero-ui-app/views/list/BackupRepositoryList.vue'
-            ),
+            component: BackupRepositoryList,
             beforeEnter: () =>
               useListStore().setObjectType(Resources.BACKUP_REPOSITORY),
           },
           {
             ...Pages.BACKUP_REPOSITORY,
-            component: import(
-              '@velero-ui-app/views/resources/BackupRepository.vue'
-            ),
+            component: BackupRepository,
           },
         ],
       },
@@ -132,15 +143,13 @@ const routes: Array<RouteRecordRaw> = [
         children: [
           {
             path: '',
-            component: import(
-              '@velero-ui-app/views/list/PodVolumeBackupList.vue'
-            ),
+            component: PodVolumeBackupList,
             beforeEnter: () =>
               useListStore().setObjectType(Resources.POD_VOLUME_BACKUP),
           },
           {
             ...Pages.POD_VOLUME_BACKUP,
-            component: import('@velero-ui-app/views/resources/PodVolume.vue'),
+            component: PodVolume,
           },
         ],
       },
@@ -151,21 +160,19 @@ const routes: Array<RouteRecordRaw> = [
         children: [
           {
             path: '',
-            component: import(
-              '@velero-ui-app/views/list/PodVolumeRestoreList.vue'
-            ),
+            component: PodVolumeRestoreList,
             beforeEnter: () =>
               useListStore().setObjectType(Resources.POD_VOLUME_RESTORE),
           },
           {
             ...Pages.POD_VOLUME_RESTORE,
-            component: import('@velero-ui-app/views/resources/PodVolume.vue'),
+            component: PodVolume,
           },
         ],
       },
       {
         ...Pages.DOWNLOAD_REQUESTS,
-        component: import('@velero-ui-app/views/list/DownloadRequestList.vue'),
+        component: DownloadRequestList,
         beforeEnter: () => {
           useListStore().setObjectType(Resources.DOWNLOAD_REQUEST);
           return resourceGuard(Action.Read, Resources.DOWNLOAD_REQUEST.plural);
@@ -173,9 +180,7 @@ const routes: Array<RouteRecordRaw> = [
       },
       {
         ...Pages.SERVER_STATUS_REQUESTS,
-        component: import(
-          '@velero-ui-app/views/list/ServerStatusRequestList.vue'
-        ),
+        component: ServerStatusRequestList,
         beforeEnter: () => {
           useListStore().setObjectType(Resources.SERVER_STATUS_REQUEST);
           return resourceGuard(
@@ -186,9 +191,7 @@ const routes: Array<RouteRecordRaw> = [
       },
       {
         ...Pages.DELETE_BACKUP_REQUESTS,
-        component: import(
-          '@velero-ui-app/views/list/DeleteBackupRequestList.vue'
-        ),
+        component: DeleteBackupRequestList,
         beforeEnter: () => {
           useListStore().setObjectType(Resources.DELETE_BACKUP_REQUEST);
           return resourceGuard(
@@ -200,17 +203,17 @@ const routes: Array<RouteRecordRaw> = [
       {
         ...Pages.SETTINGS,
         beforeEnter: () => resourceGuard(Action.Manage, 'all'),
-        component: import('@velero-ui-app/views/Settings.vue'),
+        component: Settings,
       },
     ],
   },
   {
     ...Pages.LOGIN,
-    component: import('@velero-ui-app/layouts/auth/Auth.vue'),
+    component: Auth,
   },
   {
     ...Pages.NOT_FOUND,
-    component: import('@velero-ui-app/layouts/not-found/NotFound.vue'),
+    component: NotFound,
   },
 ];
 
