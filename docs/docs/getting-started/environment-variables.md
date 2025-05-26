@@ -14,6 +14,18 @@ environment variables, including their types, default values, and descriptions.
 The following environment variables are used by `apps/velero-ui-api` to provide Velero UI startup
 configuration.
 
+#### `DEFAULT_LANGUAGE`
+
+- **Type**: `string` (enum: `en`, `fr`)
+- **Default**: `en`
+- **Description**: Sets the default language for the application. This can be changed to support different languages, such as `fr` for French.
+
+#### `DEFAULT_TIMEZONE`
+
+- **Type**: `string` (enum: `UTC`, `America/New_York`, `Europe/Paris`, etc.)
+- **Default**: `Europe/London`
+- **Description**: Defines the default timezone for the application. This is used to display dates and times correctly based on the user's locale.
+
 ### API (backend)
 
 #### `NODE_ENV`
@@ -42,6 +54,12 @@ configuration.
 - **Default**: `velero`
 - **Description**: Specifies the Kubernetes namespace in which Velero is deployed. This is important for managing backups and restores.
 
+#### `VELERO_UI_NAMESPACE`
+
+- **Type**: `string`
+- **Default**: `velero-ui`
+- **Description**: Specify the namespace where the Velero UI is running.
+
 #### `AUTH_SECRET_PASSPHRASE`
 
 - **Type**: `string`
@@ -63,13 +81,6 @@ configuration.
   - **Kubernetes Default**: Provided by Cluster Role Binding
 - **Description**: Specifies the path to the Kubernetes configuration file. This file is needed to connect to the Kubernetes cluster.
 
-#### `VELERO_UI_NAMESPACE`
-
-- **Type**: `string`
-- **Default**: `velero-ui`
-- **Description**: Specify the namespace where the Velero UI is running.
-
-
 #### `KUBE_CONTEXT`
 
 - **Type**: `string`
@@ -78,6 +89,18 @@ configuration.
   - **Docker Default**: Uses the default context from Kube Config.
   - **Kubernetes Default**: Provided by Cluster Role Binding
 - **Description**: Defines the context to use from the Kube Config for cluster interactions. Ensure the correct context is set for the desired cluster.
+
+#### `CACHE_TTL`
+
+- **Type**: `number`
+- **Default**: `60000`
+- **Description**: Sets the time-to-live (TTL) for cached data in milliseconds. This controls how long data is stored in the cache before it is considered stale and needs to be refreshed.
+
+#### `POLICY_FILE_PATH`
+
+- **Type**: `string`
+- **Default**: `./policies.csv`
+- **Description**: Specifies the path to the CSV file containing policies for user permissions. This file is used to manage access control within the application.
 
 ### APP (frontend)
 
