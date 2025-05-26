@@ -450,6 +450,10 @@
       "paused": {
         "label": "Paused",
         "placeholder": "Select a paused status"
+      },
+      "targetKind": {
+        "label": "Target Kind",
+        "placeholder": "Select a kind"
       }
     },
     "header": {
@@ -541,7 +545,8 @@
         "global": "Global",
         "overall": "Overall",
         "status": "Status",
-        "successRate": "Success Rate"
+        "successRate": "Success Rate",
+        "loading": "Loading..."
       },
       "label": {
         "success": "Success"
@@ -579,7 +584,7 @@
       },
       "latest": {
         "title": "Latest Backups",
-        "description": "Over all backups"
+        "description": "Over last 24 hours"
       }
     }
   },

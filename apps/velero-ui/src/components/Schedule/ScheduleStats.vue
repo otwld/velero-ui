@@ -1,9 +1,11 @@
 <template>
   <div
-    class="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800"
+    class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800"
   >
     <div class="flex items-center justify-between flex-wrap gap-x-4">
-      <h3 class="text-xl font-semibold dark:text-white">{{ t('global.stats') }}</h3>
+      <h3 class="text-xl font-semibold dark:text-white">
+        {{ t('global.stats') }}
+      </h3>
       <div v-if="!isFetching" class="inline-flex rounded-md shadow-xs">
         <button
           :class="{
@@ -46,11 +48,15 @@
           {{ t('global.button.size.title') }}
         </button>
       </div>
-      <div class="flex mt-4 w-full self-center items-center justify-center">
+      <div
+        class="mt-4 h-[300px] w-full self-center items-center justify-center"
+      >
         <apexchart
-          v-if="data.duration"
+          v-if="data[currentTab]?.series.length > 0"
           :options="{
-            noData: { text: t('global.noData') },
+            noData: {
+              text: t('global.noData'),
+            },
             stroke: {
               curve: 'smooth',
             },
@@ -63,32 +69,24 @@
                 formatter: getFormatter,
               },
             },
-            chart: {
-              width: 500,
-              events: {},
-            },
-            responsive: [
-              {
-                breakpoint: 500,
-                options: {
-                  chart: {
-                    width: 300,
-                  },
-                },
-              },
-              {
-                breakpoint: 1000,
-                options: {
-                  chart: {
-                    width: 400,
-                  },
-                },
-              },
-            ],
           }"
           :series="data[currentTab]?.series"
+          height="100%"
           type="line"
+          width="100%"
         />
+        <div v-else class="flex h-full items-center justify-center">
+          <span v-if="!isFetching" class="text-gray-500 dark:text-gray-400">
+            {{ t('global.noData') }}
+          </span>
+          <span v-else class="text-gray-500 dark:text-gray-400">
+            <FontAwesomeIcon
+              :icon="faCircleNotch"
+              class="!w-4 !h-4 animate-spin mr-2"
+            />
+            {{ t('dashboard.stats.title.loading') }}
+          </span>
+        </div>
       </div>
     </div>
   </div>
@@ -99,9 +97,14 @@ import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useScheduleStats } from '@velero-ui-app/composables/schedule/useScheduleStats';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { faRectangleList, faSquareBinary, faStopwatch } from '@fortawesome/free-solid-svg-icons';
+import {
+  faCircleNotch,
+  faRectangleList,
+  faSquareBinary,
+  faStopwatch,
+} from '@fortawesome/free-solid-svg-icons';
 import { durationToLabel } from '@velero-ui-app/utils/date.utils';
-import { convertBytes } from "@velero-ui-app/utils/string.utils";
+import { convertBytes } from '@velero-ui-app/utils/string.utils';
 
 const { t } = useI18n();
 const props = defineProps({
@@ -121,5 +124,5 @@ const getFormatter = (value: number): string | number => {
     default:
       return value;
   }
-}
+};
 </script>

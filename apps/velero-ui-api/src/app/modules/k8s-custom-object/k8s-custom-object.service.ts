@@ -24,7 +24,7 @@ import {
 import { VELERO } from '@velero-ui-api/shared/modules/velero/velero.constants';
 import { AppLogger } from '@velero-ui-api/shared/modules/logger/logger.service';
 import { Socket } from 'socket.io';
-import { KubernetesListObjectWithFilters } from '@velero-ui/shared-types';
+import { KubernetesListObjectWithFilters, Search } from '@velero-ui/shared-types';
 import { filters, slice, sort } from '@velero-ui-api/shared/utils/search.utils';
 import { SearchDto } from '@velero-ui-api/shared/dto/search.dto';
 
@@ -49,7 +49,7 @@ export class K8sCustomObjectService {
 
   public get<T extends KubernetesObject>(
     plural: string,
-    search?: SearchDto
+    search?: Search
   ): Observable<KubernetesListObjectWithFilters<T>> {
     this.logger.debug(
       `Fetching resources in "${plural}" (offset: ${search?.offset}, limit: ${search?.limit}, search: ${search?.search}, sortBy: ${search?.sortBy}, sortDirection: ${search?.sortDirection})...`,

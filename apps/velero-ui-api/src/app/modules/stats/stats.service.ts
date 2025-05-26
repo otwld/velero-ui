@@ -6,7 +6,7 @@ import {
   BackupsNextScheduled,
   BackupsStatusStats,
   BackupsSuccessRateStats,
-  BasicStats,
+  BasicStats, Filter,
   KubernetesListObjectWithFilters,
   RestoresStatusStats,
   RestoresSuccessRateStats,
@@ -254,6 +254,7 @@ export class StatsService {
           backupList.items.map((backup: V1Backup) => ({
             name: backup.metadata.name,
             date: backup.status.completionTimestamp,
+            phase: backup.status.phase
           }))
         )
       );

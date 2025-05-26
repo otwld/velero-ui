@@ -26,6 +26,9 @@
         />
       </button>
     </template>
+    <template #filters>
+      <SearchFilter :type="Filter.Status" />
+    </template>
   </ListHeader>
   <ListContent ref="childListRef" :component="ServerStatusRequestLine" />
   <ListFooter />
@@ -65,7 +68,8 @@ import {Resources} from "@velero-ui/velero";
 import ModalConfirmation from "@velero-ui-app/components/Modals/ModalConfirmation.vue";
 import {useI18n} from "vue-i18n";
 import { can } from "@velero-ui-app/utils/policy.utils";
-import { Action, SortBy, SortDirection } from "@velero-ui/shared-types";
+import { Action, Filter, SortBy, SortDirection } from "@velero-ui/shared-types";
+import SearchFilter from "@velero-ui-app/components/Search/SearchFilter.vue";
 
 const { t } = useI18n();
 

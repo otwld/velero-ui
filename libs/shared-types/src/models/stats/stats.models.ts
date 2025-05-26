@@ -36,6 +36,7 @@ export interface BackupsNextScheduled {
 export interface BackupsLatest {
   name: string;
   date: string;
+  phase: V1BackupPhase;
 }
 
 export interface ScheduleStats {

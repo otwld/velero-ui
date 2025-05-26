@@ -8,7 +8,6 @@ export const useFilters = () => {
   const router: Router = useRouter();
 
   const set = (key: Filter, value: string, hidden = false) => {
-    console.log('ici')
     listStore.setFilter(key, value);
 
     if (!hidden) {

@@ -1,5 +1,5 @@
-<template class="hover:bg-gray-100 dark:hover:bg-gray-700">
-  <tr>
+<template>
+  <tr class="dark:hover:bg-gray-600 transition duration-200">
     <td class="w-4 p-4">
       <div class="flex items-center">
         <input

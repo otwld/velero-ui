@@ -67,7 +67,7 @@
                 'animate-pulse-loading': isFetching && data?.length > 0,
                 'cursor-progress': isFetching && data?.length > 0,
               }"
-              class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700 cur"
+              class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700"
             >
               <component
                 :is="component"

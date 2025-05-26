@@ -17,7 +17,7 @@
               'cursor-not-allowed': disabledFilters,
             }"
             :disabled="disabledFilters"
-            class="relative inline-flex items-center transition duration-200 justify-center w-1/2 px-3 py-3 text-sm font-medium text-center text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:ring-blue-300 sm:w-auto dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-gray-700"
+            class="relative inline-flex items-center transition duration-200 justify-center w-1/2 px-3 py-2.5 text-sm font-medium text-center text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:ring-blue-300 sm:w-auto dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-gray-700"
             type="button"
             @click="toggleFiltersDropdown()"
           >
@@ -69,7 +69,7 @@
             isFetching || Object.keys(filters)?.length === 0,
         }"
         :disabled="isFetching || Object.keys(filters)?.length === 0"
-        class="inline-flex self-end items-center transition duration-200 justify-center px-3 py-2 text-sm font-medium text-center focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 rounded-lg text-sm dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
+        class="inline-flex self-end items-center transition duration-200 justify-center px-4 py-2.5 text-sm font-medium text-center focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 rounded-lg text-sm dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
         type="button"
         @click="reset()"
       >

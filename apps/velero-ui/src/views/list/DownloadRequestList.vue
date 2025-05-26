@@ -26,6 +26,10 @@
         />
       </button>
     </template>
+    <template #filters>
+      <SearchFilter :type="Filter.TargetKind" />
+      <SearchFilter :type="Filter.Status" />
+    </template>
   </ListHeader>
   <ListContent ref="childListRef" :component="DownloadRequestLine" />
   <ListFooter />
@@ -69,7 +73,8 @@ import { useDeleteManyKubernetesObjects } from '@velero-ui-app/composables/useDe
 import { Resources } from '@velero-ui/velero';
 import { useI18n } from 'vue-i18n';
 import { can } from "@velero-ui-app/utils/policy.utils";
-import { Action, SortBy, SortDirection } from "@velero-ui/shared-types";
+import { Action, Filter, SortBy, SortDirection } from "@velero-ui/shared-types";
+import SearchFilter from "@velero-ui-app/components/Search/SearchFilter.vue";
 
 const { t } = useI18n();
 

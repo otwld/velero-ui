@@ -4,12 +4,12 @@
       <ScheduleActions :schedule="data" />
       <ScheduleStatus :schedule="data" />
       <BackupDetails :spec="data?.spec.template" />
-      <ScheduleStats :name="router.currentRoute.value.params.name as string" />
     </template>
     <template #right>
       <ResourceManifest :data="data" />
     </template>
     <template #bottom>
+      <ScheduleStats :name="router.currentRoute.value.params.name as string" />
       <ScheduleBackupList v-if="can(Action.Read, Resources.BACKUP.plural)" />
     </template>
   </Resource>

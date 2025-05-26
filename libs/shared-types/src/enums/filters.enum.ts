@@ -8,4 +8,5 @@ export enum Filter {
   AccessMode = 'accessMode',
   Provider = 'provider',
   Paused = 'paused',
+  TargetKind = 'targetKind',
 }

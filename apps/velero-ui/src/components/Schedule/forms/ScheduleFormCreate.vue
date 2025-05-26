@@ -5,6 +5,7 @@
       :not-applicable-fields="{
         backupName: true,
       }"
+      :reset="forNamespace"
       :step-components="[
         {
           name: t('global.info'),
@@ -53,7 +54,7 @@ import BackupCreateLabels from '@velero-ui-app/components/Backup/forms/BackupFor
 import { useI18n } from 'vue-i18n';
 
 const { mutate, isPending, isError, isSuccess } = useKubernetesCreateObject(
-  Resources.SCHEDULE,
+  Resources.SCHEDULE
 );
 
 const { t } = useI18n();
@@ -61,6 +62,13 @@ const { t } = useI18n();
 const formStore = useFormStore();
 const { formContent } = storeToRefs(formStore);
 
+defineProps({
+  forNamespace: {
+    type: Boolean,
+    required: false,
+    default: false,
+  },
+});
 onBeforeUnmount(() => formStore.reset());
 
 const emit = defineEmits(['onConfirm', 'onCancel', 'onClose']);
@@ -129,8 +137,9 @@ const onSubmit = () => {
 
   if (formContent.value[1].parallelFilesUpload) {
     form.spec.template.uploaderConfig = {};
-    form.spec.template.uploaderConfig.parallelFilesUpload =
-      parseInt(formContent.value[1].parallelFilesUpload);
+    form.spec.template.uploaderConfig.parallelFilesUpload = parseInt(
+      formContent.value[1].parallelFilesUpload
+    );
   }
 
   if (formContent.value[2].resourcePolicy) {

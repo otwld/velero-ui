@@ -33,6 +33,7 @@ const filterValueGetters: Record<
   [Filter.Backup]: (item) => item.spec?.backupName || item.spec?.tags?.backup,
   [Filter.Status]: (item) => item.status?.phase,
   [Filter.Paused]: (item) => item.spec?.paused?.toString(),
+  [Filter.TargetKind]: (item) => item.spec?.target?.kind,
 };
 
 const sortGetters: Record<
@@ -187,6 +188,7 @@ export const filters = <
       [Filter.Schedule]: availableFilters[Filter.Schedule],
       [Filter.StorageLocation]: availableFilters[Filter.StorageLocation],
       [Filter.Backup]: availableFilters[Filter.Backup],
+      [Filter.TargetKind]: availableFilters[Filter.TargetKind],
       [Filter.Paused]: availableFilters[Filter.Paused],
     },
   };

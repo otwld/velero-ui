@@ -15,6 +15,11 @@ export interface FilterSelect {
   disabled: boolean;
 }
 
+export interface FilterDate {
+  from?: Date | string;
+  to?: Date | string;
+}
+
 export interface SearchFilters<T = string | string[] | Set<string> | FilterSelect[]> {
   [Filter.Search]?: T;
   [Filter.StorageLocation]?: T;
@@ -24,6 +29,7 @@ export interface SearchFilters<T = string | string[] | Set<string> | FilterSelec
   [Filter.RepositoryType]?: T;
   [Filter.AccessMode]?: T;
   [Filter.Provider]?: T;
+  [Filter.TargetKind]?: T;
   [Filter.Paused]?: T;
 }
 

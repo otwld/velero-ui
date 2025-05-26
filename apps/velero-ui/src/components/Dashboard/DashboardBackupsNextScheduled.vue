@@ -11,47 +11,55 @@
             {{ t('dashboard.stats.nextScheduled.title') }}
           </h1>
           <h3 class="text-base font-light text-gray-500 dark:text-gray-400">
-            {{ t('dashboard.stats.nextScheduled.description')}}
+            {{ t('dashboard.stats.nextScheduled.description') }}
           </h3>
         </div>
-        <div class="flex mt-4 flex-col h-[200px] overflow-y-auto">
-          <ul v-if="isFetching && data.length === 0">
-            <Skeleton
-              v-for="(i, index) of 8"
-              :key="`line-${index}`"
-              class="mb-4"
-              width="72"
-            />
-          </ul>
-          <ul
-            v-for="(schedule, index) of data"
-            v-else
-            :key="`line-${index}`"
-            class="w-full text-gray-500 flex justify-between dark:text-gray-400"
-          >
-            <dt>
-              <li class="list-disc list-inside">
-                <router-link
-                  :to="{
-                    name: Pages.SCHEDULE.name,
-                    params: {
-                      name: schedule.name,
-                    },
-                  }"
-                  class="hover:text-blue-500 transition duration-200"
-                  router-link
-                  >{{ truncate(schedule.name, 32) }}
-                </router-link>
-              </li>
-            </dt>
-            <dd class="italic">
-              {{
-                t('global.date.in', {
-                  count: getRemainingTime(schedule.nextRun),
-                })
-              }}
-            </dd>
-          </ul>
+        <div class="relative overflow-y-auto mt-4 h-[250px]">
+          <table class="w-full">
+            <tbody>
+              <template v-if="isFetching && data.length === 0">
+                <tr
+                  v-for="(i, index) of 8"
+                  :key="`skeleton--${index}`"
+                  class="even:bg-white odd:dark:bg-gray-900 odd:bg-gray-50 even:dark:bg-gray-800"
+                >
+                  <td class="py-1 px-2">
+                    <Skeleton class="m-1.5" width="72" />
+                  </td>
+                  <td class="py-1 px-2 flex justify-end">
+                    <Skeleton class="m-1.5" width="24" />
+                  </td>
+                </tr>
+              </template>
+              <tr
+                v-for="(schedule, index) of data"
+                v-else
+                :key="`line-${index}`"
+                class="even:bg-white odd:dark:bg-gray-900 odd:bg-gray-50 even:dark:bg-gray-800"
+              >
+                <td class="py-1 px-2 text-gray-500 text-sm dark:text-gray-400">
+                  <router-link
+                    :to="{
+                      name: Pages.SCHEDULE.name,
+                      params: {
+                        name: schedule.name,
+                      },
+                    }"
+                    class="hover:text-blue-500 transition duration-200"
+                    router-link
+                    >{{ truncate(schedule.name, 32) }}
+                  </router-link>
+                </td>
+                <td class="py-1 px-2 flex text-xs justify-end italic text-gray-500 dark:text-gray-400">
+                  {{
+                    t('global.date.in', {
+                      count: getRemainingTime(schedule.nextRun),
+                    })
+                  }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
@@ -64,7 +72,7 @@ import { useStatsBackupsNextScheduled } from '@velero-ui-app/composables/stats/u
 import { getRemainingTime } from '@velero-ui-app/utils/date.utils';
 import { Pages } from '@velero-ui-app/utils/constants.utils';
 import { truncate } from '@velero-ui-app/utils/string.utils';
-import Skeleton from "@velero-ui-app/components/Skeleton.vue";
+import Skeleton from '@velero-ui-app/components/Skeleton.vue';
 
 const { t } = useI18n();
 const { isFetching, data } = useStatsBackupsNextScheduled();

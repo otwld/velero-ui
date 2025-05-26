@@ -10,7 +10,7 @@
     />
     {{ text }}
     <FontAwesomeIcon
-      v-if="prefixIcon"
+      v-if="suffixIcon"
       :icon="suffixIcon"
       class="!w-2 !h-2 ml-1.5"
     />

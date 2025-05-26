@@ -10,7 +10,6 @@ appVersion: "0.7.0"
 kubeVersion: "^1.16.0-0"
 
 annotations:
-  artifacthub.io/prerelease: true
   artifacthub.io/category: monitoring-logging
   artifacthub.io/changes: |
     - kind: fixed

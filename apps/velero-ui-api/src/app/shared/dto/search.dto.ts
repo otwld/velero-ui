@@ -80,7 +80,12 @@ export class SearchFiltersDto implements SearchFilters<string> {
   @IsString()
   [Filter.Provider]?: string;
 
-  @Transform(({value}) => (value === '' ? '' : value))
+  @Transform(({value}) => (value === '' ? undefined : value))
+  @IsOptional()
+  @IsString()
+  [Filter.TargetKind]?: string;
+
+  @Transform(({value}) => (value === '' ? undefined : value))
   @IsOptional()
   @IsString()
   [Filter.Paused]?: string;

@@ -8,7 +8,9 @@
         <slot name="right" />
       </div>
     </div>
-    <slot name="bottom" />
+    <div class="grid grid-cols-1 px-4 gap-4">
+      <slot name="bottom" />
+    </div>
   </div>
   <ResourceNotFound v-else :page="page" />
 </template>

@@ -1,22 +1,20 @@
 <template>
-  <div class="grid grid-cols-1 px-4 xl:gap-4">
-    <div
-      class="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800"
-    >
-      <div class="flex flex-col">
-        <div class="flex items-center">
-          <h3 class="text-xl font-semibold dark:text-white">
-            {{ t('backups.title') }}
-          </h3>
-          <Badge
-            :prefix-icon="faFloppyDisk"
-            :text="total.toString()"
-            class="ml-4"
-            color="blue"
-          />
-        </div>
-        <BackupList />
+  <div
+    class="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800"
+  >
+    <div class="flex flex-col">
+      <div class="flex items-center">
+        <h3 class="text-xl font-semibold dark:text-white">
+          {{ t('backups.title') }}
+        </h3>
+        <Badge
+          :prefix-icon="faFloppyDisk"
+          :text="total.toString()"
+          class="ml-4"
+          color="blue"
+        />
       </div>
+        <BackupList />
     </div>
   </div>
 </template>
