@@ -17,6 +17,7 @@ export const downloadDirective: Directive<HTMLElement, DownloadBindingValue> = {
     el.addEventListener('click', () => {
       const { content, filename, type } = binding.value
 
+      console.log('initial')
       const blob: Blob = content instanceof Blob
         ? content
         : new Blob([content], { type: type || 'text/plain' })
@@ -39,6 +40,7 @@ export const downloadDirective: Directive<HTMLElement, DownloadBindingValue> = {
     const toastsStore = useToastsStore();
 
     el.onclick = () => {
+      console.log('updated')
       const { content, filename, type } = binding.value
 
       const blob = content instanceof Blob

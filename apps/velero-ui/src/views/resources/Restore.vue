@@ -10,7 +10,7 @@
     </template>
     <template #bottom>
       <PodVolumes v-if="can(Action.Read, Resources.RESTORE.plural)" />
-      <Logs
+      <ResourceLogs
         v-if="can(Action.Logs, Resources.RESTORE.plural)"
         :data="logs"
         :loading="isLoading"
@@ -33,14 +33,12 @@ import {
 } from '@velero-ui/velero';
 import { onBeforeMount, onBeforeUnmount } from 'vue';
 import ResourceManifest from '@velero-ui-app/components/Resource/ResourceManifest.vue';
-import Logs from '@velero-ui-app/components/Logs.vue';
 import { useLogsGet } from '@velero-ui-app/composables/useLogsGet';
 import RestoreActions from '@velero-ui-app/components/Restore/RestoreActions.vue';
 import RestoreStatus from '@velero-ui-app/components/Restore/RestoreStatus.vue';
 import RestoreDetails from '@velero-ui-app/components/Restore/RestoreDetails.vue';
 import { useKubernetesWatchObject } from '@velero-ui-app/composables/useKubernetesWatchObject';
 import { Pages } from '@velero-ui-app/utils/constants.utils';
-import ResourceNotFound from '@velero-ui-app/components/Resource/ResourceNotFound.vue';
 import PodVolumes from '@velero-ui-app/components/PodVolume/PodVolumes.vue';
 import { can } from '@velero-ui-app/utils/policy.utils';
 import { Action } from '@velero-ui/shared-types';

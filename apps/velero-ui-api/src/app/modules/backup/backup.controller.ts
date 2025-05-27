@@ -24,7 +24,7 @@ import { K8sCustomObjectService } from '@velero-ui-api/modules/k8s-custom-object
 import { CreateBackupDto } from '@velero-ui-api/shared/dto/backup.dto';
 import { CheckPolicies } from '@velero-ui-api/shared/decorators/check-policies.decorator';
 import { AppAbility } from '@velero-ui-api/shared/modules/casl/casl-ability.factory';
-import { Action } from '@velero-ui/shared-types';
+import { Action, VeleroLog } from '@velero-ui/shared-types';
 import { K8sCustomObjectController } from '@velero-ui-api/modules/k8s-custom-object/k8s-custom-object.controller';
 import { Subject } from '@velero-ui-api/shared/decorators/subject.decorator';
 import { K8sCustomObjectParams } from '@velero-ui-api/shared/dto/k8s-custom-object.dto';
@@ -66,7 +66,7 @@ export class BackupController extends K8sCustomObjectController<V1Backup> {
   @CheckPolicies((ability: AppAbility) =>
     ability.can(Action.Logs, Resources.BACKUP.plural)
   )
-  public logs(@Param('name') name: string): Observable<string[]> {
+  public logs(@Param('name') name: string): Observable<VeleroLog[]> {
     return this.backupService.logs(name);
   }
 

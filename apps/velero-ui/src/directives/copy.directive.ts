@@ -8,7 +8,8 @@ export const copyDirective: Directive = {
     const toastsStore = useToastsStore();
     const textToCopy = binding.value;
     el.style.cursor = 'pointer';
-    el.addEventListener('click', () => {
+
+    const handler = () => {
       if (!textToCopy) {
         return;
       }
@@ -23,7 +24,9 @@ export const copyDirective: Directive = {
           }
         );
       });
-    });
+    }
+
+    el.addEventListener('click', handler);
   },
 
   updated(el: HTMLElement, binding: DirectiveBinding) {

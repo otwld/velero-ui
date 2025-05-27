@@ -42,22 +42,7 @@
       </button>
     </div>
   </div>
-  <VModal
-    v-if="showModal"
-    id="modal-logs-server"
-    width="w-10/12"
-    @on-close="showModal = false"
-  >
-    <template #header>
-      <h3 class="text-lg text-gray-500 dark:text-gray-400">
-        {{ t('settings.agents.modal.logs.title') }}
-        <span class="font-normal text-sm ml-2">{{ data.name }}</span>
-      </h3>
-    </template>
-    <template #content>
-      <SettingsLogs :name="data.name" :type="data.name" />
-    </template>
-  </VModal>
+  <ModalLogs v-if="showModal" :type="LogType.VeleroAgent" :name="data.name" @on-close="showModal = false" />
   <div
     :id="`tooltip-button-logs-agent-${data.name}`"
     class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
@@ -73,14 +58,15 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { faEye, faMicrochip } from '@fortawesome/free-solid-svg-icons';
 import { inject, onMounted, type PropType, ref } from 'vue';
 import { initTooltips } from 'flowbite';
-import type { VeleroAgentSettings } from '@velero-ui/shared-types';
+import { LogType, type VeleroAgentSettings } from '@velero-ui/shared-types';
 import VModal from '@velero-ui-app/components/Modals/VModal.vue';
 import SettingsLogs from '@velero-ui-app/components/Settings/SettingsLogs.vue';
 import { useI18n } from 'vue-i18n';
 import type { SocketIO } from '@velero-ui-app/plugins/socket.plugin';
+import ModalLogs from "@velero-ui-app/components/Modals/ModalLogs.vue";
 
 defineProps({
-  data: {type: Object as PropType<VeleroAgentSettings>, required: true },
+  data: { type: Object as PropType<VeleroAgentSettings>, required: true },
 });
 
 const socket: SocketIO = inject('socketIo');

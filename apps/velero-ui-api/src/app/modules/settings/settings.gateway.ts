@@ -15,7 +15,7 @@ import {
   AppAbility,
   CaslAbilityFactory,
 } from '@velero-ui-api/shared/modules/casl/casl-ability.factory';
-import { Action } from '@velero-ui/shared-types';
+import { Action, LogType } from '@velero-ui/shared-types';
 
 @WebSocketGateway({ cors: true })
 export class SettingsGateway
@@ -43,7 +43,7 @@ export class SettingsGateway
   @SubscribeMessage('settings:logs:on')
   public logsServerOn(
     @ConnectedSocket() client: Socket,
-    @MessageBody('type') type: string,
+    @MessageBody('type') type: LogType,
     @MessageBody('name') name: string
   ): void {
     const ability: AppAbility = this.caslAbilityFactory.createForUser(

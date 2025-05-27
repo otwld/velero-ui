@@ -62,7 +62,7 @@
       </h3>
     </template>
     <template #content>
-      <SettingsLogs type="ui" />
+      <SettingsLogs :type="LogType.VeleroUI" />
     </template>
   </VModal>
   <div
@@ -90,6 +90,7 @@ import SettingsLogs from '@velero-ui-app/components/Settings/SettingsLogs.vue';
 import { useI18n } from 'vue-i18n';
 import type { SocketIO } from '@velero-ui-app/plugins/socket.plugin';
 import Skeleton from '@velero-ui-app/components/Skeleton.vue';
+import { LogType } from '@velero-ui/shared-types';
 
 const showModal = ref(false);
 const { data } = useSettingsUI();

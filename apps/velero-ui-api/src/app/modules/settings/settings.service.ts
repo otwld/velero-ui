@@ -11,7 +11,9 @@ import {
 } from 'rxjs';
 import {
   ClusterSettings,
+  LogType,
   VeleroAgentSettings,
+  VeleroLog,
   VeleroServerSettings,
   VeleroUiSettings,
 } from '@velero-ui/shared-types';
@@ -35,6 +37,10 @@ import { VeleroService } from '@velero-ui-api/shared/modules/velero/velero.servi
 import { ServerStatusRequestService } from '@velero-ui-api/modules/server-status-request/server-status-request.service';
 import { V1PluginInfo, V1ServerStatusRequest } from '@velero-ui/velero';
 import { AppLogger } from "@velero-ui-api/shared/modules/logger/logger.service";
+import {
+  parseVeleroLog,
+  parseVeleroUILog,
+} from '@velero-ui-api/shared/utils/logs.utils';
 
 @Injectable()
 export class SettingsService {
@@ -176,19 +182,21 @@ export class SettingsService {
     client: Socket,
     type: string,
     nodeName?: string
+    type: LogType,
+    nodeName?: string
   ): Promise<void> {
     let name: string;
     let containerName: string;
     let namespace: string;
 
-    if (type === 'server') {
+    if (type === LogType.VeleroServer) {
       const veleroServer: VeleroServerSettings = await lastValueFrom(
         this.getVeleroServer()
       );
       name = veleroServer.name;
       containerName = 'velero';
       namespace = this.configService.get('velero.namespace');
-    } else if (type === 'ui') {
+    } else if (type === LogType.VeleroUI) {
       const veleroUI: VeleroUiSettings = await lastValueFrom(
         this.getVeleroUi()
       );
@@ -206,8 +214,19 @@ export class SettingsService {
     }
 
     const stream: Writable = new Writable({
-      write: (chunk, encoding, callback) => {
-        client.emit('settings:logs', chunk.toString().split('\n'));
+      write: (chunk, encoding: BufferEncoding, callback) => {
+        client.emit(
+          'settings:logs',
+          chunk
+            .toString()
+            .split('\n')
+            .map((line: string) =>
+              type === LogType.VeleroUI
+                ? parseVeleroUILog(line)
+                : parseVeleroLog(line)
+            )
+            .filter((log: VeleroLog) => !!log)
+        );
         callback();
       },
     });

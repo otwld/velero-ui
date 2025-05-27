@@ -20,48 +20,43 @@ export class AppLogger implements LoggerService {
     });
   }
 
-  public log(message: string, scope: string): void {
-    this.logger.log(message, scope);
+  log(message: any, context?: string): void {
+    this.logger.log('info', this.formatMessage(message), { context });
   }
 
-  public info(message: string, scope: string): void;
-
-  public info(message: never, ...optionalParams: never[]): void {
-    this.logger.info(message, optionalParams);
+  info(message: any, context?: string): void {
+    this.logger.log('info', this.formatMessage(message), { context });
   }
 
-  public debug(message: string, scope: string);
-
-  public debug(message: object, scope: string);
-
-  public debug(message: never, ...optionalParams: never[]): void {
-    this.logger.debug(message, optionalParams);
+  debug(message: any, context?: string): void {
+    this.logger.log('debug', this.formatMessage(message), { context });
   }
 
-  public error(message: string, scope: string): void;
-
-  public error(message: object, scope: string);
-
-  public error(message: never, ...optionalParams: never[]): void {
-    this.logger.error(message, optionalParams);
+  warn(message: any, context?: string): void {
+    this.logger.log('warn', this.formatMessage(message), { context });
   }
 
-  public verbose(message: never, scope: string);
-
-  public verbose(message: never, ...optionalParams: never[]): void {
-    this.logger.verbose(message, optionalParams);
+  error(message: any, context?: string): void {
+    this.logger.log('error', this.formatMessage(message), { context });
   }
 
-  public warn(message: string, scope: string);
+  verbose(message: any, context?: string): void {
+    this.logger.log('verbose', this.formatMessage(message), { context });
+  }
 
-  public warn(message: object, scope: string);
+  private formatMessage(message: any): string {
+    if (message instanceof Error) {
+      return `${message.message} \nStack Trace: ${message.stack}`;
+    }
 
-  public warn(message: never, ...optionalParams: never[]): void {
-    this.logger.warn(message, optionalParams);
+    if (typeof message === 'object') {
+      return JSON.stringify(message);
+    }
+    return message;
   }
 
   private getFormat() {
-    const env = this.configService.get<Environment>('app.environment', {
+    const env = this.configService.get<string>('app.env', {
       infer: true,
     });
 
@@ -74,14 +69,12 @@ export class AppLogger implements LoggerService {
     }
 
     return [
-      format.colorize(),
+      format.colorize({ all: true }),
       format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
-      format.printf(
-        (info: TransformableInfo) =>
-          `${info['timestamp']} ${info.level} [${
-            info['scope'] ?? 'App'
-          }]: ${info.message}`,
-      ),
+      format.printf(({ timestamp, level, message, context }) => {
+        const scope = context ?? 'App';
+        return `${timestamp} ${level} [${scope}]: ${message}`;
+      }),
     ];
   }
 }

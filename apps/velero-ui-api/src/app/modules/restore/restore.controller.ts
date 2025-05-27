@@ -21,7 +21,7 @@ import { Subject } from '@velero-ui-api/shared/decorators/subject.decorator';
 import { K8sCustomObjectController } from '@velero-ui-api/modules/k8s-custom-object/k8s-custom-object.controller';
 import { CheckPolicies } from '@velero-ui-api/shared/decorators/check-policies.decorator';
 import { AppAbility } from '@velero-ui-api/shared/modules/casl/casl-ability.factory';
-import { Action } from '@velero-ui/shared-types';
+import { Action, VeleroLog } from '@velero-ui/shared-types';
 import { CacheInterceptor } from '@nestjs/cache-manager';
 
 @Controller(Resources.RESTORE.route)
@@ -48,7 +48,7 @@ export class RestoreController extends K8sCustomObjectController<V1Restore> {
   @CheckPolicies((ability: AppAbility) =>
     ability.can(Action.Logs, Resources.RESTORE.plural)
   )
-  public logs(@Param('name') name: string): Observable<string[]> {
+  public logs(@Param('name') name: string): Observable<VeleroLog[]> {
     return this.restoreService.logs(name);
   }
 

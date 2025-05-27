@@ -21,9 +21,10 @@ import {
 } from '@velero-ui-api/shared/dto/backup.dto';
 import { K8sCustomObjectService } from '@velero-ui-api/modules/k8s-custom-object/k8s-custom-object.service';
 import { ConfigService } from '@nestjs/config';
-import { CreateBackupTypeEnum } from '@velero-ui/shared-types';
+import { CreateBackupTypeEnum, VeleroLog } from '@velero-ui/shared-types';
 import { AppLogger } from '@velero-ui-api/shared/modules/logger/logger.service';
 import { createK8sCustomObject } from '@velero-ui-api/modules/k8s-custom-object/k8s-custom-object.utils';
+import { parseVeleroLog } from '@velero-ui-api/shared/utils/logs.utils';
 
 @Injectable()
 export class BackupService {
@@ -36,7 +37,7 @@ export class BackupService {
     private configService: ConfigService
   ) {}
 
-  public logs(name: string): Observable<string[]> {
+  public logs(name: string): Observable<VeleroLog[]> {
     this.logger.debug(`Getting logs for ${name}...`, BackupService.name);
 
     return from(
@@ -57,7 +58,15 @@ export class BackupService {
       )
       .pipe(map((response: AxiosResponse<ArrayBuffer>) => response.data))
       .pipe(map((buffer: ArrayBuffer) => unzipSync(buffer)))
-      .pipe(map((content: Buffer) => content.toString().split('\n')));
+      .pipe(
+        map((content: Buffer) =>
+          content
+            .toString()
+            .split('\n')
+            .map((line: string) => parseVeleroLog(line))
+            .filter((log: VeleroLog) => !!log)
+        )
+      );
   }
 
   public create(data: CreateBackupDto) {
@@ -155,7 +164,10 @@ export class BackupService {
           })
           .pipe(
             map((response: AxiosResponse) =>
-              parseInt(response.headers['content-range']?.split('/')[1] || '0', 10)
+              parseInt(
+                response.headers['content-range']?.split('/')[1] || '0',
+                10
+              )
             ),
             catchError(() => of(0)),
             concatMap((size) =>
