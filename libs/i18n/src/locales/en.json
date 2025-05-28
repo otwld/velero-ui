@@ -576,15 +576,18 @@
       },
       "unscheduled": {
         "title": "Unscheduled Namespaces",
-        "description": "Over all namespaces"
+        "description": "Over all namespaces",
+        "success": "All namespaces are scheduled!"
       },
       "nextScheduled": {
         "title": "Next Scheduled Backups",
-        "description": "Over all schedules"
+        "description": "In the next 24 hours",
+        "noData": "No scheduled backups!"
       },
       "latest": {
         "title": "Latest Backups",
-        "description": "Over last 24 hours"
+        "description": "Over last 24 hours",
+        "noData": "No latest backups!"
       }
     }
   },

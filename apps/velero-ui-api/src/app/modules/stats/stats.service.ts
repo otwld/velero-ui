@@ -6,7 +6,7 @@ import {
   BackupsNextScheduled,
   BackupsStatusStats,
   BackupsSuccessRateStats,
-  BasicStats, Filter,
+  BasicStats,
   KubernetesListObjectWithFilters,
   RestoresStatusStats,
   RestoresSuccessRateStats,
@@ -185,7 +185,12 @@ export class StatsService {
   public getUnscheduledNamespaces(): Observable<string[]> {
     return from(this.k8sCoreApi.listNamespace()).pipe(
       map((response: V1NamespaceList) =>
-        response.items.map((ns: V1Namespace) => ns.metadata?.name)
+        response.items
+          .filter(
+            (ns: V1Namespace) =>
+              !ns.metadata.labels?.['velero.io/exclude-from-backup']
+          )
+          .map((ns: V1Namespace) => ns.metadata?.name)
       ),
       switchMap(
         (allNamespaces: string[]): Observable<string[]> =>
@@ -195,17 +200,31 @@ export class StatsService {
               map(
                 (scheduleList: KubernetesListObjectWithFilters<V1Schedule>) => {
                   const scheduledNamespaces = new Set<string>();
+                  let hasWildcard = false;
 
                   scheduleList.items.forEach((schedule: V1Schedule) => {
-                    schedule.spec?.template?.includedNamespaces?.forEach(
-                      (namespace: string) => {
-                        scheduledNamespaces.add(namespace);
-                      }
+                    const included: string[] =
+                      schedule.spec?.template?.includedNamespaces;
+                    const excluded: string[] =
+                      schedule.spec?.template?.excludedNamespaces;
+
+                    if (included?.includes('*') || !included) {
+                      hasWildcard = true;
+                    } else {
+                      included?.forEach((ns) => scheduledNamespaces.add(ns));
+                    }
+
+                    excluded?.forEach((namespace: string) =>
+                      scheduledNamespaces.add(namespace)
                     );
                   });
-                  return allNamespaces.filter(
-                    (namespace: string) => !scheduledNamespaces.has(namespace)
-                  );
+
+                  return hasWildcard
+                    ? ['*']
+                    : allNamespaces.filter(
+                        (namespace: string) =>
+                          !scheduledNamespaces.has(namespace)
+                      );
                 }
               )
             )
@@ -223,7 +242,7 @@ export class StatsService {
               const cron: CronExpression = CronExpressionParser.parse(
                 schedule.spec.schedule
               );
-              if (cron.hasNext()) {
+              if (cron.hasNext() && !schedule.spec.skipImmediately) {
                 return {
                   name: schedule.metadata.name,
                   schedule: schedule.spec.schedule,
@@ -233,11 +252,15 @@ export class StatsService {
               return null;
             })
             .filter(Boolean)
+            .filter(
+              (schedule: BackupsNextScheduled) =>
+                new Date(schedule.nextRun).getTime() - new Date().getTime() <=
+                24 * 60 * 60 * 1000
+            )
             .sort(
               (a: BackupsNextScheduled, b: BackupsNextScheduled) =>
                 new Date(a.nextRun).getTime() - new Date(b.nextRun).getTime()
-            )
-            .slice(0, 8);
+            );
         })
       );
   }
@@ -245,17 +268,22 @@ export class StatsService {
   public getBackupLatest(): Observable<BackupsLatest[]> {
     return this.k8sCustomObjectService
       .get<V1Backup>(Resources.BACKUP.plural, {
-        limit: 8,
         sortBy: SortBy.CompletionTimestamp,
         sortDirection: SortDirection.Descending,
       })
       .pipe(
         map((backupList: KubernetesListObjectWithFilters<V1Backup>) =>
-          backupList.items.map((backup: V1Backup) => ({
-            name: backup.metadata.name,
-            date: backup.status.completionTimestamp,
-            phase: backup.status.phase
-          }))
+          backupList.items
+            .map((backup: V1Backup) => ({
+              name: backup.metadata.name,
+              date: backup.status.completionTimestamp,
+              phase: backup.status.phase,
+            }))
+            .filter(
+              (backup: BackupsLatest) =>
+                new Date().getTime() - new Date(backup.date).getTime() <=
+                24 * 60 * 60 * 1000
+            )
         )
       );
   }
