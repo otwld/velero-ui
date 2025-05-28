@@ -1,18 +1,19 @@
 import { inject } from 'vue';
 import { QueryClient, useQuery, useQueryClient } from '@tanstack/vue-query';
 import type { SocketIO } from '@velero-ui-app/plugins/socket.plugin';
+import { type Log, LogType } from '@velero-ui/shared-types';
 
-export const useSettingsLogs = (type: string, name?: string) => {
+export const useSettingsLogs = (type: LogType, name?: string) => {
   const socket: SocketIO = inject('socketIo') as SocketIO;
   const queryClient: QueryClient = useQueryClient();
 
   const on = (): void => {
-    socket.io.on(`settings:logs`, (data: string[]): void => {
-      queryClient.setQueryData<string[]>(
+    socket.io.on(`settings:logs`, (data: Log[]): void => {
+      queryClient.setQueryData<Log[]>(
         ['settings-logs', type],
-        (oldData: string[]): string[] => {
+        (oldData: Log[]): Log[] => {
           return oldData.concat(data);
-        },
+        }
       );
     });
   };
@@ -22,13 +23,14 @@ export const useSettingsLogs = (type: string, name?: string) => {
     socket.io.emit(`settings:logs:off`);
   };
 
-  const { data } = useQuery<string[]>({
+  const { data } = useQuery<Log[]>({
     queryKey: ['settings-logs', type],
     queryFn: async () => {
       socket.io.emit(`settings:logs:on`, { type, name });
       return [];
     },
     initialData: [],
+    refetchOnWindowFocus: false,
   });
 
   return { on, off, data };

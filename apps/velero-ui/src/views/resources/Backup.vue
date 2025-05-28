@@ -10,13 +10,13 @@
     </template>
     <template #bottom>
       <PodVolumes v-if="can(Action.Read, Resources.POD_VOLUME_BACKUP.plural)" />
-      <Logs
+      <ResourceLogs
         v-if="can(Action.Logs, Resources.BACKUP.plural)"
         :data="logs"
-        :loading="isLoading"
+        :loading="isFetching"
         :name="data?.metadata?.name"
         :type="V1DownloadTargetKind.BackupLog"
-        class="pb-6"
+        class="pb-4"
       />
     </template>
   </Resource>
@@ -36,7 +36,7 @@ import BackupActions from '@velero-ui-app/components/Backup/BackupActions.vue';
 import BackupStatus from '@velero-ui-app/components/Backup/BackupStatus.vue';
 import BackupDetails from '@velero-ui-app/components/Backup/BackupDetails.vue';
 import ResourceManifest from '@velero-ui-app/components/Resource/ResourceManifest.vue';
-import Logs from '@velero-ui-app/components/Logs.vue';
+import Logs from '@velero-ui-app/components/Log/Logs.vue';
 import { useLogsGet } from '@velero-ui-app/composables/useLogsGet';
 import { useKubernetesWatchObject } from '@velero-ui-app/composables/useKubernetesWatchObject';
 import ResourceNotFound from '@velero-ui-app/components/Resource/ResourceNotFound.vue';
@@ -45,6 +45,7 @@ import PodVolumes from '@velero-ui-app/components/PodVolume/PodVolumes.vue';
 import { Action } from '@velero-ui/shared-types';
 import { can } from '@velero-ui-app/utils/policy.utils';
 import Resource from '@velero-ui-app/components/Resource/Resource.vue';
+import ResourceLogs from '@velero-ui-app/components/Resource/ResourceLogs.vue';
 
 const router: Router = useRouter();
 
@@ -54,7 +55,7 @@ const { on, off, data, error } = useKubernetesWatchObject<V1Backup>(
 );
 
 const {
-  isLoading,
+  isFetching,
   data: logs,
   refetch,
 } = useLogsGet(

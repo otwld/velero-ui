@@ -8,5 +8,6 @@ export * from './models/auth/user.models';
 export * from './models/list/list.models';
 export * from './models/k8s/k8s.models';
 export * from './models/search/search.models';
+export * from './models/logs/logs.models';
 export * from './enums/index';
 export * from './regex/index';

@@ -4,19 +4,21 @@ import { IoAdapter } from '@nestjs/platform-socket.io';
 
 import { AppModule } from './app/app.module';
 import passport from 'passport';
+import { AppLogger } from '@velero-ui-api/shared/modules/logger/logger.service';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { bufferLogs: true });
 
   app.setGlobalPrefix('api', {
     exclude: [{ path: 'health', method: RequestMethod.GET }],
   });
+  app.useLogger(app.get(AppLogger));
   app.enableCors();
   app.use(passport.initialize());
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,
-    }),
+    })
   );
   app.useWebSocketAdapter(new IoAdapter(app));
 

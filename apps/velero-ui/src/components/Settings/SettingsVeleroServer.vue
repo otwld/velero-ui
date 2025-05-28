@@ -5,7 +5,10 @@
     <div
       class="items-center sm:flex xl:block 2xl:flex sm:space-x-4 xl:space-x-0 2xl:space-x-4"
     >
-      <FontAwesomeIcon :icon="faHardDrive" class="!w-16 !h-16 dark:text-white" />
+      <FontAwesomeIcon
+        :icon="faHardDrive"
+        class="!w-16 !h-16 dark:text-white"
+      />
 
       <div class="flex-1 min-w-0">
         <h3
@@ -44,21 +47,7 @@
       </div>
     </div>
   </div>
-  <VModal
-    v-if="showModal"
-    id="modal-logs-server"
-    width="w-10/12"
-    @on-close="showModal = false"
-  >
-    <template #header>
-      <h3 class="text-lg text-gray-500 dark:text-gray-400">
-        {{ t('settings.server.modal.logs.title') }}
-      </h3>
-    </template>
-    <template #content>
-      <SettingsLogs type="server" />
-    </template>
-  </VModal>
+  <ModalLogs v-if="showModal" :type="LogType.VeleroServer" name="Velero Server" @on-close="showModal = false" />
   <div
     :id="`tooltip-button-logs-server`"
     class="absolute w- z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
@@ -79,7 +68,9 @@ import SettingsLogs from '@velero-ui-app/components/Settings/SettingsLogs.vue';
 import { useSettingsServer } from '@velero-ui-app/composables/settings/useSettingsServer';
 import { useI18n } from 'vue-i18n';
 import type { SocketIO } from '@velero-ui-app/plugins/socket.plugin';
-import Skeleton from "@velero-ui-app/components/Skeleton.vue";
+import Skeleton from '@velero-ui-app/components/Skeleton.vue';
+import { LogType } from '@velero-ui/shared-types';
+import ModalLogs from "@velero-ui-app/components/Modals/ModalLogs.vue";
 
 const showModal = ref(false);
 const { data } = useSettingsServer();
