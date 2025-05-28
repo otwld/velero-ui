@@ -112,7 +112,7 @@
             <td
               :class="
                 matchIndexes.includes(index) &&
-                index === matchIndexes[activeIndex]
+                index === matchIndexes[activeIndex] && searchTerm
                   ? 'bg-gray-700'
                   : ''
               "
