@@ -80,8 +80,8 @@
                 <button
                   v-copy-to-clipboard="toRaw()"
                   class="inline-flex items-center text-gray-300 hover:text-white text-xs border border-gray-600 rounded-s-lg px-2 py-1 transition duration-200"
-                  type="button"
                   data-tooltip-target="tooltip-button-copy"
+                  type="button"
                 >
                   <FontAwesomeIcon :icon="faCopy" class="!w-4 !h-4" />
                 </button>
@@ -91,13 +91,10 @@
                     filename: `logs.txt`,
                   }"
                   class="inline-flex items-center text-gray-300 hover:text-white text-xs border border-gray-600 rounded-e-lg px-2 py-1 transition duration-200"
-                  type="button"
                   data-tooltip-target="tooltip-button-download"
+                  type="button"
                 >
-                  <FontAwesomeIcon
-                    :icon="faFileArrowDown"
-                    class="!w-4 !h-4"
-                  />
+                  <FontAwesomeIcon :icon="faFileArrowDown" class="!w-4 !h-4" />
                 </button>
               </div>
             </div>
@@ -136,7 +133,7 @@
               </span>
             </td>
             <td class="px-4 py-1 text-white">
-              <LogMessage :line="line"/>
+              <LogMessage :line="line" />
             </td>
           </template>
         </tr>
@@ -189,8 +186,8 @@ import { computed, nextTick, onMounted, type PropType, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { type Log, type VeleroLog } from '@velero-ui/shared-types';
 import { convertTimestampToDate } from '@velero-ui-app/utils/date.utils';
-import { initTooltips } from "flowbite";
-import LogMessage from "@velero-ui-app/components/Log/LogMessage.vue";
+import { initTooltips } from 'flowbite';
+import LogMessage from '@velero-ui-app/components/Log/LogMessage.vue';
 
 const props = defineProps({
   data: { type: Array as PropType<VeleroLog[]>, required: true },
@@ -266,5 +263,5 @@ const prevMatch = () => {
   }
 };
 
-const toRaw = (): string[] => props.data.map((line: Log) => `${line.raw}\n`)
+const toRaw = (): string => props.data.map((line: Log) => line.raw).join('\n');
 </script>

@@ -182,8 +182,6 @@ export class SettingsService {
     client: Socket,
     type: string,
     nodeName?: string
-    type: LogType,
-    nodeName?: string
   ): Promise<void> {
     let name: string;
     let containerName: string;
