@@ -8,9 +8,13 @@
           <h3 class="text-xl font-semibold dark:text-white">
             {{ t('settings.agents.title') }}
           </h3>
-          <Skeleton v-if="data && data.length === 0" class="ml-4" width="12" />
+          <Skeleton
+            v-if="data.length === 0 && isFetching"
+            class="ml-4"
+            width="12"
+          />
           <Badge
-            v-if="data && data.length >= 0"
+            v-else
             :prefix-icon="faMicrochip"
             :text="data.length.toString()"
             class="ml-4"
@@ -20,7 +24,7 @@
         <ul
           class="divide-y divide-gray-200 dark:divide-gray-700 overflow-auto max-h-[250px] mt-2 pr-2"
         >
-          <template v-if="!data || data?.length === 0">
+          <template v-if="data.length === 0 && isFetching">
             <li v-for="index of 2" :key="index" class="py-4">
               <div class="flex items-center space-x-4">
                 <div class="flex-shrink-0">
@@ -40,6 +44,13 @@
               </div>
             </li>
           </template>
+          <li v-else-if="data.length === 0 && !isFetching" class="flex h-full items-center justify-center">
+            <span
+              class="inline-flex py-8 items-center text-gray-500 dark:text-gray-400"
+            >
+              {{ t('settings.agents.noData') }}
+            </span>
+          </li>
           <li
             v-for="(agent, index) of data"
             :key="`agent-${index}`"
@@ -63,5 +74,5 @@ import Skeleton from '@velero-ui-app/components/Skeleton.vue';
 import Badge from '@velero-ui-app/components/Badge.vue';
 
 const { t } = useI18n();
-const { data } = useSettingsAgents();
+const { data, isFetching } = useSettingsAgents();
 </script>

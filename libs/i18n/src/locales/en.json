@@ -643,6 +643,7 @@
     },
     "agents": {
       "title": "Velero Node Agents",
+      "noData": "No Velero Node Agents found.",
       "modal": {
         "logs": {
           "title": "Node Agent logs:"
