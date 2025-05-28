@@ -34,6 +34,7 @@ import { K8S_CONNECTION } from '@velero-ui-api/shared/utils/k8s.utils';
 import { VeleroService } from '@velero-ui-api/shared/modules/velero/velero.service';
 import { ServerStatusRequestService } from '@velero-ui-api/modules/server-status-request/server-status-request.service';
 import { V1PluginInfo, V1ServerStatusRequest } from '@velero-ui/velero';
+import { AppLogger } from "@velero-ui-api/shared/modules/logger/logger.service";
 
 @Injectable()
 export class SettingsService {
@@ -46,9 +47,10 @@ export class SettingsService {
 
   constructor(
     @Inject(K8S_CONNECTION) private readonly k8s: KubeConfig,
+    private logger: AppLogger,
     private readonly serverStatusRequestService: ServerStatusRequestService,
     private readonly veleroService: VeleroService,
-    private configService: ConfigService,
+    private configService: ConfigService
   ) {
     this.k8sCoreV1Api = this.k8s.makeApiClient(CoreV1Api);
     this.k8sLog = new Log(k8s);
@@ -63,7 +65,7 @@ export class SettingsService {
             connected: true,
             server: this.k8s.getCurrentCluster().server,
             version: nodes[0].status.nodeInfo.kubeProxyVersion,
-          }),
+          })
         ),
         catchError(
           (): Observable<ClusterSettings> =>
@@ -71,8 +73,8 @@ export class SettingsService {
               connected: false,
               server: this.k8s.getCurrentCluster().server,
               version: 'unknown',
-            }),
-        ),
+            })
+        )
       );
   }
 
@@ -83,25 +85,27 @@ export class SettingsService {
       .pipe(
         map(
           (pod: V1Pod): VeleroServerSettings => ({
-            connected: pod.status.phase === 'Running',
-            name: pod.metadata.name,
-            namespace: pod.metadata.namespace,
-            version: pod.spec.containers
-              .find((container: V1Container) =>
-                container.image.startsWith(VELERO.IMAGE),
+            connected: pod.status?.phase === 'Running',
+            name: pod.metadata?.name || 'unknown',
+            namespace: pod.metadata?.namespace || 'unknown',
+            version: pod.spec?.containers
+              ?.find((container: V1Container) =>
+                container.image?.startsWith(VELERO.IMAGE)
               )
-              .image.split(':')[1],
-          }),
+              ?.image?.split(':')[1] || 'unknown',
+          })
         ),
         catchError(
-          (): Observable<VeleroServerSettings> =>
-            of({
+          (err): Observable<VeleroServerSettings> => {
+            this.logger.error(err, SettingsService.name)
+            return of({
               connected: false,
               name: 'unknown',
               namespace: 'unknown',
               version: 'unknown',
-            }),
-        ),
+            })
+          }
+        )
       );
   }
 
@@ -113,20 +117,23 @@ export class SettingsService {
         map((pods: V1Pod[]) =>
           pods.map(
             (pod: V1Pod): VeleroAgentSettings => ({
-              name: pod.metadata.name,
-              namespace: pod.metadata.namespace,
-              connected: pod.status.phase === 'Running',
-              version: pod.spec.containers
-                .find((container: V1Container) =>
-                  container.image.startsWith(VELERO.IMAGE),
+              name: pod.metadata?.name || 'unknown',
+              namespace: pod.metadata?.namespace || 'unknown',
+              connected: pod.status?.phase === 'Running',
+              version: pod.spec?.containers
+                ?.find((container: V1Container) =>
+                  container.image?.startsWith(VELERO.IMAGE)
                 )
-                .image.split(':')[1],
-              node: pod.spec.nodeName,
-              ip: pod.status.podIP,
-            }),
-          ),
+                ?.image?.split(':')[1] || 'unknown',
+              node: pod.spec?.nodeName || 'unknown',
+              ip: pod.status?.podIP || 'unknown',
+            })
+          )
         ),
-        catchError((): Observable<VeleroAgentSettings[]> => of([])),
+        catchError((err): Observable<VeleroAgentSettings[]> => {
+          this.logger.error(err, SettingsService.name)
+          return of([]);
+        })
       );
   }
 
@@ -146,15 +153,15 @@ export class SettingsService {
               version: version,
               mode: 'In Cluster',
               name: pod.metadata.name,
-            }),
+            })
           ),
           catchError(
             (): Observable<VeleroUiSettings> =>
               of({
                 version: version,
                 mode: 'Standalone',
-              }),
-          ),
+              })
+          )
         );
     }
   }
@@ -168,7 +175,7 @@ export class SettingsService {
   public async openLogsStream(
     client: Socket,
     type: string,
-    nodeName?: string,
+    nodeName?: string
   ): Promise<void> {
     let name: string;
     let containerName: string;
@@ -176,14 +183,14 @@ export class SettingsService {
 
     if (type === 'server') {
       const veleroServer: VeleroServerSettings = await lastValueFrom(
-        this.getVeleroServer(),
+        this.getVeleroServer()
       );
       name = veleroServer.name;
       containerName = 'velero';
       namespace = this.configService.get('velero.namespace');
     } else if (type === 'ui') {
       const veleroUI: VeleroUiSettings = await lastValueFrom(
-        this.getVeleroUi(),
+        this.getVeleroUi()
       );
       name = veleroUI.name;
       containerName = 'velero-ui';
@@ -208,16 +215,10 @@ export class SettingsService {
     this.activeServerLogStreams.set(client.id, stream);
 
     try {
-      await this.k8sLog.log(
-        namespace,
-        name,
-        containerName,
-        stream,
-        {
-          follow: true,
-          tailLines: 25,
-        },
-      );
+      await this.k8sLog.log(namespace, name, containerName, stream, {
+        follow: true,
+        tailLines: 25,
+      });
     } catch (error) {
       console.error('Error streaming logs:', error);
       this.activeServerLogStreams.delete(client.id);

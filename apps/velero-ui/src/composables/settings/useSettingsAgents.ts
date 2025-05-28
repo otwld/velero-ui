@@ -11,5 +11,6 @@ export const useSettingsAgents = () => {
     queryKey: ['settings', 'agents'],
     queryFn: async () =>
       (await axiosInstance.get(ApiRoutes.SETTINGS_VELERO_AGENTS)).data,
+    initialData: []
   });
 };

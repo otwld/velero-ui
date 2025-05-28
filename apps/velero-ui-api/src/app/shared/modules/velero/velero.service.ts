@@ -11,6 +11,7 @@ import { catchError, from, map, Observable, tap } from 'rxjs';
 import { VELERO } from './velero.constants';
 import { ConfigService } from '@nestjs/config';
 import { K8S_CONNECTION } from '@velero-ui-api/shared/utils/k8s.utils';
+import { AppLogger } from '@velero-ui-api/shared/modules/logger/logger.service';
 
 @Injectable()
 export class VeleroService {
@@ -20,6 +21,7 @@ export class VeleroService {
 
   constructor(
     @Inject(K8S_CONNECTION) private readonly k8s: KubeConfig,
+    private logger: AppLogger,
     private configService: ConfigService
   ) {
     this.k8sCoreV1Api = this.k8s.makeApiClient(CoreV1Api);
@@ -76,6 +78,7 @@ export class VeleroService {
   }
 
   public getAgents(): Observable<V1Pod[]> {
+    this.logger.debug(`Finding Velero agent pods...`, VeleroService.name);
     return from(
       this.k8sCoreV1Api.listNamespacedPod({
         namespace: this.configService.get('velero.namespace'),
@@ -90,11 +93,18 @@ export class VeleroService {
                 container.name === VELERO.AGENT_CONTAINER_NAME
             )
           )
+        ),
+        tap((pods: V1Pod[]) =>
+          this.logger.debug(
+            `Found ${pods.length} Velero agent pods.`,
+            VeleroService.name
+          )
         )
       );
   }
 
   private findServer(): Observable<V1Pod> {
+    this.logger.debug(`Finding Velero server pod...`, VeleroService.name);
     return from(
       this.k8sCoreV1Api.listNamespacedPod({
         namespace: this.configService.get('velero.namespace'),
@@ -115,6 +125,10 @@ export class VeleroService {
       .pipe(
         tap((pod: V1Pod): void => {
           if (pod) {
+            this.logger.debug(
+              `Found Velero server pod: ${pod.metadata.name}.`,
+              VeleroService.name
+            );
             this.podServerName = pod.metadata.name;
           } else {
             throw new Error('Cannot find Velero server!');
@@ -124,6 +138,7 @@ export class VeleroService {
   }
 
   private findVeleroUI(): Observable<V1Pod> {
+    this.logger.debug(`Finding Velero UI pod...`, VeleroService.name);
     return from(
       this.k8sCoreV1Api.listNamespacedPod({
         namespace: this.configService.get('app.namespace'),
@@ -144,6 +159,10 @@ export class VeleroService {
       .pipe(
         tap((pod: V1Pod): void => {
           if (pod) {
+            this.logger.debug(
+              `Found Velero UI pod: ${pod.metadata.name}.`,
+              VeleroService.name
+            );
             this.podVeleroUIName = pod.metadata.name;
           } else {
             throw new Error('Cannot find Velero UI!');
