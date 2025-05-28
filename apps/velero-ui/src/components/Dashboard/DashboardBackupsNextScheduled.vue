@@ -15,7 +15,15 @@
           </h3>
         </div>
         <div class="relative overflow-y-auto mt-4 h-[250px]">
-          <table class="w-full">
+          <div
+            v-if="data.length === 0 && !isFetching"
+            class="flex h-full items-center justify-center"
+          >
+            <span class="text-gray-500 dark:text-gray-400">
+              {{ t('dashboard.stats.nextScheduled.noData') }}
+            </span>
+          </div>
+          <table v-else class="w-full">
             <tbody>
               <template v-if="isFetching && data.length === 0">
                 <tr
@@ -24,7 +32,10 @@
                   class="even:bg-white odd:dark:bg-gray-900 odd:bg-gray-50 even:dark:bg-gray-800"
                 >
                   <td class="py-1 px-2">
-                    <Skeleton class="m-1.5" width="72" />
+                    <Skeleton class="m-1.5" width="4" />
+                  </td>
+                  <td class="py-1 px-2">
+                    <Skeleton class="m-1.5" width="48" />
                   </td>
                   <td class="py-1 px-2 flex justify-end">
                     <Skeleton class="m-1.5" width="24" />
@@ -37,6 +48,9 @@
                 :key="`line-${index}`"
                 class="even:bg-white odd:dark:bg-gray-900 odd:bg-gray-50 even:dark:bg-gray-800"
               >
+                <td class="py-1 px-2 inline-flex dark:text-gray-400">
+                  <FontAwesomeIcon :icon="faClock" class="!w-3 !h-3" />
+                </td>
                 <td class="py-1 px-2 text-gray-500 text-sm dark:text-gray-400">
                   <router-link
                     :to="{
@@ -73,6 +87,8 @@ import { getRemainingTime } from '@velero-ui-app/utils/date.utils';
 import { Pages } from '@velero-ui-app/utils/constants.utils';
 import { truncate } from '@velero-ui-app/utils/string.utils';
 import Skeleton from '@velero-ui-app/components/Skeleton.vue';
+import { faClock, faClockRotateLeft, faLayerGroup } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 const { t } = useI18n();
 const { isFetching, data } = useStatsBackupsNextScheduled();

@@ -15,7 +15,15 @@
           </h3>
         </div>
         <div class="relative overflow-y-auto mt-4 h-[250px]">
-          <table class="w-full">
+          <div
+            v-if="data.length === 0 && !isFetching"
+            class="flex h-full items-center justify-center"
+          >
+            <span class="text-gray-500 dark:text-gray-400">
+              {{ t('dashboard.stats.latest.noData') }}
+            </span>
+          </div>
+          <table v-else class="w-full">
             <tbody>
               <template v-if="isFetching && data.length === 0">
                 <tr
@@ -27,7 +35,7 @@
                     <Skeleton class="m-1.5" width="4" />
                   </td>
                   <td class="py-1 px-2">
-                    <Skeleton class="m-1.5" width="72" />
+                    <Skeleton class="m-1.5" width="48" />
                   </td>
                   <td class="py-1 px-2 flex justify-end">
                     <Skeleton class="m-1.5" width="24" />
