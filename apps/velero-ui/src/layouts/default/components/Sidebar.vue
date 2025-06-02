@@ -307,6 +307,10 @@
         class="relative bottom-0 left-0 justify-center w-full p-4 space-x-4 bg-white lg:flex dark:bg-gray-800"
       >
         <div class="flex flex-col">
+          <div class="flex flex-col">
+            <ToastNewVeleroUiVersion />
+            <ToastNewVeleroVersion />
+          </div>
           <div class="flex justify-center">
             <a
               class="inline-flex justify-center transition duration-200 p-2 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
@@ -363,11 +367,18 @@ import { useI18n } from 'vue-i18n';
 import { Action } from '@velero-ui/shared-types';
 import { Resources } from '@velero-ui/velero';
 import { can, canOr } from '@velero-ui-app/utils/policy.utils';
+import ToastNewVeleroUiVersion from '@velero-ui-app/components/Toasts/ToastNewVeleroUiVersion.vue';
+import ToastNewVeleroVersion from '@velero-ui-app/components/Toasts/ToastNewVeleroVersion.vue';
 
 const { t } = useI18n();
 
 const appStore = useAppStore();
 const { hideSidebar } = storeToRefs(appStore);
+
+/*
+const { mutate: getVeleroUIVersion, data: veleroUIVersion  } = useGithubVersionChecker('otwld', 'velero-ui');
+const { mutate: getVeleroVersion, data: veleroVersion } = useGithubVersionChecker('vmware-tanzu', 'velero');
+const { data } = useSettingsServer();*/
 
 const hiddenDropdown = ref(true);
 const hiddenDropdownPodVolumes = ref(true);
@@ -377,4 +388,11 @@ const toggleDropdownPodVolumes = () =>
   (hiddenDropdownPodVolumes.value = !hiddenDropdownPodVolumes.value);
 
 const version = import.meta.env.APP_VERSION;
+/*
+onBeforeMount(() => getVeleroUIVersion(version));
+watch(data, () => {
+  if (data.value?.version) {
+    getVeleroVersion(data.value.version);
+  }
+});*/
 </script>

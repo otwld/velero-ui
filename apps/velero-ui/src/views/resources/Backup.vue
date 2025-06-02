@@ -3,7 +3,7 @@
     <template #left>
       <BackupActions :backup="data" />
       <BackupStatus :backup="data" />
-      <BackupDetails :spec="data?.spec" />
+      <BackupDetails :spec="data?.spec" :schedule="data?.metadata?.labels?.['velero.io/schedule-name']" />
     </template>
     <template #right>
       <ResourceManifest :data="data" />

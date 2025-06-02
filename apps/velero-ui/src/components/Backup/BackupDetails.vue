@@ -18,6 +18,23 @@
           color="blue"
         />
       </router-link>
+      <router-link
+        v-if="schedule"
+        :to="{
+          name: Pages.SCHEDULE.name,
+          params: {
+            name: schedule,
+          },
+        }"
+      >
+        <Badge
+          :hover="true"
+          :prefix-icon="faClockRotateLeft"
+          :suffix-icon="faArrowUpRightFromSquare"
+          :text="schedule"
+          color="blue"
+        />
+      </router-link>
       <Badge
         v-if="spec?.ttl"
         :prefix-icon="faClock"
@@ -136,6 +153,7 @@ import type { V1BackupSpec } from '@velero-ui/velero';
 import {
   faArrowUpRightFromSquare,
   faClock,
+  faClockRotateLeft,
   faDatabase,
   faServer,
 } from '@fortawesome/free-solid-svg-icons';
@@ -150,6 +168,11 @@ defineProps({
   spec: {
     type: Object as PropType<V1BackupSpec>,
     required: true,
+  },
+  schedule: {
+    type: String,
+    required: false,
+    default: undefined,
   },
 });
 </script>

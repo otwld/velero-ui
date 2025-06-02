@@ -40,12 +40,13 @@ const routes: Array<RouteRecordRaw> = [
         component: Dashboard,
       },
       {
-        ...Pages.BACKUPS,
+        path: Pages.BACKUPS.path,
         beforeEnter: () => resourceGuard(Action.Read, Resources.BACKUP.plural),
         children: [
           {
             path: '',
             component: BackupList,
+            name: Pages.BACKUPS.name,
             beforeEnter: () => useListStore().setObjectType(Resources.BACKUP),
           },
           {
@@ -55,13 +56,14 @@ const routes: Array<RouteRecordRaw> = [
         ],
       },
       {
-        ...Pages.STORAGE_LOCATIONS,
+        path: Pages.STORAGE_LOCATIONS.path,
         beforeEnter: () =>
           resourceGuard(Action.Read, Resources.BACKUP_STORAGE_LOCATION.plural),
         children: [
           {
             path: '',
             component: StorageLocationList,
+            name: Pages.STORAGE_LOCATIONS.name,
             beforeEnter: () =>
               useListStore().setObjectType(Resources.BACKUP_STORAGE_LOCATION),
           },
@@ -72,12 +74,13 @@ const routes: Array<RouteRecordRaw> = [
         ],
       },
       {
-        ...Pages.RESTORES,
+        path: Pages.RESTORES.path,
         beforeEnter: () => resourceGuard(Action.Read, Resources.RESTORE.plural),
         children: [
           {
             path: '',
             component: RestoreList,
+            name: Pages.RESTORES.name,
             beforeEnter: () => useListStore().setObjectType(Resources.RESTORE),
           },
           {
@@ -87,13 +90,14 @@ const routes: Array<RouteRecordRaw> = [
         ],
       },
       {
-        ...Pages.SCHEDULES,
+        path: Pages.SCHEDULES.path,
         beforeEnter: () =>
           resourceGuard(Action.Read, Resources.SCHEDULE.plural),
         children: [
           {
             path: '',
             component: ScheduleList,
+            name: Pages.SCHEDULES.name,
             beforeEnter: () => useListStore().setObjectType(Resources.SCHEDULE),
           },
           {
@@ -103,13 +107,14 @@ const routes: Array<RouteRecordRaw> = [
         ],
       },
       {
-        ...Pages.SNAPSHOT_LOCATIONS,
+        path: Pages.SNAPSHOT_LOCATIONS.path,
         beforeEnter: () =>
           resourceGuard(Action.Read, Resources.VOLUME_SNAPSHOT_LOCATION.plural),
         children: [
           {
             path: '',
             component: SnapshotLocationList,
+            name: Pages.SNAPSHOT_LOCATIONS.name,
             beforeEnter: () =>
               useListStore().setObjectType(Resources.VOLUME_SNAPSHOT_LOCATION),
           },
@@ -120,13 +125,14 @@ const routes: Array<RouteRecordRaw> = [
         ],
       },
       {
-        ...Pages.BACKUP_REPOSITORIES,
+        path: Pages.BACKUP_REPOSITORIES.path,
         beforeEnter: () =>
           resourceGuard(Action.Read, Resources.BACKUP_REPOSITORY.plural),
         children: [
           {
             path: '',
             component: BackupRepositoryList,
+            name: Pages.BACKUP_REPOSITORIES.name,
             beforeEnter: () =>
               useListStore().setObjectType(Resources.BACKUP_REPOSITORY),
           },
@@ -137,13 +143,14 @@ const routes: Array<RouteRecordRaw> = [
         ],
       },
       {
-        ...Pages.POD_VOLUME_BACKUPS,
+        path: Pages.POD_VOLUME_BACKUPS.path,
         beforeEnter: () =>
           resourceGuard(Action.Read, Resources.POD_VOLUME_BACKUP.plural),
         children: [
           {
             path: '',
             component: PodVolumeBackupList,
+            name: Pages.POD_VOLUME_BACKUPS.name,
             beforeEnter: () =>
               useListStore().setObjectType(Resources.POD_VOLUME_BACKUP),
           },
@@ -154,13 +161,14 @@ const routes: Array<RouteRecordRaw> = [
         ],
       },
       {
-        ...Pages.POD_VOLUME_RESTORES,
+        path: Pages.POD_VOLUME_RESTORES.path,
         beforeEnter: () =>
           resourceGuard(Action.Read, Resources.POD_VOLUME_RESTORE.plural),
         children: [
           {
             path: '',
             component: PodVolumeRestoreList,
+            name: Pages.POD_VOLUME_RESTORES.name,
             beforeEnter: () =>
               useListStore().setObjectType(Resources.POD_VOLUME_RESTORE),
           },
@@ -223,6 +231,19 @@ const router: Router = createRouter({
 });
 
 router.beforeEach(guard);
+
+router.beforeEach((to) => {
+  let title = 'Velero UI';
+
+  if (to.name) {
+    title += ` - ${to.name.toString()}`;
+  }
+  if (to.params.name) {
+    title += ` - ${to.params.name}`;
+  }
+
+  document.title = title;
+});
 
 router.afterEach((to) => {
   const listStore = useListStore();

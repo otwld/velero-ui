@@ -8,8 +8,6 @@
         @on-dismiss="dismiss(index)"
       />
     </div>
-    <ToastNewVeleroVersion />
-    <ToastNewVeleroUiVersion />
     <ToastConnectionLost v-if="!socket.connected" />
   </div>
 </template>
@@ -21,8 +19,6 @@ import { storeToRefs } from 'pinia';
 import { useToastsStore } from '@velero-ui-app/stores/toasts.store';
 import ToastConnectionLost from '@velero-ui-app/components/Toasts/ToastConnectionLost.vue';
 import type { SocketIO } from '@velero-ui-app/plugins/socket.plugin';
-import ToastNewVeleroUiVersion from '@velero-ui-app/components/Toasts/ToastNewVeleroUiVersion.vue';
-import ToastNewVeleroVersion from '@velero-ui-app/components/Toasts/ToastNewVeleroVersion.vue';
 
 const toastsStore = useToastsStore();
 const { toasts } = storeToRefs(toastsStore);
