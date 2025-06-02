@@ -59,8 +59,6 @@ import { faEye, faMicrochip } from '@fortawesome/free-solid-svg-icons';
 import { inject, onMounted, type PropType, ref } from 'vue';
 import { initTooltips } from 'flowbite';
 import { LogType, type VeleroAgentSettings } from '@velero-ui/shared-types';
-import VModal from '@velero-ui-app/components/Modals/VModal.vue';
-import SettingsLogs from '@velero-ui-app/components/Settings/SettingsLogs.vue';
 import { useI18n } from 'vue-i18n';
 import type { SocketIO } from '@velero-ui-app/plugins/socket.plugin';
 import ModalLogs from "@velero-ui-app/components/Modals/ModalLogs.vue";

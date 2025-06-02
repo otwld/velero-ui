@@ -50,21 +50,12 @@
       </div>
     </div>
   </div>
-  <VModal
+  <ModalLogs
     v-if="showModal"
-    id="modal-logs-server"
-    width="w-10/12"
+    :type="LogType.VeleroUI"
+    name="Velero UI"
     @on-close="showModal = false"
-  >
-    <template #header>
-      <h3 class="text-lg text-gray-500 dark:text-gray-400">
-        {{ t('settings.ui.modal.logs.title') }}
-      </h3>
-    </template>
-    <template #content>
-      <SettingsLogs :type="LogType.VeleroUI" />
-    </template>
-  </VModal>
+  />
   <div
     :id="`tooltip-button-logs-ui`"
     class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
@@ -85,12 +76,11 @@ import { faEye, faHardDrive } from '@fortawesome/free-solid-svg-icons';
 import { inject, onMounted, ref } from 'vue';
 import { initTooltips } from 'flowbite';
 import { useSettingsUI } from '@velero-ui-app/composables/settings/useSettingsUI';
-import VModal from '@velero-ui-app/components/Modals/VModal.vue';
-import SettingsLogs from '@velero-ui-app/components/Settings/SettingsLogs.vue';
 import { useI18n } from 'vue-i18n';
 import type { SocketIO } from '@velero-ui-app/plugins/socket.plugin';
 import Skeleton from '@velero-ui-app/components/Skeleton.vue';
 import { LogType } from '@velero-ui/shared-types';
+import ModalLogs from '@velero-ui-app/components/Modals/ModalLogs.vue';
 
 const showModal = ref(false);
 const { data } = useSettingsUI();
