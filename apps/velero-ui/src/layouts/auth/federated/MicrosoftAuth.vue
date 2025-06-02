@@ -41,7 +41,7 @@ const redirect = () => {
   const state = uuidv4();
   localStorage.setItem('auth.microsoft.state', state);
 
-  window.location.href = `https://login.microsoftonline.com/${microsoft.tenant}/oauth2/v2.0/authorize?client_id=${microsoft.clientId}&redirect_uri=${microsoft.redirectUri}&scope=${microsoft.scopes}&response_type=code&state=${state}`;
+  window.location.href = `${microsoft.authorizationUrl}?client_id=${microsoft.clientId}&redirect_uri=${microsoft.redirectUri}&scope=${microsoft.scopes}&response_type=code&state=${state}`;
 };
 
 watch(

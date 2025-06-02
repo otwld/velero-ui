@@ -20,6 +20,8 @@ export class MicrosoftStrategy extends PassportStrategy(Strategy, 'microsoft') {
       scope: configService.get('microsoft.scopes'),
       callbackURL: configService.get('microsoft.redirectUri'),
       tenant: configService.get('microsoft.tenant'),
+      authorizationURL: configService.get('microsoft.authorizationUrl'),
+      tokenURL: configService.get('microsoft.tokenUrl'),
     });
   }
 
