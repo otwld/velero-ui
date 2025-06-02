@@ -56,7 +56,7 @@ export class AppLogger implements LoggerService {
   }
 
   private getFormat() {
-    const env = this.configService.get<string>('app.env', {
+    const env = this.configService.get<string>('app.environment', {
       infer: true,
     });
 
