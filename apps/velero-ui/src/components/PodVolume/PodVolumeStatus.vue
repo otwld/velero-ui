@@ -4,23 +4,15 @@
       <PodVolumePhaseBadge :status="podVolume?.status?.phase" />
     </template>
     <template #content>
-      <div v-if="podVolume?.status?.startTimestamp" class="mt-4 flex flex-col">
-        <span class="text-base font-medium text-gray-900 dark:text-white">{{
-          t('resource.status.startTime')
-        }}</span>
-        <i class="mt-1 text-xs text-gray-500 dark:text-gray-400">{{
-          convertTimestampToDate(podVolume.status.startTimestamp)
-        }}</i>
-      </div>
       <div
-        v-if="podVolume?.status?.completionTimestamp"
+        v-if="podVolume?.status?.completionTimestamp && podVolume?.status?.startTimestamp"
         class="mt-4 flex flex-col"
       >
         <span class="text-base font-medium text-gray-900 dark:text-white">{{
-          t('resource.status.completionTime')
+          t('resource.status.duration')
         }}</span>
         <i class="mt-1 text-xs text-gray-500 dark:text-gray-400">{{
-          convertTimestampToDate(podVolume.status.completionTimestamp)
+          getTime(Date.parse(podVolume.status.completionTimestamp) - Date.parse(podVolume.status.startTimestamp))
         }}</i>
       </div>
       <div v-if="podVolume?.status?.progress" class="mt-4">
@@ -64,7 +56,7 @@ import type { V1PodVolumeBackup, V1PodVolumeRestore } from '@velero-ui/velero';
 import { useI18n } from 'vue-i18n';
 import PodVolumePhaseBadge from '@velero-ui-app/components/PodVolume/PodVolumePhaseBadge.vue';
 import { convertBytes } from '@velero-ui-app/utils/string.utils';
-import { convertTimestampToDate } from '@velero-ui-app/utils/date.utils';
+import { convertTimestampToDate, getTime } from '@velero-ui-app/utils/date.utils';
 import ResourceStatus from '@velero-ui-app/components/Resource/ResourceStatus.vue';
 import Skeleton from "@velero-ui-app/components/Skeleton.vue";
 

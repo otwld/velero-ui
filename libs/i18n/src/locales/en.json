@@ -257,7 +257,8 @@
       "lastBackup": "Last Backup",
       "lastSkipped": "Last Skipped",
       "lastSyncedTime": "Last Synchronization",
-      "lastValidationTime": "Last Validation"
+      "lastValidationTime": "Last Validation",
+      "duration": "Duration"
     },
     "phase": {
       "Completed": "Completed",

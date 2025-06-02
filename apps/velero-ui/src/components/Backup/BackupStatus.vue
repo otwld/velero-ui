@@ -22,6 +22,17 @@
       />
     </template>
     <template #content>
+      <div
+        v-if="backup?.status?.completionTimestamp && backup?.status?.startTimestamp"
+        class="mt-4 flex flex-col"
+      >
+        <span class="text-base font-medium text-gray-900 dark:text-white">{{
+          t('resource.status.duration')
+        }}</span>
+        <i class="mt-1 text-xs text-gray-500 dark:text-gray-400">{{
+          getTime(Date.parse(backup.status.completionTimestamp) - Date.parse(backup.status.startTimestamp))
+        }}</i>
+      </div>
       <div v-if="backup?.status?.progress" class="mt-4">
         <div class="flex items-center justify-between mb-1">
           <span class="text-base font-medium text-gray-900 dark:text-white">{{
@@ -70,7 +81,7 @@
 <script lang="ts" setup>
 import type { PropType } from 'vue';
 import type { V1Backup } from '@velero-ui/velero';
-import { getRemainingTime } from '../../utils/date.utils';
+import { convertTimestampToDate, getRemainingTime, getTime } from '../../utils/date.utils';
 import BackupStatusPhaseBadge from './BackupStatusPhaseBadge.vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import {
