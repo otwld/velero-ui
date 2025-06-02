@@ -1,16 +1,4 @@
 <template>
-  <tr class="hover:bg-gray-50  dark:hover:bg-gray-600 transition duration-200">
-    <td class="w-4 p-4">
-      <div class="flex items-center">
-        <input
-          :checked="checked"
-          class="!w-4 !h-4 border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600"
-          type="checkbox"
-          @click="emit('onChecked')"
-        />
-        <label class="sr-only" for="checkbox-">checkbox</label>
-      </div>
-    </td>
     <router-link
       :to="{
         name: Pages.RESTORE.name,
@@ -110,7 +98,6 @@
         </button>
       </div>
     </td>
-  </tr>
 
   <div
     :id="`tooltip-button-delete-${data?.metadata?.uid}`"
@@ -166,12 +153,9 @@ import { Pages } from '@velero-ui-app/utils/constants.utils';
 const { t } = useI18n();
 defineProps({
   data: { type: Object as PropType<V1Restore>, required: true },
-  checked: Boolean,
 });
 
 const showModalDelete = ref(false);
-
-const emit = defineEmits(['onChecked']);
 
 const { isPending: isDeleting, mutate: remove } = useDeleteKubernetesObject(
   Resources.RESTORE

@@ -596,7 +596,7 @@
         "success": "All namespaces are scheduled!"
       },
       "nextScheduled": {
-        "title": "Next Scheduled Backups",
+        "title": "Scheduled Backups",
         "description": "In the next 24 hours",
         "noData": "No scheduled backups!"
       },

@@ -1,174 +1,161 @@
 <template>
-  <tr class="hover:bg-gray-50  dark:hover:bg-gray-600 transition duration-200">
-    <td class="w-4 p-4">
-      <div class="flex items-center">
-        <input
-          :checked="checked"
-          class="!w-4 !h-4 border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600"
-          type="checkbox"
-          @click="emit('onChecked')"
-        />
-        <label class="sr-only" for="checkbox-">checkbox</label>
+  <router-link
+    :to="{
+      name: Pages.SCHEDULE.name,
+      params: {
+        name: data.metadata.name,
+      },
+    }"
+    router-link
+  >
+    <td class="flex items-center p-4 mr-12 space-x-6 whitespace-nowrap">
+      <div class="text-sm font-normal text-gray-500 dark:text-gray-400">
+        <p
+          :title="data?.metadata?.name"
+          class="text-base font-semibold text-gray-900 dark:text-white"
+        >
+          {{ truncate(data?.metadata?.name) }}
+        </p>
+        <p
+          :title="data?.metadata?.uid"
+          class="text-xs font-normal text-gray-500 dark:text-gray-400"
+        >
+          {{ data.metadata.uid }}
+        </p>
       </div>
     </td>
+  </router-link>
+  <td
+    class="max-w-sm p-4 overflow-hidden text-base font-normal text-gray-500 truncate xl:max-w-xs dark:text-gray-400"
+  >
     <router-link
+      v-if="data.spec.template?.storageLocation"
       :to="{
-        name: Pages.SCHEDULE.name,
+        name: Pages.STORAGE_LOCATION.name,
         params: {
-          name: data.metadata.name,
+          name: data.spec.template.storageLocation,
         },
       }"
-      router-link
     >
-      <td class="flex items-center p-4 mr-12 space-x-6 whitespace-nowrap">
-        <div class="text-sm font-normal text-gray-500 dark:text-gray-400">
-          <p
-            :title="data?.metadata?.name"
-            class="text-base font-semibold text-gray-900 dark:text-white"
-          >
-            {{ truncate(data?.metadata?.name) }}
-          </p>
-          <p
-            :title="data?.metadata?.uid"
-            class="text-xs font-normal text-gray-500 dark:text-gray-400"
-          >
-            {{ data.metadata.uid }}
-          </p>
-        </div>
-      </td>
+      <Badge
+        :hover="true"
+        :prefix-icon="faServer"
+        :suffix-icon="faArrowUpRightFromSquare"
+        :text="data.spec.template.storageLocation"
+        color="gray"
+      />
     </router-link>
-    <td
-      class="max-w-sm p-4 overflow-hidden text-base font-normal text-gray-500 truncate xl:max-w-xs dark:text-gray-400"
-    >
-      <router-link
-        v-if="data.spec.template?.storageLocation"
-        :to="{
-          name: Pages.STORAGE_LOCATION.name,
-          params: {
-            name: data.spec.template.storageLocation,
-          },
-        }"
+  </td>
+  <td
+    class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white"
+  >
+    {{ data.spec.schedule }}
+  </td>
+  <td
+    class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white"
+  >
+    {{ convertTimestampToDate(data.status?.lastBackup) }}
+  </td>
+  <td
+    class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white"
+  >
+    <div class="flex items-start flex-col">
+      <ScheduleStatusPhaseBadge :status="data.status?.phase" />
+      <Badge
+        v-if="data?.spec?.paused"
+        :text="t('global.paused')"
+        class="mt-2"
+        color="yellow"
+      />
+    </div>
+  </td>
+  <td class="p-4 space-x-2 whitespace-nowrap">
+    <div class="inline-flex rounded-md shadow-sm" role="group">
+      <button
+        v-if="can(Action.Update, Resources.SCHEDULE.plural)"
+        :class="{ 'cursor-not-allowed': isEditing }"
+        :data-tooltip-target="`tooltip-button-edit-${data?.metadata?.uid}`"
+        :disabled="isEditing"
+        :title="t('global.button.edit.title')"
+        class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-l-lg bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:ring-teal-300 dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
+        type="button"
+        @click="showModalEdit = !showModalEdit"
       >
-        <Badge
-          :hover="true"
-          :prefix-icon="faServer"
-          :suffix-icon="faArrowUpRightFromSquare"
-          :text="data.spec.template.storageLocation"
-          color="gray"
+        <FontAwesomeIcon
+          v-if="isEditing"
+          :icon="faCircleNotch"
+          class="!w-4 !h-4 animate-spin"
         />
-      </router-link>
-    </td>
-    <td
-      class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white"
-    >
-      {{ data.spec.schedule }}
-    </td>
-    <td
-      class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white"
-    >
-      {{ convertTimestampToDate(data.status?.lastBackup) }}
-    </td>
-    <td
-      class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white"
-    >
-      <div class="flex items-start flex-col">
-        <ScheduleStatusPhaseBadge :status="data.status?.phase" />
-        <Badge
-          v-if="data?.spec?.paused"
-          :text="t('global.paused')"
-          class="mt-2"
-          color="yellow"
+        <FontAwesomeIcon v-if="!isEditing" :icon="faPen" class="!w-4 !h-4" />
+      </button>
+      <button
+        v-if="
+          can(Action.Update, Resources.SCHEDULE.plural) &&
+          data?.status?.phase !== V1SchedulePhase.FailedValidation &&
+          data?.spec?.paused
+        "
+        :data-tooltip-target="`tooltip-button-resume-${data?.metadata?.uid}`"
+        :disabled="togglePauseLoading"
+        :title="t('global.button.resume.title')"
+        class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-green-600 hover:bg-green-800 focus:ring-4 focus:ring-green-300 dark:focus:ring-green-900"
+        type="button"
+        @click="togglePause(false)"
+      >
+        <FontAwesomeIcon
+          v-if="!togglePauseLoading"
+          :icon="faPlay"
+          class="!w-4 !h-4"
         />
-      </div>
-    </td>
-    <td class="p-4 space-x-2 whitespace-nowrap">
-      <div class="inline-flex rounded-md shadow-sm" role="group">
-        <button
-          v-if="can(Action.Update, Resources.SCHEDULE.plural)"
-          :class="{ 'cursor-not-allowed': isEditing }"
-          :data-tooltip-target="`tooltip-button-edit-${data?.metadata?.uid}`"
-          :disabled="isEditing"
-          :title="t('global.button.edit.title')"
-          class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-l-lg bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:ring-teal-300 dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
-          type="button"
-          @click="showModalEdit = !showModalEdit"
-        >
-          <FontAwesomeIcon
-            v-if="isEditing"
-            :icon="faCircleNotch"
-            class="!w-4 !h-4 animate-spin"
-          />
-          <FontAwesomeIcon v-if="!isEditing" :icon="faPen" class="!w-4 !h-4" />
-        </button>
-        <button
-          v-if="
-            can(Action.Update, Resources.SCHEDULE.plural) &&
-            data?.status?.phase !== V1SchedulePhase.FailedValidation &&
-            data?.spec?.paused
-          "
-          :data-tooltip-target="`tooltip-button-resume-${data?.metadata?.uid}`"
-          :disabled="togglePauseLoading"
-          :title="t('global.button.resume.title')"
-          class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-green-600 hover:bg-green-800 focus:ring-4 focus:ring-green-300 dark:focus:ring-green-900"
-          type="button"
-          @click="togglePause(false)"
-        >
-          <FontAwesomeIcon
-            v-if="!togglePauseLoading"
-            :icon="faPlay"
-            class="!w-4 !h-4"
-          />
-          <FontAwesomeIcon
-            v-else
-            :icon="faCircleNotch"
-            class="!w-4 !h-4 animate-spin"
-          />
-        </button>
-        <button
-          v-if="
-            can(Action.Update, Resources.SCHEDULE.plural) &&
-            data?.status?.phase !== V1SchedulePhase.FailedValidation &&
-            !data?.spec?.paused
-          "
-          :data-tooltip-target="`tooltip-button-pause-${data?.metadata?.uid}`"
-          :disabled="togglePauseLoading"
-          :title="t('global.button.pause.title')"
-          class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900"
-          type="button"
-          @click="togglePause(true)"
-        >
-          <FontAwesomeIcon
-            v-if="!togglePauseLoading"
-            :icon="faPause"
-            class="!w-4 !h-4"
-          />
-          <FontAwesomeIcon
-            v-else
-            :icon="faCircleNotch"
-            class="!w-4 !h-4 animate-spin"
-          />
-        </button>
+        <FontAwesomeIcon
+          v-else
+          :icon="faCircleNotch"
+          class="!w-4 !h-4 animate-spin"
+        />
+      </button>
+      <button
+        v-if="
+          can(Action.Update, Resources.SCHEDULE.plural) &&
+          data?.status?.phase !== V1SchedulePhase.FailedValidation &&
+          !data?.spec?.paused
+        "
+        :data-tooltip-target="`tooltip-button-pause-${data?.metadata?.uid}`"
+        :disabled="togglePauseLoading"
+        :title="t('global.button.pause.title')"
+        class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900"
+        type="button"
+        @click="togglePause(true)"
+      >
+        <FontAwesomeIcon
+          v-if="!togglePauseLoading"
+          :icon="faPause"
+          class="!w-4 !h-4"
+        />
+        <FontAwesomeIcon
+          v-else
+          :icon="faCircleNotch"
+          class="!w-4 !h-4 animate-spin"
+        />
+      </button>
 
-        <button
-          v-if="can(Action.Delete, Resources.SCHEDULE.plural)"
-          :class="{ 'cursor-not-allowed': isDeleting }"
-          :data-tooltip-target="`tooltip-button-delete-${data?.metadata?.uid}`"
-          :disabled="isDeleting"
-          :title="t('global.button.delete.title')"
-          class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-red-600 rounded-r-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"
-          type="button"
-          @click="showModalDelete = !showModalDelete"
-        >
-          <FontAwesomeIcon
-            v-if="isDeleting"
-            :icon="faCircleNotch"
-            class="!w-4 !h-4 animate-spin"
-          />
-          <FontAwesomeIcon v-else :icon="faTrashCan" class="!w-4 !h-4" />
-        </button>
-      </div>
-    </td>
-  </tr>
+      <button
+        v-if="can(Action.Delete, Resources.SCHEDULE.plural)"
+        :class="{ 'cursor-not-allowed': isDeleting }"
+        :data-tooltip-target="`tooltip-button-delete-${data?.metadata?.uid}`"
+        :disabled="isDeleting"
+        :title="t('global.button.delete.title')"
+        class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-red-600 rounded-r-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"
+        type="button"
+        @click="showModalDelete = !showModalDelete"
+      >
+        <FontAwesomeIcon
+          v-if="isDeleting"
+          :icon="faCircleNotch"
+          class="!w-4 !h-4 animate-spin"
+        />
+        <FontAwesomeIcon v-else :icon="faTrashCan" class="!w-4 !h-4" />
+      </button>
+    </div>
+  </td>
   <div
     :id="`tooltip-button-edit-${data?.metadata?.uid}`"
     class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
@@ -269,10 +256,7 @@ import { Pages } from '@velero-ui-app/utils/constants.utils';
 const { t } = useI18n();
 const props = defineProps({
   data: { type: Object as PropType<V1Schedule>, required: true },
-  checked: Boolean,
 });
-
-const emit = defineEmits(['onChecked']);
 
 onMounted(() => initTooltips());
 

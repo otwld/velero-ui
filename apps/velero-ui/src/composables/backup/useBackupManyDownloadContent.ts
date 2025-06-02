@@ -3,19 +3,23 @@ import { inject } from 'vue';
 import type { AxiosInstance } from 'axios';
 import { ToastType, useToastsStore } from '@velero-ui-app/stores/toasts.store';
 import { useI18n } from 'vue-i18n';
-import { forEach } from 'lodash';
 import { useMutation } from '@tanstack/vue-query';
+import { useListStore } from '@velero-ui-app/stores/list.store';
 
 export const useBackupManyDownloadContent = () => {
   const toastsStore = useToastsStore();
   const axiosInstance: AxiosInstance = inject('axios') as AxiosInstance;
   const { t } = useI18n();
+  const listStore = useListStore();
 
   return useMutation({
-    mutationFn: async () =>
+    mutationFn: async (names: string[]) =>
       (
         await axiosInstance.post<V1DownloadRequest[]>(
-          `${Resources.BACKUP.route}/download`
+          `${Resources.BACKUP.route}/download`,
+          {
+            data: names,
+          }
         )
       ).data,
     onSuccess: async (data: V1DownloadRequest[]) => {
@@ -24,7 +28,8 @@ export const useBackupManyDownloadContent = () => {
           t('global.message.success.downloadsStarted'),
           ToastType.SUCCESS
         );
-        forEach(data, (item: V1DownloadRequest) => {
+        listStore.resetCheckedItems();
+        data.forEach((item: V1DownloadRequest) => {
           window.open(item.status.downloadURL);
         });
       }

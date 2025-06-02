@@ -1,30 +1,12 @@
 <template>
   <ListHeader>
     <template #bulk-buttons>
-      <button
+      <BulkButton
         v-if="can(Action.Delete, Resources.BACKUP_STORAGE_LOCATION.plural)"
-        :class="{
-          'cursor-not-allowed':
-            childListRef?.getCheckedItems().length === 0 || isLoadingDeleting,
-        }"
-        :disabled="
-          childListRef?.getCheckedItems().length === 0 || isLoadingDeleting
-        "
-        class="inline-flex justify-center p-1 text-gray-500 rounded hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-        type="button"
+        :icon="faTrashCan"
+        :loading="isLoadingDeleting"
         @click="showModalBulkRemove = !showModalBulkRemove"
-      >
-        <FontAwesomeIcon
-          v-if="!isLoadingDeleting"
-          :icon="faTrashCan"
-          class="!w-5 !h-5"
-        />
-        <FontAwesomeIcon
-          v-if="isLoadingDeleting"
-          :icon="faCircleNotch"
-          class="!w-5 !h-5 animate-spin"
-        />
-      </button>
+      />
     </template>
     <template #filters>
       <SearchFilter :type="Filter.Provider" />
@@ -34,7 +16,7 @@
     <template #buttons>
       <button
         v-if="can(Action.Create, Resources.BACKUP_STORAGE_LOCATION.plural)"
-        class="inline-flex items-center justify-center w-1/2 px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 sm:w-auto dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+        class="inline-flex items-center justify-centerF w-1/2 px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 sm:w-auto dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
         type="button"
         @click="showModalAdd = !showModalAdd"
       >
@@ -43,7 +25,7 @@
       </button>
     </template>
   </ListHeader>
-  <ListContent ref="childListRef" :component="StorageLocationLine" />
+  <ListContent :component="StorageLocationLine" />
   <ListFooter />
 
   <VModal
@@ -66,16 +48,20 @@
     :icon="faExclamationCircle"
     :text="
       t('modal.text.confirmation.deleteMany', {
-        items: childListRef?.getCheckedItems().length,
+        items: checkedItems.size,
       })
     "
     @on-close="showModalBulkRemove = false"
-    @on-confirm="bulkRemove()"
+    @on-confirm="
+      remove({
+        names: [...checkedItems],
+      })
+    "
   >
     <template #content>
       <div class="flex flex-col justify-center mb-6">
         <span
-          v-for="(item, index) in childListRef?.getCheckedItems()"
+          v-for="(item, index) in checkedItems.keys()"
           :key="index"
           class="mt-2 px-1 text-sm rounded bg-gray-200 text-gray-600 dark:bg-gray-600 dark:text-gray-200"
           >{{ item }}</span
@@ -92,7 +78,6 @@ import ListFooter from '@velero-ui-app/components/List/ListFooter.vue';
 import ListContent from '@velero-ui-app/components/List/ListContent.vue';
 import StorageLocationLine from '@velero-ui-app/components/StorageLocation/StorageLocationLine.vue';
 import {
-  faCircleNotch,
   faExclamationCircle,
   faPlus,
   faTrashCan,
@@ -107,15 +92,15 @@ import ModalConfirmation from '@velero-ui-app/components/Modals/ModalConfirmatio
 import { can } from '@velero-ui-app/utils/policy.utils';
 import { Action, Filter, SortBy, SortDirection } from '@velero-ui/shared-types';
 import SearchFilter from '@velero-ui-app/components/Search/SearchFilter.vue';
-import { useFilters } from '@velero-ui-app/composables/search/useFilters';
+import { storeToRefs } from 'pinia';
+import BulkButton from '@velero-ui-app/components/BulkButton.vue';
 
 const { t } = useI18n();
 const listStore = useListStore();
+const { checkedItems } = storeToRefs(listStore);
 
 const { mutate: remove, isPending: isLoadingDeleting } =
   useDeleteManyKubernetesObjects(Resources.BACKUP_STORAGE_LOCATION);
-
-const childListRef = ref(null);
 
 onBeforeMount(() =>
   listStore.setHeaders([
@@ -155,9 +140,4 @@ onBeforeMount(() =>
 
 const showModalAdd = ref(false);
 const showModalBulkRemove = ref(false);
-
-const bulkRemove = () => {
-  remove({ names: childListRef?.value.getCheckedItems() });
-  childListRef?.value.resetCheckedItems();
-};
 </script>

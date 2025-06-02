@@ -11,7 +11,6 @@ import {
   SortBy,
   SortDirection,
 } from '@velero-ui/shared-types';
-import { type LocationQuery, useRoute, useRouter } from 'vue-router';
 
 export interface ListStore extends SearchPagination {
   total: number;
@@ -20,6 +19,7 @@ export interface ListStore extends SearchPagination {
   sort: SearchSort;
   headers: ListHeader[];
   objectType: Resource;
+  checkedItems: Set<string>
 }
 
 export const useListStore = defineStore('list', {
@@ -36,6 +36,7 @@ export const useListStore = defineStore('list', {
       },
       headers: [],
       objectType: null,
+      checkedItems: new Set<string>(),
     }) as ListStore,
   actions: {
     reset(): void {
@@ -44,6 +45,7 @@ export const useListStore = defineStore('list', {
 
       this.resetSearch();
       this.resetSort();
+      this.resetCheckedItems();
     },
     resetSearch(): void {
       this.filters = {};
@@ -56,6 +58,9 @@ export const useListStore = defineStore('list', {
     },
     resetFilters(): void {
       this.filters = {};
+    },
+    resetCheckedItems(): void {
+      this.checkedItems.clear();
     },
     setTotal(total: number): void {
       this.total = total;

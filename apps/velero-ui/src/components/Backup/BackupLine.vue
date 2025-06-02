@@ -1,134 +1,119 @@
 <template>
-  <tr class="hover:bg-gray-50 dark:hover:bg-gray-600 transition duration-200">
-    <td class="w-4 p-4">
-      <div class="flex items-center">
-        <input
-          :checked="checked"
-          :value="data?.metadata?.name"
-          class="!w-4 !h-4 border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600"
-          type="checkbox"
-          @click="emit('onChecked')"
-        />
-        <label class="sr-only" for="checkbox">checkbox</label>
+  <router-link
+    :to="{
+      name: Pages.BACKUP.name,
+      params: {
+        name: data?.metadata?.name,
+      },
+    }"
+    router-link
+  >
+    <td class="flex items-center p-4 mr-12 space-x-6 whitespace-nowrap">
+      <div class="text-sm font-normal text-gray-500 dark:text-gray-400">
+        <p
+          :title="data?.metadata?.name"
+          class="text-base font-semibold text-gray-900 dark:text-white"
+        >
+          {{ truncate(data?.metadata?.name) }}
+        </p>
+        <p
+          :title="data.metadata.uid"
+          class="text-xs font-normal text-gray-500 dark:text-gray-400"
+        >
+          {{ data.metadata.uid }}
+        </p>
       </div>
     </td>
+  </router-link>
+  <td
+    class="max-w-sm p-4 overflow-hidden text-base font-normal text-gray-500 truncate xl:max-w-xs dark:text-gray-400"
+  >
     <router-link
+      v-if="data?.metadata?.labels?.['velero.io/schedule-name']"
+      :title="data.metadata.labels['velero.io/schedule-name']"
       :to="{
-        name: Pages.BACKUP.name,
+        name: Pages.SCHEDULE.name,
         params: {
-          name: data?.metadata?.name,
+          name: data.metadata.labels['velero.io/schedule-name'],
         },
       }"
-      router-link
     >
-      <td class="flex items-center p-4 mr-12 space-x-6 whitespace-nowrap">
-        <div class="text-sm font-normal text-gray-500 dark:text-gray-400">
-          <p
-            :title="data?.metadata?.name"
-            class="text-base font-semibold text-gray-900 dark:text-white"
-          >
-            {{ truncate(data?.metadata?.name) }}
-          </p>
-          <p
-            :title="data.metadata.uid"
-            class="text-xs font-normal text-gray-500 dark:text-gray-400"
-          >
-            {{ data.metadata.uid }}
-          </p>
-        </div>
-      </td>
+      <Badge
+        :hover="true"
+        :prefix-icon="faClockRotateLeft"
+        :suffix-icon="faArrowUpRightFromSquare"
+        :text="truncate(data.metadata.labels['velero.io/schedule-name'], 30)"
+        color="gray"
+      />
     </router-link>
-    <td
-      class="max-w-sm p-4 overflow-hidden text-base font-normal text-gray-500 truncate xl:max-w-xs dark:text-gray-400"
-    >
-      <router-link
-        v-if="data?.metadata?.labels?.['velero.io/schedule-name']"
-        :title="data.metadata.labels['velero.io/schedule-name']"
-        :to="{
-          name: Pages.SCHEDULE.name,
-          params: {
-            name: data.metadata.labels['velero.io/schedule-name'],
-          },
-        }"
+  </td>
+  <td class="p-4 text-base text-gray-900 whitespace-nowrap dark:text-white">
+    {{
+      data?.status?.startTimestamp
+        ? convertTimestampToDate(data.status.startTimestamp)
+        : ''
+    }}
+  </td>
+  <td class="p-4 text-base text-gray-900 whitespace-nowrap dark:text-white">
+    {{ data.status?.expiration ? expireTime : '' }}
+  </td>
+  <td class="p-4">
+    <BackupStatusPhaseBadge :status="data?.status?.phase" />
+  </td>
+  <td class="p-4 space-x-2 whitespace-nowrap">
+    <div class="inline-flex rounded-md shadow-sm" role="group">
+      <button
+        v-if="can(Action.Create, Resources.RESTORE.plural)"
+        :class="{ 'cursor-not-allowed': isDisabled }"
+        :data-tooltip-target="`tooltip-button-restore-${data?.metadata?.uid}`"
+        :disabled="isDisabled"
+        :title="t('global.button.restore.title')"
+        class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-l-lg bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:ring-teal-300 dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
+        type="button"
+        @click="showModalRestore = !showModalRestore"
       >
-        <Badge
-          :hover="true"
-          :prefix-icon="faClockRotateLeft"
-          :suffix-icon="faArrowUpRightFromSquare"
-          :text="truncate(data.metadata.labels['velero.io/schedule-name'], 30)"
-          color="gray"
+        <FontAwesomeIcon :icon="faClockRotateLeft" class="!w-4 !h-4" />
+      </button>
+      <button
+        v-if="can(Action.Download, Resources.BACKUP.plural)"
+        :class="{ 'cursor-not-allowed': isDisabled || downloadLoading }"
+        :data-tooltip-target="`tooltip-button-download-${data?.metadata?.uid}`"
+        :disabled="isDisabled || downloadLoading"
+        :title="t('global.button.download.title')"
+        class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+        type="button"
+        @click="download()"
+      >
+        <FontAwesomeIcon
+          v-if="!downloadLoading"
+          :icon="faDownload"
+          class="!w-4 !h-4"
         />
-      </router-link>
-    </td>
-    <td class="p-4 text-base text-gray-900 whitespace-nowrap dark:text-white">
-      {{
-        data?.status?.startTimestamp
-          ? convertTimestampToDate(data.status.startTimestamp)
-          : ''
-      }}
-    </td>
-    <td class="p-4 text-base text-gray-900 whitespace-nowrap dark:text-white">
-      {{ data.status?.expiration ? expireTime : '' }}
-    </td>
-    <td class="p-4">
-      <BackupStatusPhaseBadge :status="data?.status?.phase" />
-    </td>
-    <td class="p-4 space-x-2 whitespace-nowrap">
-      <div class="inline-flex rounded-md shadow-sm" role="group">
-        <button
-          v-if="can(Action.Create, Resources.RESTORE.plural)"
-          :class="{ 'cursor-not-allowed': isDisabled }"
-          :data-tooltip-target="`tooltip-button-restore-${data?.metadata?.uid}`"
-          :disabled="isDisabled"
-          :title="t('global.button.restore.title')"
-          class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-l-lg bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:ring-teal-300 dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
-          type="button"
-          @click="showModalRestore = !showModalRestore"
-        >
-          <FontAwesomeIcon :icon="faClockRotateLeft" class="!w-4 !h-4" />
-        </button>
-        <button
-          v-if="can(Action.Download, Resources.BACKUP.plural)"
-          :class="{ 'cursor-not-allowed': isDisabled || downloadLoading }"
-          :data-tooltip-target="`tooltip-button-download-${data?.metadata?.uid}`"
-          :disabled="isDisabled || downloadLoading"
-          :title="t('global.button.download.title')"
-          class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-          type="button"
-          @click="download()"
-        >
-          <FontAwesomeIcon
-            v-if="!downloadLoading"
-            :icon="faDownload"
-            class="!w-4 !h-4"
-          />
-          <FontAwesomeIcon
-            v-else
-            :icon="faCircleNotch"
-            class="!w-4 !h-4 animate-spin"
-          />
-        </button>
-        <button
-          v-if="can(Action.Delete, Resources.BACKUP.plural)"
-          :class="{ 'cursor-not-allowed': isDeleteDisabled }"
-          :data-tooltip-target="`tooltip-button-delete-${data?.metadata?.uid}`"
-          :disabled="isDeleteDisabled"
-          :title="t('global.button.delete.title')"
-          class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-red-600 rounded-r-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"
-          type="button"
-          @click="showModalDelete = !showModalDelete"
-        >
-          <FontAwesomeIcon
-            v-if="isDeleting"
-            :icon="faCircleNotch"
-            class="!w-4 !h-4 animate-spin"
-          />
-          <FontAwesomeIcon v-else :icon="faTrashCan" class="!w-4 !h-4" />
-        </button>
-      </div>
-    </td>
-  </tr>
-
+        <FontAwesomeIcon
+          v-else
+          :icon="faCircleNotch"
+          class="!w-4 !h-4 animate-spin"
+        />
+      </button>
+      <button
+        v-if="can(Action.Delete, Resources.BACKUP.plural)"
+        :class="{ 'cursor-not-allowed': isDeleteDisabled }"
+        :data-tooltip-target="`tooltip-button-delete-${data?.metadata?.uid}`"
+        :disabled="isDeleteDisabled"
+        :title="t('global.button.delete.title')"
+        class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-red-600 rounded-r-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"
+        type="button"
+        @click="showModalDelete = !showModalDelete"
+      >
+        <FontAwesomeIcon
+          v-if="isDeleting"
+          :icon="faCircleNotch"
+          class="!w-4 !h-4 animate-spin"
+        />
+        <FontAwesomeIcon v-else :icon="faTrashCan" class="!w-4 !h-4" />
+      </button>
+    </div>
+  </td>
   <div
     :id="`tooltip-button-restore-${data?.metadata?.uid}`"
     class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
@@ -248,13 +233,11 @@ const props = defineProps({
   data: {
     type: Object as PropType<V1Backup>,
     required: true,
-  },
-  checked: Boolean,
+  }
 });
 
 onMounted(() => initTooltips());
 
-const emit = defineEmits(['onChecked']);
 
 const showModalDelete = ref(false);
 const showModalRestore = ref(false);

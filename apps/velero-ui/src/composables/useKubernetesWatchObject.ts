@@ -73,9 +73,11 @@ export const useKubernetesWatchObject = <T extends KubernetesObject>(
   const { data, isLoading, error } = useQuery<T>({
     queryKey: [resource.plural, name],
 
-    queryFn: async () =>
-      (await axiosInstance.get<T>(`${resource.route}/${name}`))
-        .data,
+    queryFn: async () => {
+      listStore.resetCheckedItems();
+      return (await axiosInstance.get<T>(`${resource.route}/${name}`))
+        .data;
+    },
     initialData: () => {
       return queryClient
         .getQueryData<T[]>([

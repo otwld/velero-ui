@@ -1,130 +1,117 @@
 <template>
-  <tr class="hover:bg-gray-50  dark:hover:bg-gray-600 transition duration-200">
-    <td class="w-4 p-4">
-      <div class="flex items-center">
-        <input
-          :checked="checked"
-          class="!w-4 !h-4 border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600"
-          type="checkbox"
-          @click="emit('onChecked')"
-        />
-        <label class="sr-only" for="checkbox-">checkbox</label>
+  <router-link
+    :to="{
+      name: Pages.BACKUP_REPOSITORY.name,
+      params: {
+        name: data?.metadata?.name,
+      },
+    }"
+    router-link
+  >
+    <td class="flex items-center p-4 mr-12 space-x-6 whitespace-nowrap">
+      <div class="text-sm font-normal text-gray-500 dark:text-gray-400">
+        <p
+          :title="data?.metadata?.name"
+          class="text-base font-semibold text-gray-900 dark:text-white"
+        >
+          {{ truncate(data?.metadata?.name) }}
+        </p>
+        <p
+          :title="data?.metadata?.uid"
+          class="text-xs font-normal text-gray-500 dark:text-gray-400"
+        >
+          {{ data?.metadata?.uid }}
+        </p>
       </div>
     </td>
+  </router-link>
+  <td
+    class="max-w-sm p-4 overflow-hidden text-base font-normal text-gray-500 truncate xl:max-w-xs dark:text-gray-400"
+  >
     <router-link
+      v-if="data?.spec?.backupStorageLocation"
       :to="{
-        name: Pages.BACKUP_REPOSITORY.name,
+        name: Pages.STORAGE_LOCATION.name,
         params: {
-          name: data?.metadata?.name,
+          name: data.spec.backupStorageLocation,
         },
       }"
-      router-link
     >
-      <td class="flex items-center p-4 mr-12 space-x-6 whitespace-nowrap">
-        <div class="text-sm font-normal text-gray-500 dark:text-gray-400">
-          <p
-            :title="data?.metadata?.name"
-            class="text-base font-semibold text-gray-900 dark:text-white"
-          >
-            {{ truncate(data?.metadata?.name) }}
-          </p>
-          <p
-            :title="data?.metadata?.uid"
-            class="text-xs font-normal text-gray-500 dark:text-gray-400"
-          >
-            {{ data?.metadata?.uid }}
-          </p>
-        </div>
-      </td>
+      <Badge
+        :hover="true"
+        :prefix-icon="faServer"
+        :suffix-icon="faArrowUpRightFromSquare"
+        :text="data.spec.backupStorageLocation"
+        color="gray"
+      />
     </router-link>
-    <td
-      class="max-w-sm p-4 overflow-hidden text-base font-normal text-gray-500 truncate xl:max-w-xs dark:text-gray-400"
-    >
-      <router-link
-        v-if="data?.spec?.backupStorageLocation"
-        :to="{
-          name: Pages.STORAGE_LOCATION.name,
-          params: {
-            name: data.spec.backupStorageLocation,
-          },
-        }"
-      >
-        <Badge
-          :hover="true"
-          :prefix-icon="faServer"
-          :suffix-icon="faArrowUpRightFromSquare"
-          :text="data.spec.backupStorageLocation"
-          color="gray"
-        />
-      </router-link>
-    </td>
-    <td
-      class="p-4 inline-flex items-center text-base text-gray-900 whitespace-nowrap dark:text-white"
-    >
-      <img
-        v-if="data?.spec?.repositoryType === V1BackupRepositoryType.Kopia"
-        class="h-5 w-5 mr-2"
-        src="/src/assets/images/kopia.svg"
+  </td>
+  <td
+    class="p-4 inline-flex items-center text-base text-gray-900 whitespace-nowrap dark:text-white"
+  >
+    <img
+      v-if="data?.spec?.repositoryType === V1BackupRepositoryType.Kopia"
+      class="h-5 w-5 mr-2"
+      src="/src/assets/images/kopia.svg"
+    />
+    <img
+      v-if="data?.spec?.repositoryType === V1BackupRepositoryType.Restic"
+      class="h-5 w-5 mr-2"
+      src="/src/assets/images/restic.png"
+    />
+    {{ data?.spec?.repositoryType }}
+  </td>
+  <td
+    class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white"
+  >
+    {{
+      data?.status?.lastMaintenanceTime
+        ? convertTimestampToDate(data?.status?.lastMaintenanceTime)
+        : '-'
+    }}
+  </td>
+  <td
+    class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white"
+  >
+    <div class="flex items-center">
+      <div
+        v-if="data?.status?.phase === V1BackupRepositoryPhase.New"
+        class="h-2.5 w-2.5 rounded-full bg-blue-500 mr-2"
       />
-      <img
-        v-if="data?.spec?.repositoryType === V1BackupRepositoryType.Restic"
-        class="h-5 w-5 mr-2"
-        src="/src/assets/images/restic.png"
+      <div
+        v-if="data?.status?.phase === V1BackupRepositoryPhase.Ready"
+        class="h-2.5 w-2.5 rounded-full bg-green-400 mr-2"
       />
-      {{ data?.spec?.repositoryType }}
-    </td>
-    <td
-      class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white"
+      <div
+        v-if="data?.status?.phase === V1BackupRepositoryPhase.NotReady"
+        class="h-2.5 w-2.5 rounded-full bg-red-500 mr-2"
+      />
+      <div
+        v-if="!data?.status?.phase"
+        class="h-2.5 w-2.5 rounded-full bg-gray-500 mr-2"
+      />
+      {{ data?.status?.phase ? data.status.phase : t('global.unknown') }}
+    </div>
+  </td>
+  <td class="p-4 space-x-2 whitespace-nowrap">
+    <button
+      v-if="can(Action.Delete, Resources.BACKUP_REPOSITORY.plural)"
+      :class="{ 'cursor-not-allowed': isDeleting }"
+      :data-tooltip-target="`tooltip-button-delete-${data?.metadata?.uid}`"
+      :disabled="isDeleting"
+      :title="t('global.button.delete.title')"
+      class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"
+      type="button"
+      @click="showModalDelete = !showModalDelete"
     >
-      {{
-        data?.status?.lastMaintenanceTime
-          ? convertTimestampToDate(data?.status?.lastMaintenanceTime)
-          : '-'
-      }}
-    </td>
-    <td
-      class="p-4 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white"
-    >
-      <div class="flex items-center">
-        <div
-          v-if="data?.status?.phase === V1BackupRepositoryPhase.New"
-          class="h-2.5 w-2.5 rounded-full bg-blue-500 mr-2"
-        />
-        <div
-          v-if="data?.status?.phase === V1BackupRepositoryPhase.Ready"
-          class="h-2.5 w-2.5 rounded-full bg-green-400 mr-2"
-        />
-        <div
-          v-if="data?.status?.phase === V1BackupRepositoryPhase.NotReady"
-          class="h-2.5 w-2.5 rounded-full bg-red-500 mr-2"
-        />
-        <div
-          v-if="!data?.status?.phase"
-          class="h-2.5 w-2.5 rounded-full bg-gray-500 mr-2"
-        />
-        {{ data?.status?.phase ? data.status.phase : t('global.unknown') }}
-      </div>
-    </td>
-    <td class="p-4 space-x-2 whitespace-nowrap">
-      <button
-        v-if="can(Action.Delete, Resources.BACKUP_REPOSITORY.plural)"
-        :class="{ 'cursor-not-allowed': isDeleting }"
-        :data-tooltip-target="`tooltip-button-delete-${data?.metadata?.uid}`"
-        :disabled="isDeleting"
-        :title="t('global.button.delete.title')"
-        class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"
-        type="button"
-        @click="showModalDelete = !showModalDelete"
-      >
-        <FontAwesomeIcon
-          v-if="isDeleting"
-          :icon="faCircleNotch"
-          class="!w-4 !h-4 animate-spin"
-        />
-        <FontAwesomeIcon v-else :icon="faTrashCan" class="!w-4 !h-4" />
-      </button>
-    </td>
-  </tr>
+      <FontAwesomeIcon
+        v-if="isDeleting"
+        :icon="faCircleNotch"
+        class="!w-4 !h-4 animate-spin"
+      />
+      <FontAwesomeIcon v-else :icon="faTrashCan" class="!w-4 !h-4" />
+    </button>
+  </td>
 
   <div
     :id="`tooltip-button-delete-${data?.metadata?.uid}`"
@@ -183,7 +170,6 @@ import Badge from '@velero-ui-app/components/Badge.vue';
 const { t } = useI18n();
 defineProps({
   data: { type: Object as PropType<V1BackupRepository>, required: true },
-  checked: Boolean,
 });
 
 const showModalDelete = ref(false);

@@ -1,54 +1,18 @@
 <template>
   <ListHeader>
     <template #bulk-buttons>
-      <button
+      <BulkButton
         v-if="can(Action.Download, Resources.BACKUP.plural)"
-        :class="{
-          'cursor-not-allowed':
-            childListRef?.getCheckedItems().length === 0 || downloadLoading,
-        }"
-        :disabled="
-          childListRef?.getCheckedItems().length === 0 || downloadLoading
-        "
-        class="inline-flex justify-center p-1 text-gray-500 rounded hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-        type="button"
+        :icon="faDownload"
+        :loading="downloadLoading"
         @click="showModalBulkDownload = !showModalBulkDownload"
-      >
-        <FontAwesomeIcon
-          v-if="!downloadLoading"
-          :icon="faDownload"
-          class="!w-5 !h-5"
-        />
-        <FontAwesomeIcon
-          v-if="downloadLoading"
-          :icon="faCircleNotch"
-          class="!w-5 !h-5 animate-spin"
-        />
-      </button>
-      <button
+      />
+      <BulkButton
         v-if="can(Action.Delete, Resources.BACKUP.plural)"
-        :class="{
-          'cursor-not-allowed':
-            childListRef?.getCheckedItems().length === 0 || isLoadingDeleting,
-        }"
-        :disabled="
-          childListRef?.getCheckedItems().length === 0 || isLoadingDeleting
-        "
-        class="inline-flex justify-center p-1 text-gray-500 rounded hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-        type="button"
+        :icon="faTrashCan"
+        :loading="isLoadingDeleting"
         @click="showModalBulkRemove = !showModalBulkRemove"
-      >
-        <FontAwesomeIcon
-          v-if="!isLoadingDeleting"
-          :icon="faTrashCan"
-          class="!w-5 !h-5"
-        />
-        <FontAwesomeIcon
-          v-if="isLoadingDeleting"
-          :icon="faCircleNotch"
-          class="!w-5 !h-5 animate-spin"
-        />
-      </button>
+      />
     </template>
     <template #filters>
       <SearchFilter :type="Filter.Schedule" />
@@ -66,7 +30,7 @@
       </button>
     </template>
   </ListHeader>
-  <ListContent ref="childListRef" :component="BackupLine" />
+  <ListContent :component="BackupLine" />
   <ListFooter />
   <VModal
     v-if="showModalAdd"
@@ -88,16 +52,21 @@
     :icon="faExclamationCircle"
     :text="
       t('modal.text.confirmation.deleteMany', {
-        items: childListRef?.getCheckedItems().length,
+        items: checkedItems.size,
       })
     "
     @on-close="showModalBulkRemove = false"
-    @on-confirm="bulkRemove()"
+    @on-confirm="
+      remove({
+        names: [...checkedItems],
+        forced: forceDeleteContext.value,
+      })
+    "
   >
     <template #content>
       <div class="flex flex-col justify-center mb-6">
         <span
-          v-for="(item, index) in childListRef?.getCheckedItems()"
+          v-for="(item, index) in checkedItems.keys()"
           :key="index"
           class="mt-2 px-1 text-sm rounded bg-gray-200 text-gray-600 dark:bg-gray-600 dark:text-gray-200"
           >{{ item }}</span
@@ -130,16 +99,16 @@
     :icon="faDownload"
     :text="
       t('modal.text.confirmation.downloadMany', {
-        items: childListRef?.getCheckedItems().length,
+        items: checkedItems.size,
       })
     "
     @on-close="showModalBulkDownload = false"
-    @on-confirm="bulkDownload()"
+    @on-confirm="download([...checkedItems])"
   >
     <template #content>
       <div class="flex flex-col justify-center mb-6">
         <span
-          v-for="(item, index) in childListRef?.getCheckedItems()"
+          v-for="(item, index) in checkedItems.keys()"
           :key="index"
           class="mt-2 px-1 text-sm rounded bg-gray-200 text-gray-600 dark:bg-gray-600 dark:text-gray-200"
           >{{ item }}</span
@@ -151,7 +120,6 @@
 <script lang="ts" setup>
 import BackupLine from '@velero-ui-app/components/Backup/BackupLine.vue';
 import {
-  faCircleNotch,
   faDownload,
   faExclamationCircle,
   faPlus,
@@ -175,19 +143,18 @@ import { Action, Filter, SortBy, SortDirection } from '@velero-ui/shared-types';
 import { can } from '@velero-ui-app/utils/policy.utils';
 import { useFormKitContextById } from '@formkit/vue';
 import SearchFilter from '@velero-ui-app/components/Search/SearchFilter.vue';
-
-import { useFilters } from '@velero-ui-app/composables/search/useFilters';
+import { storeToRefs } from 'pinia';
+import BulkButton from '@velero-ui-app/components/BulkButton.vue';
 
 const { t } = useI18n();
 const listStore = useListStore();
+const { checkedItems } = storeToRefs(listStore);
 
 const { mutate: remove, isPending: isLoadingDeleting } =
   useDeleteManyKubernetesObjects(Resources.BACKUP);
 
 const { mutate: download, isPending: downloadLoading } =
   useBackupManyDownloadContent();
-
-const childListRef = ref(null);
 
 onBeforeMount(() =>
   listStore.setHeaders([
@@ -234,17 +201,4 @@ const showModalBulkRemove = ref(false);
 const showModalBulkDownload = ref(false);
 
 const forceDeleteContext = useFormKitContextById('force-delete');
-
-const bulkDownload = () => {
-  download(childListRef?.value.getCheckedItems());
-  childListRef?.value.resetCheckedItems();
-};
-
-const bulkRemove = () => {
-  remove({
-    names: childListRef?.value.getCheckedItems(),
-    forced: forceDeleteContext.value.value,
-  });
-  childListRef?.value.resetCheckedItems();
-};
 </script>

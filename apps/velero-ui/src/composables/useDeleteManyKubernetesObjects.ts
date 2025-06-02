@@ -92,6 +92,7 @@ export const useDeleteManyKubernetesObjects = <T extends KubernetesObject>(
           ToastType.SUCCESS
         );
       }
+      listStore.resetCheckedItems();
     },
     onError: (error: Error): void => {
       toastsStore.push(t('global.message.error.unexpected'), ToastType.ERROR);

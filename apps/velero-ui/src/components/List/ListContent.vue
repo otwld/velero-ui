@@ -69,14 +69,18 @@
               }"
               class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700"
             >
-              <component
-                :is="component"
+              <ListContentLine
                 v-for="(item, index) in data"
                 :key="`list-item-${index}`"
-                :checked="checkedItems[`${index}`]"
-                :data="item"
-                @on-checked="setCheckedItem(index)"
-              />
+                :name="item?.metadata?.name"
+              >
+                <template #content>
+                  <component
+                    :is="component"
+                    :data="item"
+                  />
+                </template>
+              </ListContentLine>
             </tbody>
           </table>
           <div
@@ -103,7 +107,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onBeforeMount, onBeforeUnmount, ref } from 'vue';
+import { computed, onBeforeMount, onBeforeUnmount } from 'vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import {
   faCircleNotch,
@@ -117,10 +121,11 @@ import { storeToRefs } from 'pinia';
 import { useI18n } from 'vue-i18n';
 import { useKubernetesWatchListObject } from '@velero-ui-app/composables/useKubernetesWatchListObject';
 import { SortDirection } from '@velero-ui/shared-types';
+import ListContentLine from '@velero-ui-app/components/List/ListContentLine.vue';
 
 const { t } = useI18n();
 const listStore = useListStore();
-const { headers, objectType } = storeToRefs(listStore);
+const { headers, objectType, checkedItems } = storeToRefs(listStore);
 
 const { on, off, data, isFetching } = useKubernetesWatchListObject(
   objectType.value
@@ -133,59 +138,22 @@ defineProps({
 onBeforeMount(() => on());
 onBeforeUnmount(() => off());
 
-const checkedItems = ref({});
-const checked = ref('false');
-
-const initCheckedItems = () =>
-  Object.keys(checkedItems.value).length === 0
-    ? data.value.forEach((e, index) => (checkedItems.value[`${index}`] = false))
-    : null;
-
-const resetCheckedItems = () => {
-  checkedItems.value = {};
-  checked.value = 'false';
-};
-
 const globalCheck = ($event) => {
-  initCheckedItems();
   if (checked.value === 'true') {
-    checkedItems.value = {};
-    checked.value = 'false';
+    listStore.resetCheckedItems();
   } else {
-    data.value.forEach((e, index) => (checkedItems.value[`${index}`] = true));
-    checked.value = 'true';
+    data.value.forEach((e, index) => checkedItems.value.add(e?.metadata?.name));
   }
   $event.preventDefault();
   $event.stopPropagation();
 };
 
-const setCheckedItem = (index: number) => {
-  initCheckedItems();
-  checkedItems.value[`${index}`] = !checkedItems.value[`${index}`];
-  const totalChecked = Object.values(checkedItems.value).filter(
-    (i) => i
-  ).length;
-  if (!totalChecked) {
-    checked.value = 'false';
-  } else if (totalChecked === Object.keys(checkedItems.value).length) {
-    checked.value = 'true';
-  } else {
-    checked.value = 'partial';
+const checked = computed(() => {
+  if (checkedItems.value.size === 0) {
+    return 'false';
+  } else if (checkedItems.value.size < data.value.length) {
+    return 'partial';
   }
-};
-
-const getCheckedItems = () => {
-  const checkedItemsArray: string[] = [];
-  Object.keys(checkedItems.value).forEach((key) => {
-    if (checkedItems.value[key]) {
-      checkedItemsArray.push(data.value[key].metadata.name);
-    }
-  });
-  return checkedItemsArray;
-};
-
-defineExpose({
-  getCheckedItems,
-  resetCheckedItems,
+  return 'true';
 });
 </script>

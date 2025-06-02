@@ -5,11 +5,20 @@
     >
       <div class="flex-col w-full">
         <div>
-          <h1
+          <div
             class="flex text-xl font-bold leading-none text-gray-900 sm:text-2xl dark:text-white"
           >
+            <Skeleton
+              v-if="isFetching && data.length === 0"
+              class="mr-2"
+              height="6"
+              width="8"
+            />
+            <span v-else class="mr-2">
+              {{ data.length }}
+            </span>
             {{ t('dashboard.stats.nextScheduled.title') }}
-          </h1>
+          </div>
           <h3 class="text-base font-light text-gray-500 dark:text-gray-400">
             {{ t('dashboard.stats.nextScheduled.description') }}
           </h3>
