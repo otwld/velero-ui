@@ -63,6 +63,7 @@ export class AppConfigController {
         clientId: this.configService.get('microsoft.clientId'),
         redirectUri: this.configService.get('microsoft.redirectUri'),
         tenant: this.configService.get('microsoft.tenant'),
+        authorizationUrl: this.configService.get('microsoft.authorizationUrl'),
       },
       oauth: {
         enabled: this.configService.get('oauth.enabled') || false,
@@ -71,7 +72,6 @@ export class AppConfigController {
         clientId: this.configService.get('oauth.clientId'),
         redirectUri: this.configService.get('oauth.redirectUri'),
         authorizationUrl: this.configService.get('oauth.authorizationUrl'),
-        tokenUrl: this.configService.get('oauth.tokenUrl'),
       },
     };
 

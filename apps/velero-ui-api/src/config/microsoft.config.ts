@@ -10,5 +10,7 @@ export default registerAs('microsoft', (): MicrosoftConfig => {
     scopes: process.env.MICROSOFT_OAUTH_SCOPE || 'user.read',
     redirectUri: process.env.MICROSOFT_REDIRECT_URI || '',
     tenant: process.env.MICROSOFT_TENANT || 'common',
+    authorizationUrl: process.env.MICROSOFT_AUTHORIZATION_URL || 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize',
+    tokenUrl: process.env.MICROSOFT_TOKEN_URL || 'https://login.microsoftonline.com/common/oauth2/v2.0/token'
   };
 });

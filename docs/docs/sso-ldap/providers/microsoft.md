@@ -9,14 +9,16 @@ Velero UI also supports authentication via Microsoft using OAuth 2.0. This guide
 
 ## Environment Variables
 
-| Variable | Description |
-|----------|-------------|
-| `MICROSOFT_AUTH_ENABLED` | Set to `true` to enable Microsoft authentication. Default is `false`. |
-| `MICROSOFT_CLIENT_ID` | The client ID from your Microsoft Azure portal. |
-| `MICROSOFT_CLIENT_SECRET` | The client secret from your Microsoft Azure portal. |
-| `MICROSOFT_OAUTH_SCOPE` | The scope of OAuth access. Default: `user.read`. |
-| `MICROSOFT_REDIRECT_URI` | The redirect URI after authentication. Default: `http://localhost:4200/login`. |
-| `MICROSOFT_TENANT` | The Microsoft tenant ID. Use `common` for multi-tenant applications. |
+| Variable | Description                                                                                             |
+|----------|---------------------------------------------------------------------------------------------------------|
+| `MICROSOFT_AUTH_ENABLED` | Set to `true` to enable Microsoft authentication. Default is `false`.                                   |
+| `MICROSOFT_CLIENT_ID` | The client ID from your Microsoft Azure portal.                                                         |
+| `MICROSOFT_CLIENT_SECRET` | The client secret from your Microsoft Azure portal.                                                     |
+| `MICROSOFT_OAUTH_SCOPE` | The scope of OAuth access. Default: `user.read`.                                                        |
+| `MICROSOFT_REDIRECT_URI` | The redirect URI after authentication. Default: `http://localhost:4200/login`.                          |
+| `MICROSOFT_TENANT` | The Microsoft tenant ID. Use `common` for multi-tenant applications.                                    |
+| `MICROSOFT_AUTHORIZATION_URL` | The OAuth authorization URL. Default: `https://login.microsoftonline.com/common/oauth2/v2.0/authorize`. |
+| `MICROSOFT_TOKEN_URL` | The OAuth token URL. Default: `https://login.microsoftonline.com/common/oauth2/v2.0/token`.             |
 
 ## Steps to Configure Microsoft Authentication
 
@@ -41,6 +43,8 @@ Velero UI also supports authentication via Microsoft using OAuth 2.0. This guide
      MICROSOFT_OAUTH_SCOPE="user.read"
      MICROSOFT_REDIRECT_URI=http://localhost:4200/login
      MICROSOFT_TENANT=common
+     MICROSOFT_AUTHORIZATION_URL=https://login.microsoftonline.com/{tenant}/oauth2/v2.0/authorize
+     MICROSOFT_TOKEN_URL=https://login.microsoftonline.com/{tenant}/oauth2/v2.0/token
      ```
 
 4. **Restart Your Application**

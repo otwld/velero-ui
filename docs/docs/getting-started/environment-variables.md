@@ -267,6 +267,18 @@ configuration.
 - **Default**: `common`
 - **Description**: Specifies the tenant for Microsoft OAuth authentication, which can be set to a specific tenant for better control.
 
+#### `MICROSOFT_AUTHORIZATION_URL`
+
+- **Type**: `string`
+- **Default**: `https://login.microsoftonline.com/common/oauth2/v2.0/authorize`
+- **Description**: Sets the authorization URL for Microsoft authentication, directing users to the provider's login page.
+
+#### `MICROSOFT_TOKEN_URL`
+
+- **Type**: `string`
+- **Default**: `https://login.microsoftonline.com/common/oauth2/v2.0/token`
+- **Description**: Sets the token URL for Microsoft authentication, used to exchange the authorization code for access tokens.
+
 #### `OAUTH_AUTH_ENABLED`
 
 - **Type**: `bool`

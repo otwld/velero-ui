@@ -65,6 +65,8 @@ export interface MicrosoftConfig {
   scopes: string;
   redirectUri: string;
   tenant: string;
+  authorizationUrl: string;
+  tokenUrl: string;
 }
 
 export interface GitlabConfig {
