@@ -34,8 +34,23 @@ export class BackupService {
     private readonly downloadRequestService: DownloadRequestService,
     private readonly httpService: HttpService,
     private readonly k8sCustomObjectService: K8sCustomObjectService,
-    private configService: ConfigService
+    private readonly configService: ConfigService
   ) {}
+
+  public downloadByName(name: string) {
+    return this.downloadRequestService
+      .create({
+        name,
+        kind: V1DownloadTargetKind.BackupContents,
+      })
+      .pipe(
+        concatMap((request: V1DownloadRequest) =>
+          this.httpService.get(request.status.downloadURL, {
+            responseType: 'stream',
+          })
+        )
+      );
+  }
 
   public logs(name: string): Observable<VeleroLog[]> {
     this.logger.debug(`Getting logs for ${name}...`, BackupService.name);
