@@ -34,7 +34,7 @@ export class DownloadRequestService {
   constructor(
     @Inject(K8S_CONNECTION) private readonly k8s: KubeConfig,
     private readonly k8sCustomObjectService: K8sCustomObjectService,
-    private configService: ConfigService
+    private readonly configService: ConfigService
   ) {
     this.k8sCustomObjectApi = this.k8s.makeApiClient(CustomObjectsApi);
   }
