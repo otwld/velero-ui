@@ -32,10 +32,12 @@ export const useFormAuth = () => {
         )
       ).data,
     onSuccess: async (data) => {
-      if (data) {
+      if (data.access_token) {
         localStorage.setItem('access_token', data.access_token);
         resetSocketIOConnection();
-        await router.push('/');
+        await router.push('/dashboard');
+      } else {
+        await router.push('/?state=error&reason=credentials');
       }
     },
     onError: async (error) => {
