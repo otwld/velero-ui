@@ -21,6 +21,6 @@
       "options": {
         "reportsDirectory": "../../coverage/apps/velero-ui"
       }
-    },
+    }
   }
 }
