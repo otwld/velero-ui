@@ -51,19 +51,4 @@ export class RestoreController extends K8sCustomObjectController<V1Restore> {
   public logs(@Param('name') name: string): Observable<VeleroLog[]> {
     return this.restoreService.logs(name);
   }
-
-  @Post('/:name/logs/download')
-  @CheckPolicies(
-    (ability: AppAbility) =>
-      ability.can(Action.Logs, Resources.RESTORE.plural) &&
-      ability.can(Action.Download, Resources.RESTORE.plural)
-  )
-  public downloadLogs(
-    @Param('name') name: string
-  ): Observable<V1DownloadRequest> {
-    return this.downloadRequestService.create({
-      name,
-      kind: V1DownloadTargetKind.RestoreLog,
-    });
-  }
 }

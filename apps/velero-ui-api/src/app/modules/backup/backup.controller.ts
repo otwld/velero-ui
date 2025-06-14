@@ -8,15 +8,15 @@ import {
   ParseBoolPipe,
   Post,
   Query,
+  Res,
   UseInterceptors,
 } from '@nestjs/common';
 import { BackupService } from './backup.service';
-import { forkJoin, Observable } from 'rxjs';
+import { forkJoin, lastValueFrom, Observable } from 'rxjs';
 import {
   PluralsNames,
   Resources,
   V1Backup,
-  V1DownloadRequest,
   V1DownloadTargetKind,
 } from '@velero-ui/velero';
 import { DownloadRequestService } from '@velero-ui-api/modules/download-request/download-request.service';
@@ -29,6 +29,7 @@ import { K8sCustomObjectController } from '@velero-ui-api/modules/k8s-custom-obj
 import { Subject } from '@velero-ui-api/shared/decorators/subject.decorator';
 import { K8sCustomObjectParams } from '@velero-ui-api/shared/dto/k8s-custom-object.dto';
 import { CacheInterceptor } from '@nestjs/cache-manager';
+import { Response } from 'express';
 
 @Controller(Resources.BACKUP.route)
 @Subject(Resources.BACKUP.plural)
@@ -70,32 +71,21 @@ export class BackupController extends K8sCustomObjectController<V1Backup> {
     return this.backupService.logs(name);
   }
 
-  @Post('/:name/logs/download')
-  @CheckPolicies(
-    (ability: AppAbility) =>
-      ability.can(Action.Logs, Resources.BACKUP.plural) &&
-      ability.can(Action.Download, Resources.BACKUP.plural)
-  )
-  public downloadLogs(
-    @Param('name') name: string
-  ): Observable<V1DownloadRequest> {
-    return this.downloadRequestService.create({
-      name,
-      kind: V1DownloadTargetKind.BackupLog,
-    });
-  }
-
-  @Post('/:name/download')
+  @Get('/:name/download')
   @CheckPolicies((ability: AppAbility) =>
     ability.can(Action.Download, Resources.BACKUP.plural)
   )
-  public downloadByName(
-    @Param('name') name: string
-  ): Observable<V1DownloadRequest> {
-    return this.downloadRequestService.create({
-      name,
-      kind: V1DownloadTargetKind.BackupContents,
-    });
+  public async downloadByName(
+    @Param('name') name: string,
+    @Res() res: Response
+  ) {
+    const response = await lastValueFrom(
+      this.backupService.downloadByName(name)
+    );
+
+    res.setHeader('Content-Disposition', `attachment; filename=${name}.tar.gz`);
+
+    response.data.pipe(res);
   }
 
   @Delete()
