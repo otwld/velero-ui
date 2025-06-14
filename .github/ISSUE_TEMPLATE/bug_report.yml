@@ -1,0 +1,51 @@
+name: Bug Report
+description: File a bug report.
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Please fill out the details below to help us understand and resolve the issue effectively.**
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Please describe the issue or the goal you are trying to achieve with the Velero UI.
+      placeholder: Tell us what you see!
+    validations:
+      required: true
+  - type: input
+    id: velero-ui-version
+    attributes:
+      label: Velero UI version
+      description: Please provide the version of Velero UI you are using.
+      placeholder: 0.x.x
+    validations:
+      required: true
+  - type: input
+    id: velero-version
+    attributes:
+      label: Velero version
+      description: Please specify the version of Velero you are using.
+      placeholder: 1.x.x
+    validations:
+      required: true
+  - type: input
+    id: deployment-mode
+    attributes:
+      label: Deployment mode
+      description: Please mention the deployment mode you are using (e.g., local, docker, kubernetes, helm).
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant log output
+      description: If relevant, please provide the logs from the pods to help diagnose the issue. (Enable LOB_LEVEL=debug for more details)
+      render: shell
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional context
+      description: Add any other context about the problem here.
+      render: markdown
