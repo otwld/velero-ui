@@ -16,6 +16,7 @@ import {
   CaslAbilityFactory,
 } from '@velero-ui-api/shared/modules/casl/casl-ability.factory';
 import { Action, LogType } from '@velero-ui/shared-types';
+import { CheckPolicies } from '@velero-ui-api/shared/decorators/check-policies.decorator';
 
 @WebSocketGateway({ cors: true })
 export class SettingsGateway
@@ -40,22 +41,18 @@ export class SettingsGateway
   }
 
   @UseGuards(WsJwtAuthGuard)
+  @CheckPolicies((ability: AppAbility) => ability.can(Action.Manage, 'all'))
   @SubscribeMessage('settings:logs:on')
   public logsServerOn(
     @ConnectedSocket() client: Socket,
     @MessageBody('type') type: LogType,
     @MessageBody('name') name: string
   ): void {
-    const ability: AppAbility = this.caslAbilityFactory.createForUser(
-      client.data.user
-    );
-
-    if (ability.can(Action.Manage, 'all')) {
-      this.settingsService.openLogsStream(client, type, name);
-    }
+    this.settingsService.openLogsStream(client, type, name);
   }
 
   @UseGuards(WsJwtAuthGuard)
+  @CheckPolicies((ability: AppAbility) => ability.can(Action.Manage, 'all'))
   @SubscribeMessage('settings:logs:off')
   public logsServerOff(@ConnectedSocket() client: Socket): void {
     this.settingsService.closeLogsSteam(client);
