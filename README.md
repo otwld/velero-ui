@@ -65,8 +65,8 @@ Want to learn more about Velero UI's features? Check out [Velero UI documentatio
 ## 🚀 Deployments
 
 - [🐳 **Getting Started with Docker**](https://velero-ui.docs.otwld.com/getting-started/docker)
-- [☸️ **Getting Started with Helm Chart**](https://velero-ui.docs.otwld.com/getting-started/getting-started/helm)
-- [⚙️ **Getting Started with Kubernetes**](https://velero-ui.docs.otwld.com/getting-started/getting-started/kubernetes)
+- [☸️ **Getting Started with Helm Chart**](https://velero-ui.docs.otwld.com/getting-started/helm)
+- [⚙️ **Getting Started with Kubernetes**](https://velero-ui.docs.otwld.com/getting-started/kubernetes)
 
 
 ## 🛠️ Support
