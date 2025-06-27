@@ -1,6 +1,5 @@
 <template>
   <span
-    v-if="status"
     :class="getClass()"
     class="text-xs font-medium inline-flex items-center me-2 px-2.5 py-0.5 rounded"
   >
@@ -59,6 +58,14 @@ const getClass = () => {
         'text-red-800',
         'dark:bg-red-900',
         'dark:text-red-300',
+      ];
+    case undefined:
+    case null:
+      return [
+        'bg-gray-100',
+        'text-gray-800',
+        'dark:bg-gray-900',
+        'dark:text-gray-300',
       ];
     default:
       return [

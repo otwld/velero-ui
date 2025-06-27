@@ -162,8 +162,8 @@ export class ScheduleService {
                   ?.size || 0;
 
               const durationMs: number =
-                new Date(backup.status.completionTimestamp).getTime() -
-                new Date(backup.status.startTimestamp).getTime();
+                new Date(backup.status?.completionTimestamp).getTime() -
+                new Date(backup.status?.startTimestamp).getTime();
 
               stats.duration.series[0].data.push({
                 x: backupName,
@@ -172,7 +172,7 @@ export class ScheduleService {
 
               stats.items.series[0].data.push({
                 x: backupName,
-                y: backup.status.progress.itemsBackedUp,
+                y: backup.status?.progress?.itemsBackedUp || 0,
               });
 
               const podVolumeSize: number = podVolumes.items

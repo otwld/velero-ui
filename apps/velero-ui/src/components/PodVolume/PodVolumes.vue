@@ -40,6 +40,11 @@
             <Skeleton class="ml-4 mt-2" height="3" width="48" />
           </div>
         </template>
+        <div v-if="data && data.length === 0 && !isFetching" class="flex h-full items-center justify-center">
+          <span v-if="!isFetching" class="text-gray-500 dark:text-gray-400">
+            {{ t('global.noData') }}
+          </span>
+        </div>
         <PodVolumeLine
           v-for="(pod, index) of data"
           :key="index"
@@ -62,12 +67,13 @@ import { Pages } from '@velero-ui-app/utils/constants.utils';
 import { computed, onBeforeMount, onBeforeUnmount } from 'vue';
 import { useListStore } from '@velero-ui-app/stores/list.store';
 import PodVolumeLine from '@velero-ui-app/components/PodVolume/PodVolumeShortLine.vue';
-import { faCubes, faSquareBinary } from '@fortawesome/free-solid-svg-icons';
+import { faCircleNotch, faCubes, faSquareBinary } from '@fortawesome/free-solid-svg-icons';
 import { convertBytes } from '@velero-ui-app/utils/string.utils';
 import Skeleton from '@velero-ui-app/components/Skeleton.vue';
 import Badge from '@velero-ui-app/components/Badge.vue';
 import { useFilters } from '@velero-ui-app/composables/search/useFilters';
 import { Filter } from '@velero-ui/shared-types';
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 const { t } = useI18n();
 const router: Router = useRouter();

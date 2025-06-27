@@ -8,7 +8,7 @@
       <button
         v-if="can(Action.Create, Resources.RESTORE.plural)"
         :class="{ 'cursor-not-allowed': isDisabled || !backup }"
-        :disabled="!backup"
+        :disabled="!backup || isDisabled"
         class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:ring-teal-300 dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
         type="button"
         @click="showModalRestore = !showModalRestore"
