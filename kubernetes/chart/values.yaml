@@ -64,6 +64,9 @@ configuration:
     grafanaUrl: ""
 
   policies:
+    # -- Whether to enable policies
+    enabled: false
+
     # -- Value of the policy file, this is a sample policy file
     # if `useConfigMap` is true and `existingSecret` is empty, this value will be stored in secret at first deployment
     value: |
@@ -80,7 +83,12 @@ configuration:
     # -- key in the configMap containing the policies
     key: "policies.csv"
 
+
+    # -- Name of a pre-existing configMap (if any)
     existingConfigMap: ""
+
+    # -- Mount path for the configMap
+    mountPath: "/policies"
 
     # -- Annotations to add to the configMap
     annotations: { }
