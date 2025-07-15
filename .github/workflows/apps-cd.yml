@@ -16,7 +16,7 @@ env:
 jobs:
   main:
     timeout-minutes: 15
-    runs-on: otwld
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
@@ -53,5 +53,5 @@ jobs:
         env:
           DOCKER_TAG: ${{ steps.package-version.outputs.current-version }}
         run: |
-          docker buildx build --platform linux/amd64,linux/arm64 . -t $DOCKER_IMAGE:$DOCKER_TAG --push
+          docker buildx build --platform linux/amd64,linux/arm64 . -t $DOCKER_IMAGE:$DOCKER_TAG -t $DOCKER_IMAGE:latest --push
 
