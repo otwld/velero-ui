@@ -20,7 +20,7 @@ concurrency:
 jobs:
   # Build job
   build:
-    runs-on: otwld
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
