@@ -47,8 +47,8 @@ export const getDefaultTimezone = (): string => {
   }
 
   const defaultTimezone =
-    import.meta.env.DEFAULT_TIMEZONE ||
-    Intl.DateTimeFormat().resolvedOptions().timeZone;
+    Intl.DateTimeFormat().resolvedOptions().timeZone ||
+    import.meta.env.DEFAULT_TIMEZONE;
   localStorage.setItem('timezone', defaultTimezone);
   return defaultTimezone;
 };
