@@ -356,7 +356,7 @@
       "secret": "Select a existing secret",
       "secretName": "Type secret name",
       "accessMode": "Select an access mode",
-      "cron": "Type cron",
+      "cron": "Type cron with timezone",
       "backup": "Select backup",
       "provider": "Type provider",
       "notApplicable": "Not applicable",

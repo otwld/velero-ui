@@ -9,44 +9,52 @@
       <div class="grid gap-4 mb-4 grid-cols-2">
         <div class="col-span-2 sm:col-span-1">
           <FormKit
-            name="name"
             :disabled="notApplicableFields?.scheduleName"
             :placeholder="t('form.placeholder.scheduleName')"
-            :validation="
-              [['required'], ['k8s_name'], ['length', 4]]
-            "
+            :validation="[['required'], ['k8s_name'], ['length', 4]]"
+            name="name"
             type="text"
           >
             <template #label>
               <label
                 class="flex mb-2 text-sm font-medium text-gray-900 dark:text-white items-center"
-              >{{ t('form.field.scheduleName') }} *
+                >{{ t('form.field.scheduleName') }} *
               </label>
             </template>
           </FormKit>
         </div>
         <div class="col-span-2 sm:col-span-1">
-          <FormKit
-            name="schedule"
-            :placeholder="t('form.placeholder.cron')"
-            :validation="
-              [['cron']]
-            "
-            help="sec min hour day month day-of-week (ex: * 6 * * * *)"
-            type="text"
-          >
-            <template #label>
-              <label
-                class="flex mb-2 text-sm font-medium text-gray-900 dark:text-white items-center"
-              >{{ t('resource.spec.schedule') }} *
-                <FontAwesomeIcon
-                  :icon="faQuestionCircle"
-                  class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
-                  data-tooltip-style="light"
-                  data-tooltip-target="tooltip-schedule"
-                />
-              </label>
-            </template>
+          <FormKit name="cron" type="group">
+            <label
+              class="flex mb-2 text-sm font-medium text-gray-900 dark:text-white items-center"
+              >{{ t('form.placeholder.cron') }}
+              <FontAwesomeIcon
+                :icon="faQuestionCircle"
+                class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help"
+                data-tooltip-style="light"
+                data-tooltip-target="tooltip-schedule"
+              />
+            </label>
+            <div class="flex w-full">
+              <FormKit
+                :options="getTimezones"
+                input-class="rounded-none rounded-s-lg"
+                name="timezone"
+                outer-class="w-4/6"
+                type="select"
+              />
+              <FormKit
+                :placeholder="t('form.placeholder.cron')"
+                :validation="[['cron']]"
+                input-class=" border-s-0 rounded-s-none rounded-e-lg"
+                name="schedule"
+                outer-class="w-2/6 flex-shrink-0"
+                type="text"
+              />
+            </div>
+            <span class="text-gray-600 text-xs"
+              >sec min hour day month day-of-week (ex: * 6 * * * *)</span
+            >
           </FormKit>
         </div>
         <div class="col-span-2 sm:col-span-1">
@@ -58,28 +66,22 @@
             </p>
             <label class="inline-flex items-center mb-5">
               <FormKit
-                name="useOwnerReferencesInBackup"
-                type="checkbox"
                 input-class="sr-only peer"
                 label-class="ml-2"
-                wrapper-class="relative w-11 h-6 bg-gray-200 dark:bg-gray-700 rounded-full cursor-pointer"
+                name="useOwnerReferencesInBackup"
                 outer-class="flex items-center"
+                type="checkbox"
+                wrapper-class="relative w-11 h-6 bg-gray-200 dark:bg-gray-700 rounded-full cursor-pointer"
               >
                 <template #decorator>
                   <span
-                    class="peer
-                      peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full
-                      peer-checked:after:border-white after:content-['']
-                      after:absolute after:top-0.5 after:start-[2px]
-                      after:bg-white after:border-gray-300 after:border after:rounded-full
-                      after:h-5 after:w-5 after:transition-all dark:border-gray-600
-                      peer-checked:bg-blue-600"
+                    class="peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"
                   />
                 </template>
               </FormKit>
               <span
                 class="ms-3 text-sm font-medium text-gray-400 dark:text-white"
-              >{{ t('resource.spec.useOwnerReferencesInBackup') }}
+                >{{ t('resource.spec.useOwnerReferencesInBackup') }}
               </span>
               <FontAwesomeIcon
                 :icon="faQuestionCircle"
@@ -88,30 +90,24 @@
                 data-tooltip-target="tooltip-use-owner-references-in-backup"
               />
             </label>
-            <label class="inline-flex items-center mb-5 ">
+            <label class="inline-flex items-center mb-5">
               <FormKit
-                name="skipImmediately"
-                type="checkbox"
                 input-class="sr-only peer"
                 label-class="ml-2"
-                wrapper-class="relative w-11 h-6 bg-gray-200 dark:bg-gray-700 rounded-full cursor-pointer"
+                name="skipImmediately"
                 outer-class="flex items-center"
+                type="checkbox"
+                wrapper-class="relative w-11 h-6 bg-gray-200 dark:bg-gray-700 rounded-full cursor-pointer"
               >
                 <template #decorator>
                   <span
-                    class="peer
-                      peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full
-                      peer-checked:after:border-white after:content-['']
-                      after:absolute after:top-0.5 after:start-[2px]
-                      after:bg-white after:border-gray-300 after:border after:rounded-full
-                      after:h-5 after:w-5 after:transition-all dark:border-gray-600
-                      peer-checked:bg-blue-600"
+                    class="peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"
                   />
                 </template>
               </FormKit>
               <span
                 class="ms-3 text-sm font-medium text-gray-400 dark:text-white"
-              >{{ t('resource.spec.skipImmediately') }}
+                >{{ t('resource.spec.skipImmediately') }}
               </span>
               <FontAwesomeIcon
                 :icon="faQuestionCircle"
@@ -122,28 +118,23 @@
             </label>
             <label class="inline-flex items-center mb-5">
               <FormKit
-                name="paused"
-                type="checkbox"
                 input-class="sr-only peer"
                 label-class="ml-2"
-                wrapper-class="relative w-11 h-6 bg-gray-200 dark:bg-gray-700 rounded-full cursor-pointer"
+                name="paused"
                 outer-class="flex items-center"
+                type="checkbox"
+                wrapper-class="relative w-11 h-6 bg-gray-200 dark:bg-gray-700 rounded-full cursor-pointer"
               >
                 <template #decorator>
                   <span
-                    class="peer
-                      peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full
-                      peer-checked:after:border-white after:content-['']
-                      after:absolute after:top-0.5 after:start-[2px]
-                      after:bg-white after:border-gray-300 after:border after:rounded-full
-                      after:h-5 after:w-5 after:transition-all dark:border-gray-600
-                      peer-checked:bg-blue-600"
+                    class="peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"
                   />
                 </template>
               </FormKit>
               <span
                 class="ms-3 text-sm font-medium text-gray-400 dark:text-white"
-              >{{ t('global.paused') }}</span>
+                >{{ t('global.paused') }}</span
+              >
               <FontAwesomeIcon
                 :icon="faQuestionCircle"
                 class="pl-1 !w-3 !h-3 hover:text-gray-700 hover:cursor-help dark:text-white dark:hover:text-gray-200"
@@ -191,7 +182,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useFormStore } from '@velero-ui-app/stores/form.store';
 import { storeToRefs } from 'pinia';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
@@ -199,17 +190,39 @@ import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
 import { initTooltips } from 'flowbite';
 import { useI18n } from 'vue-i18n';
 import { useFormKitContextById } from '@formkit/vue';
+import { useAppStore } from '@velero-ui-app/stores/app.store';
+import timezones, { type TimeZone } from 'timezones-list';
 
 const { t } = useI18n();
 
 const formStore = useFormStore();
-const { currentStep, formContent, notApplicableFields } = storeToRefs(formStore);
+const appStore = useAppStore();
+const { currentStep, formContent, notApplicableFields } =
+  storeToRefs(formStore);
+const { timezone } = storeToRefs(appStore);
 
 const formContext = useFormKitContextById('schedule-form-info');
 
+const getTimezones = computed(() =>
+  [
+    {
+      label: 'Default timezone',
+      value: null,
+    },
+  ].concat(
+    timezones.map((t: TimeZone) => ({
+      label: t.label,
+      value: t.tzCode,
+    }))
+  )
+);
+
 const currentForm = ref({
   name: '',
-  schedule: '0 7 * * *',
+  cron: {
+    schedule: '0 7 * * *',
+    timezone: timezone,
+  },
   useOwnerReferencesInBackup: true,
   paused: false,
   skipImmediately: false,
@@ -224,7 +237,7 @@ onMounted(() => {
   };
 });
 
-const validate = () => formContext.value.state.valid
+const validate = () => formContext.value.state.valid;
 
 const getForm = () => formContext.value.value;
 

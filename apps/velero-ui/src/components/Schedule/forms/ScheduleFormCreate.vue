@@ -87,7 +87,9 @@ const onSubmit = () => {
         formContent.value[0].useOwnerReferencesInBackup,
       paused: formContent.value[0].paused,
       skipImmediately: formContent.value[0].skipImmediately,
-      schedule: formContent.value[0].schedule,
+      schedule: formContent.value[0].cron?.timezone
+        ? `CRON_TZ=${formContent.value[0].cron?.timezone} ${formContent.value[0].cron.schedule}`
+        : formContent.value[0].cron.schedule,
     },
   };
 

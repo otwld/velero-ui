@@ -19,7 +19,7 @@
             {{ t('form.field.schedule') }} *
           </dt>
           <dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">
-            {{ formContent[0]?.schedule }}
+            {{ formContent[0]?.cron.timezone }} {{ formContent[0]?.cron.schedule }}
           </dd>
         </div>
       </div>
