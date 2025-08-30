@@ -45,7 +45,7 @@
 import Form from '@velero-ui-app/components/Form.vue';
 import { useFormStore } from '@velero-ui-app/stores/form.store';
 import { storeToRefs } from 'pinia';
-import type { CreateFormBody, EditFormBody } from '@velero-ui/shared-types';
+import type { EditFormBody } from '@velero-ui/shared-types';
 import {
   onBeforeMount,
   onBeforeUnmount,
@@ -65,7 +65,10 @@ import BackupCreateResources from '@velero-ui-app/components/Backup/forms/Backup
 import BackupCreateLabels from '@velero-ui-app/components/Backup/forms/BackupFormLabels.vue';
 import { useI18n } from 'vue-i18n';
 import { useKubernetesEditObject } from '@velero-ui-app/composables/useKubernetesEditObject';
-import { parseTimeString } from '@velero-ui-app/utils/date.utils';
+import {
+  parseTimeString,
+  parseVeleroCron,
+} from '@velero-ui-app/utils/date.utils';
 
 const props = defineProps({
   schedule: { type: Object as PropType<V1Schedule>, required: true },
@@ -85,10 +88,11 @@ onBeforeMount(() => {
   formStore.setFormContent([
     {
       name: props.schedule.metadata.name,
-      schedule: props.schedule.spec?.schedule,
+      cron: parseVeleroCron(props.schedule.spec?.schedule),
       paused: props.schedule.spec?.paused,
       skipImmediately: props.schedule.spec?.skipImmediately,
-      useOwnerReferencesInBackup: props.schedule.spec?.useOwnerReferencesInBackup,
+      useOwnerReferencesInBackup:
+        props.schedule.spec?.useOwnerReferencesInBackup,
     },
     {
       ttl: {
@@ -98,23 +102,19 @@ onBeforeMount(() => {
       storageLocation: props.schedule.spec?.template?.storageLocation,
       itemOperationTimeout: {
         value:
-          parseTimeString(
-            props.schedule.spec?.template?.itemOperationTimeout
-          )?.value || '',
+          parseTimeString(props.schedule.spec?.template?.itemOperationTimeout)
+            ?.value || '',
         unit:
-          parseTimeString(
-            props.schedule.spec?.template?.itemOperationTimeout
-          )?.unit || 'm',
+          parseTimeString(props.schedule.spec?.template?.itemOperationTimeout)
+            ?.unit || 'm',
       },
       csiSnapshotTimeout: {
         value:
-          parseTimeString(
-            props.schedule.spec?.template?.csiSnapshotTimeout
-          )?.value || '',
+          parseTimeString(props.schedule.spec?.template?.csiSnapshotTimeout)
+            ?.value || '',
         unit:
-          parseTimeString(
-            props.schedule.spec?.template?.csiSnapshotTimeout
-          )?.unit || 'm',
+          parseTimeString(props.schedule.spec?.template?.csiSnapshotTimeout)
+            ?.unit || 'm',
       },
       snapshotMoveData: props.schedule.spec?.template?.snapshotMoveData,
       snapshotVolumes: props.schedule.spec?.template?.snapshotVolumes,
@@ -122,8 +122,10 @@ onBeforeMount(() => {
         props.schedule.spec?.template?.defaultVolumesToFsBackup,
       volumeSnapshotLocations:
         props.schedule.spec?.template?.volumeSnapshotLocations || [],
-      includedNamespaces: props.schedule.spec?.template?.includedNamespaces || [],
-      excludedNamespaces: props.schedule.spec?.template?.excludedNamespaces || [],
+      includedNamespaces:
+        props.schedule.spec?.template?.includedNamespaces || [],
+      excludedNamespaces:
+        props.schedule.spec?.template?.excludedNamespaces || [],
       datamover: props.schedule.spec?.template?.datamover,
       parallelFilesUpload:
         props.schedule.spec?.template?.uploaderConfig?.parallelFilesUpload,
@@ -134,14 +136,18 @@ onBeforeMount(() => {
       resourcePolicy: props.schedule.spec?.template?.resourcePolicy,
       includedResources: props.schedule.spec?.template?.includedResources || [],
       excludedResources: props.schedule.spec?.template?.excludedResources || [],
-      includedClusterScopedResources: props.schedule.spec?.template?.includedClusterScopedResources || [],
-      excludedClusterScopedResources: props.schedule.spec?.template?.includedClusterScopedResources || [],
-      includedNamespaceScopedResources: props.schedule.spec?.template?.includedNamespaceScopedResources || [],
-      excludedNamespaceScopedResources: props.schedule.spec?.template?.excludedNamespaceScopedResources || [],
+      includedClusterScopedResources:
+        props.schedule.spec?.template?.includedClusterScopedResources || [],
+      excludedClusterScopedResources:
+        props.schedule.spec?.template?.includedClusterScopedResources || [],
+      includedNamespaceScopedResources:
+        props.schedule.spec?.template?.includedNamespaceScopedResources || [],
+      excludedNamespaceScopedResources:
+        props.schedule.spec?.template?.excludedNamespaceScopedResources || [],
     },
     {
       labelSelector: { ...props.schedule.spec?.labelSelector },
-    }
+    },
   ]);
 });
 
@@ -163,7 +169,10 @@ const onSubmit = () => {
         formContent.value[0].useOwnerReferencesInBackup,
       paused: formContent.value[0].paused,
       skipImmediately: formContent.value[0].skipImmediately,
-      schedule: formContent.value[0].schedule,
+      //schedule: formContent.value[0].schedule,
+      schedule: formContent.value[0].cron?.timezone
+        ? `CRON_TZ=${formContent.value[0].cron?.timezone} ${formContent.value[0].cron.schedule}`
+        : formContent.value[0].cron.schedule,
     },
   };
 
@@ -213,8 +222,9 @@ const onSubmit = () => {
 
   if (formContent.value[1].parallelFilesUpload) {
     form.spec.template.uploaderConfig = {};
-    form.spec.template.uploaderConfig.parallelFilesUpload =
-      parseInt(formContent.value[1].parallelFilesUpload);
+    form.spec.template.uploaderConfig.parallelFilesUpload = parseInt(
+      formContent.value[1].parallelFilesUpload
+    );
   }
 
   if (formContent.value[2].resourcePolicy) {

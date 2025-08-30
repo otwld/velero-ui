@@ -24,7 +24,7 @@
       <div class="col-span-2">
         <FormKit
           :disabled="!data || !!isError"
-          :label="t('resource.spec.volumeSnapshotLocations')"
+          :label="t('resource.spec.schedule')"
           :options="data?.items"
           :placeholder="t('form.placeholder.schedule')"
           :validation="[['required']]"

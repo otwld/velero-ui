@@ -39,7 +39,7 @@ export const getTime = (time: number): string | null => {
   }
 
   return null;
-}
+};
 
 export const convertTimestampToDate = (timeStamp: string) => {
   const date: Date = new Date(timeStamp);
@@ -84,4 +84,24 @@ export const durationToLabel = (duration: number): string => {
     label += `${secs}s`;
   }
   return label;
+};
+
+/*
+  ex: CRON_TZ=America/New_York 0 3 * * *
+ */
+export const parseVeleroCron = (
+  expr: string
+): { timezone: string; cron: string } => {
+  let timezone: string | null = null;
+  let cron: string;
+
+  const tzMatch = expr.match(/^CRON_TZ=([^\s]+)\s+(.*)$/);
+  if (tzMatch) {
+    timezone = tzMatch[1];
+    cron = tzMatch[2];
+  } else {
+    cron = expr;
+  }
+
+  return { timezone, cron };
 };

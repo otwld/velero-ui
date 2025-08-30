@@ -49,7 +49,7 @@
   <td
     class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white"
   >
-    {{ data.spec.schedule }}
+    {{ veleroCron?.timezone ?? '' }} {{ veleroCron?.cron }}
   </td>
   <td
     class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white"
@@ -226,7 +226,7 @@
 <script lang="ts" setup>
 import { Resources, type V1Schedule, V1SchedulePhase } from '@velero-ui/velero';
 import { convertTimestampToDate } from '../../utils/date.utils';
-import { onMounted, type PropType, ref, toRef } from 'vue';
+import { computed, onMounted, type PropType, ref, toRef } from 'vue';
 import {
   faArrowUpRightFromSquare,
   faCircleNotch,
@@ -252,6 +252,7 @@ import { can } from '@velero-ui-app/utils/policy.utils';
 import { Action } from '@velero-ui/shared-types';
 import Badge from '@velero-ui-app/components/Badge.vue';
 import { Pages } from '@velero-ui-app/utils/constants.utils';
+import { parseVeleroCron } from '@velero-ui-app/utils/date.utils';
 
 const { t } = useI18n();
 const props = defineProps({
@@ -270,6 +271,8 @@ const { mutate: togglePause, isPending: togglePauseLoading } = usePauseSchedule(
 const { isPending: isDeleting, mutate: remove } = useDeleteKubernetesObject(
   Resources.SCHEDULE
 );
+
+const veleroCron = computed(() => parseVeleroCron(props.data?.spec?.schedule));
 
 const { isPending: isEditing } = useKubernetesEditObject(
   Resources.SCHEDULE,

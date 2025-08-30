@@ -10,7 +10,7 @@
       <Badge
         v-if="schedule?.spec.schedule"
         :prefix-icon="faCalendar"
-        :text="schedule.spec.schedule"
+        :text="`${veleroCron.timezone ?? ''} ${veleroCron?.cron}`"
         color="blue"
       />
     </template>
@@ -36,17 +36,19 @@
 </template>
 
 <script lang="ts" setup>
-import type { PropType } from 'vue';
+import { computed, type PropType } from 'vue';
 import type { V1Schedule } from '@velero-ui/velero';
 import { faCalendar } from '@fortawesome/free-solid-svg-icons';
 import ScheduleStatusPhaseBadge from './ScheduleStatusPhaseBadge.vue';
-import { convertTimestampToDate } from '../../utils/date.utils';
+import { convertTimestampToDate, parseVeleroCron } from '../../utils/date.utils';
 import { useI18n } from 'vue-i18n';
 import Badge from '@velero-ui-app/components/Badge.vue';
 import ResourceStatus from "@velero-ui-app/components/Resource/ResourceStatus.vue";
 
 const { t } = useI18n();
-defineProps({
+const props = defineProps({
   schedule: { type: Object as PropType<V1Schedule>, required: true },
 });
+
+const veleroCron = computed(() => parseVeleroCron(props.schedule?.spec?.schedule));
 </script>
