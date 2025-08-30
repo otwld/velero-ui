@@ -64,7 +64,7 @@ volumes:
 
 Or using a `Secret, depending on your security practices.
 
-## 3. 🌍 Set NODE_EXTRA_CA_CERTS
+### 3. 🌍 Set NODE_EXTRA_CA_CERTS
 
 Configure Velero UI to use the certificate bundle:
 
@@ -83,6 +83,6 @@ env:
 :::warning This path must point to a single file, not a directory.
 :::
 
-## 4. 🚀 Restart Velero UI
+### 4. 🚀 Restart Velero UI
 
 After setting the environment variable and mounting the certificate file, restart Velero UI to apply the changes.
