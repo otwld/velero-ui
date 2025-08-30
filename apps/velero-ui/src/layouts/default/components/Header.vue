@@ -22,7 +22,41 @@
           </router-link>
         </div>
         <div class="flex items-center">
-          <div v-click-out="clickOutsideLanguageDropdown">
+          <div v-click-out="clickOutsideTimezoneDropdown" class="relative">
+            <button
+              class="flex ml-3 text-gray-600 transition duration-200 rounded dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 text-sm p-2"
+              type="button"
+              @click="toggleTimezoneDropdown()"
+            >
+              <FontAwesomeIcon :icon="faGlobe" class="!w-5 !h-5" />
+            </button>
+
+            <div
+              id="dropdown-3"
+              :class="{ hidden: hiddenTimezoneDropdown }"
+              class="absolute z-50 mt-2 right-0 bg-white divide-y divide-gray-100 rounded-lg shadow w-[300px] dark:bg-gray-700"
+            >
+              <div class="flex p-2">
+                <FormKit
+                  v-model="timezoneModel"
+                  :options="getTimezones"
+                  label="Timezone"
+                  name="timezone"
+                  outer-class="mb-2"
+                  placeholder="Select timezone"
+                  type="select"
+                >
+                  <template #label>
+                    <label
+                      class="flex mb-2 text-sm font-medium text-gray-900 dark:text-white items-center"
+                      >Select timezone
+                    </label>
+                  </template>
+                </FormKit>
+              </div>
+            </div>
+          </div>
+          <div v-click-out="clickOutsideLanguageDropdown" class="relative">
             <button
               class="flex ml-3 text-gray-600 transition duration-200 rounded dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 text-sm p-2"
               type="button"
@@ -33,7 +67,7 @@
             <div
               id="dropdown-3"
               :class="{ hidden: hiddenLanguageDropdown }"
-              class="absolute z-50 mt-2 ml-3 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700"
+              class="absolute z-50 mt-2 right-0 bg-white divide-y divide-gray-100 rounded-lg shadow min-w-[200px] dark:bg-gray-700"
             >
               <ul
                 aria-labelledby="dropdownDefaultButton"
@@ -132,10 +166,11 @@
   </nav>
 </template>
 <script lang="ts" setup>
-import { inject, type Ref, ref } from 'vue';
+import { computed, inject, type Ref, ref, watch } from 'vue';
 import {
   faAngleDown,
   faBars,
+  faGlobe,
   faLanguage,
   faUserCircle,
 } from '@fortawesome/free-solid-svg-icons';
@@ -143,12 +178,13 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import type { Router } from 'vue-router';
 import { useRouter } from 'vue-router';
 import { getUser } from '@velero-ui-app/utils/jwt.utils';
-import type { AppPublicConfig, JwtPayload } from '@velero-ui/shared-types';
+import { type AppPublicConfig, type JwtPayload } from '@velero-ui/shared-types';
 import { useAppStore } from '@velero-ui-app/stores/app.store';
 import { useI18n } from 'vue-i18n';
 import { getLanguages } from '@velero-ui/i18n';
 import type { SocketIO } from '@velero-ui-app/plugins/socket.plugin';
 import { storeToRefs } from 'pinia';
+import timezones, { type TimeZone } from 'timezones-list';
 
 const { t } = useI18n();
 const socket: SocketIO = inject('socketIo');
@@ -157,21 +193,38 @@ const { noAuthRequired } = inject('config') as AppPublicConfig;
 
 const router: Router = useRouter();
 const appStore = useAppStore();
-const { language } = storeToRefs(appStore);
+const { language, timezone } = storeToRefs(appStore);
+
+const timezoneModel: Ref<string> = ref(timezone.value);
 
 const isLoading: Ref<boolean> = ref(false);
 const hiddenDropdown = ref(true);
 const hiddenLanguageDropdown = ref(true);
+const hiddenTimezoneDropdown = ref(true);
 
 const user: JwtPayload = getUser(localStorage.getItem('access_token'));
 
 const toggleDropdown = () => (hiddenDropdown.value = !hiddenDropdown.value);
 const toggleLanguageDropdown = () =>
   (hiddenLanguageDropdown.value = !hiddenLanguageDropdown.value);
+const toggleTimezoneDropdown = () =>
+  (hiddenTimezoneDropdown.value = !hiddenTimezoneDropdown.value);
 
 const clickOutside = () => (hiddenDropdown.value ? null : toggleDropdown());
 const clickOutsideLanguageDropdown = () =>
   hiddenLanguageDropdown.value ? null : toggleLanguageDropdown();
+const clickOutsideTimezoneDropdown = () =>
+  hiddenTimezoneDropdown.value ? null : toggleTimezoneDropdown();
+
+const getTimezones = computed(() =>
+  timezones.map((t: TimeZone) => ({
+    label: t.label,
+    value: t.tzCode,
+    selected: timezone.value === t.tzCode,
+  }))
+);
+
+watch(timezoneModel, () => appStore.setTimezone(timezoneModel.value));
 
 const logout = async () => {
   try {
@@ -184,6 +237,5 @@ const logout = async () => {
   }
 };
 
-const isCurrentLanguage = (lang: string) =>
-  language.value === lang;
+const isCurrentLanguage = (lang: string) => language.value === lang;
 </script>
