@@ -21,6 +21,7 @@ export interface V1BackupSpec {
   orLabelSelectors?: Record<string, string>;
   snapshotVolumes?: boolean;
   ttl?: string;
+  volumeGroupSnapshotLabelKey?: string;
   includeClusterResources?: boolean;
   hooks?: V1BackupHooks;
   storageLocation?: string;
