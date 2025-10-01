@@ -37,7 +37,7 @@ Syntax: `g,<group>,<action>,<subject>`
 
 **User:** Allows to assign authenticated user to internal actions.
 
-Syntax: `g,<user>,<action>,<subject>`
+Syntax: `u,<user>,<action>,<subject>`
 
 - `<user>` is the **email of the user or username for LDAP** in the provider.
 - `<action>` is the action to be performed.
