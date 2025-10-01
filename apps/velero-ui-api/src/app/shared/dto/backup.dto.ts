@@ -90,7 +90,7 @@ export class CreateBackupScratchDto implements V1BackupSpec {
 
   @IsOptional()
   @IsBoolean()
-  snapshotVolumes?: boolean = true;
+  snapshotVolumes?: boolean;
 
   @IsNotEmpty()
   @IsString()
