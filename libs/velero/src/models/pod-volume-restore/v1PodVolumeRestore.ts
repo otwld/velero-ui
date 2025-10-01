@@ -24,12 +24,17 @@ export interface V1PodVolumeRestoreSpec {
   sourceNamespace: string;
   tags?: Record<string, string>;
   uploaderSettings?: Record<string, string>;
+  cancel?: boolean;
 }
 
 export enum V1PodVolumeRestorePhase {
   New = 'New',
+  Accepted = 'Accepted',
+  Prepared = 'Prepared',
   InProgress = 'InProgress',
   Completed = 'Completed',
+  Canceling = 'Canceling',
+  Canceled = 'Canceled',
   Failed = 'Failed',
 }
 
@@ -38,5 +43,7 @@ export interface V1PodVolumeRestoreStatus {
   message?: string;
   startTimestamp?: string;
   completionTimestamp?: string;
+  acceptedTimestamp?: string;
   progress?: V1DataMoveOperationProgress;
+  node?: string;
 }
