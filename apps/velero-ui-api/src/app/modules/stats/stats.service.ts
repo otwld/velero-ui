@@ -240,7 +240,7 @@ export class StatsService {
           return scheduleList.items
             .map((schedule: V1Schedule) => {
               const scheduleStr = schedule.spec.schedule.trim();
-              const match = scheduleStr.match(/^(?:CRON_TZ|TZ)=([\w/+-]+)\s+(.*)$/);
+              const match = scheduleStr.match(/^(?:CRON_TZ)=([\w/+-]+)\s+(.*)$/);
 
               const { tz, cronSchedule } = match
                 ? { tz: match[1], cronSchedule: match[2] }
