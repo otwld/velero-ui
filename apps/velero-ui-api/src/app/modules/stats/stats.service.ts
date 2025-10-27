@@ -239,9 +239,15 @@ export class StatsService {
         map((scheduleList: KubernetesListObjectWithFilters<V1Schedule>) => {
           return scheduleList.items
             .map((schedule: V1Schedule) => {
-              const cron: CronExpression = CronExpressionParser.parse(
-                schedule.spec.schedule
-              );
+              const scheduleStr = schedule.spec.schedule.trim();
+              const match = scheduleStr.match(/^(?:CRON_TZ|TZ)=([\w/+-]+)\s+(.*)$/);
+
+              const { tz, cronSchedule } = match
+                ? { tz: match[1], cronSchedule: match[2] }
+                : { tz: null, cronSchedule: scheduleStr };
+              
+              const cron: CronExpression = CronExpressionParser.parse(cronSchedule, { tz });
+
               if (cron.hasNext() && !schedule.spec.skipImmediately) {
                 return {
                   name: schedule.metadata.name,
