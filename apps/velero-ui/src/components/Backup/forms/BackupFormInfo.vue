@@ -127,7 +127,7 @@
           <FormKit
             :disabled="!dataSnapshotLocations || errorSnapshotLocations"
             :label="t('resource.spec.volumeSnapshotLocations')"
-            :options="dataStorageLocations?.items"
+            :options="dataSnapshotLocations?.items"
             multiple
             name="volumeSnapshotLocations"
             outer-class="mb-2"
