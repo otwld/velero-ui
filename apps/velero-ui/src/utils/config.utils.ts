@@ -35,9 +35,7 @@ export const getDefaultLocal = (): string => {
     return lang;
   }
 
-  const defaultLang: string = import.meta.env.DEFAULT_LANGUAGE || 'en';
-  localStorage.setItem('language', defaultLang);
-  return defaultLang;
+  return import.meta.env.DEFAULT_LANGUAGE || navigator.language || 'en';
 };
 
 export const getDefaultTimezone = (): string => {
@@ -46,9 +44,8 @@ export const getDefaultTimezone = (): string => {
     return timezone;
   }
 
-  const defaultTimezone =
+  return (
     Intl.DateTimeFormat().resolvedOptions().timeZone ||
-    import.meta.env.DEFAULT_TIMEZONE;
-  localStorage.setItem('timezone', defaultTimezone);
-  return defaultTimezone;
+    import.meta.env.DEFAULT_TIMEZONE
+  );
 };
