@@ -16,10 +16,6 @@
         "{workspaceRoot}/eslint.config.js"
       ]
     },
-    "@nx/vite:test": {
-      "cache": true,
-      "inputs": ["default", "^production"]
-    },
     "e2e": {
       "cache": true,
       "inputs": ["default", "^production"]
@@ -41,6 +37,10 @@
       "cache": true,
       "dependsOn": ["^build"],
       "inputs": ["production", "^production"]
+    },
+    "@nx/vitest:test": {
+      "cache": true,
+      "inputs": ["default", "^production"]
     }
   },
   "namedInputs": {
