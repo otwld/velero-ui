@@ -5,7 +5,7 @@ type: application
 
 version: 0.14.0
 
-appVersion: "0.10.0"
+appVersion: "0.10.1"
 
 kubeVersion: "^1.16.0-0"
 
