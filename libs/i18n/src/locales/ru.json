@@ -1,0 +1,713 @@
+{
+  "global": {
+    "date": {
+      "day": "нет дней | {count} день | {count} дней",
+      "hour": "нет часов | {count} час | {count} часов",
+      "minute": "нет минут | {count} минута | {count} минут",
+      "second": "нет секунд | {count} секунда | {count} секунд",
+      "expired": "Истёк",
+      "in": "через {count}",
+      "ago": "{count} назад",
+      "now": "сейчас"
+    },
+    "powered": "v{version} — на базе",
+    "nowAvailable": " уже доступна!",
+    "backup": "нет резервных копий | резервная копия | резервные копии",
+    "schedule": "нет расписаний | расписание | расписания",
+    "restore": "нет восстановлений | восстановление | восстановления",
+    "backupRepository": "нет репозиториев резервных копий | репозиторий резервных копий | репозитории резервных копий",
+    "storageLocation": "нет мест хранения | место хранения | места хранения",
+    "snapshotLocation": "нет мест хранения снимков | место хранения снимков | места хранения снимков",
+    "request": "нет запросов | запрос | запросы",
+    "deleteBackupRequest": "нет запросов на удаление резервных копий | запрос на удаление резервной копии | запросы на удаление резервных копий",
+    "downloadRequest": "нет запросов на скачивание | запрос на скачивание | запросы на скачивание",
+    "serverStatusRequest": "нет запросов статуса сервера | запрос статуса сервера | запросы статуса сервера",
+    "setting": "нет настроек | настройка | настройки",
+    "actions": "Действия",
+    "button": {
+      "edit": {
+        "title": "Редактировать"
+      },
+      "new": {
+        "title": "Создать"
+      },
+      "add": {
+        "title": "Добавить"
+      },
+      "refresh": {
+        "title": "Обновить",
+        "loading": "Обновление"
+      },
+      "next": {
+        "title": "Далее"
+      },
+      "enable": {
+        "title": "Включить"
+      },
+      "pause": {
+        "title": "Приостановить"
+      },
+      "filters": {
+        "title": "Фильтры"
+      },
+      "resume": {
+        "title": "Возобновить"
+      },
+      "reset": {
+        "title": "Сбросить"
+      },
+      "close": {
+        "title": "Закрыть"
+      },
+      "previous": {
+        "title": "Назад"
+      },
+      "download": {
+        "title": "Скачать",
+        "loading": "Скачивание"
+      },
+      "restore": {
+        "title": "Восстановить",
+        "loading": "Восстановление"
+      },
+      "delete": {
+        "title": "Удалить",
+        "loading": "Удаление"
+      },
+      "describe": {
+        "title": "Описать"
+      },
+      "confirm": {
+        "title": "Подтвердить"
+      },
+      "nextStep": {
+        "title": "Следующий шаг"
+      },
+      "previousStep": {
+        "title": "Предыдущий шаг"
+      },
+      "learnMore": {
+        "title": "Подробнее"
+      },
+      "duration": {
+        "title": "Длительность"
+      },
+      "items": {
+        "title": "Элементы"
+      },
+      "size": {
+        "title": "Размер"
+      },
+      "copy": {
+        "title": "Копировать"
+      },
+      "tableView": {
+        "title": "Табличный вид"
+      },
+      "rawView": {
+        "title": "Исходный вид"
+      }
+    },
+    "message": {
+      "error": {
+        "unexpected": "Произошла непредвиденная ошибка, повторите попытку.",
+        "unableToCreate": "Не удалось создать {resource}, повторите попытку.",
+        "unableToEdit": "Не удалось изменить {resource}, повторите попытку.",
+        "unableToDownloadLogs": "Не удалось скачать логи, повторите попытку.",
+        "unableToDownload": "Не удалось скачать содержимое резервной копии, повторите попытку.",
+        "unableToRetrieveLogs": "Не удалось получить логи, повторите попытку.",
+        "policyAccessDenied": "Доступ запрещён политикой."
+      },
+      "success": {
+        "copied": "Скопировано в буфер обмена!",
+        "created": "Ресурс {resource} создан.",
+        "edited": "Ресурс {resource} изменён.",
+        "deleted": "Ресурс {resource} удалён.",
+        "deleteRequestCreated": "Запрос на удаление создан.",
+        "downloadStarted": "Скачивание началось...",
+        "downloadsStarted": "Скачивание началось... Разрешите всплывающие окна в браузере",
+        "deletedByServer": "Ресурс {resource} был удалён сервером Velero."
+      }
+    },
+    "optional": "(Необязательно)",
+    "na": "Н/Д",
+    "error": "Ошибка",
+    "noData": "Нет данных",
+    "details": "Подробности",
+    "stats": "Статистика",
+    "status": "Статус",
+    "paused": "Приостановлено",
+    "unknown": "Неизвестно",
+    "documentation": "Документация",
+    "options": "Параметры",
+    "docs": "Документация",
+    "mappingAndLabels": "Сопоставление и метки",
+    "key": "Ключ",
+    "value": "Значение",
+    "from": "Исходное",
+    "to": "Целевое",
+    "online": "В сети",
+    "offline": "Не в сети",
+    "labels": "Метки",
+    "confirmation": "Подтверждение",
+    "info": "Информация",
+    "backupInfo": "Информация о резервной копии",
+    "backupResources": "Ресурсы резервной копии",
+    "backupLabels": "Метки резервной копии",
+    "credentials": "Учётные данные",
+    "configurationAndLabels": "Конфигурация и метки",
+    "resources": "Ресурсы",
+    "seconds": "Секунда(ы)",
+    "minutes": "Минута(ы)",
+    "hours": "Час(ы)",
+    "type": "Тип",
+    "connectionLost": "Подключение к серверу..."
+  },
+  "manifest": {
+    "title": "Манифест",
+    "text": {
+      "loading": "Получение манифеста...",
+      "noResult": "Нет манифеста для отображения!"
+    }
+  },
+  "log": {
+    "title": "Логи",
+    "text": {
+      "loading": "Получение логов...",
+      "noResult": "Нет логов для отображения!"
+    },
+    "search": {
+      "placeholder": "Поиск по логам..."
+    },
+    "table": {
+      "header": {
+        "time": "Время",
+        "message": "Сообщение",
+        "level": "Уровень"
+      }
+    }
+  },
+  "resource": {
+    "metadata": {
+      "labels": "Метки"
+    },
+    "spec": {
+      "includedNamespaces": "Включённые пространства имён",
+      "excludedNamespaces": "Исключённые пространства имён",
+      "includedResources": "Включённые ресурсы",
+      "excludedResources": "Исключённые ресурсы",
+      "includedClusterScopedResources": "Включённые кластерные ресурсы",
+      "excludedClusterScopedResources": "Исключённые кластерные ресурсы",
+      "includedNamespaceScopedResources": "Включённые ресурсы пространств имён",
+      "excludedNamespaceScopedResources": "Исключённые ресурсы пространств имён",
+      "restoreStatusIncludedResources": "Включённые ресурсы статуса",
+      "restoreStatusExcludedResources": "Исключённые ресурсы статуса",
+      "volumeNamespace": "Пространство имён томов",
+      "resticIdentifier": "Идентификатор Restic",
+      "default": "По умолчанию",
+      "ttl": "TTL",
+      "resourcePolicy": "ConfigMap политик ресурсов",
+      "storageLocation": "Место хранения",
+      "volumeSnapshotLocations": "Места хранения снимков томов",
+      "provider": "Провайдер",
+      "backupSyncPeriod": "Период синхронизации",
+      "validationFrequency": "Частота валидации",
+      "bucket": "Бакет объектного хранилища",
+      "prefix": "Префикс",
+      "certificate": "Сертификат",
+      "snapshotVolumes": "Снимки томов",
+      "snapshotMoveData": "Перемещение данных снимков",
+      "defaultVolumesToFsBackup": "Тома по умолчанию в бэкап ФС",
+      "includeClusterResources": "Включать кластерные ресурсы",
+      "includeNamespaceClusterResources": "Включать ресурсы пространств имён",
+      "csiSnapshotTimeout": "Таймаут CSI-снимков",
+      "itemOperationTimeout": "Таймаут операций над объектами",
+      "labelSelector": "Селектор меток",
+      "orLabelSelectors": "Селекторы меток (OR)",
+      "datamover": "Data Mover",
+      "parallelFilesUpload": "Параллельная выгрузка файлов",
+      "parallelFilesDownload": "Параллельная загрузка файлов",
+      "credentialName": "Ссылка на секрет",
+      "credentialKey": "Ключ секрета",
+      "backup": "Бэкап",
+      "schedule": "Расписание",
+      "node": "Узел",
+      "config": "Поля конфигурации",
+      "volume": "Том",
+      "paused": "На паузе",
+      "accessMode": "Режим доступа",
+      "useOwnerReferencesInBackup": "Использовать Owner References в бэкапе",
+      "skipImmediately": "Пропустить немедленно",
+      "namespaceMapping": "Сопоставление пространств имён",
+      "existingResourcePolicy": "Политика существующих ресурсов",
+      "restorePVs": "Восстанавливать тома",
+      "preserveNodePorts": "Сохранять порты NodePort",
+      "writeSparseFiles": "Записывать разрежённые файлы",
+      "resourceModifier": "ConfigMap модификатора ресурсов"
+    },
+    "status": {
+      "items": "Элементы",
+      "bytes": "Байты",
+      "reason": "Причина",
+      "validationErrors": "Ошибки валидации",
+      "lastMaintenanceTime": "Последнее обслуживание",
+      "message": "Сообщение",
+      "startTime": "Время начала",
+      "completionTime": "Время завершения",
+      "lastBackup": "Последний бэкап",
+      "lastSkipped": "Последний пропущенный",
+      "lastSyncedTime": "Последняя синхронизация",
+      "lastValidationTime": "Последняя валидация",
+      "duration": "Длительность"
+    },
+    "phase": {
+      "Completed": "Завершено",
+      "InProgress": "Выполняется",
+      "WaitingForPluginOperations": "Ожидание операций плагинов",
+      "Finalizing": "Финализация",
+      "WaitingForPluginOperationsPartiallyFailed": "Ожидание операций плагинов (частичный сбой)",
+      "FinalizingPartiallyFailed": "Финализация (частичный сбой)",
+      "PartiallyFailed": "Частичный сбой",
+      "Deleting": "Удаление",
+      "Failed": "Сбой",
+      "FailedValidation": "Ошибка валидации",
+      "New": "Новый",
+      "Ready": "Готов",
+      "NotReady": "Не готов",
+      "Processed": "Обработано",
+      "Enabled": "Включено",
+      "Available": "Доступно",
+      "Unavailable": "Недоступно",
+      "null": "Неизвестно",
+      "undefined": "Неизвестно"
+    }
+  },
+  "modal": {
+    "button": {
+      "yes": {
+        "title": "Да, я уверен"
+      },
+      "no": {
+        "title": "Нет, отмена"
+      }
+    },
+    "text": {
+      "title": {
+        "manifest": "Описание манифеста:",
+        "restoreFromBackup": "Восстановление из бэкапа:",
+        "editBackupStorageLocation": "Редактировать место хранения бэкапов:",
+        "editVolumeSnapshotLocation": "Редактировать место хранения снимков:",
+        "editSchedule": "Редактировать расписание:",
+        "createNewBackup": "Создать новый бэкап",
+        "createNewRestore": "Создать новое восстановление",
+        "createNewSchedule": "Создать новое расписание",
+        "createNewVolumeSnapshotLocation": "Создать новое место хранения снимков",
+        "createNewBackupStorageLocation": "Создать новое место хранения бэкапов"
+      },
+      "confirmation": {
+        "delete": "Вы уверены, что хотите удалить:",
+        "deleteMany": "Вы уверены, что хотите удалить выбранные элементы ({items}):",
+        "downloadMany": "Вы уверены, что хотите скачать выбранные элементы ({items}):",
+        "restore": "Вы уверены, что хотите восстановить:"
+      }
+    }
+  },
+  "form": {
+    "field": {
+      "backupName": "Имя бэкапа",
+      "restoreName": "Имя восстановления",
+      "backupStorageLocationName": "Имя места хранения бэкапов",
+      "volumeSnapshotLocationName": "Имя места хранения снимков томов",
+      "scheduleName": "Имя расписания",
+      "schedule": "Расписание",
+      "fromSchedule": "На основе расписания",
+      "fromScratch": "С нуля",
+      "fromBackup": "Из бэкапа",
+      "scheduleOptions": "Параметры расписания",
+      "backupOptions": "Параметры бэкапа",
+      "forceDelete": "Принудительное удаление",
+      "selectTimezone": "Выберите часовой пояс",
+      "timeFormat24h": "24-часовой формат времени"
+    },
+    "hint": {
+      "storageProvider": "См. документацию плагина вашего провайдера объектного хранилища",
+      "typeBackup": "Тип бэкапа:",
+      "typeRestore": "Тип восстановления:",
+      "ttl": "(напр., 72h)",
+      "fromSchedule": "Использовать существующее расписание в качестве шаблона",
+      "fromLatestSchedule": "Создать восстановление из последнего успешного ИЛИ частично завершившегося со сбоем бэкапа по расписанию",
+      "fromScratch": "Создать собственный шаблон",
+      "fromBackup": "Создать восстановление из бэкапа"
+    },
+    "placeholder": {
+      "ttl": "72",
+      "csiSnapshotTimeout": "10",
+      "itemOperationTimeout": "4",
+      "parallelFilesUpload": "10",
+      "parallelFilesDownload": "10",
+      "backupSyncPeriod": "1",
+      "validationFrequency": "1",
+      "existingResourcePolicy": "Выберите существующий тип политики ресурсов",
+      "backupName": "Введите имя бэкапа",
+      "restoreName": "Введите имя восстановления",
+      "scheduleName": "Введите имя расписания",
+      "storageLocation": "Выберите место хранения",
+      "storageLocationName": "Введите имя места хранения",
+      "resourcePolicy": "Выберите существующий ConfigMap",
+      "schedule": "Выберите расписание",
+      "secret": "Выберите существующий секрет",
+      "secretName": "Введите имя секрета",
+      "accessMode": "Выберите режим доступа",
+      "cron": "Введите cron с часовым поясом",
+      "backup": "Выберите бэкап",
+      "provider": "Введите провайдера",
+      "notApplicable": "Не применимо",
+      "datamover": "Введите data mover",
+      "resource": "Введите ресурс",
+      "bucket": "Введите имя бакета",
+      "prefix": "Введите префикс"
+    },
+    "tooltip": {
+      "labels": "Метки, применяемые к {type}. (ключ=значение)",
+      "ttl": "Время хранения бэкапа до его удаления сборщиком мусора.",
+      "includedNamespaces": "Пространства имён для включения в {type}. Если ничего не выбрано, включаются все пространства имён.",
+      "excludedNamespaces": "Пространства имён для исключения из {type}.",
+      "includedResources": "Ресурсы для включения в {type}, в формате ресурс.группа, например storageclasses.storage.k8s.io (используйте '*', чтобы включить все ресурсы).",
+      "excludedResources": "Ресурсы для исключения из {type}, в формате ресурс.группа, например storageclasses.storage.k8s.io.",
+      "includedClusterScopedResources": "Кластерные ресурсы для включения в {type}, в формате ресурс.группа, например storageclasses.storage.k8s.io (используйте '*', чтобы включить все ресурсы).",
+      "excludedClusterScopedResources": "Кластерные ресурсы для исключения из {type}, в формате ресурс.группа, например storageclasses.storage.k8s.io.",
+      "includedNamespaceScopedResources": "Ресурсы пространств имён для включения в {type}, в формате ресурс.группа, например deployments.apps (используйте '*', чтобы включить все ресурсы).",
+      "excludedNamespaceScopedResources": "Ресурсы пространств имён для исключения из {type}, в формате ресурс.группа, например deployments.apps.",
+      "restoreStatusIncludedResources": "Ресурсы для включения в статус восстановления, в формате ресурс.группа, например storageclasses.storage.k8s.io.",
+      "restoreStatusExcludedResources": "Ресурсы для исключения из статуса восстановления, в формате ресурс.группа, например storageclasses.storage.k8s.io.",
+      "default": "Делает это новое место хранения основным (по умолчанию) для бэкапов.",
+      "storageLocation": "Место хранения, в котором сохраняется бэкап.",
+      "volumeSnapshotLocations": "Список мест хранения (не более одного на провайдера), где должны сохраняться снимки томов.",
+      "provider": "Имя провайдера места хранения снимков томов (напр., aws, azure, gcp).",
+      "backupSyncPeriod": "Как часто проверять, что все бэкапы Velero в объектном хранилище существуют как объекты Backup API в кластере. Укажите 0s для отключения синхронизации.",
+      "validationFrequency": "Как часто проверять валидность места хранения бэкапов. Укажите 0s для отключения проверки. По умолчанию 1 минута.",
+      "bucket": "Имя бакета объектного хранилища, в котором должны сохраняться бэкапы.",
+      "prefix": "Префикс в бакете, под которым должны сохраняться все данные Velero.",
+      "certificate": "Файл, содержащий бандл сертификатов для проверки TLS-соединений с объектным хранилищем.",
+      "accessMode": "Режим доступа к месту хранения бэкапов.",
+      "credentialName": "Имя ссылаемого секрета.",
+      "credentialKey": "Ключ секрета для выбора. Должен быть корректным ключом секрета.",
+      "config": "Пары конфигурации ключ-значение.",
+      "useOwnerReferencesInBackup": "Определяет, использовать ли OwnerReferences для бэкапов, создаваемых этим расписанием. Примечание: если установлено значение true, при удалении расписания бэкапы также будут удалены.",
+      "skipImmediately": "Немедленно пропустить следующий запланированный бэкап.",
+      "paused": "Определяет, приостановлено ли создаваемое расписание.",
+      "schedule": "Cron-выражение, определяющее периодическое расписание запуска этого бэкапа.",
+      "namespaceMapping": "Сопоставление пространств имён: исходное имя в бэкапе -> требуемое имя при восстановлении.",
+      "resourcePolicy": "Ссылка на ConfigMap с политиками ресурсов, используемый бэкапом.",
+      "snapshotVolumes": "Создавать снимки томов PersistentVolume в рамках бэкапа.",
+      "snapshotMoveData": "Указывает, следует ли перемещать данные снимков.",
+      "defaultVolumesToFsBackup": "Использовать бэкап файловой системы томов подов по умолчанию для томов.",
+      "includeClusterResources": "Включать кластерные ресурсы в {type}.",
+      "includeNamespaceClusterResources": "Включать кластерные ресурсы пространств имён в {type}.",
+      "csiSnapshotTimeout": "Время ожидания создания CSI-снимка до истечения таймаута.",
+      "itemOperationTimeout": "Время ожидания асинхронных операций плагинов до истечения таймаута.",
+      "labelSelector": "Создавать бэкап только тех ресурсов, которые соответствуют этому селектору меток.",
+      "orLabelSelectors": "Создавать бэкап ресурсов, соответствующих хотя бы одному из селекторов меток из списка.",
+      "datamover": "Укажите data mover для использования бэкапом. Если параметр не задан или установлен как 'velero', будет использоваться встроенный data mover.",
+      "parallelFilesUpload": "Количество файлов, выгружаемых одновременно при выполнении бэкапа. Применимо только для загрузчика Kopia.",
+      "parallelFilesDownload": "Количество параллельно выполняемых операций восстановления. Если установлено значение 0, по умолчанию используется количество CPU узла, на котором работает под node-agent.",
+      "existingResourcePolicy": "Политика восстановления, используемая в процессе восстановления, может быть none или update.",
+      "restorePVs": "Восстанавливать ли тома из снимков.",
+      "preserveNodePorts": "Сохранять ли порты NodePort сервисов при восстановлении.",
+      "writeSparseFiles": "Записывать ли разрежённые файлы при восстановлении томов.",
+      "resourceModifier": "Ссылка на ConfigMap модификаторов ресурсов, который будет использовать восстановление.",
+      "forceDelete": "Удалить ресурс напрямую вместо создания запроса на удаление."
+    },
+    "message": {
+      "error": {
+        "orLabelSelectors": "Or Labels Selectors ещё не реализовано."
+      }
+    }
+  },
+  "list": {
+    "text": {
+      "noEntries": "Нет записей.",
+      "fetchingEntries": "Загрузка записей...",
+      "entriesPerPage": "Записей на странице:",
+      "showing": "Показано",
+      "of": "из"
+    },
+    "search": {
+      "name": "Поиск",
+      "label": "Поиск",
+      "placeholder": "Поиск..."
+    },
+    "filter": {
+      "storageLocation": {
+        "label": "Место хранения",
+        "placeholder": "Выберите место хранения"
+      },
+      "schedule": {
+        "label": "Расписание",
+        "placeholder": "Выберите расписание"
+      },
+      "backup": {
+        "label": "Бэкап",
+        "placeholder": "Выберите бэкап"
+      },
+      "status": {
+        "label": "Статус",
+        "placeholder": "Выберите статус"
+      },
+      "provider": {
+        "label": "Провайдер",
+        "placeholder": "Выберите провайдера"
+      },
+      "accessMode": {
+        "label": "Режим доступа",
+        "placeholder": "Выберите режим доступа"
+      },
+      "repositoryType": {
+        "label": "Тип репозитория",
+        "placeholder": "Выберите тип репозитория"
+      },
+      "paused": {
+        "label": "На паузе",
+        "placeholder": "Выберите статус паузы"
+      },
+      "targetKind": {
+        "label": "Тип объекта",
+        "placeholder": "Выберите тип"
+      }
+    },
+    "header": {
+      "name": "Имя",
+      "date": "Дата",
+      "expireIn": "Истекает через",
+      "lastMaintenanceTime": "Время последнего обслуживания",
+      "status": "Статус",
+      "cron": "Cron",
+      "provider": "Провайдер",
+      "fromBackup": "Из бэкапа",
+      "lastBackup": "Последний бэкап",
+      "lastSync": "Последняя синхронизация",
+      "accessMode": "Режим доступа",
+      "processedOn": "Обработано на",
+      "kind": "Тип",
+      "type": "Тип",
+      "target": "Цель",
+      "actions": "Действия",
+      "volume": "Том"
+    }
+  },
+  "auth": {
+    "signIn": "Вход в систему",
+    "divider": "или",
+    "powered": "v{version} — на базе",
+    "form": {
+      "username": {
+        "label": "Ваше имя пользователя",
+        "placeholder": "имя пользователя"
+      },
+      "password": {
+        "label": "Пароль"
+      },
+      "button": {
+        "title": "Войти"
+      }
+    },
+    "federated": {
+      "button": {
+        "title": "Войти через {strategy}"
+      }
+    },
+    "message": {
+      "error": {
+        "unauthorized": "Для доступа к этой странице необходимо войти в систему.",
+        "inactivity": "Время вашей сессии истекло.",
+        "sso": "Не удалось выполнить вход через внешний SSO.",
+        "credentials": "Неверное имя пользователя или пароль."
+      },
+      "success": {
+        "logout": "Вы успешно вышли из системы!",
+        "code": "Выполняется вход, пожалуйста, подождите..."
+      }
+    }
+  },
+  "notFound": {
+    "title": "Страница не найдена",
+    "description": "К сожалению, мы не можем найти эту страницу. На главной странице вы найдёте много полезного.",
+    "button": {
+      "title": "Вернуться на главную"
+    }
+  },
+  "resourceNotFound": {
+    "title": "Ресурс не найден",
+    "description": "К сожалению, сейчас невозможно получить ресурс.",
+    "button": {
+      "title": "Вернуться к списку {resource}"
+    }
+  },
+  "header": {
+    "signOut": {
+      "button": {
+        "title": "Выйти"
+      }
+    },
+    "account": {
+      "ldap": "Учётная запись LDAP",
+      "local": "Локальная учётная запись"
+    }
+  },
+  "sidebar": {
+    "menu": {}
+  },
+  "dashboard": {
+    "title": "Панель управления",
+    "stats": {
+      "title": {
+        "global": "Общая статистика",
+        "overall": "Сводка",
+        "status": "Статус",
+        "successRate": "Доля успешных",
+        "loading": "Загрузка..."
+      },
+      "label": {
+        "success": "Успешно"
+      },
+      "global": {
+        "button": {
+          "grafana": {
+            "title": "Посмотреть в Grafana"
+          }
+        }
+      },
+      "backups": {
+        "description": "По всем резервным копиям",
+        "button": {
+          "see": {
+            "title": "Посмотреть все резервные копии"
+          }
+        }
+      },
+      "restores": {
+        "description": "По всем восстановлениям",
+        "button": {
+          "see": {
+            "title": "Посмотреть все восстановления"
+          }
+        }
+      },
+      "unscheduled": {
+        "title": "Пространства имён без расписаний",
+        "description": "По всем пространствам имён",
+        "success": "Все пространства имён охвачены расписанием!"
+      },
+      "nextScheduled": {
+        "title": "Запланированные резервные копии",
+        "description": "В ближайшие 24 часа",
+        "noData": "Нет запланированных резервных копий!"
+      },
+      "latest": {
+        "title": "Последние резервные копии",
+        "description": "За последние 24 часа",
+        "noData": "Нет недавних резервных копий!"
+      }
+    }
+  },
+  "backups": {
+    "title": "Резервные копии"
+  },
+  "schedules": {
+    "title": "Расписания",
+    "message": {
+      "error": {
+        "unexpected": "Не удалось скачать содержимое резервной копии, повторите попытку."
+      },
+      "success": {
+        "paused": "Расписание приостановлено",
+        "resumed": "Расписание возобновлено"
+      }
+    }
+  },
+  "restores": {
+    "title": "Восстановления"
+  },
+  "backupRepositories": {
+    "title": "Репозитории бэкапов"
+  },
+  "storageLocations": {
+    "title": "Места хранения бэкапов"
+  },
+  "snapshotLocations": {
+    "title": "Места хранения снимков"
+  },
+  "requests": {
+    "title": "Запросы"
+  },
+  "deleteBackupRequests": {
+    "title": "Запросы на удаление резервных копий"
+  },
+  "downloadRequests": {
+    "title": "Запросы на скачивание"
+  },
+  "serverStatusRequest": {
+    "title": "Запросы статуса сервера"
+  },
+  "podVolumes": {
+    "title": "Тома подов"
+  },
+  "podVolumeBackups": {
+    "title": "Резервные копии томов подов"
+  },
+  "podVolumeRestores": {
+    "title": "Восстановления томов подов"
+  },
+  "settings": {
+    "title": "Настройки",
+    "cluster": {
+      "title": "Кластер Kubernetes"
+    },
+    "agents": {
+      "title": "Node-агенты Velero",
+      "noData": "Node-агенты Velero не найдены.",
+      "modal": {
+        "logs": {
+          "title": "Логи node-агента:"
+        }
+      },
+      "tooltip": {
+        "logs": {
+          "title": "Логи узла"
+        }
+      }
+    },
+    "plugins": {
+      "title": "Плагины"
+    },
+    "server": {
+      "title": "Сервер Velero",
+      "modal": {
+        "logs": {
+          "title": "Логи сервера"
+        }
+      },
+      "tooltip": {
+        "logs": {
+          "title": "Логи сервера Velero"
+        }
+      }
+    },
+    "ui": {
+      "title": "Velero UI",
+      "modal": {
+        "logs": {
+          "title": "Логи интерфейса"
+        }
+      },
+      "tooltip": {
+        "logs": {
+          "title": "Логи Velero UI"
+        },
+        "standalone": {
+          "title": "Логи доступны только при развёртывании Velero UI внутри кластера K8s"
+        }
+      }
+    }
+  }
+}
