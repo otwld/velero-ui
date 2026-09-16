@@ -1,6 +1,6 @@
 import type { App } from 'vue';
 import { defaultConfig, type DefaultConfigOptions, plugin } from '@formkit/vue';
-import { en, fr } from '@formkit/i18n';
+import { en, fr, ru } from '@formkit/i18n';
 import { default as Cron } from 'cron-validate';
 import { REGEX } from '@velero-ui/shared-types';
 import { getDefaultLocal } from "@velero-ui-app/utils/config.utils";
@@ -22,7 +22,7 @@ const config: DefaultConfigOptions = {
     bucket: (node) => REGEX.s3Bucket.test(node.value as string),
     field: (node) => REGEX.field.test(node.value as string),
   },
-  locales: { en, fr },
+  locales: { en, fr, ru },
   messages: {
     en: {
       validation: {
@@ -32,6 +32,15 @@ const config: DefaultConfigOptions = {
         k8s_label: ({ name }) => `${name} is not a valid Kubernetes label.`,
         bucket: ({ name }) => `${name} is not a valid bucket format.`,
         field: ({ name }) => `${name} can contain a-Z, 0-9 and "-_.".`,
+      },
+    },
+    ru: {
+      validation: {
+        k8s_name: ({ name }) => `${name} не является корректным именем Kubernetes.`,
+        k8s_resource: ({ name }) => `${name} не является корректным ресурсом Kubernetes.`,
+        k8s_label: ({ name }) => `${name} не является корректной меткой Kubernetes.`,
+        bucket: ({ name }) => `${name} имеет некорректный формат бакета.`,
+        field: ({ name }) => `${name} может содержать a-Z, 0-9 и "-_.".`,
       },
     },
   },
