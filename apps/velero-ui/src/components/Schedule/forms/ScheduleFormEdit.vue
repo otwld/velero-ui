@@ -192,7 +192,7 @@ const onSubmit = () => {
     form.spec.template.snapshotMoveData = formContent.value[1].snapshotMoveData;
   }
 
-  if (formContent.value[1].snapshotVolumes) {
+  if (formContent.value[1].snapshotVolumes != null) {
     form.spec.template.snapshotVolumes = formContent.value[1].snapshotVolumes;
   }
 
