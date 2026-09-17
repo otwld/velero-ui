@@ -14,15 +14,15 @@ export class HealthController {
     private k8s: K8sHealthIndicator
   ) {}
 
-  @Get()
+  @Get(['live', 'startup'])
   @HealthCheck()
-  check() {
+  live() {
     return this.health.check([]);
   }
 
-  @Get('detailed')
+  @Get('ready')
   @HealthCheck()
-  detailed() {
+  ready() {
     return this.health.check([
       () => lastValueFrom(this.k8s.isHealthy()),
       () => lastValueFrom(this.velero.isHealthy()),

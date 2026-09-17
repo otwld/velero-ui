@@ -49,8 +49,8 @@ describe('HealthController', () => {
   afterEach(() => jest.clearAllMocks());
   afterAll(() => app.close());
 
-  it('answers the probe without checking external dependencies', async () => {
-    const response = await fetch(`${baseUrl}/health`);
+  it('answers the liveness probe without checking external dependencies', async () => {
+    const response = await fetch(`${baseUrl}/health/live`);
 
     expect(response.status).toBe(200);
     expect(await response.json()).toEqual({
@@ -63,8 +63,22 @@ describe('HealthController', () => {
     expect(velero.isHealthy).not.toHaveBeenCalled();
   });
 
-  it('reports external dependency health on the detailed endpoint', async () => {
-    const response = await fetch(`${baseUrl}/health/detailed`);
+  it('answers the startup probe without checking external dependencies', async () => {
+    const response = await fetch(`${baseUrl}/health/startup`);
+
+    expect(response.status).toBe(200);
+    expect(await response.json()).toEqual({
+      status: 'ok',
+      info: {},
+      error: {},
+      details: {},
+    });
+    expect(k8s.isHealthy).not.toHaveBeenCalled();
+    expect(velero.isHealthy).not.toHaveBeenCalled();
+  });
+
+  it('reports external dependency health on the readiness endpoint', async () => {
+    const response = await fetch(`${baseUrl}/health/ready`);
 
     expect(response.status).toBe(200);
     expect(await response.json()).toEqual({
