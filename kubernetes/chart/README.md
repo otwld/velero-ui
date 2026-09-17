@@ -45,6 +45,12 @@ helm delete velero-ui --namespace velero-ui
 
 Substitute your values if they differ from the examples. See `helm delete --help` for a full reference on `delete` parameters and flags.
 
+## Health endpoints
+
+The default `/health` endpoint performs no downstream checks and is suitable
+for liveness and readiness probes. `/health/detailed` also checks Kubernetes
+and Velero; use it for dependency-aware monitoring, not liveness probes.
+
 ## Helm Values
 
 - See [values.yaml](values.yaml) to see the Chart's default values.
