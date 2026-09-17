@@ -11,12 +11,18 @@ export class HealthController {
   constructor(
     private health: HealthCheckService,
     private velero: VeleroHealthIndicator,
-    private k8s: K8sHealthIndicator,
+    private k8s: K8sHealthIndicator
   ) {}
 
-  @Get()
+  @Get(['live', 'startup'])
   @HealthCheck()
-  check() {
+  live() {
+    return this.health.check([]);
+  }
+
+  @Get('ready')
+  @HealthCheck()
+  ready() {
     return this.health.check([
       () => lastValueFrom(this.k8s.isHealthy()),
       () => lastValueFrom(this.velero.isHealthy()),
