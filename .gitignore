@@ -8,6 +8,13 @@ tmp
 # dependencies
 node_modules
 
+# Local credentials and deployment settings
+.env
+.env.*
+!.env.example
+kubernetes/chart/values-otwld.yaml
+values-local.yaml
+
 # IDEs and editors
 /.idea
 .project

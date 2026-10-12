@@ -70,8 +70,8 @@ configuration.
 #### `AUTH_SECRET_PASSPHRASE`
 
 - **Type**: `string`
-- **Default**: `this is not a secret passphrase`
-- **Description**: A secret passphrase used for signing and verifying JWT tokens. Ensure this is kept secure to prevent unauthorized access.
+- **Default**: None (required).
+- **Description**: Random JWT signing secret of at least 32 bytes. Generate it with `openssl rand -hex 32`. Startup fails if it is missing or too short. Rotating it invalidates existing sessions.
 
 #### `AUTH_SESSION_DURATION`
 
@@ -106,8 +106,8 @@ configuration.
 #### `POLICY_FILE_PATH`
 
 - **Type**: `string`
-- **Default**: `./policies.csv`
-- **Description**: Specifies the path to the CSV file containing policies for user permissions. This file is used to manage access control within the application.
+- **Default**: None.
+- **Description**: Path to the CSV permissions file. Without a file, federated users have no permissions. An unreadable file or invalid rule prevents startup; an empty file grants no permissions.
 
 ### APP (frontend)
 
@@ -134,19 +134,19 @@ configuration.
 
 - **Type**: `bool`
 - **Default**: `true`
-- **Description**: Enables basic authentication for the application. If set to `false`, the login form will be hidden.
+- **Description**: Enables basic authentication for the application. Set to `false` explicitly when using SSO only. The login form remains available when LDAP is enabled.
 
 #### `BASIC_AUTH_USERNAME`
 
 - **Type**: `string`
-- **Default**: `admin`
-- **Description**: Specifies the username for basic authentication. Change this as needed for security.
+- **Default**: None.
+- **Description**: Required when basic authentication is enabled.
 
 #### `BASIC_AUTH_PASSWORD`
 
 - **Type**: `string`
-- **Default**: `admin`
-- **Description**: Specifies the password for basic authentication. Ensure this is secure and not easily guessable.
+- **Default**: None.
+- **Description**: Required when basic authentication is enabled. Use a strong, unique password; the former default `admin` is rejected.
 
 ### Federated Authentication
 

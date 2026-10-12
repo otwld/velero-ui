@@ -120,7 +120,7 @@ export class CreateBackupScratchDto implements V1BackupSpec {
 
   @IsOptional()
   @IsString()
-  sciSnapshotTimeout?: string;
+  csiSnapshotTimeout?: string;
 
   @IsOptional()
   @IsString()
@@ -132,7 +132,7 @@ export class CreateBackupScratchDto implements V1BackupSpec {
 
   @IsOptional()
   @IsString()
-  dataMover?: string;
+  datamover?: string;
 
   @IsOptional()
   @IsObject()

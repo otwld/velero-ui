@@ -7,10 +7,9 @@ title: ☸️ Start with Helm Chart
 
 :::tip 🔑 **Credentials**
 
-The default credentials to sign in are:
+There are no default credentials. Configure a random JWT signing key and explicit local credentials before starting. See [Security configuration](./security.md).
 
-- **Username:** admin
-- **Password:** admin
+For SSO-only deployments, explicitly set `BASIC_AUTH_ENABLED=false` and configure RBAC policies.
 
 :::
 
@@ -26,10 +25,7 @@ The default credentials to sign in are:
     helm repo update
     ```
 
-3. (Optional) Create a configuration file to override or extend default values.yaml
-   :::info Optional
-   You can use the default values.yaml provided in the chart.
-   :::
+3. Create a `values-local.yaml` file following [Security configuration](./security.md). A signing secret and authentication settings are required.
 
    :::tip Environment Variables
    You can add [environment variables](/getting-started/environment-variables) in the values.yaml
@@ -46,7 +42,7 @@ The default credentials to sign in are:
 
 5. Install the chart
     ```console
-    helm install velero-ui otwld/velero-ui --namespace velero-ui
+    helm install velero-ui otwld/velero-ui --namespace velero-ui --values values-local.yaml
     ```
 
 ### 🖥️ Installing from Source
@@ -65,10 +61,7 @@ The default credentials to sign in are:
     ```bash
     cd velero-ui/kubernetes/chart
     ```
-3. (Optional) Create a configuration file to override or extend default values.yaml
-   :::info Optional
-   You can use the default values.yaml provided in the chart.
-   :::
+3. Create a `values-local.yaml` file following [Security configuration](./security.md). A signing secret and authentication settings are required.
 
    :::tip Environment Variables
    You can add [environment variables](/getting-started/environment-variables) in the values.yaml
@@ -83,7 +76,7 @@ The default credentials to sign in are:
     ```
 5. Install the chart
     ```console
-    helm install velero-ui . --namespace velero-ui
+    helm install velero-ui . --namespace velero-ui --values values-local.yaml
     ```
 
 ### 🔄 Upgrading

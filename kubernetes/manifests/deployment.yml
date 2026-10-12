@@ -35,8 +35,21 @@ spec:
           failureThreshold: 30
           periodSeconds: 10
         env:
+          - name: AUTH_SECRET_PASSPHRASE
+            valueFrom:
+              secretKeyRef:
+                name: velero-ui-auth
+                key: pass_phrase
+          - name: BASIC_AUTH_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: velero-ui-auth
+                key: username
           - name: BASIC_AUTH_PASSWORD
-            value: admin
+            valueFrom:
+              secretKeyRef:
+                name: velero-ui-auth
+                key: password
           - name: VELERO_UI_NAMESPACE
             value: velero-ui
           - name: POLICY_FILE_PATH

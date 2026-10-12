@@ -1,6 +1,8 @@
 Dockerfile
 .dockerignore
 node_modules
+.env
+.env.*
 .git
 .nx
 .vscode

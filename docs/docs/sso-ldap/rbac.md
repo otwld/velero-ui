@@ -19,7 +19,7 @@ RBAC policies are defined in a CSV file. An `policies.csv` file example is provi
 
 Depending on the deployment method, the file can be mounted as a volume or copied to the container.
 
-Velero UI uses the environment variable `POLICY_FILE_PATH` to load the RBAC policies. The default value is `./policies.csv`.
+Velero UI uses the environment variable `POLICY_FILE_PATH` to load the RBAC policies. There is no default path.
 
 ## Model Structure
 
@@ -65,7 +65,9 @@ Below is a table that summarizes all possible resources and which actions are va
 ## Default behavior for users
 
 - Internal user is assigned to all actions as `u,admin,manage,all`.
-- If no group or user is defined to a specific action, the default behavior is to allow access to all actions and resources as `u,*,manage,all`.
+- Federated users have no permissions unless an explicit user, group or wildcard rule grants them.
+- An absent or empty policy file grants no permissions. An explicitly configured file that cannot be read, or contains an invalid rule, prevents startup.
+- To intentionally grant every authenticated federated user all permissions, add `u,*,manage,all`.
 
 ## Combined syntax
 
