@@ -1,0 +1,713 @@
+{
+  "global": {
+    "date": {
+      "day": "无天数 | {count} 天 | {count} 天",
+      "hour": "无小时 | {count} 小时 | {count} 小时",
+      "minute": "无分钟 | {count} 分钟 | {count} 分钟",
+      "second": "无秒 | {count} 秒 | {count} 秒",
+      "expired": "已过期",
+      "in": "{count}后",
+      "ago": "{count}前",
+      "now": "现在"
+    },
+    "powered": "v{version} - 技术支持：",
+    "nowAvailable": " 现已推出！",
+    "backup": "无备份 | 备份 | 备份",
+    "schedule": "无计划 | 计划 | 计划",
+    "restore": "无恢复 | 恢复 | 恢复",
+    "backupRepository": "无备份仓库 | 备份仓库 | 备份仓库",
+    "storageLocation": "无存储位置 | 存储位置 | 存储位置",
+    "snapshotLocation": "无快照位置 | 快照位置 | 快照位置",
+    "request": "无请求 | 请求 | 请求",
+    "deleteBackupRequest": "无备份删除请求 | 备份删除请求 | 备份删除请求",
+    "downloadRequest": "无下载请求 | 下载请求 | 下载请求",
+    "serverStatusRequest": "无服务器状态请求 | 服务器状态请求 | 服务器状态请求",
+    "setting": "无设置 | 设置 | 设置",
+    "actions": "操作",
+    "button": {
+      "edit": {
+        "title": "编辑"
+      },
+      "new": {
+        "title": "新建"
+      },
+      "add": {
+        "title": "添加"
+      },
+      "refresh": {
+        "title": "刷新",
+        "loading": "正在刷新"
+      },
+      "next": {
+        "title": "下一页"
+      },
+      "enable": {
+        "title": "启用"
+      },
+      "pause": {
+        "title": "暂停"
+      },
+      "filters": {
+        "title": "筛选"
+      },
+      "resume": {
+        "title": "恢复运行"
+      },
+      "reset": {
+        "title": "重置"
+      },
+      "close": {
+        "title": "关闭"
+      },
+      "previous": {
+        "title": "上一页"
+      },
+      "download": {
+        "title": "下载",
+        "loading": "正在下载"
+      },
+      "restore": {
+        "title": "恢复",
+        "loading": "正在恢复"
+      },
+      "delete": {
+        "title": "删除",
+        "loading": "正在删除"
+      },
+      "describe": {
+        "title": "查看清单"
+      },
+      "confirm": {
+        "title": "确认"
+      },
+      "nextStep": {
+        "title": "下一步"
+      },
+      "previousStep": {
+        "title": "上一步"
+      },
+      "learnMore": {
+        "title": "了解更多"
+      },
+      "duration": {
+        "title": "耗时"
+      },
+      "items": {
+        "title": "条目"
+      },
+      "size": {
+        "title": "大小"
+      },
+      "copy": {
+        "title": "复制"
+      },
+      "tableView": {
+        "title": "表格视图"
+      },
+      "rawView": {
+        "title": "原始视图"
+      }
+    },
+    "message": {
+      "error": {
+        "unexpected": "发生未知错误，请重试。",
+        "unableToCreate": "无法创建 {resource}，请重试。",
+        "unableToEdit": "无法编辑 {resource}，请重试。",
+        "unableToDownloadLogs": "无法下载日志，请重试。",
+        "unableToDownload": "无法下载备份内容，请重试。",
+        "unableToRetrieveLogs": "无法获取日志，请重试。",
+        "policyAccessDenied": "访问被策略拒绝。"
+      },
+      "success": {
+        "copied": "已复制到剪贴板！",
+        "created": "{resource} 已创建。",
+        "edited": "{resource} 已编辑。",
+        "deleted": "{resource} 已删除。",
+        "deleteRequestCreated": "删除请求已创建。",
+        "downloadStarted": "下载已开始……",
+        "downloadsStarted": "下载已开始…… 请在浏览器中允许弹出窗口",
+        "deletedByServer": "资源 {resource} 已由 velero 服务器删除。"
+      }
+    },
+    "optional": "（可选）",
+    "na": "不适用",
+    "error": "错误",
+    "noData": "暂无数据",
+    "details": "详情",
+    "stats": "统计",
+    "status": "状态",
+    "paused": "已暂停",
+    "unknown": "未知",
+    "documentation": "文档",
+    "options": "选项",
+    "docs": "文档",
+    "mappingAndLabels": "映射与标签",
+    "key": "键",
+    "value": "值",
+    "from": "从",
+    "to": "到",
+    "online": "在线",
+    "offline": "离线",
+    "labels": "标签",
+    "confirmation": "确认",
+    "info": "信息",
+    "backupInfo": "备份信息",
+    "backupResources": "备份资源",
+    "backupLabels": "备份标签",
+    "credentials": "凭据",
+    "configurationAndLabels": "配置与标签",
+    "resources": "资源",
+    "seconds": "秒",
+    "minutes": "分钟",
+    "hours": "小时",
+    "type": "类型",
+    "connectionLost": "正在连接服务器……"
+  },
+  "manifest": {
+    "title": "清单",
+    "text": {
+      "loading": "正在获取清单……",
+      "noResult": "没有可显示的清单！"
+    }
+  },
+  "log": {
+    "title": "日志",
+    "text": {
+      "loading": "正在获取日志……",
+      "noResult": "没有可显示的日志！"
+    },
+    "search": {
+      "placeholder": "搜索日志……"
+    },
+    "table": {
+      "header": {
+        "time": "时间",
+        "message": "消息",
+        "level": "级别"
+      }
+    }
+  },
+  "resource": {
+    "metadata": {
+      "labels": "标签"
+    },
+    "spec": {
+      "includedNamespaces": "包含的命名空间",
+      "excludedNamespaces": "排除的命名空间",
+      "includedResources": "包含的资源",
+      "excludedResources": "排除的资源",
+      "includedClusterScopedResources": "包含的集群范围资源",
+      "excludedClusterScopedResources": "排除的集群范围资源",
+      "includedNamespaceScopedResources": "包含的命名空间级集群资源",
+      "excludedNamespaceScopedResources": "排除的命名空间级集群资源",
+      "restoreStatusIncludedResources": "状态包含的资源",
+      "restoreStatusExcludedResources": "状态排除的资源",
+      "volumeNamespace": "卷命名空间",
+      "resticIdentifier": "Restic 标识",
+      "default": "默认",
+      "ttl": "TTL",
+      "resourcePolicy": "资源策略 ConfigMap",
+      "storageLocation": "存储位置",
+      "volumeSnapshotLocations": "卷快照位置",
+      "provider": "提供方",
+      "backupSyncPeriod": "同步周期",
+      "validationFrequency": "校验频率",
+      "bucket": "对象存储桶",
+      "prefix": "前缀",
+      "certificate": "证书",
+      "snapshotVolumes": "快照卷",
+      "snapshotMoveData": "快照数据迁移",
+      "defaultVolumesToFsBackup": "默认对卷使用文件系统备份",
+      "includeClusterResources": "包含集群资源",
+      "includeNamespaceClusterResources": "包含命名空间级集群资源",
+      "csiSnapshotTimeout": "CSI 快照超时",
+      "itemOperationTimeout": "条目操作超时",
+      "labelSelector": "标签选择器",
+      "orLabelSelectors": "或标签选择器",
+      "datamover": "数据迁移器",
+      "parallelFilesUpload": "并发文件上传数",
+      "parallelFilesDownload": "并发文件下载数",
+      "credentialName": "Secret 名称",
+      "credentialKey": "Secret 键",
+      "backup": "备份",
+      "schedule": "计划",
+      "node": "节点",
+      "config": "配置字段",
+      "volume": "卷",
+      "paused": "已暂停",
+      "accessMode": "访问模式",
+      "useOwnerReferencesInBackup": "在备份中使用 OwnerReferences",
+      "skipImmediately": "立即跳过",
+      "namespaceMapping": "命名空间映射",
+      "existingResourcePolicy": "已有资源策略",
+      "restorePVs": "恢复卷",
+      "preserveNodePorts": "保留 NodePort",
+      "writeSparseFiles": "写入稀疏文件",
+      "resourceModifier": "资源修改器 ConfigMap"
+    },
+    "status": {
+      "items": "条目",
+      "bytes": "字节",
+      "reason": "原因",
+      "validationErrors": "校验错误",
+      "lastMaintenanceTime": "最近维护",
+      "message": "消息",
+      "startTime": "开始时间",
+      "completionTime": "完成时间",
+      "lastBackup": "最近备份",
+      "lastSkipped": "最近跳过",
+      "lastSyncedTime": "最近同步",
+      "lastValidationTime": "最近校验",
+      "duration": "耗时"
+    },
+    "phase": {
+      "Completed": "已完成",
+      "InProgress": "进行中",
+      "WaitingForPluginOperations": "等待插件操作",
+      "Finalizing": "收尾中",
+      "WaitingForPluginOperationsPartiallyFailed": "等待插件操作（部分失败）",
+      "FinalizingPartiallyFailed": "收尾中（部分失败）",
+      "PartiallyFailed": "部分失败",
+      "Deleting": "删除中",
+      "Failed": "失败",
+      "FailedValidation": "校验失败",
+      "New": "新建",
+      "Ready": "就绪",
+      "NotReady": "未就绪",
+      "Processed": "已处理",
+      "Enabled": "已启用",
+      "Available": "可用",
+      "Unavailable": "不可用",
+      "null": "未知",
+      "undefined": "未知"
+    }
+  },
+  "modal": {
+    "button": {
+      "yes": {
+        "title": "是，我确定"
+      },
+      "no": {
+        "title": "否，取消"
+      }
+    },
+    "text": {
+      "title": {
+        "manifest": "查看清单：",
+        "restoreFromBackup": "从备份恢复：",
+        "editBackupStorageLocation": "编辑备份存储位置：",
+        "editVolumeSnapshotLocation": "编辑卷快照位置：",
+        "editSchedule": "编辑计划：",
+        "createNewBackup": "新建备份",
+        "createNewRestore": "新建恢复",
+        "createNewSchedule": "新建计划",
+        "createNewVolumeSnapshotLocation": "新建卷快照位置",
+        "createNewBackupStorageLocation": "新建存储位置"
+      },
+      "confirmation": {
+        "delete": "确定要删除以下内容吗：",
+        "deleteMany": "确定要删除 {items} 个条目吗：",
+        "downloadMany": "确定要下载 {items} 个条目吗：",
+        "restore": "确定要恢复以下内容吗："
+      }
+    }
+  },
+  "form": {
+    "field": {
+      "backupName": "备份名称",
+      "restoreName": "恢复名称",
+      "backupStorageLocationName": "备份存储位置名称",
+      "volumeSnapshotLocationName": "卷快照位置名称",
+      "scheduleName": "计划名称",
+      "schedule": "计划",
+      "fromSchedule": "基于计划",
+      "fromScratch": "从零开始",
+      "fromBackup": "基于备份",
+      "scheduleOptions": "计划选项",
+      "backupOptions": "备份选项",
+      "forceDelete": "强制删除",
+      "selectTimezone": "选择时区",
+      "timeFormat24h": "显示 24 小时制"
+    },
+    "hint": {
+      "storageProvider": "请参阅对象存储提供方插件的文档",
+      "typeBackup": "备份类型：",
+      "typeRestore": "恢复类型：",
+      "ttl": "（例如 72h）",
+      "fromSchedule": "使用已有计划作为模板",
+      "fromLatestSchedule": "基于该计划触发的最近一次成功或部分失败的备份创建恢复",
+      "fromScratch": "自行创建模板",
+      "fromBackup": "基于备份创建恢复"
+    },
+    "placeholder": {
+      "ttl": "72",
+      "csiSnapshotTimeout": "10",
+      "itemOperationTimeout": "4",
+      "parallelFilesUpload": "10",
+      "parallelFilesDownload": "10",
+      "backupSyncPeriod": "1",
+      "validationFrequency": "1",
+      "existingResourcePolicy": "选择已有的资源策略类型",
+      "backupName": "输入备份名称",
+      "restoreName": "输入恢复名称",
+      "scheduleName": "输入计划名称",
+      "storageLocation": "选择存储位置",
+      "storageLocationName": "输入存储位置名称",
+      "resourcePolicy": "选择已有的 ConfigMap",
+      "schedule": "选择计划",
+      "secret": "选择已有的 Secret",
+      "secretName": "输入 Secret 名称",
+      "accessMode": "选择访问模式",
+      "cron": "输入带时区的 cron",
+      "backup": "选择备份",
+      "provider": "输入提供方",
+      "notApplicable": "不适用",
+      "datamover": "输入数据迁移器",
+      "resource": "输入资源",
+      "bucket": "输入存储桶名称",
+      "prefix": "输入前缀"
+    },
+    "tooltip": {
+      "labels": "应用到 {type} 的标签（key=value）。",
+      "ttl": "备份在被垃圾回收之前的保留时长。",
+      "includedNamespaces": "{type} 中包含的命名空间。若不作选择，则包含全部命名空间。",
+      "excludedNamespaces": "{type} 中排除的命名空间。",
+      "includedResources": "{type} 中包含的资源，格式为 resource.group，例如 storageclasses.storage.k8s.io（使用 * 表示全部资源）。",
+      "excludedResources": "{type} 中排除的资源，格式为 resource.group，例如 storageclasses.storage.k8s.io。",
+      "includedClusterScopedResources": "{type} 中包含的集群范围资源，格式为 resource.group，例如 storageclasses.storage.k8s.io（使用 * 表示全部资源）。",
+      "excludedClusterScopedResources": "{type} 中排除的集群范围资源，格式为 resource.group，例如 storageclasses.storage.k8s.io。",
+      "includedNamespaceScopedResources": "{type} 中包含的命名空间级资源，格式为 resource.group，例如 deployments.apps（使用 * 表示全部资源）。",
+      "excludedNamespaceScopedResources": "{type} 中排除的命名空间级资源，格式为 resource.group，例如 deployments.apps。",
+      "restoreStatusIncludedResources": "恢复状态中包含的资源，格式为 resource.group，例如 storageclasses.storage.k8s.io。",
+      "restoreStatusExcludedResources": "恢复状态中排除的资源，格式为 resource.group，例如 storageclasses.storage.k8s.io。",
+      "default": "将此新位置设为默认的备份存储位置。",
+      "storageLocation": "存放备份的位置。",
+      "volumeSnapshotLocations": "存放卷快照的位置列表（每个提供方最多一个）。",
+      "provider": "卷快照位置的提供方名称（例如 aws、azure、gcp）。",
+      "backupSyncPeriod": "多久确认一次对象存储中的所有 Velero 备份在集群中都存在对应的 Backup API 对象。设为 0s 可禁用同步。",
+      "validationFrequency": "多久校验一次备份存储位置是否有效。设为 0s 可禁用同步。默认 1 分钟。",
+      "bucket": "存放备份的对象存储桶名称。",
+      "prefix": "存储桶内存放 Velero 数据的统一前缀。",
+      "certificate": "连接对象存储并进行 TLS 校验时使用的证书 bundle 文件。",
+      "accessMode": "备份存储位置的访问模式。",
+      "credentialName": "所引用的 Secret 名称。",
+      "credentialKey": "要选择的 Secret 键，必须是有效的 Secret 键。",
+      "config": "配置的键值对。",
+      "useOwnerReferencesInBackup": "指定是否为该计划创建的备份使用 OwnerReferences。注意：设为 true 时，删除计划会同时删除其备份。",
+      "skipImmediately": "立即跳过下一次计划备份。",
+      "paused": "指定新建的计划是否处于暂停状态。",
+      "schedule": "cron 表达式，指定该备份周期性运行的计划。",
+      "namespaceMapping": "将备份中的命名空间名称映射为恢复后期望的名称。",
+      "resourcePolicy": "引用备份所使用的资源策略 ConfigMap。",
+      "snapshotVolumes": "在备份过程中对 PersistentVolume 创建快照。",
+      "snapshotMoveData": "指定是否需要迁移快照数据。",
+      "defaultVolumesToFsBackup": "默认对卷使用 Pod 卷文件系统备份。",
+      "includeClusterResources": "在 {type} 中包含集群范围资源。",
+      "includeNamespaceClusterResources": "在 {type} 中包含命名空间级集群资源。",
+      "csiSnapshotTimeout": "等待 CSI 快照创建完成的超时时长。",
+      "itemOperationTimeout": "等待异步插件操作完成的超时时长。",
+      "labelSelector": "仅备份匹配该标签选择器的资源。",
+      "orLabelSelectors": "备份至少匹配列表中一个标签选择器的资源。",
+      "datamover": "指定备份使用的数据迁移器。未设置或设置为 velero 时将使用内置数据迁移器。",
+      "parallelFilesUpload": "运行备份时同时上传的文件数量。仅适用于 kopia uploader。",
+      "parallelFilesDownload": "并行执行的恢复操作数量。设为 0 时，默认并行度为 node agent 所在节点的 CPU 数量。",
+      "existingResourcePolicy": "恢复流程中使用的恢复策略，可选 none 或 update。",
+      "restorePVs": "是否从快照恢复卷。",
+      "preserveNodePorts": "恢复时是否保留 Service 的 NodePort。",
+      "writeSparseFiles": "恢复卷时是否写入稀疏文件。",
+      "resourceModifier": "引用恢复所使用的资源修改器 ConfigMap。",
+      "forceDelete": "直接删除资源，而不是创建删除请求。"
+    },
+    "message": {
+      "error": {
+        "orLabelSelectors": "或标签选择器功能尚未实现。"
+      }
+    }
+  },
+  "list": {
+    "text": {
+      "noEntries": "没有条目。",
+      "fetchingEntries": "正在获取条目",
+      "entriesPerPage": "每页条目数：",
+      "showing": "显示",
+      "of": "/"
+    },
+    "search": {
+      "name": "搜索",
+      "label": "搜索",
+      "placeholder": "搜索……"
+    },
+    "filter": {
+      "storageLocation": {
+        "label": "存储位置",
+        "placeholder": "选择存储位置"
+      },
+      "schedule": {
+        "label": "计划",
+        "placeholder": "选择计划"
+      },
+      "backup": {
+        "label": "备份",
+        "placeholder": "选择备份"
+      },
+      "status": {
+        "label": "状态",
+        "placeholder": "选择状态"
+      },
+      "provider": {
+        "label": "提供方",
+        "placeholder": "选择提供方"
+      },
+      "accessMode": {
+        "label": "访问模式",
+        "placeholder": "选择访问模式"
+      },
+      "repositoryType": {
+        "label": "仓库类型",
+        "placeholder": "选择仓库类型"
+      },
+      "paused": {
+        "label": "暂停状态",
+        "placeholder": "选择暂停状态"
+      },
+      "targetKind": {
+        "label": "目标类型",
+        "placeholder": "选择类型"
+      }
+    },
+    "header": {
+      "name": "名称",
+      "date": "日期",
+      "expireIn": "过期时间",
+      "lastMaintenanceTime": "最近维护时间",
+      "status": "状态",
+      "cron": "Cron",
+      "provider": "提供方",
+      "fromBackup": "来源备份",
+      "lastBackup": "最近备份",
+      "lastSync": "最近同步",
+      "accessMode": "访问模式",
+      "processedOn": "处理时间",
+      "kind": "Kind",
+      "type": "类型",
+      "target": "目标",
+      "actions": "操作",
+      "volume": "卷"
+    }
+  },
+  "auth": {
+    "signIn": "登录",
+    "divider": "或",
+    "powered": "v{version} - 技术支持：",
+    "form": {
+      "username": {
+        "label": "用户名",
+        "placeholder": "用户名"
+      },
+      "password": {
+        "label": "密码"
+      },
+      "button": {
+        "title": "登录"
+      }
+    },
+    "federated": {
+      "button": {
+        "title": "使用 {strategy} 登录"
+      }
+    },
+    "message": {
+      "error": {
+        "unauthorized": "必须先登录才能访问此页面。",
+        "inactivity": "会话已超时。",
+        "sso": "无法通过外部 SSO 完成登录。",
+        "credentials": "用户名或密码无效。"
+      },
+      "success": {
+        "logout": "已成功退出登录！",
+        "code": "正在处理登录，请稍候……"
+      }
+    }
+  },
+  "notFound": {
+    "title": "页面不存在",
+    "description": "抱歉，我们找不到该页面。你可以在首页发现更多内容。",
+    "button": {
+      "title": "返回首页"
+    }
+  },
+  "resourceNotFound": {
+    "title": "未找到资源",
+    "description": "抱歉，当前无法获取该资源。",
+    "button": {
+      "title": "返回 {resource} 列表"
+    }
+  },
+  "header": {
+    "signOut": {
+      "button": {
+        "title": "退出登录"
+      }
+    },
+    "account": {
+      "ldap": "LDAP 账户",
+      "local": "本地账户"
+    }
+  },
+  "sidebar": {
+    "menu": {}
+  },
+  "dashboard": {
+    "title": "概览",
+    "stats": {
+      "title": {
+        "global": "全局",
+        "overall": "总体",
+        "status": "状态",
+        "successRate": "成功率",
+        "loading": "加载中……"
+      },
+      "label": {
+        "success": "成功"
+      },
+      "global": {
+        "button": {
+          "grafana": {
+            "title": "在 Grafana 中查看"
+          }
+        }
+      },
+      "backups": {
+        "description": "全部备份统计",
+        "button": {
+          "see": {
+            "title": "查看全部备份"
+          }
+        }
+      },
+      "restores": {
+        "description": "全部恢复统计",
+        "button": {
+          "see": {
+            "title": "查看全部恢复"
+          }
+        }
+      },
+      "unscheduled": {
+        "title": "未纳入计划的命名空间",
+        "description": "全部命名空间统计",
+        "success": "所有命名空间都已纳入计划！"
+      },
+      "nextScheduled": {
+        "title": "计划备份",
+        "description": "未来 24 小时内",
+        "noData": "没有计划备份！"
+      },
+      "latest": {
+        "title": "最近的备份",
+        "description": "过去 24 小时内",
+        "noData": "没有最近的备份！"
+      }
+    }
+  },
+  "backups": {
+    "title": "备份"
+  },
+  "schedules": {
+    "title": "计划",
+    "message": {
+      "error": {
+        "unexpected": "无法下载备份内容，请重试。"
+      },
+      "success": {
+        "paused": "计划已暂停",
+        "resumed": "计划已恢复"
+      }
+    }
+  },
+  "restores": {
+    "title": "恢复"
+  },
+  "backupRepositories": {
+    "title": "备份仓库"
+  },
+  "storageLocations": {
+    "title": "存储位置"
+  },
+  "snapshotLocations": {
+    "title": "快照位置"
+  },
+  "requests": {
+    "title": "请求"
+  },
+  "deleteBackupRequests": {
+    "title": "备份删除请求"
+  },
+  "downloadRequests": {
+    "title": "下载请求"
+  },
+  "serverStatusRequest": {
+    "title": "服务器状态请求"
+  },
+  "podVolumes": {
+    "title": "Pod 卷"
+  },
+  "podVolumeBackups": {
+    "title": "Pod 卷备份"
+  },
+  "podVolumeRestores": {
+    "title": "Pod 卷恢复"
+  },
+  "settings": {
+    "title": "设置",
+    "cluster": {
+      "title": "Kubernetes 集群"
+    },
+    "agents": {
+      "title": "Velero Node Agent",
+      "noData": "未找到 Velero Node Agent。",
+      "modal": {
+        "logs": {
+          "title": "Node Agent 日志："
+        }
+      },
+      "tooltip": {
+        "logs": {
+          "title": "节点日志"
+        }
+      }
+    },
+    "plugins": {
+      "title": "插件"
+    },
+    "server": {
+      "title": "Velero 服务器",
+      "modal": {
+        "logs": {
+          "title": "服务器日志"
+        }
+      },
+      "tooltip": {
+        "logs": {
+          "title": "Velero 服务器日志"
+        }
+      }
+    },
+    "ui": {
+      "title": "Velero UI",
+      "modal": {
+        "logs": {
+          "title": "UI 日志"
+        }
+      },
+      "tooltip": {
+        "logs": {
+          "title": "Velero UI 日志"
+        },
+        "standalone": {
+          "title": "仅当 Velero UI 部署在 K8S 集群内部时才可查看日志"
+        }
+      }
+    }
+  }
+}
