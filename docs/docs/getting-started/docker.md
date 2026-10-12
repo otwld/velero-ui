@@ -6,10 +6,9 @@ title: 🐳 Start with Docker
 
 :::tip 🔑 **Credentials**
 
-The default credentials to sign in are:
+There are no default credentials. Configure a random JWT signing key and explicit local credentials before starting. See [Security configuration](./security.md).
 
-- **Username:** admin
-- **Password:** admin
+For SSO-only deployments, explicitly set `BASIC_AUTH_ENABLED=false` and configure RBAC policies.
 
 :::
 
@@ -36,7 +35,7 @@ The default credentials to sign in are:
 
 2. Run this Docker command with your Kube config path. You can also specify the context using the [environment variables](/getting-started/environment-variables) `KUBE_CONTEXT`:
     ```bash
-    docker run --name velero-ui -v ~/.kube/config:/app/.kube/config -e KUBE_CONFIG_PATH=/app/.kube/config -d -p 3333:3000 otwld/velero-ui:latest
+    docker run --name velero-ui --env-file .env -v ~/.kube/config:/app/.kube/config -e KUBE_CONFIG_PATH=/app/.kube/config -d -p 3333:3000 otwld/velero-ui:latest
     ```
     Where:
       - **~/.kube/config:/app/.kube/config** links the Kube Config as a volume from the host to the container.

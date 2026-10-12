@@ -6,10 +6,9 @@ title: ⚙️ Start with Kubernetes
 
 :::tip 🔑 **Credentials**
 
-The default credentials to sign in are:
+There are no default credentials. Configure a random JWT signing key and explicit local credentials before starting. See [Security configuration](./security.md).
 
-- **Username:** admin
-- **Password:** admin
+For SSO-only deployments, explicitly set `BASIC_AUTH_ENABLED=false` and configure RBAC policies.
 
 :::
 
@@ -37,7 +36,7 @@ All Kubernetes manifests are located in [kubernetes/manifests](https://github.co
     [Environment variables](/getting-started/environment-variables) can be defined in [kubernetes/manifests/deployment.yml](https://github.com/otwld/velero-ui/blob/main/kubernetes/manifests/deployment.yml)
     :::
 
-4. Apply manifests with kubectl
+4. Create the `velero-ui-auth` Secret as described in [Security configuration](./security.md), then apply manifests with kubectl
     ```bash
     kubectl apply -f .
     ```

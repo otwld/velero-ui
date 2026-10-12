@@ -46,6 +46,33 @@ Velero UI supports authentication via LDAP (Lightweight Directory Access Protoco
 4. **Restart Your Application**
    - Restart the Velero UI to apply the changes.
 
+## LLDAP
+
+LLDAP works with Velero UI's standard LDAP configuration. For example, with Helm:
+
+```yaml
+env:
+  - name: LDAP_ENABLED
+    value: "true"
+  - name: LDAP_URL
+    value: "ldap://lldap:3890"
+  - name: LDAP_BIND_DN
+    value: "uid=velero-ui,ou=people,dc=example,dc=com"
+  - name: LDAP_BIND_CREDENTIALS
+    valueFrom:
+      secretKeyRef:
+        name: lldap-credentials
+        key: password
+  - name: LDAP_SEARCH_BASE
+    value: "ou=people,dc=example,dc=com"
+  - name: LDAP_SEARCH_FILTER
+    value: "(uid={{username}})"
+```
+
+Use the full LLDAP user DN for `LDAP_BIND_DN`. Variables such as `AUTH_METHOD`,
+`LDAP_BIND_PASSWORD`, and `LDAP_USER_SEARCH_BASE` are not Velero UI settings;
+use `LDAP_ENABLED`, `LDAP_BIND_CREDENTIALS`, and `LDAP_SEARCH_BASE` instead.
+
 ## RBAC
 
 If you are using LDAP groups for RBAC, ensure that the LDAP server is configured to return group memberships. This allows Velero UI to read the user's group memberships.
@@ -67,5 +94,4 @@ Then refer to the [RBAC documentation](../rbac.md) for further configuration.
 ## Conclusion
 
 Once configured, users will be able to sign in to Velero UI using their LDAP credentials for authentication.
-
 

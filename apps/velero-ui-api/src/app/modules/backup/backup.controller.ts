@@ -6,6 +6,7 @@ import {
   Get,
   Param,
   ParseBoolPipe,
+  ParseArrayPipe,
   Post,
   Query,
   Res,
@@ -44,9 +45,9 @@ export class BackupController extends K8sCustomObjectController<V1Backup> {
 
   @Post('/download')
   @CheckPolicies((ability: AppAbility) =>
-    ability.can(Action.Read, Resources.BACKUP.plural)
+    ability.can(Action.Download, Resources.BACKUP.plural)
   )
-  public download(@Body() names: string[]) {
+  public download(@Body(new ParseArrayPipe({ items: String })) names: string[]) {
     return forkJoin(
       names.map((name) =>
         this.downloadRequestService.create({

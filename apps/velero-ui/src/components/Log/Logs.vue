@@ -16,8 +16,8 @@
             </th>
           </template>
           <th class="px-4 py-2 flex justify-between items-center">
-            <template v-if="!displayRawView"
-              >{{ t('log.table.header.message') }}
+            <template v-if="!displayRawView">
+              {{ t('log.table.header.message') }}
             </template>
             <template v-else>
               <div class="flex items-center gap-1">
@@ -27,7 +27,7 @@
                   class="text-xs bg-gray-800 border border-gray-600 placeholder-gray-500 text-white rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-500 w-[160px]"
                   type="text"
                   @keyup.enter="nextMatch()"
-                />
+                >
                 <button
                   :disabled="activeIndex === 0"
                   class="px-1 py-1 rounded text-xs bg-gray-700 hover:bg-gray-600 disabled:opacity-50"
@@ -112,13 +112,21 @@
             <td
               :class="
                 matchIndexes.includes(index) &&
-                index === matchIndexes[activeIndex] && searchTerm
+                  index === matchIndexes[activeIndex] &&
+                  searchTerm
                   ? 'bg-gray-700'
                   : ''
               "
               class="px-2 py-1 font-mono whitespace-pre-wrap text-white text-sm"
-              v-html="highlight(line.raw, searchTerm)"
-            />
+            >
+              <template
+                v-for="(part, partIndex) in highlight(line.raw, searchTerm)"
+                :key="partIndex"
+              >
+                <mark v-if="partIndex % 2" class="bg-yellow-500 text-black" v-text="part" />
+                <span v-else v-text="part" />
+              </template>
+            </td>
           </template>
           <template v-else>
             <td class="px-4 py-1 whitespace-nowrap text-gray-400">
@@ -188,6 +196,7 @@ import { type Log, type VeleroLog } from '@velero-ui/shared-types';
 import { convertTimestampToDate } from '@velero-ui-app/utils/date.utils';
 import { initTooltips } from 'flowbite';
 import LogMessage from '@velero-ui-app/components/Log/LogMessage.vue';
+import { escapeRegExp } from 'lodash';
 
 const props = defineProps({
   data: { type: Array as PropType<VeleroLog[]>, required: true },
@@ -221,13 +230,9 @@ const levelColor = (level: string): string => {
 
 const highlight = (text: string, keyword: string) => {
   if (!keyword || keyword.length === 0) {
-    return text;
+    return [text];
   }
-  const regex = new RegExp(`(${keyword})`, 'gi');
-  return text.replace(
-    regex,
-    '<mark class="bg-yellow-500 text-black">$1</mark>'
-  );
+  return text.split(new RegExp(`(${escapeRegExp(keyword)})`, 'gi'));
 };
 
 const matchIndexes = computed(() =>

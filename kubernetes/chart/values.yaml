@@ -37,9 +37,9 @@ configuration:
     # Secret passphrase use to generate JWT
     secretPassPhrase:
 
-      # -- Value of the secret pass phrase, must be changed.
+      # -- Required random JWT signing secret (at least 32 bytes), unless existingSecret is set.
       # if `useSecret` is true and `existingSecret` is empty, this value will be stored in secret at first deployment
-      value: "this is not a secret passphrase"
+      value: ""
 
       # -- Whether a secret should be used.
       useSecret: true

@@ -17,9 +17,7 @@ export const useBackupManyDownloadContent = () => {
       (
         await axiosInstance.post<V1DownloadRequest[]>(
           `${Resources.BACKUP.route}/download`,
-          {
-            data: names,
-          }
+          names
         )
       ).data,
     onSuccess: async (data: V1DownloadRequest[]) => {
