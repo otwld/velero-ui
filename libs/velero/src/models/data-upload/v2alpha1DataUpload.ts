@@ -1,27 +1,27 @@
-import { KubernetesObject } from '@kubernetes/client-node';
-import {
+import type { KubernetesObject } from '@kubernetes/client-node';
+import type {
   NodeOS,
   V1DataMoveOperationProgress,
   V1Metadata,
 } from '@velero-ui/velero';
-import { V1ObjectMeta } from '@kubernetes/client-node/dist/api';
+import type { V1ObjectMeta } from '@kubernetes/client-node/dist/api';
 
 export interface V2alpha1DataUpload extends KubernetesObject {
   metadata?: V1ObjectMeta & V1Metadata;
   spec: V2alpha1DataUploadSpec;
-  status: V2alpha1DataUploadStatus;
+  status?: V2alpha1DataUploadStatus;
 }
 
 export interface V2alpha1DataUploadSpec {
   snapshotType: V2alpha1DataUploadSnapshotType;
-  csiSnapshot: V2alpha1DataUploadCSISnapshotSpec;
+  csiSnapshot?: V2alpha1DataUploadCSISnapshotSpec;
   sourcePVC: string;
-  datamover: string;
+  datamover?: string;
   backupStorageLocation: string;
   sourceNamespace: string;
   dataMoverConfig?: object;
-  cancel: boolean;
-  operationTimeout: Date;
+  cancel?: boolean;
+  operationTimeout: string;
 }
 
 export enum V2alpha1DataUploadSnapshotType {
@@ -30,8 +30,10 @@ export enum V2alpha1DataUploadSnapshotType {
 
 export interface V2alpha1DataUploadCSISnapshotSpec {
   volumeSnapshot: string;
+  volumeSnapshotNamespace?: string;
+  driver?: string;
   storageClass: string;
-  snapshotClass: string;
+  snapshotClass?: string;
 }
 
 export enum V2alpha1DataUploadPhase {
@@ -46,18 +48,18 @@ export enum V2alpha1DataUploadPhase {
 }
 
 export interface V2alpha1DataUploadStatus {
-  phase: V2alpha1DataUploadPhase;
-  path: string;
-  snapshotID: string;
-  dataMoverResult: object;
-  message: string;
-  startTimestamp: Date;
-  completionTimestamp: Date;
-  progress: V1DataMoveOperationProgress;
-  node: string;
-  nodeOS: NodeOS;
-  acceptedByNode: string;
-  acceptedTimestamp: Date;
+  phase?: V2alpha1DataUploadPhase;
+  path?: string;
+  snapshotID?: string;
+  dataMoverResult?: object;
+  message?: string;
+  startTimestamp?: string;
+  completionTimestamp?: string;
+  progress?: V1DataMoveOperationProgress;
+  node?: string;
+  nodeOS?: NodeOS;
+  acceptedByNode?: string;
+  acceptedTimestamp?: string;
 }
 
 export interface V2alpha1DataUploadResult {

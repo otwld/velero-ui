@@ -47,6 +47,18 @@
           <div :style="getPercent()" class="bg-blue-600 h-2.5 rounded-full" />
         </div>
       </div>
+      <div v-for="operation in operationProgress" :key="operation.label" class="mt-4">
+        <div class="flex items-center justify-between mb-1">
+          <span class="text-base font-medium text-gray-900 dark:text-white">{{ t(operation.label) }}</span>
+          <span class="text-xs font-medium text-gray-900 dark:text-white">
+            {{ operation.completed }} / {{ operation.attempted }}
+            <span v-if="operation.failed">({{ operation.failed }} {{ t('podVolumes.failed') }})</span>
+          </span>
+        </div>
+        <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700" role="progressbar" :aria-label="t(operation.label)" :aria-valuenow="operation.completed" :aria-valuemax="operation.attempted" aria-valuemin="0">
+          <div :style="{ width: progressPercent({ bytesDone: operation.completed, totalBytes: operation.attempted }) + '%' }" class="bg-blue-600 h-2.5 rounded-full" />
+        </div>
+      </div>
       <div v-if="!backup" class="mt-4">
         <div class="flex items-center justify-between mb-1">
           <Skeleton />
@@ -79,7 +91,8 @@
 </template>
 
 <script lang="ts" setup>
-import type { PropType } from 'vue';
+import { computed, type PropType } from 'vue';
+import { progressPercent } from '@velero-ui-app/utils/volume.utils';
 import type { V1Backup } from '@velero-ui/velero';
 import { convertTimestampToDate, getRemainingTime, getTime } from '../../utils/date.utils';
 import BackupStatusPhaseBadge from './BackupStatusPhaseBadge.vue';
@@ -98,6 +111,12 @@ const { t } = useI18n();
 const props = defineProps({
   backup: { type: Object as PropType<V1Backup>, required: true },
 });
+
+const operationProgress = computed(() => [
+  { label: 'podVolumes.operations', attempted: props.backup?.status?.backupItemOperationsAttempted || 0, completed: props.backup?.status?.backupItemOperationsCompleted || 0, failed: props.backup?.status?.backupItemOperationsFailed || 0 },
+  { label: 'podVolumes.csiSnapshots', attempted: props.backup?.status?.csiVolumeSnapshotsAttempted || 0, completed: props.backup?.status?.csiVolumeSnapshotsCompleted || 0, failed: 0 },
+  { label: 'podVolumes.nativeSnapshots', attempted: props.backup?.status?.volumeSnapshotsAttempted || 0, completed: props.backup?.status?.volumeSnapshotsCompleted || 0, failed: 0 },
+].filter((operation) => operation.attempted > 0));
 
 const getPercent = () => {
   const percent = Math.round(

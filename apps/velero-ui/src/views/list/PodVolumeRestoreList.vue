@@ -1,5 +1,5 @@
 <template>
-  <ListHeader>
+  <ListHeader :query="volumeList">
     <template #bulk-buttons>
       <BulkButton
         v-if="can(Action.Delete, Resources.POD_VOLUME_RESTORE.plural)"
@@ -14,8 +14,8 @@
       <SearchFilter :type="Filter.Status" />
     </template>
   </ListHeader>
-  <ListContent :component="PodVolumeLine" />
-  <ListFooter />
+  <ListContent :component="PodVolumeLine" :query="volumeList" :selectable="selectable" />
+  <ListFooter :query="volumeList" />
   <ModalConfirmation
     v-if="showModalBulkRemove"
     :icon="faExclamationCircle"
@@ -45,6 +45,8 @@
 </template>
 <script lang="ts" setup>
 import { onBeforeMount, ref } from 'vue';
+import { usePodVolumeList } from '@velero-ui-app/composables/usePodVolumeList';
+import type { PodVolumeListItem } from '@velero-ui-app/utils/pod-volume-list.utils';
 import { useListStore } from '@velero-ui-app/stores/list.store';
 import {
   faExclamationCircle,
@@ -65,6 +67,9 @@ import { storeToRefs } from 'pinia';
 import BulkButton from '@velero-ui-app/components/BulkButton.vue';
 
 const { t } = useI18n();
+const volumeList = usePodVolumeList(false);
+const deleteFilesystem = can(Action.Delete, Resources.POD_VOLUME_RESTORE.plural);
+const selectable = (item: PodVolumeListItem) => !item.dataMover && deleteFilesystem;
 
 const listStore = useListStore();
 const { checkedItems } = storeToRefs(listStore);
@@ -82,7 +87,7 @@ onBeforeMount(() =>
       },
     },
     {
-      name: 'list.header.fromBackup',
+      name: 'restores.title',
     },
     {
       name: 'storageLocations.title',

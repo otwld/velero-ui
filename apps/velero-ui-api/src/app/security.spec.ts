@@ -23,6 +23,9 @@ jest.mock('node:fs', () => ({
   ...jest.requireActual('node:fs'),
   readFileSync: jest.fn(),
 }));
+jest.mock('./modules/backup/backup-snapshots.service', () => ({
+  BackupSnapshotsService: class {},
+}));
 jest.mock('./modules/backup/backup.service', () => ({
   BackupService: class {},
 }));

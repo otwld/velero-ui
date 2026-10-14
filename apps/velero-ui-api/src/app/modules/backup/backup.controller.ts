@@ -1,3 +1,4 @@
+import { BackupSnapshotsService } from './backup-snapshots.service';
 import {
   Body,
   Controller,
@@ -37,6 +38,7 @@ import { Response } from 'express';
 export class BackupController extends K8sCustomObjectController<V1Backup> {
   constructor(
     private readonly backupService: BackupService,
+    private readonly snapshotsService: BackupSnapshotsService,
     private readonly downloadRequestService: DownloadRequestService,
     readonly k8sCustomObjectService: K8sCustomObjectService
   ) {
@@ -64,6 +66,12 @@ export class BackupController extends K8sCustomObjectController<V1Backup> {
   )
   public create(@Body() data: CreateBackupDto) {
     return this.backupService.create(data);
+  }
+
+  @Get('/:name/snapshots')
+  @CheckPolicies((ability: AppAbility) => ability.can(Action.Read, Resources.BACKUP.plural))
+  public snapshots(@Param('name') name: string) {
+    return this.snapshotsService.get(name);
   }
 
   @Get('/:name/logs')

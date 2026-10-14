@@ -2,6 +2,8 @@ import type { Router, RouteRecordRaw } from 'vue-router';
 import { createRouter, createWebHistory } from 'vue-router';
 import Default from '../layouts/default/Default.vue';
 import Auth from '../layouts/auth/Auth.vue';
+import { canOr } from '../utils/policy.utils';
+import { podVolumeResourceForRoute } from '../utils/pod-volume-list.utils';
 import { guard, resourceGuard } from '../utils/guard.utils';
 import BackupList from '@velero-ui-app/views/list/BackupList.vue';
 import NotFound from '../layouts/not-found/NotFound.vue';
@@ -145,7 +147,7 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: Pages.POD_VOLUME_BACKUPS.path,
         beforeEnter: () =>
-          resourceGuard(Action.Read, Resources.POD_VOLUME_BACKUP.plural),
+          canOr([{ action: Action.Read, subject: Resources.POD_VOLUME_BACKUP.plural }, { action: Action.Read, subject: Resources.DATA_UPLOAD.plural }]) ? undefined : resourceGuard(Action.Read, Resources.POD_VOLUME_BACKUP.plural),
         children: [
           {
             path: '',
@@ -157,13 +159,14 @@ const routes: Array<RouteRecordRaw> = [
           {
             ...Pages.POD_VOLUME_BACKUP,
             component: PodVolume,
+            beforeEnter: to => { const resource = podVolumeResourceForRoute(true, to.query.resource as string); return resource ? resourceGuard(Action.Read, resource.plural) : { name: Pages.HOME.name }; },
           },
         ],
       },
       {
         path: Pages.POD_VOLUME_RESTORES.path,
         beforeEnter: () =>
-          resourceGuard(Action.Read, Resources.POD_VOLUME_RESTORE.plural),
+          canOr([{ action: Action.Read, subject: Resources.POD_VOLUME_RESTORE.plural }, { action: Action.Read, subject: Resources.DATA_DOWNLOAD.plural }]) ? undefined : resourceGuard(Action.Read, Resources.POD_VOLUME_RESTORE.plural),
         children: [
           {
             path: '',
@@ -175,6 +178,7 @@ const routes: Array<RouteRecordRaw> = [
           {
             ...Pages.POD_VOLUME_RESTORE,
             component: PodVolume,
+            beforeEnter: to => { const resource = podVolumeResourceForRoute(false, to.query.resource as string); return resource ? resourceGuard(Action.Read, resource.plural) : { name: Pages.HOME.name }; },
           },
         ],
       },
