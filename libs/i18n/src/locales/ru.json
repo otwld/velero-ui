@@ -279,7 +279,11 @@
       "Available": "Доступно",
       "Unavailable": "Недоступно",
       "null": "Неизвестно",
-      "undefined": "Неизвестно"
+      "undefined": "Неизвестно",
+      "Accepted": "Принято",
+      "Prepared": "Подготовлено",
+      "Canceling": "Отмена",
+      "Canceled": "Отменено"
     }
   },
   "modal": {
@@ -650,7 +654,21 @@
     "title": "Запросы статуса сервера"
   },
   "podVolumes": {
-    "title": "Тома подов"
+    "title": "Тома подов",
+    "dataMover": "Перенос данных",
+    "snapshot": "Снимок",
+    "snapshotID": "ID снимка",
+    "snapshotContent": "Содержимое снимка",
+    "driver": "Драйвер CSI",
+    "filesystemError": "Не удалось получить тома файловой системы.",
+    "dataMoverError": "Не удалось получить тома переноса данных.",
+    "snapshotError": "Не удалось получить сведения о снимках.",
+    "operations": "Операции резервного копирования",
+    "csiSnapshots": "Снимки CSI",
+    "nativeSnapshots": "Нативные снимки",
+    "failed": "с ошибкой",
+    "storageSnapshotID": "ID снимка хранилища",
+    "filesystem": "Файловая система"
   },
   "podVolumeBackups": {
     "title": "Резервные копии томов подов"

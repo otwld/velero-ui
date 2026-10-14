@@ -125,6 +125,8 @@
                     action: Action.Read,
                     subject: Resources.POD_VOLUME_RESTORE.plural,
                   },
+                  { action: Action.Read, subject: Resources.DATA_UPLOAD.plural },
+                  { action: Action.Read, subject: Resources.DATA_DOWNLOAD.plural },
                 ])
               "
             >
@@ -156,7 +158,7 @@
                 :class="{ hidden: hiddenDropdownPodVolumes }"
                 class="py-2 space-y-2"
               >
-                <li v-if="can(Action.Read, Resources.POD_VOLUME_BACKUP.plural)">
+                <li v-if="canOr([{ action: Action.Read, subject: Resources.POD_VOLUME_BACKUP.plural }, { action: Action.Read, subject: Resources.DATA_UPLOAD.plural }])">
                   <router-link
                     :to="Pages.POD_VOLUME_BACKUPS.path"
                     active-class="bg-gray-100 dark:bg-gray-700"
@@ -170,7 +172,7 @@
                   </router-link>
                 </li>
                 <li
-                  v-if="can(Action.Read, Resources.POD_VOLUME_RESTORE.plural)"
+                  v-if="canOr([{ action: Action.Read, subject: Resources.POD_VOLUME_RESTORE.plural }, { action: Action.Read, subject: Resources.DATA_DOWNLOAD.plural }])"
                 >
                   <router-link
                     :to="Pages.POD_VOLUME_RESTORES.path"

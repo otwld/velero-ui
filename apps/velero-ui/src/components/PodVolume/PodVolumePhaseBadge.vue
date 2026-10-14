@@ -1,65 +1,45 @@
 <template>
-  <span
+  <Badge
     v-if="status"
-    :class="getClass()"
-    class="text-xs font-medium inline-flex items-center me-2 px-2.5 py-0.5 rounded"
-  >
-    {{ t(`resource.phase.${status}`) }}</span
-  >
+    :text="t(`resource.phase.${status}`)"
+    :color="color"
+    :class="{
+      'animate-pulse': status === 'InProgress' || status === 'Canceling',
+    }"
+  />
 </template>
-
 <script lang="ts" setup>
-import type { PropType } from 'vue';
-import {
+import { computed } from 'vue';
+import { useI18n } from 'vue-i18n';
+import type {
   V1PodVolumeBackupPhase,
   V1PodVolumeRestorePhase,
+  V2alpha1DataUploadPhase,
+  V2alpha1DataDownloadPhase,
 } from '@velero-ui/velero';
-import { useI18n } from 'vue-i18n';
+import Badge from '@velero-ui-app/components/Badge.vue';
 
+const props = defineProps<{
+  status?:
+    | V1PodVolumeBackupPhase
+    | V1PodVolumeRestorePhase
+    | V2alpha1DataUploadPhase
+    | V2alpha1DataDownloadPhase;
+}>();
 const { t } = useI18n();
-
-const props = defineProps({
-  status: {
-    type: String as PropType<V1PodVolumeBackupPhase | V1PodVolumeRestorePhase>,
-    required: false,
-    default: undefined,
-  },
-});
-
-const getClass = () => {
+const color = computed(() => {
   switch (props.status) {
-    case V1PodVolumeBackupPhase.Completed:
-    case V1PodVolumeRestorePhase.Completed:
-      return [
-        'bg-green-100',
-        'text-green-800',
-        'dark:bg-green-900',
-        'dark:text-green-300',
-      ];
-    case V1PodVolumeBackupPhase.InProgress:
-    case V1PodVolumeRestorePhase.InProgress:
-      return [
-        'bg-yellow-100',
-        'text-yellow-800',
-        'dark:bg-yellow-900',
-        'dark:text-yellow-300',
-        'animate-pulse',
-      ];
-    case V1PodVolumeBackupPhase.Failed:
-    case V1PodVolumeRestorePhase.Failed:
-      return [
-        'bg-red-100',
-        'text-red-800',
-        'dark:bg-red-900',
-        'dark:text-red-300',
-      ];
+    case 'Completed':
+      return 'green';
+    case 'Failed':
+      return 'red';
+    case 'Canceled':
+      return 'gray';
+    case 'InProgress':
+    case 'Canceling':
+      return 'yellow';
     default:
-      return [
-        'bg-blue-100',
-        'text-blue-800',
-        'dark:bg-blue-900',
-        'dark:text-blue-300',
-      ];
+      return 'blue';
   }
-};
+});
 </script>

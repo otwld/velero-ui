@@ -56,11 +56,17 @@ Below is a table that summarizes all possible resources and which actions are va
 | volumesnapshotlocations | ✅                    | ✅    | ✅      | ✅      | ✅      | ❌        | ❌    |
 | podvolumebackups        | ✅                    | ✅    | ❌      | ❌      | ✅      | ❌        | ❌    |
 | podvolumerestores       | ✅                    | ✅    | ❌      | ❌      | ✅      | ❌        | ❌    |
+| datauploads             | ✅                    | ✅    | ❌      | ❌      | ❌      | ❌        | ❌    |
+| datadownloads           | ✅                    | ✅    | ❌      | ❌      | ❌      | ❌        | ❌    |
 | downloadrequests        | ✅                    | ✅    | ❌      | ❌      | ✅      | ❌        | ❌    |
 | deletebackuprequests    | ✅                    | ✅    | ❌      | ❌      | ✅      | ❌        | ❌    |
 | serverstatusrequests    | ✅                    | ✅    | ❌      | ❌      | ❌      | ❌        | ❌    |
 | settings                | ✅                    | ❌    | ❌      | ❌      | ❌      | ❌        | ❌    |
 | all (All subjects)      | ✅                    | ✅    | ✅      | ✅      | ✅      | ✅        | ✅    |
+
+The backed-up volumes panel reads filesystem backups with `read,podvolumebackups` and snapshot data mover uploads with `read,datauploads`. The restored volumes panel uses `read,podvolumerestores` and `read,datadownloads`. Snapshot details use `read,backups`. Existing `read,all` policies include these resources.
+
+Live CSI snapshot details also require the service account to list `volumesnapshots` and `volumesnapshotcontents` in `snapshot.storage.k8s.io` across namespaces. The supplied Helm chart and Kubernetes manifests include these read permissions; update the ClusterRole when upgrading an existing deployment or using custom RBAC.
 
 ## Default behavior for users
 

@@ -1,3 +1,5 @@
+import { DataUploadController } from './modules/data-upload/data-upload.controller';
+import { DataDownloadController } from './modules/data-download/data-download.controller';
 import { Module } from '@nestjs/common';
 
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
@@ -114,7 +116,7 @@ import { CacheModule } from "@nestjs/cache-manager";
     LoggerModule,
     CaslModule,
   ],
-  controllers: [],
+  controllers: [DataUploadController, DataDownloadController],
   providers: [
     {
       provide: APP_FILTER,

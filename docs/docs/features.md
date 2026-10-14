@@ -36,3 +36,11 @@ hide_title: true
 
 - ⚡ **Optimized Performance:** Velero UI leverages caching for fast performance and quick rendering.
 - 📱 **Responsive Design:** Fully functional on mobile devices and tablets.
+
+## Snapshot and data mover progress
+
+The backup details page displays filesystem volumes, CSI snapshots, native snapshots, and data mover uploads in the backed-up volumes panel. Data mover entries show the source PVC, snapshot reference and ID, phase, byte progress, and failure messages. Restore details also show data mover downloads and their target PVCs. Volume progress refreshes every five seconds while the panel is open.
+
+Backup status shows completed/attempted item operations, failed operations, and CSI/native snapshot counts. CSI snapshot details come from live Kubernetes objects while the backup runs and from Velero backup metadata once it finishes, so temporary snapshot cleanup does not remove the archived details. Native snapshot details are available after the backup finishes.
+
+The dedicated Pod Volume Backups and Pod Volume Restores menus combine filesystem volumes with data mover uploads/downloads. Search, status and backup filters, sorting, pagination, and refresh apply to the combined list. Each data mover row links to its progress and original manifest; restore rows display the target PVC namespace and parent restore. Filesystem volumes retain their delete actions.

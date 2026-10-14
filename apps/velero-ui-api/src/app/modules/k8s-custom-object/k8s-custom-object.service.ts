@@ -26,7 +26,8 @@ import { AppLogger } from '@velero-ui-api/shared/modules/logger/logger.service';
 import { Socket } from 'socket.io';
 import { KubernetesListObjectWithFilters, Search } from '@velero-ui/shared-types';
 import { filters, slice, sort } from '@velero-ui-api/shared/utils/search.utils';
-import { SearchDto } from '@velero-ui-api/shared/dto/search.dto';
+export const resourceApiVersion = (plural: string): string =>
+  ['datauploads', 'datadownloads'].includes(plural) ? 'v2alpha1' : VELERO.VERSION;
 
 @Injectable()
 export class K8sCustomObjectService {
@@ -58,7 +59,7 @@ export class K8sCustomObjectService {
     return from(
       this.k8sCustomObjectApi.listNamespacedCustomObject({
         group: VELERO.GROUP,
-        version: VELERO.VERSION,
+        version: resourceApiVersion(plural),
         namespace: this.configService.get('velero.namespace'),
         plural,
       })
@@ -102,7 +103,7 @@ export class K8sCustomObjectService {
     return from(
       this.k8sCustomObjectApi.getNamespacedCustomObject({
         group: VELERO.GROUP,
-        version: VELERO.VERSION,
+        version: resourceApiVersion(plural),
         namespace: this.configService.get('velero.namespace'),
         plural,
         name,
@@ -126,7 +127,7 @@ export class K8sCustomObjectService {
     return from(
       this.k8sCustomObjectApi.listNamespacedCustomObject({
         group: VELERO.GROUP,
-        version: VELERO.VERSION,
+        version: resourceApiVersion(plural),
         namespace: this.configService.get('velero.namespace'),
         plural,
       })
@@ -146,7 +147,7 @@ export class K8sCustomObjectService {
     return from(
       this.k8sCustomObjectApi.createNamespacedCustomObject({
         group: VELERO.GROUP,
-        version: VELERO.VERSION,
+        version: resourceApiVersion(plural),
         namespace: this.configService.get('velero.namespace'),
         plural,
         body,
@@ -179,7 +180,7 @@ export class K8sCustomObjectService {
       this.k8sCustomObjectApi.patchNamespacedCustomObject(
         {
           group: VELERO.GROUP,
-          version: VELERO.VERSION,
+          version: resourceApiVersion(plural),
           namespace: this.configService.get('velero.namespace'),
           plural,
           name,
@@ -212,7 +213,7 @@ export class K8sCustomObjectService {
         concatMap((name: string) =>
           this.k8sCustomObjectApi.deleteNamespacedCustomObject({
             group: VELERO.GROUP,
-            version: VELERO.VERSION,
+            version: resourceApiVersion(plural),
             namespace: this.configService.get('velero.namespace'),
             plural,
             name,
@@ -243,7 +244,7 @@ export class K8sCustomObjectService {
     return from(
       this.k8sCustomObjectApi.deleteNamespacedCustomObject({
         group: VELERO.GROUP,
-        version: VELERO.VERSION,
+        version: resourceApiVersion(plural),
         namespace: this.configService.get('velero.namespace'),
         plural,
         name,
@@ -283,7 +284,7 @@ export class K8sCustomObjectService {
       const resourceVersion: string = version ? version : undefined;
 
       const controller: AbortController = await this.k8sWatcher.watch(
-        `/apis/${VELERO.GROUP}/${VELERO.VERSION}/namespaces/${this.configService.get('velero.namespace')}/${plural}`,
+        `/apis/${VELERO.GROUP}/${resourceApiVersion(plural)}/namespaces/${this.configService.get('velero.namespace')}/${plural}`,
         { fieldSelector, resourceVersion },
         (phase: string, obj: KubernetesObject) => {
           this.logger.debug(

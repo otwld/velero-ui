@@ -279,7 +279,11 @@
       "Available": "Available",
       "Unavailable": "Unavailable",
       "null": "Unknown",
-      "undefined": "Unknown"
+      "undefined": "Unknown",
+      "Accepted": "Accepted",
+      "Prepared": "Prepared",
+      "Canceling": "Canceling",
+      "Canceled": "Canceled"
     }
   },
   "modal": {
@@ -650,7 +654,21 @@
     "title": "Server Status Requests"
   },
   "podVolumes": {
-    "title": "Pod Volumes"
+    "title": "Pod Volumes",
+    "dataMover": "Data mover",
+    "snapshot": "Snapshot",
+    "snapshotID": "Snapshot ID",
+    "snapshotContent": "Snapshot content",
+    "driver": "CSI driver",
+    "filesystemError": "Unable to retrieve filesystem volumes.",
+    "dataMoverError": "Unable to retrieve data mover volumes.",
+    "snapshotError": "Unable to retrieve snapshot details.",
+    "operations": "Backup item operations",
+    "csiSnapshots": "CSI snapshots",
+    "nativeSnapshots": "Native snapshots",
+    "failed": "failed",
+    "storageSnapshotID": "Storage snapshot ID",
+    "filesystem": "Filesystem"
   },
   "podVolumeBackups": {
     "title": "Pod Volume Backups"
