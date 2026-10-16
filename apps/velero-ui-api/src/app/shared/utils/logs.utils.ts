@@ -1,10 +1,13 @@
 import { Log, VeleroLog } from '@velero-ui/shared-types';
 
+const cleanValue = (value: string): string =>
+  value.replace(/velero\//, '').replace(/\/plugins\//, '');
+
 const execRegex = (regex: RegExp, line: string): string | null => {
   const result = regex.exec(line);
 
   if (result && result[1]) {
-    return result[1].replace(/velero\//, '').replace(/\/plugins\//, '');
+    return cleanValue(result[1]);
   }
   return null;
 };
@@ -41,8 +44,84 @@ const parseValueGetters: Record<string, (line: string) => string | null> = {
   downloadRequest: (line) => execRegex(/downloadRequest=([^\s]+)/, line),
 };
 
+/**
+ * Keys emitted by Velero with `--log-format=json` (logrus JSONFormatter).
+ * They are the same logrus fields matched by `parseValueGetters`, except the
+ * error message, which Velero writes to `error.message` in JSON mode.
+ */
+const jsonValueKeys: Partial<Record<keyof VeleroLog, string[]>> = {
+  plugin: ['plugin'],
+  backupStorageLocation: ['backup-storage-location', 'backupLocation', 'bsl'],
+  volumeSnapshotLocation: [
+    'volume-snapshot-location',
+    'volumeSnapshotLocation',
+    'vsl',
+  ],
+  backup: ['backup'],
+  backupRepository: ['backupRepo'],
+  podVolumeBackup: ['podvolumebackup', 'pvb'],
+  podVolumeRestore: ['podvolumerestore', 'pvr'],
+  namespace: ['namespace'],
+  resource: ['resource'],
+  group: ['group'],
+  name: ['name'],
+  logSource: ['logSource'],
+  error: ['error.message', 'error'],
+  expiration: ['expiration'],
+  deleteBackupRequest: ['deleteBackupRequest'],
+  serverStatusRequest: ['serverStatusRequest'],
+  downloadRequest: ['downloadRequest'],
+};
+
+const parseVeleroJsonLog = (line: string): VeleroLog | null => {
+  let entry: unknown;
+
+  try {
+    entry = JSON.parse(line);
+  } catch {
+    return null;
+  }
+
+  if (!entry || typeof entry !== 'object' || Array.isArray(entry)) {
+    return null;
+  }
+
+  const fields = entry as Record<string, unknown>;
+
+  if (typeof fields.level !== 'string' || typeof fields.msg !== 'string') {
+    return null;
+  }
+
+  const object: VeleroLog = {
+    date: typeof fields.time === 'string' ? fields.time : undefined,
+    level: fields.level,
+    message: fields.msg,
+    raw: line,
+  };
+
+  Object.entries(jsonValueKeys).forEach(([key, jsonKeys]) => {
+    const value = jsonKeys
+      .map((jsonKey) => fields[jsonKey])
+      .find((val): val is string => typeof val === 'string' && val !== '');
+
+    if (value) {
+      object[key] = cleanValue(value);
+    }
+  });
+
+  return object;
+};
+
 export const parseVeleroLog = (line: string): VeleroLog => {
   try {
+    if (line.trim().startsWith('{')) {
+      const jsonLog = parseVeleroJsonLog(line);
+
+      if (jsonLog) {
+        return jsonLog;
+      }
+    }
+
     const regex = /time="([^"]+)"\s+level=([^\s]+)\s+msg="([^"]+)"/;
 
     const match = regex.exec(line);
