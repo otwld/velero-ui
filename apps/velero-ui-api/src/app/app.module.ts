@@ -1,3 +1,4 @@
+import { PodVolumeListModule } from './modules/pod-volume-list/pod-volume-list.module';
 import { DataUploadController } from './modules/data-upload/data-upload.controller';
 import { DataDownloadController } from './modules/data-download/data-download.controller';
 import { Module } from '@nestjs/common';
@@ -110,6 +111,7 @@ import { CacheModule } from "@nestjs/cache-manager";
     BackupRepositoryModule,
     PodVolumeBackupModule,
     PodVolumeRestoreModule,
+    PodVolumeListModule,
     StatsModule,
     AppConfigModule,
     AuthModule,

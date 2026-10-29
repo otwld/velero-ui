@@ -1,20 +1,33 @@
 <template>
   <div class="mb-4 text-gray-900 dark:text-white">
     <div class="flex flex-wrap items-center gap-2 font-semibold">
-      <span>{{ snapshot.namespace ? `${snapshot.namespace}/` : ''
-      }}{{ snapshot.volume || snapshot.name }}</span>
+      <span
+        >{{ snapshot.namespace ? `${snapshot.namespace}/` : ''
+        }}{{ snapshot.volume || snapshot.name }}</span
+      >
       <Badge
         :text="`${snapshot.type} ${t('podVolumes.snapshot')}`"
         color="blue"
       />
       <Badge
-        :text="t(`resource.phase.${snapshot.phase}`)"
+        v-if="snapshot.snapshotDataMoved"
+        :text="t('podVolumes.dataMover')"
+        color="blue"
+      />
+      <Badge
+        :text="
+          t(
+            `resource.phase.${snapshot.phase === 'Unknown' ? 'undefined' : snapshot.phase}`
+          )
+        "
         :color="
           snapshot.phase === 'Failed'
             ? 'red'
             : snapshot.phase === 'Completed'
               ? 'green'
-              : 'yellow'
+              : snapshot.phase === 'Unknown'
+                ? 'gray'
+                : 'yellow'
         "
       />
     </div>
@@ -22,7 +35,10 @@
       {{ snapshot.name }}
     </p>
     <p v-if="snapshot.snapshotID" class="text-sm break-all">
-      {{ t('podVolumes.snapshotID') }}: {{ snapshot.snapshotID }}
+      {{ t('podVolumes.storageSnapshotID') }}: {{ snapshot.snapshotID }}
+    </p>
+    <p v-if="snapshot.dataMoverSnapshotID" class="text-sm break-all">
+      {{ t('podVolumes.snapshotID') }}: {{ snapshot.dataMoverSnapshotID }}
     </p>
     <p v-if="snapshot.contentName" class="text-sm break-all">
       {{ t('podVolumes.snapshotContent') }}: {{ snapshot.contentName }}
@@ -33,6 +49,7 @@
     <p v-if="snapshot.size !== undefined" class="text-sm">
       {{ t('resource.status.bytes') }}: {{ convertBytes(snapshot.size) }}
     </p>
+    <p v-else class="text-sm">{{ t('podVolumes.unknownSize') }}</p>
     <p v-if="snapshot.message" class="text-sm text-red-600 dark:text-red-400">
       {{ snapshot.message }}
     </p>

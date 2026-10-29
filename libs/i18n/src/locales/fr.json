@@ -300,6 +300,16 @@
     "nativeSnapshots": "Instantanés natifs",
     "failed": "en échec",
     "storageSnapshotID": "ID de l’instantané de stockage",
-    "filesystem": "Système de fichiers"
+    "filesystem": "Système de fichiers",
+    "partial": "Les informations sur les volumes sont incomplètes. Les volumes disponibles sont affichés ci-dessous.",
+    "unavailable": "Les métadonnées de cette source sont indisponibles.",
+    "sourceError": "Impossible de récupérer cette source.",
+    "unknownSize": "Taille inconnue",
+    "knownSize": "octets connus uniquement",
+    "sources": {
+      "volumeInfos": "Informations archivées des volumes",
+      "native": "Snapshots natifs",
+      "csi": "Snapshots CSI"
+    }
   }
 }

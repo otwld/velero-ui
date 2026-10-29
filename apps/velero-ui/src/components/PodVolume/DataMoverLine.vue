@@ -15,13 +15,19 @@
       {{ t('podVolumes.snapshot') }}: {{ snapshotName }}
       <Badge
         v-if="snapshot"
-        :text="t(`resource.phase.${snapshot.phase}`)"
+        :text="
+          t(
+            `resource.phase.${snapshot.phase === 'Unknown' ? 'undefined' : snapshot.phase}`
+          )
+        "
         :color="
           snapshot.phase === 'Failed'
             ? 'red'
             : snapshot.phase === 'Completed'
               ? 'green'
-              : 'yellow'
+              : snapshot.phase === 'Unknown'
+                ? 'gray'
+                : 'yellow'
         "
       />
     </p>
@@ -47,8 +53,10 @@
     <div v-if="operation.status?.progress" class="mt-1">
       <div class="flex justify-between text-xs mb-1">
         <span>{{ t('resource.status.bytes') }}</span>
-        <span>{{ convertBytes(operation.status.progress.bytesDone || 0) }} /
-          {{ convertBytes(operation.status.progress.totalBytes || 0) }}</span>
+        <span
+          >{{ convertBytes(operation.status.progress.bytesDone || 0) }} /
+          {{ convertBytes(operation.status.progress.totalBytes || 0) }}</span
+        >
       </div>
       <div
         class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700"

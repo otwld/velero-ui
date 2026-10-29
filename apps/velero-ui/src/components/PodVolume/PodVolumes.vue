@@ -7,11 +7,7 @@
         {{ t('podVolumes.title') }}
       </h3>
       <Badge :prefix-icon="faCubes" :text="String(count)" color="blue" />
-      <Badge
-        :prefix-icon="faSquareBinary"
-        :text="convertBytes(totalSize)"
-        color="blue"
-      />
+      <Badge :prefix-icon="faSquareBinary" :text="sizeLabel" color="blue" />
     </div>
     <div class="overflow-auto mt-2 pr-2 max-h-[300px]">
       <Skeleton v-if="loading && count === 0" height="3" width="96" />
@@ -33,6 +29,26 @@
       >
         {{ t('podVolumes.snapshotError') }}
       </p>
+      <div
+        v-if="snapshotIssues.length"
+        role="status"
+        class="text-sm text-amber-700 dark:text-amber-300"
+      >
+        <p>{{ t('podVolumes.partial') }}</p>
+        <p
+          v-for="issue in snapshotIssues"
+          :key="`${issue.source}:${issue.reason}`"
+        >
+          {{ t(`podVolumes.sources.${issue.source}`) }}:
+          {{
+            t(
+              issue.reason === 'unavailable'
+                ? 'podVolumes.unavailable'
+                : 'podVolumes.sourceError'
+            )
+          }}
+        </p>
+      </div>
       <p
         v-if="!loading && !hasError && count === 0"
         class="text-gray-500 dark:text-gray-400"
@@ -62,7 +78,7 @@
 import { useI18n } from 'vue-i18n';
 import {
   Resources,
-  type BackupSnapshot,
+  type BackupSnapshotsResult,
   type V1Backup,
   type V1PodVolumeBackup,
   type V1PodVolumeRestore,
@@ -120,6 +136,7 @@ const snapshots = useQuery({
   queryKey: computed(() => [
     'backup-snapshots',
     name.value,
+    uid.value,
     props.backup?.status?.phase,
     snapshotCount.value,
   ]),
@@ -131,29 +148,44 @@ const snapshots = useQuery({
   ),
   queryFn: async () =>
     (
-      await axios.get<BackupSnapshot[]>(
+      await axios.get<BackupSnapshotsResult>(
         `${Resources.BACKUP.route}/${name.value}/snapshots`
       )
     ).data,
-  initialData: [] as BackupSnapshot[],
+  placeholderData: (previous, query) =>
+    query?.queryKey[1] === name.value && query?.queryKey[2] === uid.value
+      ? previous
+      : undefined,
   refetchInterval: computed(() =>
     props.backup?.status?.completionTimestamp ? false : 5000
   ),
   refetchOnWindowFocus: false,
   retry: 1,
 });
+const snapshotItems = computed(() =>
+  allowedSnapshots ? snapshots.data.value?.items || [] : []
+);
+const snapshotIssues = computed(() =>
+  allowedSnapshots ? snapshots.data.value?.issues || [] : []
+);
 const snapshotFor = (operation: V2alpha1DataUpload | V2alpha1DataDownload) => {
   if (!('sourcePVC' in operation.spec)) return undefined;
   const spec = operation.spec;
-  return snapshots.data.value.find(
+  const upload = operation as V2alpha1DataUpload;
+  return snapshotItems.value.find(
     (snapshot) =>
       snapshot.type === 'CSI' &&
-      snapshot.name === spec.csiSnapshot?.volumeSnapshot &&
-      snapshot.namespace === (spec.csiSnapshot?.volumeSnapshotNamespace || spec.sourceNamespace)
+      snapshot.namespace ===
+        (spec.csiSnapshot?.volumeSnapshotNamespace || spec.sourceNamespace) &&
+      (snapshot.name === spec.csiSnapshot?.volumeSnapshot ||
+        (snapshot.snapshotDataMoved &&
+          ((!!snapshot.dataMoverSnapshotID &&
+            snapshot.dataMoverSnapshotID === upload.status?.snapshotID) ||
+            snapshot.volume === spec.sourcePVC)))
   );
 };
 const standaloneSnapshots = computed(() =>
-  snapshots.data.value.filter(
+  snapshotItems.value.filter(
     (snapshot) =>
       !movers.data.value.some((mover) => snapshotFor(mover) === snapshot)
   )
@@ -176,6 +208,31 @@ const totalSize = computed(
       0
     )
 );
+const unknownSize = computed(
+  () =>
+    [...filesystem.data.value, ...movers.data.value].some(
+      (operation) => operation.status?.progress?.bytesDone === undefined
+    ) ||
+    standaloneSnapshots.value.some((snapshot) => snapshot.size === undefined)
+);
+const sizeLabel = computed(() => {
+  if (unknownSize.value) {
+    return totalSize.value > 0
+      ? `${convertBytes(totalSize.value)} + ${t('podVolumes.unknownSize')}`
+      : t('podVolumes.unknownSize');
+  }
+  if (
+    snapshotIssues.value.length ||
+    snapshots.error.value ||
+    filesystem.error.value ||
+    movers.error.value
+  ) {
+    return totalSize.value > 0
+      ? `${convertBytes(totalSize.value)} (${t('podVolumes.knownSize')})`
+      : t('podVolumes.unknownSize');
+  }
+  return convertBytes(totalSize.value);
+});
 const loading = computed(
   () =>
     filesystem.isFetching.value ||
@@ -184,6 +241,11 @@ const loading = computed(
 );
 const hasError = computed(
   () =>
-    !!(filesystem.error.value || movers.error.value || snapshots.error.value)
+    !!(
+      filesystem.error.value ||
+      movers.error.value ||
+      snapshots.error.value ||
+      snapshotIssues.value.length
+    )
 );
 </script>

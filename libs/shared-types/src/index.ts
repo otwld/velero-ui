@@ -11,3 +11,6 @@ export * from './models/search/search.models';
 export * from './models/logs/logs.models';
 export * from './enums/index';
 export * from './regex/index';
+
+export * from './models/list/pod-volume-list.models';
+export * from './utils/pod-volume-list.utils';

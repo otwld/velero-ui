@@ -668,7 +668,17 @@
     "nativeSnapshots": "原生快照",
     "failed": "失败",
     "storageSnapshotID": "存储快照 ID",
-    "filesystem": "文件系统"
+    "filesystem": "文件系统",
+    "partial": "卷信息不完整。可用卷显示如下。",
+    "unavailable": "此来源的元数据不可用。",
+    "sourceError": "无法获取此来源的数据。",
+    "unknownSize": "大小未知",
+    "knownSize": "仅已知字节数",
+    "sources": {
+      "volumeInfos": "已归档卷信息",
+      "native": "原生快照",
+      "csi": "CSI 快照"
+    }
   },
   "podVolumeBackups": {
     "title": "Pod 卷备份"

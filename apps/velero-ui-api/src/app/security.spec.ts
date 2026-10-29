@@ -195,4 +195,36 @@ describe('security boundaries', () => {
       expect(handlers.every((handler) => handler(downloader))).toBe(true);
     }
   );
+
+  it('requires backup read permission for snapshot metadata and preserves partial results', async () => {
+    const policies = factory();
+    const handlers = Reflect.getMetadata(
+      CHECK_POLICIES_KEY,
+      BackupController.prototype.snapshots
+    );
+    const ability = (subject: string) =>
+      policies.createForUser({
+        permissions: [{ action: Action.Read, subject }],
+      } as JwtPayload);
+    expect(handlers.every((handler) => handler(ability('backups')))).toBe(true);
+    expect(handlers.every((handler) => handler(ability('datauploads')))).toBe(
+      false
+    );
+    expect(
+      handlers.every((handler) => handler(ability('podvolumebackups')))
+    ).toBe(false);
+    const result = {
+      items: [{ type: 'Native', name: 'pv', phase: 'Completed' }],
+      issues: [{ source: 'csi', reason: 'error' }],
+    };
+    const get = jest.fn().mockReturnValue(result);
+    const controller = new BackupController(
+      {} as never,
+      { get } as never,
+      {} as never,
+      {} as never
+    );
+    expect(controller.snapshots('daily')).toBe(result);
+    expect(get).toHaveBeenCalledWith('daily');
+  });
 });

@@ -1,4 +1,8 @@
-import { csiSnapshots, nativeSnapshots } from './backup-snapshots.utils';
+import {
+  csiSnapshots,
+  nativeSnapshots,
+  volumeInfoSnapshots,
+} from './backup-snapshots.utils';
 
 describe('backup snapshot metadata', () => {
   const snapshot = {
@@ -87,5 +91,56 @@ describe('backup snapshot metadata', () => {
       type: 'Native',
     });
     expect(csiSnapshots([{ metadata: { name: 'new' } }], [])).toHaveLength(1);
+  });
+});
+
+describe('versioned volume info', () => {
+  it('preserves incomplete 1.13 state instead of inventing success or zero size', () => {
+    expect(
+      volumeInfoSnapshots([
+        {
+          backupMethod: 'CSISnapshot',
+          pvcName: 'data',
+          snapshotDataMoved: true,
+          csiSnapshotInfo: {
+            snapshotHandle: 'unknown',
+            size: 0,
+            vscName: 'unknown',
+          },
+        },
+      ])[0]
+    ).toMatchObject({ phase: 'Unknown', snapshotDataMoved: true });
+    expect(
+      volumeInfoSnapshots([
+        {
+          backupMethod: 'CSISnapshot',
+          snapshotDataMoved: true,
+          csiSnapshotInfo: { size: 1024 },
+        },
+      ])[0].size
+    ).toBeUndefined();
+  });
+  it('preserves PascalCase modern states and data mover identity', () => {
+    expect(
+      volumeInfoSnapshots([
+        {
+          backupMethod: 'CSISnapshot',
+          pvcName: 'data',
+          result: 'failed',
+          snapshotDataMoved: true,
+          snapshotDataMovementInfo: {
+            snapshotHandle: 'repo',
+            size: 12,
+            Phase: 'Failed',
+          },
+          csiSnapshotInfo: { snapshotHandle: 'provider', size: 100 },
+        },
+      ])[0]
+    ).toMatchObject({
+      phase: 'Failed',
+      snapshotID: 'provider',
+      dataMoverSnapshotID: 'repo',
+      size: 12,
+    });
   });
 });

@@ -668,7 +668,17 @@
     "nativeSnapshots": "Native snapshots",
     "failed": "failed",
     "storageSnapshotID": "Storage snapshot ID",
-    "filesystem": "Filesystem"
+    "filesystem": "Filesystem",
+    "partial": "Volume information is incomplete. Available volumes are shown below.",
+    "unavailable": "Metadata is unavailable for this source.",
+    "sourceError": "Unable to retrieve this source.",
+    "unknownSize": "Unknown size",
+    "knownSize": "known bytes only",
+    "sources": {
+      "volumeInfos": "Archived volume information",
+      "native": "Native snapshots",
+      "csi": "CSI snapshots"
+    }
   },
   "podVolumeBackups": {
     "title": "Pod Volume Backups"

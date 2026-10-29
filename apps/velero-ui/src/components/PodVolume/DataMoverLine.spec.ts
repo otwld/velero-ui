@@ -91,4 +91,33 @@ describe('data mover volume line', () => {
     expect(wrapper.text()).toContain('restored/database');
     expect(wrapper.text()).toContain('repository-id');
   });
+
+  it('keeps incomplete archived snapshot state unknown while showing provider metadata', () => {
+    const wrapper = shallowMount(DataMoverLine, {
+      props: {
+        operation: {
+          spec,
+          status: { phase: V2alpha1DataUploadPhase.Canceled },
+        },
+        snapshot: {
+          type: 'CSI',
+          name: 'snapshot',
+          phase: 'Unknown',
+          snapshotID: 'provider-id',
+          contentName: 'content',
+          driver: 'csi.example',
+        },
+      },
+    });
+    const labels = wrapper
+      .findAllComponents({ name: 'Badge' })
+      .map((badge) => badge.props('text'));
+    expect(labels).toContain('resource.phase.undefined');
+    expect(labels).toContain('resource.phase.Canceled');
+    expect(labels).not.toContain('resource.phase.Completed');
+    expect(wrapper.text()).toContain('provider-id');
+    expect(wrapper.text()).toContain('content');
+    expect(wrapper.text()).toContain('csi.example');
+    expect(wrapper.find('[role="progressbar"]').exists()).toBe(false);
+  });
 });

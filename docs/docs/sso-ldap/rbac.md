@@ -68,6 +68,8 @@ The backed-up volumes panel reads filesystem backups with `read,podvolumebackups
 
 Live CSI snapshot details also require the service account to list `volumesnapshots` and `volumesnapshotcontents` in `snapshot.storage.k8s.io` across namespaces. The supplied Helm chart and Kubernetes manifests include these read permissions; update the ClusterRole when upgrading an existing deployment or using custom RBAC.
 
+Archived snapshot metadata is retrieved through Velero DownloadRequests under the service account's existing permissions. The snapshot endpoint requires `read,backups`; it does not grant access to the separate filesystem or live data mover resources. Missing optional CRDs can yield empty lists, but a forbidden response remains an error. If only part of the snapshot metadata is available, the panel keeps those results and marks the information as incomplete.
+
 ## Default behavior for users
 
 - Internal user is assigned to all actions as `u,admin,manage,all`.

@@ -5,15 +5,7 @@ import {
   KubernetesListObject,
 } from '@kubernetes/client-node';
 import { HttpService } from '@nestjs/axios';
-import {
-  catchError,
-  concatMap,
-  forkJoin,
-  map,
-  Observable,
-  of,
-  throwError,
-} from 'rxjs';
+import { catchError, concatMap, forkJoin, map, Observable, of } from 'rxjs';
 import { createHash } from 'node:crypto';
 import { unzipSync } from 'node:zlib';
 import {
@@ -21,6 +13,9 @@ import {
   BackupCSISnapshotContent,
   BackupNativeSnapshot,
   BackupSnapshot,
+  BackupSnapshotIssue,
+  BackupSnapshotsResult,
+  BackupVolumeInfo,
   Resources,
   V1Backup,
   V1BackupPhase,
@@ -29,7 +24,12 @@ import {
 import { K8S_CONNECTION } from '../../shared/utils/k8s.utils';
 import { K8sCustomObjectService } from '../k8s-custom-object/k8s-custom-object.service';
 import { DownloadRequestService } from '../download-request/download-request.service';
-import { csiSnapshots, nativeSnapshots } from './backup-snapshots.utils';
+import {
+  csiSnapshots,
+  nativeSnapshots,
+  volumeInfoSnapshots,
+  mergeSnapshots,
+} from './backup-snapshots.utils';
 
 @Injectable()
 export class BackupSnapshotsService {
@@ -44,7 +44,7 @@ export class BackupSnapshotsService {
     this.api = k8s.makeApiClient(CustomObjectsApi);
   }
 
-  get(name: string): Observable<BackupSnapshot[]> {
+  get(name: string): Observable<BackupSnapshotsResult> {
     return this.objects.getByName<V1Backup>(Resources.BACKUP.plural, name).pipe(
       concatMap((backup) => {
         const finished = [
@@ -53,37 +53,168 @@ export class BackupSnapshotsService {
           V1BackupPhase.Failed,
         ].includes(backup.status?.phase);
         if (!finished) {
-          // No CSI objects are expected when snapshots are explicitly disabled.
-          if (backup.spec?.snapshotVolumes === false) return of([]);
-          return this.liveCSI(backup);
+          if (backup.spec?.snapshotVolumes === false)
+            return of({ items: [], issues: [] });
+          return this.settle('csi', this.liveCSI(backup));
         }
-        // Archived metadata remains available after temporary CSI objects are deleted.
-        const native = backup.status?.volumeSnapshotsAttempted
-          ? this.metadata<BackupNativeSnapshot>(
-              name,
-              V1DownloadTargetKind.BackupVolumeSnapshots
-            ).pipe(map(nativeSnapshots))
-          : of([]);
-        const csi = backup.status?.csiVolumeSnapshotsAttempted
-          ? forkJoin({
-              snapshots: this.metadata<BackupCSISnapshot>(
-                name,
-                V1DownloadTargetKind.CSIBackupVolumeSnapshots
-              ),
-              contents: this.metadata<BackupCSISnapshotContent>(
-                name,
-                V1DownloadTargetKind.CSIBackupVolumeSnapshotContents
-              ),
-            }).pipe(
-              map(({ snapshots, contents }) =>
-                csiSnapshots(snapshots, contents)
-              )
-            )
-          : of([]);
-        return forkJoin({ native, csi }).pipe(
-          map(({ native, csi }) => [...native, ...csi])
+        if (
+          !backup.status?.volumeSnapshotsAttempted &&
+          !backup.status?.csiVolumeSnapshotsAttempted &&
+          !backup.spec?.snapshotMoveData &&
+          backup.spec?.snapshotVolumes !== true
+        ) {
+          return of({ items: [], issues: [] });
+        }
+        return this.settle(
+          'volumeInfos',
+          this.metadata<BackupVolumeInfo>(
+            name,
+            V1DownloadTargetKind.BackupVolumeInfos
+          ).pipe(map(volumeInfoSnapshots))
+        ).pipe(
+          concatMap((current) => {
+            // Access, network and corruption errors must never masquerade as old formats.
+            const currentError = current.issues.some(
+              (issue) => issue.reason === 'error'
+            );
+            const needs = (type: BackupSnapshot['type'], expected?: number) => {
+              const items = current.items.filter((item) => item.type === type);
+              return (
+                items.some(
+                  (item) =>
+                    !item.snapshotDataMoved &&
+                    (item.phase === 'Unknown' || !item.snapshotID)
+                ) ||
+                expected > items.length ||
+                (!items.length &&
+                  !currentError &&
+                  current.issues.length > 0 &&
+                  expected === undefined &&
+                  ((type === 'CSI' && backup.spec?.snapshotMoveData) ||
+                    (backup.spec?.snapshotVolumes === true &&
+                      !backup.status?.volumeSnapshotsAttempted &&
+                      !backup.status?.csiVolumeSnapshotsAttempted)))
+              );
+            };
+            const nativeNeeded = needs(
+              'Native',
+              backup.status?.volumeSnapshotsAttempted
+            );
+            const csiNeeded = needs(
+              'CSI',
+              backup.status?.csiVolumeSnapshotsAttempted
+            );
+            const native = nativeNeeded
+              ? this.settle(
+                  'native',
+                  this.metadata<BackupNativeSnapshot>(
+                    name,
+                    V1DownloadTargetKind.BackupVolumeSnapshots
+                  ).pipe(map(nativeSnapshots))
+                )
+              : of({ items: [], issues: [] });
+            const csi = csiNeeded
+              ? this.settle(
+                  'csi',
+                  forkJoin({
+                    snapshots: this.metadata<BackupCSISnapshot>(
+                      name,
+                      V1DownloadTargetKind.CSIBackupVolumeSnapshots
+                    ),
+                    contents: this.metadata<BackupCSISnapshotContent>(
+                      name,
+                      V1DownloadTargetKind.CSIBackupVolumeSnapshotContents
+                    ),
+                  }).pipe(
+                    map(({ snapshots, contents }) =>
+                      csiSnapshots(snapshots, contents)
+                    )
+                  )
+                )
+              : of({ items: [], issues: [] });
+            return forkJoin({ native, csi }).pipe(
+              map(({ native, csi }) => ({
+                items: mergeSnapshots(current.items, [
+                  ...native.items,
+                  ...csi.items,
+                ]),
+                // Successful legacy fallback resolves missing VolumeInfos, but source failures stay visible.
+                issues: [
+                  ...(currentError ? current.issues : []),
+                  ...native.issues,
+                  ...csi.issues,
+                  ...(nativeNeeded &&
+                  native.issues.length === 0 &&
+                  mergeSnapshots(
+                    current.items.filter((item) => item.type === 'Native'),
+                    native.items
+                  ).length < (backup.status?.volumeSnapshotsAttempted || 0)
+                    ? [
+                        {
+                          source: 'native' as const,
+                          reason: 'unavailable' as const,
+                        },
+                      ]
+                    : []),
+                  ...(csiNeeded &&
+                  csi.issues.length === 0 &&
+                  mergeSnapshots(
+                    current.items.filter((item) => item.type === 'CSI'),
+                    csi.items
+                  ).length < (backup.status?.csiVolumeSnapshotsAttempted || 0)
+                    ? [
+                        {
+                          source: 'csi' as const,
+                          reason: 'unavailable' as const,
+                        },
+                      ]
+                    : []),
+                ],
+              }))
+            );
+          })
         );
       })
+    );
+  }
+
+  private settle(
+    source: BackupSnapshotIssue['source'],
+    request: Observable<BackupSnapshot[]>
+  ): Observable<BackupSnapshotsResult> {
+    return request.pipe(
+      map((items) => ({ items, issues: [] })),
+      catchError((error) =>
+        of({
+          items: [],
+          issues: [
+            {
+              source,
+              reason: this.isUnavailable(error)
+                ? ('unavailable' as const)
+                : ('error' as const),
+            },
+          ],
+        })
+      )
+    );
+  }
+
+  private isUnavailable(error: {
+    code?: number;
+    response?: { status?: number; data?: unknown };
+  }): boolean {
+    // Classify only explicit 404 responses. Generic S3 403 also means denied access.
+    const status = error?.response?.status ?? error?.code;
+    const data = error?.response?.data;
+    const body = Buffer.isBuffer(data)
+      ? data.toString()
+      : typeof data === 'string'
+        ? data
+        : '';
+    if (/<Code>NoSuchBucket<\/Code>/.test(body)) return false;
+    return (
+      status === 404 || (status === 403 && /<Code>NoSuchKey<\/Code>/.test(body))
     );
   }
 
@@ -118,9 +249,6 @@ export class BackupSnapshotsService {
                 backup.metadata.uid
           )
         )
-      ),
-      catchError((error) =>
-        error.code === 404 ? of([]) : throwError(() => error)
       )
     );
   }
@@ -135,10 +263,20 @@ export class BackupSnapshotsService {
           responseType: 'arraybuffer',
         })
       ),
-      map(
-        (response) =>
-          (JSON.parse(unzipSync(response.data).toString()) || []) as T[]
-      )
+      map((response) => {
+        const value: unknown = JSON.parse(unzipSync(response.data).toString());
+        // Go nil slices are persisted as JSON null in older archives.
+        if (value === null) return [];
+        if (
+          !Array.isArray(value) ||
+          value.some(
+            (item) => !item || typeof item !== 'object' || Array.isArray(item)
+          )
+        ) {
+          throw new Error('Invalid snapshot metadata');
+        }
+        return value as T[];
+      })
     );
   }
 }

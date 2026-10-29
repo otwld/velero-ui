@@ -115,7 +115,7 @@ export const useKubernetesWatchListObject = <T extends KubernetesObject>(
     socket.io.off(`watch:${resource.plural}:ADDED`);
     socket.io.off(`watch:${resource.plural}:MODIFIED`);
     socket.io.off(`watch:${resource.plural}:DELETED`);
-    socket.io.emit(`watch:off`);
+    socket.io.emit(`watch:off`, { plural: resource.plural });
   };
 
   const { data, isLoading, error, isFetching, refetch } = useQuery<T[]>({

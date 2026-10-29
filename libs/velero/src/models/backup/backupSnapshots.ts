@@ -37,6 +37,9 @@ export interface BackupSnapshot {
   name: string;
   namespace?: string;
   volume?: string;
+  pvName?: string;
+  snapshotDataMoved?: boolean;
+  dataMoverSnapshotID?: string;
   type: 'CSI' | 'Native';
   phase: string;
   snapshotID?: string;
@@ -44,4 +47,38 @@ export interface BackupSnapshot {
   driver?: string;
   size?: number;
   message?: string;
+}
+
+/** Stored BackupVolumeInfos fields vary across Velero 1.13–1.18. */
+export interface BackupVolumeInfo {
+  pvcName?: string;
+  pvcNamespace?: string;
+  pvName?: string;
+  backupMethod?: string;
+  snapshotDataMoved?: boolean;
+  skipped?: boolean;
+  result?: string;
+  csiSnapshotInfo?: {
+    snapshotHandle?: string;
+    size?: number;
+    driver?: string;
+    vscName?: string;
+    ReadyToUse?: boolean;
+  };
+  nativeSnapshotInfo?: { snapshotHandle?: string; Phase?: string };
+  snapshotDataMovementInfo?: {
+    snapshotHandle?: string;
+    size?: number;
+    Phase?: string;
+  };
+}
+
+export interface BackupSnapshotIssue {
+  source: 'volumeInfos' | 'native' | 'csi';
+  reason: 'unavailable' | 'error';
+}
+
+export interface BackupSnapshotsResult {
+  items: BackupSnapshot[];
+  issues: BackupSnapshotIssue[];
 }

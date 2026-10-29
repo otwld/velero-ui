@@ -3,6 +3,7 @@ import {
   BackupCSISnapshotContent,
   BackupNativeSnapshot,
   BackupSnapshot,
+  BackupVolumeInfo,
 } from '@velero-ui/velero';
 
 export function csiSnapshots(
@@ -82,4 +83,86 @@ export function nativeSnapshots(
     phase: snapshot.status?.phase || 'New',
     snapshotID: snapshot.status?.providerSnapshotID,
   }));
+}
+
+const known = (value?: string) =>
+  value && value !== 'unknown' ? value : undefined;
+
+/** Go fields without json tags are serialized as Phase / ReadyToUse. */
+export function volumeInfoSnapshots(
+  infos: BackupVolumeInfo[]
+): BackupSnapshot[] {
+  return infos
+    .filter(
+      (info) =>
+        !info.skipped &&
+        ['NativeSnapshot', 'CSISnapshot'].includes(info.backupMethod)
+    )
+    .map((info) => {
+      const csi = info.csiSnapshotInfo;
+      const native = info.nativeSnapshotInfo;
+      const movement = info.snapshotDataMovementInfo;
+      const moved = info.snapshotDataMoved === true;
+      const phase =
+        info.result === 'failed'
+          ? 'Failed'
+          : (moved ? movement?.Phase : native?.Phase) ||
+            (info.result === 'succeeded'
+              ? 'Completed'
+              : !moved && csi?.ReadyToUse === true
+                ? 'Completed'
+                : 'Unknown');
+      const rawSize = moved ? movement?.size : csi?.size;
+      return {
+        name: known(csi?.vscName) || info.pvName || info.pvcName || 'unknown',
+        namespace: info.pvcNamespace,
+        volume: info.pvcName || info.pvName,
+        pvName: info.pvName,
+        type: info.backupMethod === 'CSISnapshot' ? 'CSI' : 'Native',
+        phase,
+        snapshotDataMoved: info.snapshotDataMoved,
+        snapshotID: known(csi?.snapshotHandle || native?.snapshotHandle),
+        dataMoverSnapshotID: known(movement?.snapshotHandle),
+        contentName: known(csi?.vscName),
+        driver: known(csi?.driver),
+        // Omitted early fields and Go default zero are not evidence of a measured size.
+        size: Number.isFinite(rawSize) && rawSize > 0 ? rawSize : undefined,
+      };
+    });
+}
+
+export function mergeSnapshots(
+  current: BackupSnapshot[],
+  legacy: BackupSnapshot[]
+): BackupSnapshot[] {
+  const result = [...current];
+  for (const item of legacy) {
+    const index = result.findIndex(
+      (other) =>
+        other.type === item.type &&
+        ((other.snapshotID &&
+          item.snapshotID &&
+          other.snapshotID === item.snapshotID) ||
+          (other.contentName && other.contentName === item.contentName) ||
+          (other.pvName && other.pvName === item.volume) ||
+          (other.volume &&
+            other.volume === item.volume &&
+            other.namespace === item.namespace))
+    );
+    if (index < 0) result.push(item);
+    else {
+      const original = result[index];
+      // Enrich historical incomplete entries without overwriting current known state.
+      result[index] = {
+        ...item,
+        ...Object.fromEntries(
+          Object.entries(original).filter(([, v]) => v !== undefined)
+        ),
+      } as BackupSnapshot;
+      if (original.phase === 'Unknown' && !original.snapshotDataMoved)
+        result[index].phase = item.phase;
+      if (original.snapshotDataMoved) result[index].size = original.size;
+    }
+  }
+  return result;
 }
