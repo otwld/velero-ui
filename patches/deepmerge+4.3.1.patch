@@ -1,0 +1,114 @@
+diff --git a/node_modules/deepmerge/index.js b/node_modules/deepmerge/index.js
+--- a/node_modules/deepmerge/index.js
++++ b/node_modules/deepmerge/index.js
+@@ -51,11 +51,21 @@
+ 			&& Object.propertyIsEnumerable.call(target, key)) // and also unsafe if they're nonenumerable.
+ }
+ 
++function setProperty(target, key, value) {
++	// Define an own data property instead of invoking the __proto__ setter.
++	Object.defineProperty(target, key, {
++		value: value,
++		enumerable: true,
++		configurable: true,
++		writable: true
++	});
++}
++
+ function mergeObject(target, source, options) {
+ 	var destination = {}
+ 	if (options.isMergeableObject(target)) {
+ 		getKeys(target).forEach(function(key) {
+-			destination[key] = cloneUnlessOtherwiseSpecified(target[key], options)
++			setProperty(destination, key, cloneUnlessOtherwiseSpecified(target[key], options))
+ 		})
+ 	}
+ 	getKeys(source).forEach(function(key) {
+@@ -64,9 +74,9 @@
+ 		}
+ 
+ 		if (propertyIsOnObject(target, key) && options.isMergeableObject(source[key])) {
+-			destination[key] = getMergeFunction(key, options)(target[key], source[key], options)
++			setProperty(destination, key, getMergeFunction(key, options)(target[key], source[key], options))
+ 		} else {
+-			destination[key] = cloneUnlessOtherwiseSpecified(source[key], options)
++			setProperty(destination, key, cloneUnlessOtherwiseSpecified(source[key], options))
+ 		}
+ 	})
+ 	return destination
+diff --git a/node_modules/deepmerge/dist/cjs.js b/node_modules/deepmerge/dist/cjs.js
+--- a/node_modules/deepmerge/dist/cjs.js
++++ b/node_modules/deepmerge/dist/cjs.js
+@@ -76,11 +76,21 @@
+ 			&& Object.propertyIsEnumerable.call(target, key)) // and also unsafe if they're nonenumerable.
+ }
+ 
++function setProperty(target, key, value) {
++	// Define an own data property instead of invoking the __proto__ setter.
++	Object.defineProperty(target, key, {
++		value: value,
++		enumerable: true,
++		configurable: true,
++		writable: true
++	});
++}
++
+ function mergeObject(target, source, options) {
+ 	var destination = {};
+ 	if (options.isMergeableObject(target)) {
+ 		getKeys(target).forEach(function(key) {
+-			destination[key] = cloneUnlessOtherwiseSpecified(target[key], options);
++			setProperty(destination, key, cloneUnlessOtherwiseSpecified(target[key], options));
+ 		});
+ 	}
+ 	getKeys(source).forEach(function(key) {
+@@ -89,9 +99,9 @@
+ 		}
+ 
+ 		if (propertyIsOnObject(target, key) && options.isMergeableObject(source[key])) {
+-			destination[key] = getMergeFunction(key, options)(target[key], source[key], options);
++			setProperty(destination, key, getMergeFunction(key, options)(target[key], source[key], options));
+ 		} else {
+-			destination[key] = cloneUnlessOtherwiseSpecified(source[key], options);
++			setProperty(destination, key, cloneUnlessOtherwiseSpecified(source[key], options));
+ 		}
+ 	});
+ 	return destination
+diff --git a/node_modules/deepmerge/dist/umd.js b/node_modules/deepmerge/dist/umd.js
+--- a/node_modules/deepmerge/dist/umd.js
++++ b/node_modules/deepmerge/dist/umd.js
+@@ -80,11 +80,21 @@
+ 				&& Object.propertyIsEnumerable.call(target, key)) // and also unsafe if they're nonenumerable.
+ 	}
+ 
++	function setProperty(target, key, value) {
++		// Define an own data property instead of invoking the __proto__ setter.
++		Object.defineProperty(target, key, {
++			value: value,
++			enumerable: true,
++			configurable: true,
++			writable: true
++		});
++	}
++	
+ 	function mergeObject(target, source, options) {
+ 		var destination = {};
+ 		if (options.isMergeableObject(target)) {
+ 			getKeys(target).forEach(function(key) {
+-				destination[key] = cloneUnlessOtherwiseSpecified(target[key], options);
++				setProperty(destination, key, cloneUnlessOtherwiseSpecified(target[key], options));
+ 			});
+ 		}
+ 		getKeys(source).forEach(function(key) {
+@@ -93,9 +103,9 @@
+ 			}
+ 
+ 			if (propertyIsOnObject(target, key) && options.isMergeableObject(source[key])) {
+-				destination[key] = getMergeFunction(key, options)(target[key], source[key], options);
++				setProperty(destination, key, getMergeFunction(key, options)(target[key], source[key], options));
+ 			} else {
+-				destination[key] = cloneUnlessOtherwiseSpecified(source[key], options);
++				setProperty(destination, key, cloneUnlessOtherwiseSpecified(source[key], options));
+ 			}
+ 		});
+ 		return destination
