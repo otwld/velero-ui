@@ -9,6 +9,8 @@ on:
       - libs/**
       - package.json
       - package-lock.json
+      - scripts/dependency-security.test.mjs
+      - patches/**
   pull_request:
     types:
       - opened
@@ -19,6 +21,8 @@ on:
       - libs/**
       - package.json
       - package-lock.json
+      - scripts/dependency-security.test.mjs
+      - patches/**
   workflow_dispatch:
 
 permissions:
@@ -44,6 +48,10 @@ jobs:
 
       - run: npm ci
 
+      - run: npm run test:dependency-security
+
       - uses: nrwl/nx-set-shas@v4
+
+      - run: npx nx run-many -t test -p velero-ui,velero-ui-api --parallel=2
 
       - run: npx nx run-many -t lint build
