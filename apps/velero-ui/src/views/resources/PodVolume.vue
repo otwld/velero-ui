@@ -1,44 +1,22 @@
 <template>
-  <Resource :error="!!error" :page="Pages.POD_VOLUME_BACKUPS">
-    <template #left>
-      <PodVolumeActions :pod-volume="data" :type="type" />
-      <PodVolumeStatus :pod-volume="data" />
-      <PodVolumeDetails :spec="data?.spec" />
-    </template>
-    <template #right>
-      <ResourceManifest :data="data" />
-    </template>
-  </Resource>
+  <PodVolumeResource :key="route.fullPath" />
 </template>
-
-<script lang="ts" setup>
-import ResourceManifest from '@velero-ui-app/components/Resource/ResourceManifest.vue';
-import type { Router } from 'vue-router';
-import { useRouter } from 'vue-router';
-import {
-  Resources,
-  type V1PodVolumeBackup,
-  type V1PodVolumeRestore,
-} from '@velero-ui/velero';
-import { useKubernetesWatchObject } from '@velero-ui-app/composables/useKubernetesWatchObject';
-import { onBeforeMount, onBeforeUnmount } from 'vue';
+<script setup lang="ts">
+import { onBeforeRouteUpdate, useRoute } from 'vue-router';
+import { Action } from '@velero-ui/shared-types';
+import { resourceGuard } from '@velero-ui-app/utils/guard.utils';
 import { Pages } from '@velero-ui-app/utils/constants.utils';
-import PodVolumeActions from '@velero-ui-app/components/PodVolume/PodVolumeActions.vue';
-import PodVolumeStatus from '@velero-ui-app/components/PodVolume/PodVolumeStatus.vue';
-import PodVolumeDetails from '@velero-ui-app/components/PodVolume/PodVolumeDetails.vue';
-import Resource from '@velero-ui-app/components/Resource/Resource.vue';
+import { podVolumeResourceForRoute } from '@velero-ui-app/utils/pod-volume-list.utils';
+import PodVolumeResource from '@velero-ui-app/components/PodVolume/PodVolumeResource.vue';
 
-const router: Router = useRouter();
-
-const type =
-  router.currentRoute.value.name === Pages.POD_VOLUME_BACKUP.name
-    ? Resources.POD_VOLUME_BACKUP
-    : Resources.POD_VOLUME_RESTORE;
-
-const { on, off, data, error } = useKubernetesWatchObject<
-  V1PodVolumeBackup | V1PodVolumeRestore
->(type, router.currentRoute.value.params.name as string);
-
-onBeforeMount((): void => on());
-onBeforeUnmount((): void => off());
+const route = useRoute();
+onBeforeRouteUpdate((to) => {
+  const resource = podVolumeResourceForRoute(
+    to.name === Pages.POD_VOLUME_BACKUP.name,
+    to.query.resource as string
+  );
+  return resource
+    ? resourceGuard(Action.Read, resource.plural)
+    : { name: Pages.HOME.name };
+});
 </script>

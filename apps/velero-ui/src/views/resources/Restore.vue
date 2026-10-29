@@ -9,7 +9,7 @@
       <ResourceManifest :data="data" />
     </template>
     <template #bottom>
-      <PodVolumes v-if="can(Action.Read, Resources.RESTORE.plural)" />
+      <PodVolumes :parent-uid="data?.metadata?.uid" v-if="can(Action.Read, Resources.RESTORE.plural)" />
       <ResourceLogs
         v-if="can(Action.Logs, Resources.RESTORE.plural)"
         :data="logs"

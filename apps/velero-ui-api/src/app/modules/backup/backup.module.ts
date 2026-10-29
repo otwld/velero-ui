@@ -1,3 +1,4 @@
+import { BackupSnapshotsService } from './backup-snapshots.service';
 import { Module } from '@nestjs/common';
 import { BackupService } from './backup.service';
 import { BackupController } from './backup.controller';
@@ -16,7 +17,7 @@ import https from 'https';
     DeleteBackupRequestModule,
     DownloadRequestModule,
   ],
-  providers: [BackupService],
+  providers: [BackupSnapshotsService, BackupService],
   controllers: [BackupController],
   exports: [BackupService],
 })

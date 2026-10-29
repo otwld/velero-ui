@@ -53,6 +53,7 @@
 <script lang="ts" setup>
 import type { PropType } from 'vue';
 import type { V1PodVolumeBackup, V1PodVolumeRestore } from '@velero-ui/velero';
+import { progressPercent } from '@velero-ui-app/utils/volume.utils';
 import { useI18n } from 'vue-i18n';
 import PodVolumePhaseBadge from '@velero-ui-app/components/PodVolume/PodVolumePhaseBadge.vue';
 import { convertBytes } from '@velero-ui-app/utils/string.utils';
@@ -69,13 +70,9 @@ const props = defineProps({
 });
 
 const getPercent = () => {
-  const percent = Math.round(
-    ((props.podVolume?.status?.progress?.bytesDone || 0) * 100) /
-      props.podVolume?.status?.progress?.totalBytes
-  );
+  const percent = progressPercent(props.podVolume?.status?.progress);
   return {
     width: `${percent}%`,
   };
 };
 </script>
-<script lang="ts" setup></script>

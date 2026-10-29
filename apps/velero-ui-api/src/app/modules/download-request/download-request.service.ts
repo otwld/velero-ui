@@ -11,17 +11,7 @@ import {
   V1DownloadRequestPhase,
 } from '@velero-ui/velero';
 import { ConfigService } from '@nestjs/config';
-import {
-  catchError,
-  concatMap,
-  defer,
-  from,
-  map,
-  Observable,
-  of,
-  retry,
-  throwError,
-} from 'rxjs';
+import { concatMap, defer, from, map, Observable, of, retry } from 'rxjs';
 import { CreateDownloadRequestDto } from '@velero-ui-api/shared/dto/download-request.dto';
 import { VELERO } from '@velero-ui-api/shared/modules/velero/velero.constants';
 import { createK8sCustomObject } from '@velero-ui-api/modules/k8s-custom-object/k8s-custom-object.utils';
@@ -89,11 +79,6 @@ export class DownloadRequestService {
       retry({
         count: 5,
         delay: 4000,
-      }),
-      catchError(() => {
-        return throwError(
-          () => new Error('Download request is not ready after 5 retries!')
-        );
       })
     );
   }

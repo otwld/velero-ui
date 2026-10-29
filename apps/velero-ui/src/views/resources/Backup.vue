@@ -9,7 +9,7 @@
       <ResourceManifest :data="data" />
     </template>
     <template #bottom>
-      <PodVolumes v-if="can(Action.Read, Resources.POD_VOLUME_BACKUP.plural)" />
+      <PodVolumes :backup="data" v-if="can(Action.Read, Resources.BACKUP.plural)" />
       <ResourceLogs
         v-if="can(Action.Logs, Resources.BACKUP.plural)"
         :data="logs"

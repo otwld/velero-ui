@@ -279,7 +279,11 @@
       "Available": "可用",
       "Unavailable": "不可用",
       "null": "未知",
-      "undefined": "未知"
+      "undefined": "未知",
+      "Accepted": "已接受",
+      "Prepared": "已准备",
+      "Canceling": "取消中",
+      "Canceled": "已取消"
     }
   },
   "modal": {
@@ -650,7 +654,31 @@
     "title": "服务器状态请求"
   },
   "podVolumes": {
-    "title": "Pod 卷"
+    "title": "Pod 卷",
+    "dataMover": "数据移动器",
+    "snapshot": "快照",
+    "snapshotID": "快照 ID",
+    "snapshotContent": "快照内容",
+    "driver": "CSI 驱动",
+    "filesystemError": "无法获取文件系统卷。",
+    "dataMoverError": "无法获取数据移动器卷。",
+    "snapshotError": "无法获取快照详情。",
+    "operations": "备份项目操作",
+    "csiSnapshots": "CSI 快照",
+    "nativeSnapshots": "原生快照",
+    "failed": "失败",
+    "storageSnapshotID": "存储快照 ID",
+    "filesystem": "文件系统",
+    "partial": "卷信息不完整。可用卷显示如下。",
+    "unavailable": "此来源的元数据不可用。",
+    "sourceError": "无法获取此来源的数据。",
+    "unknownSize": "大小未知",
+    "knownSize": "仅已知字节数",
+    "sources": {
+      "volumeInfos": "已归档卷信息",
+      "native": "原生快照",
+      "csi": "CSI 快照"
+    }
   },
   "podVolumeBackups": {
     "title": "Pod 卷备份"

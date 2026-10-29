@@ -6,7 +6,7 @@
   >
     <template #buttons>
       <button
-        v-if="can(Action.Delete, type.pluralt)"
+        v-if="can(Action.Delete, type.plural)"
         :class="{ 'cursor-not-allowed': isDeleting || !podVolume }"
         :disabled="isDeleting || !podVolume"
         class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-red-600 hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"
@@ -87,4 +87,3 @@ const { isPending: isDeleting, mutate: remove } = useDeleteKubernetesObject(
   props.type
 );
 </script>
-<script lang="ts" setup></script>

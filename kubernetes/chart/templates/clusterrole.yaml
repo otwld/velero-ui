@@ -19,6 +19,9 @@ rules:
     verbs:
       - get
       - list
+  - apiGroups: ["snapshot.storage.k8s.io"]
+    resources: ["volumesnapshots", "volumesnapshotcontents"]
+    verbs: ["get", "list"]
   - apiGroups: ["velero.io"]
     resources: ["*"]
     verbs:

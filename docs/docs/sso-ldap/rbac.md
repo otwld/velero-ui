@@ -56,11 +56,19 @@ Below is a table that summarizes all possible resources and which actions are va
 | volumesnapshotlocations | ✅                    | ✅    | ✅      | ✅      | ✅      | ❌        | ❌    |
 | podvolumebackups        | ✅                    | ✅    | ❌      | ❌      | ✅      | ❌        | ❌    |
 | podvolumerestores       | ✅                    | ✅    | ❌      | ❌      | ✅      | ❌        | ❌    |
+| datauploads             | ✅                    | ✅    | ❌      | ❌      | ❌      | ❌        | ❌    |
+| datadownloads           | ✅                    | ✅    | ❌      | ❌      | ❌      | ❌        | ❌    |
 | downloadrequests        | ✅                    | ✅    | ❌      | ❌      | ✅      | ❌        | ❌    |
 | deletebackuprequests    | ✅                    | ✅    | ❌      | ❌      | ✅      | ❌        | ❌    |
 | serverstatusrequests    | ✅                    | ✅    | ❌      | ❌      | ❌      | ❌        | ❌    |
 | settings                | ✅                    | ❌    | ❌      | ❌      | ❌      | ❌        | ❌    |
 | all (All subjects)      | ✅                    | ✅    | ✅      | ✅      | ✅      | ✅        | ✅    |
+
+The backed-up volumes panel reads filesystem backups with `read,podvolumebackups` and snapshot data mover uploads with `read,datauploads`. The restored volumes panel uses `read,podvolumerestores` and `read,datadownloads`. Snapshot details use `read,backups`. Existing `read,all` policies include these resources.
+
+Live CSI snapshot details also require the service account to list `volumesnapshots` and `volumesnapshotcontents` in `snapshot.storage.k8s.io` across namespaces. The supplied Helm chart and Kubernetes manifests include these read permissions; update the ClusterRole when upgrading an existing deployment or using custom RBAC.
+
+Archived snapshot metadata is retrieved through Velero DownloadRequests under the service account's existing permissions. The snapshot endpoint requires `read,backups`; it does not grant access to the separate filesystem or live data mover resources. Missing optional CRDs can yield empty lists, but a forbidden response remains an error. If only part of the snapshot metadata is available, the panel keeps those results and marks the information as incomplete.
 
 ## Default behavior for users
 

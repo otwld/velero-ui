@@ -67,6 +67,7 @@ export const useKubernetesWatchObject = <T extends KubernetesObject>(
     socket.io.off(`watch:${resource.plural}:${name}:DELETED`);
     socket.io.emit(`watch:off`, {
       name,
+      plural: resource.plural,
     });
   };
 

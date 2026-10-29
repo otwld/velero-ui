@@ -15,6 +15,7 @@
                         id="checkbox-all"
                         :checked="checked === 'true' || checked === 'partial'"
                         aria-describedby="checkbox-1"
+                        :disabled="!data.some(selectable)"
                         class="peer w-4 h-4 border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600"
                         type="checkbox"
                         @click="globalCheck($event)"
@@ -70,9 +71,10 @@
               class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700"
             >
               <ListContentLine
-                v-for="(item, index) in data"
-                :key="`list-item-${index}`"
+                v-for="item in data"
+                :key="`${item?.kind}:${item?.metadata?.uid || item?.metadata?.name}`"
                 :name="item?.metadata?.name"
+                :selectable="selectable(item)"
               >
                 <template #content>
                   <component
@@ -83,8 +85,9 @@
               </ListContentLine>
             </tbody>
           </table>
+          <p v-if="error" class="p-4 text-red-600 dark:text-red-400">{{ t('global.message.error.unexpected') }}</p>
           <div
-            v-if="data?.length === 0 && !isFetching"
+            v-if="data?.length === 0 && !isFetching && !error"
             class="w-full flex flex-col items-center py-10 text-gray-400 dark:text-gray-300 dark:bg-gray-800"
           >
             <FontAwesomeIcon :icon="faInfoCircle" class="!w-16 !h-16 mb-5" />
@@ -107,7 +110,9 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onBeforeMount, onBeforeUnmount } from 'vue';
+import { computed, onBeforeMount, onBeforeUnmount, type PropType } from 'vue';
+import type { ListQuery } from '@velero-ui-app/composables/usePodVolumeList';
+import type { KubernetesObject } from '@kubernetes/client-node';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import {
   faCircleNotch,
@@ -127,13 +132,13 @@ const { t } = useI18n();
 const listStore = useListStore();
 const { headers, objectType, checkedItems } = storeToRefs(listStore);
 
-const { on, off, data, isFetching } = useKubernetesWatchListObject(
-  objectType.value
-);
-
-defineProps({
+const props = defineProps({
   component: { type: Object, required: true },
+  query: { type: Object as PropType<ListQuery>, default: undefined },
+  selectable: { type: Function as PropType<(item: KubernetesObject) => boolean>, default: () => true },
 });
+const { on, off, data, isFetching, error } = props.query || useKubernetesWatchListObject(objectType.value);
+const selectable = (item: KubernetesObject) => props.selectable(item);
 
 onBeforeMount(() => on());
 onBeforeUnmount(() => off());
@@ -142,16 +147,17 @@ const globalCheck = ($event) => {
   if (checked.value === 'true') {
     listStore.resetCheckedItems();
   } else {
-    data.value.forEach((e, index) => checkedItems.value.add(e?.metadata?.name));
+    data.value.filter(selectable).forEach(e => checkedItems.value.add(e?.metadata?.name));
   }
   $event.preventDefault();
   $event.stopPropagation();
 };
 
 const checked = computed(() => {
-  if (checkedItems.value.size === 0) {
+  const selected = data.value.filter(selectable).filter(item => checkedItems.value.has(item.metadata?.name)).length;
+  if (selected === 0) {
     return 'false';
-  } else if (checkedItems.value.size < data.value.length) {
+  } else if (selected < data.value.filter(selectable).length) {
     return 'partial';
   }
   return 'true';

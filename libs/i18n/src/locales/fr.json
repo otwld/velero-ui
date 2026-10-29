@@ -103,6 +103,12 @@
       "lastSkipped": "Dernier ignoré",
       "lastSyncedTime": "Dernière synchronisation",
       "lastValidationTime": "Dernière validation"
+    },
+    "phase": {
+      "Accepted": "Accepté",
+      "Prepared": "Préparé",
+      "Canceling": "Annulation en cours",
+      "Canceled": "Annulé"
     }
   },
   "modal": {
@@ -279,5 +285,31 @@
   },
   "settings": {
     "title": "Paramètres"
+  },
+  "podVolumes": {
+    "dataMover": "Transfert de données",
+    "snapshot": "Instantané",
+    "snapshotID": "ID de l’instantané",
+    "snapshotContent": "Contenu de l’instantané",
+    "driver": "Pilote CSI",
+    "filesystemError": "Impossible de récupérer les volumes du système de fichiers.",
+    "dataMoverError": "Impossible de récupérer les volumes du transfert de données.",
+    "snapshotError": "Impossible de récupérer les détails des instantanés.",
+    "operations": "Opérations de sauvegarde",
+    "csiSnapshots": "Instantanés CSI",
+    "nativeSnapshots": "Instantanés natifs",
+    "failed": "en échec",
+    "storageSnapshotID": "ID de l’instantané de stockage",
+    "filesystem": "Système de fichiers",
+    "partial": "Les informations sur les volumes sont incomplètes. Les volumes disponibles sont affichés ci-dessous.",
+    "unavailable": "Les métadonnées de cette source sont indisponibles.",
+    "sourceError": "Impossible de récupérer cette source.",
+    "unknownSize": "Taille inconnue",
+    "knownSize": "octets connus uniquement",
+    "sources": {
+      "volumeInfos": "Informations archivées des volumes",
+      "native": "Snapshots natifs",
+      "csi": "Snapshots CSI"
+    }
   }
 }

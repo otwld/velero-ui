@@ -1,0 +1,53 @@
+[
+  {
+    "backupMethod": "CSISnapshot",
+    "pvcName": "database",
+    "pvcNamespace": "app",
+    "pvName": "pv-database",
+    "snapshotDataMoved": false,
+    "csiSnapshotInfo": {
+      "snapshotHandle": "provider-csi",
+      "size": 4096,
+      "driver": "csi.example",
+      "vscName": "content"
+    }
+  },
+  {
+    "backupMethod": "NativeSnapshot",
+    "pvcName": "disk",
+    "pvcNamespace": "app",
+    "pvName": "pv-native",
+    "snapshotDataMoved": false,
+    "nativeSnapshotInfo": {
+      "snapshotHandle": "provider-native"
+    }
+  },
+  {
+    "backupMethod": "CSISnapshot",
+    "pvcName": "moved",
+    "pvcNamespace": "app",
+    "pvName": "pv-moved",
+    "snapshotDataMoved": true,
+    "csiSnapshotInfo": {
+      "snapshotHandle": "unknown",
+      "size": 0,
+      "driver": "csi.example",
+      "vscName": "unknown"
+    },
+    "snapshotDataMovementInfo": {
+      "snapshotHandle": "repository-id",
+      "operationID": "backup-upload",
+      "dataMover": "velero",
+      "uploaderType": "kopia",
+      "size": 123
+    }
+  },
+  {
+    "backupMethod": "PodVolumeBackup",
+    "pvcName": "files"
+  },
+  {
+    "skipped": true,
+    "pvName": "pv-skipped"
+  }
+]

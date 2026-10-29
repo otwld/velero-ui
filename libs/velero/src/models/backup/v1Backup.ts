@@ -98,8 +98,8 @@ export interface V1BackupStatus {
   validationErrors?: string[];
   startTimestamp?: string;
   completionTimestamp?: string;
-  volumeSnapshotsAttempted?: Date;
-  volumeSnapshotsCompleted?: Date;
+  volumeSnapshotsAttempted?: number;
+  volumeSnapshotsCompleted?: number;
   failureReason?: string;
   warnings?: number;
   errors?: number;

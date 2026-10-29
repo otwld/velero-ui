@@ -32,9 +32,9 @@
           }}</label>
           <select
             id="underline_select"
-            v-model="limit"
+            v-model.number="limit"
             class="text-xs text-center text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer"
-            @change="listStore.setLimit(parseInt($event.target.value))"
+            @change="onLimitChange"
           >
             <option value="20">
               20
@@ -76,6 +76,8 @@
 </template>
 
 <script lang="ts" setup>
+import type { PropType } from 'vue';
+import type { ListQuery } from '@velero-ui-app/composables/usePodVolumeList';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import {
   faChevronLeft,
@@ -92,9 +94,11 @@ const { t } = useI18n();
 const listStore = useListStore();
 const { offset, limit, total, objectType } = storeToRefs(listStore);
 
-const { isFetching } = useKubernetesWatchListObject(objectType.value);
+const props = defineProps({ query: { type: Object as PropType<ListQuery>, default: undefined } });
+const { isFetching } = props.query || useKubernetesWatchListObject(objectType.value);
+const onLimitChange = (event: Event) => listStore.setLimit(Number((event.target as HTMLSelectElement).value));
 
 const disablePrev = () => isFetching.value || listStore.offset === 0;
 const disableNext = () =>
-  isFetching.value || listStore.offset + listStore.limit > listStore.total;
+  isFetching.value || listStore.offset + listStore.limit >= listStore.total;
 </script>

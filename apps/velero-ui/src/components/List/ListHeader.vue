@@ -80,7 +80,8 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onBeforeUnmount, ref } from 'vue';
+import { computed, onBeforeUnmount, ref, type PropType } from 'vue';
+import type { ListQuery } from '@velero-ui-app/composables/usePodVolumeList';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { faArrowsRotate, faFilter } from '@fortawesome/free-solid-svg-icons';
 import { useListStore } from '../../stores/list.store';
@@ -97,7 +98,8 @@ const { t } = useI18n();
 const listStore = useListStore();
 const { objectType, filters, availableFilters } = storeToRefs(listStore);
 const { reset } = useFilters();
-const { refetch, isFetching } = useKubernetesWatchListObject(objectType.value);
+const props = defineProps({ query: { type: Object as PropType<ListQuery>, default: undefined } });
+const { refetch, isFetching } = props.query || useKubernetesWatchListObject(objectType.value);
 
 const hiddenFiltersDropdown = ref(true);
 

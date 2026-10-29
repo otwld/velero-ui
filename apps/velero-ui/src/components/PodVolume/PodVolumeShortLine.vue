@@ -7,13 +7,13 @@
       <div
         class="flex items-center text-base font-semibold text-gray-900 truncate dark:text-white"
       >
-        {{ podVolume?.spec?.pod.name }}
-        <PodVolumePhaseBadge :status="podVolume?.status.phase" class="ml-4" />
+        {{ podVolume?.spec?.pod?.name }}
+        <PodVolumePhaseBadge :status="podVolume?.status?.phase" class="ml-4" />
       </div>
       <p class="text-sm font-normal text-gray-500 truncate dark:text-gray-400">
-        {{ podVolume?.spec?.tags?.volume }}
+        {{ podVolume?.spec?.tags?.volume || podVolume?.spec?.volume }}
       </p>
-      <div v-if="podVolume?.status.progress" class="mt-1">
+      <div v-if="podVolume?.status?.progress" class="mt-1">
         <div class="flex items-center justify-between mb-1">
           <span class="text-xs font-medium text-gray-900 dark:text-white">{{
             t('resource.status.bytes')
@@ -33,9 +33,9 @@
     </div>
     <div class="inline-flex items-center">
       <router-link
-        :title="podVolume?.spec?.pod.name"
+        :title="podVolume?.spec?.pod?.name"
         :to="{
-          name: Pages.POD_VOLUME_BACKUP.name,
+          name: podVolume.kind === Resources.POD_VOLUME_RESTORE.kind ? Pages.POD_VOLUME_RESTORE.name : Pages.POD_VOLUME_BACKUP.name,
           params: {
             name: podVolume?.metadata?.name,
           },
@@ -56,9 +56,10 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 import { useI18n } from 'vue-i18n';
 import type { PropType } from 'vue';
-import type { V1PodVolumeBackup, V1PodVolumeRestore } from '@velero-ui/velero';
+import { Resources, type V1PodVolumeBackup, type V1PodVolumeRestore } from '@velero-ui/velero';
 import PodVolumePhaseBadge from '@velero-ui-app/components/PodVolume/PodVolumePhaseBadge.vue';
 import { convertBytes } from '@velero-ui-app/utils/string.utils';
+import { progressPercent } from '@velero-ui-app/utils/volume.utils';
 import { Pages } from '@velero-ui-app/utils/constants.utils';
 
 const { t } = useI18n();
@@ -67,10 +68,7 @@ const props = defineProps({
 });
 
 const getPercent = () => {
-  const percent = Math.round(
-    ((props.podVolume?.status.progress.bytesDone || 0) * 100) /
-      props.podVolume?.status.progress.totalBytes,
-  );
+  const percent = progressPercent(props.podVolume?.status?.progress);
   return {
     width: `${percent}%`,
   };
