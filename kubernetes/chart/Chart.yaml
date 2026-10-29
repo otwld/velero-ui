@@ -3,25 +3,17 @@ name: velero-ui
 description: A Helm chart for Velero UI
 type: application
 
-version: 1.0.0
+version: 1.1.0
 
-appVersion: "0.11.0"
+appVersion: "0.12.0"
 
 kubeVersion: "^1.16.0-0"
 
 annotations:
   artifacthub.io/category: monitoring-logging
   artifacthub.io/changes: |
-    - kind: added
-      description: Add a configurable startup probe using /health/startup.
     - kind: changed
-      description: Use /health/live and /health/ready for liveness and readiness probes.
-    - kind: changed
-      description: Remove the default JWT signing key; upgrades must configure a random secret of at least 32 bytes or an existing Secret.
-    - kind: fixed
-      description: Inject AUTH_SECRET_PASSPHRASE from the configured Secret or explicit value into the application container.
-    - kind: fixed
-      description: Set POLICY_FILE_PATH only when RBAC policies are enabled.
+      description: upgrade app version to 0.12.0
 
 home: https://velero-ui.docs.otwld.com/
 icon: https://velero.io/img/Velero.svg
