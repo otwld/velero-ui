@@ -177,6 +177,40 @@ ingress:
   #      - velero-ui.local
 
 
+# Configure the Gateway API HTTPRoute resource that allows you to access the
+# application, as an alternative to the ingress resource above.
+# Requires the Gateway API CRDs (gateway.networking.k8s.io/v1) to be installed.
+httpRoute:
+  # -- Enable Gateway API HTTPRoute resource
+  enabled: false
+
+  # -- Additional annotations for the HTTPRoute resource.
+  annotations: { }
+
+  # -- The Gateways this HTTPRoute attaches to. Required when httpRoute.enabled is true.
+  parentRefs: [ ]
+  #  - name: velero-ui-gateway
+  #    namespace: gateway-system
+  #    sectionName: https
+
+  # -- The list of hostnames to be covered with this HTTPRoute record.
+  hostnames:
+    - velero-ui.local
+
+  # -- The filters applied to the HTTPRoute rule.
+  filters: [ ]
+  #  - type: ResponseHeaderModifier
+  #    responseHeaderModifier:
+  #      add:
+  #        - name: X-Frame-Options
+  #          value: DENY
+
+  # -- Default path for the HTTPRoute.
+  path: /
+
+  # -- Default pathType for the HTTPRoute.
+  pathType: PathPrefix
+
 # Configure resource requests and limits
 # ref: http://kubernetes.io/docs/user-guide/compute-resources/
 resources:
